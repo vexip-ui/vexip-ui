@@ -33,7 +33,7 @@ describe('Checkbox', () => {
     const wrapper = mount(() => (
       <Checkbox label={TEXT}>
         {{
-          default: () => <span class={'label'}></span>
+          default: () => <span class={'label'}></span>,
         }}
       </Checkbox>
     ))
@@ -44,7 +44,7 @@ describe('Checkbox', () => {
 
   it('size', async () => {
     const wrapper = mount(Checkbox, {
-      props: { size: 'large' }
+      props: { size: 'large' },
     })
 
     expect(wrapper.find('.vxp-checkbox').classes()).toContain('vxp-checkbox--large')
@@ -79,8 +79,8 @@ describe('Checkbox', () => {
     const wrapper = mount(Checkbox, {
       props: {
         checked: false,
-        onChange
-      }
+        onChange,
+      },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-checkbox--disabled')
@@ -104,7 +104,7 @@ describe('Checkbox', () => {
 
   it('partial', async () => {
     const wrapper = mount(Checkbox, {
-      props: { partial: true }
+      props: { partial: true },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-checkbox--partial')
@@ -135,8 +135,8 @@ describe('Checkbox', () => {
     const wrapper = mount(Checkbox, {
       props: {
         checked: false,
-        onChange
-      }
+        onChange,
+      },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-checkbox--loading')
@@ -152,21 +152,21 @@ describe('Checkbox', () => {
 
   it('color', async () => {
     const wrapper = mount(Checkbox, {
-      props: { color: 'orange' }
+      props: { color: 'orange' },
     })
     const rgbColor = parseColorToRgba('orange')
 
     expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
-      `--vxp-checkbox-b-color-hover: ${rgbColor};`
+      `--vxp-checkbox-b-color-hover: ${rgbColor};`,
     )
     expect(wrapper.find('.vxp-checkbox').attributes('style')).not.toContain(
-      `--vxp-checkbox-b-color: ${rgbColor};`
+      `--vxp-checkbox-b-color: ${rgbColor};`,
     )
 
     await wrapper.setProps({ stateColor: true })
 
     expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
-      `--vxp-checkbox-b-color: ${rgbColor};`
+      `--vxp-checkbox-b-color: ${rgbColor};`,
     )
   })
 
@@ -238,9 +238,9 @@ describe('Checkbox', () => {
         default: () => [
           <Checkbox></Checkbox>,
           <Checkbox loading={false}></Checkbox>,
-          <Checkbox loading-lock={false}></Checkbox>
-        ]
-      }
+          <Checkbox loading-lock={false}></Checkbox>,
+        ],
+      },
     })
 
     const items = wrapper.findAllComponents(Checkbox)
@@ -343,22 +343,22 @@ describe('Checkbox', () => {
     const wrapper = mount(CheckboxGroup, {
       props: { color: 'orange' },
       slots: {
-        default: () => <Checkbox></Checkbox>
-      }
+        default: () => <Checkbox></Checkbox>,
+      },
     })
     const rgbColor = parseColorToRgba('orange')
 
     expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
-      `--vxp-checkbox-b-color-hover: ${rgbColor};`
+      `--vxp-checkbox-b-color-hover: ${rgbColor};`,
     )
     expect(wrapper.find('.vxp-checkbox').attributes('style')).not.toContain(
-      `--vxp-checkbox-b-color: ${rgbColor};`
+      `--vxp-checkbox-b-color: ${rgbColor};`,
     )
 
     await wrapper.setProps({ stateColor: true })
 
     expect(wrapper.find('.vxp-checkbox').attributes('style')).toContain(
-      `--vxp-checkbox-b-color: ${rgbColor};`
+      `--vxp-checkbox-b-color: ${rgbColor};`,
     )
   })
 })

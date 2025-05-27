@@ -13,5 +13,5 @@ export default defineComponent({
 
       return props.renderer(props.data)
     }
-  }
+  },
 })

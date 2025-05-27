@@ -16,5 +16,5 @@ export type {
   SelectOptionState,
   SelectFilter,
   SelectListSlotParams,
-  SelectSlots
+  SelectSlots,
 } from './symbol'

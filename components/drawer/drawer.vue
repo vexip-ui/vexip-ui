@@ -10,12 +10,13 @@ import {
   createSizeProp,
   emitEvent,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { getGlobalCount, isPromise, toNumber } from '@vexip-ui/utils'
+import { isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'
 import { drawerPlacements } from './symbol'
 
@@ -29,19 +30,19 @@ const props = useProps('drawer', _props, {
   transfer: false,
   active: {
     default: false,
-    static: true
+    static: true,
   },
   width: {
     default: 280,
-    validator: value => typeof value === 'string' || value > 0
+    validator: value => typeof value === 'string' || value > 0,
   },
   height: {
     default: 280,
-    validator: value => typeof value === 'string' || value > 0
+    validator: value => typeof value === 'string' || value > 0,
   },
   placement: {
     default: 'right',
-    validator: value => drawerPlacements.includes(value)
+    validator: value => drawerPlacements.includes(value),
   },
   title: '',
   closable: true,
@@ -51,7 +52,7 @@ const props = useProps('drawer', _props, {
   hideMask: false,
   onBeforeClose: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   resizable: false,
   autoRemove: false,
@@ -64,7 +65,7 @@ const props = useProps('drawer', _props, {
   actionSize: createSizeProp('small'),
   undivided: false,
   disableEsc: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active'])
@@ -80,8 +81,6 @@ const currentWidth = ref(props.width)
 const currentHeight = ref(props.height)
 
 const wrapper = ref<HTMLElement>()
-
-const idIndex = `${getGlobalCount()}`
 
 const { target: resizer, moving: resizing } = useMoving({
   onStart: (state, event) => {
@@ -131,15 +130,15 @@ const { target: resizer, moving: resizing } = useMoving({
 
     emitEvent(props.onResizeMove, {
       width: toNumber(currentWidth.value),
-      height: toNumber(currentHeight.value)
+      height: toNumber(currentHeight.value),
     })
   },
   onEnd: () => {
     emitEvent(props.onResizeEnd, {
       width: toNumber(currentWidth.value),
-      height: toNumber(currentHeight.value)
+      height: toNumber(currentHeight.value),
     })
-  }
+  },
 })
 
 const className = computed(() => {
@@ -151,8 +150,8 @@ const className = computed(() => {
       [nh.bm('inner')]: props.inner,
       [nh.bm('closable')]: props.closable,
       [nh.bm('resizable')]: props.resizable,
-      [nh.bm('undivided')]: props.undivided
-    }
+      [nh.bm('undivided')]: props.undivided,
+    },
   ]
 })
 const moveTransition = computed(() => {
@@ -164,9 +163,9 @@ const wrapperClass = computed(() => {
     nh.bem('wrapper', props.placement),
     {
       [nh.bem('wrapper', 'hide-mask')]: props.hideMask,
-      [nh.bem('wrapper', 'resizing')]: resizing.value
+      [nh.bem('wrapper', 'resizing')]: resizing.value,
     },
-    props.drawerClass
+    props.drawerClass,
   ]
 })
 const wrapperStyle = computed(() => {
@@ -176,39 +175,39 @@ const wrapperStyle = computed(() => {
     const height = currentHeight.value
 
     return {
-      height: `${height}`.endsWith('%') ? height : `${height}px`
+      height: `${height}`.endsWith('%') ? height : `${height}px`,
     }
   }
 
   const width = currentWidth.value
 
   return {
-    width: `${width}`.endsWith('%') ? width : `${width}px`
+    width: `${width}`.endsWith('%') ? width : `${width}px`,
   }
 })
 const hasTitle = computed(() => {
   return !!(slots.header || slots.title || props.title || props.slots.header || props.slots.title)
 })
-const titleId = computed(() => `${nh.bs(idIndex)}__title`)
-const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
+const titleId = useId()
+const bodyId = useId()
 
 watch(
   () => props.active,
   value => {
     currentActive.value = value
-  }
+  },
 )
 watch(
   () => props.width,
   value => {
     currentWidth.value = value
-  }
+  },
 )
 watch(
   () => props.height,
   value => {
     currentHeight.value = value
-  }
+  },
 )
 
 defineExpose({
@@ -219,7 +218,7 @@ defineExpose({
   resizer,
   handleConfirm,
   handleCancel,
-  handleClose
+  handleClose,
 })
 
 const slotParams = shallowReadonly(
@@ -227,8 +226,8 @@ const slotParams = shallowReadonly(
     resizing,
     handleConfirm,
     handleCancel,
-    handleClose
-  })
+    handleClose,
+  }),
 )
 
 function setActive(active: boolean) {

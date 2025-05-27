@@ -25,10 +25,10 @@ describe('SSR for Dropdown', () => {
                   <DropdownItem>{'2'}</DropdownItem>
                   <DropdownItem>{'3'}</DropdownItem>
                 </DropdownList>
-              )
+              ),
             }}
           </Dropdown>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

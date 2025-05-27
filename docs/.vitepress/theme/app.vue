@@ -36,7 +36,7 @@ const providedProps: PropsOptions = {
   masker: { transfer: true },
   modal: { transfer: true },
   drawer: { transfer: true },
-  imageViewer: { transfer: true }
+  imageViewer: { transfer: true },
 }
 
 const fixedSub = ref(false)
@@ -78,8 +78,8 @@ const layoutClasses = computed(() => {
     aside: nh.be('aside'),
     footer: {
       [nh.be('footer')]: true,
-      [nh.bem('footer', 'center')]: linkCenter.value
-    }
+      [nh.bem('footer', 'center')]: linkCenter.value,
+    },
   } as LayoutInnerClass
 })
 
@@ -91,8 +91,8 @@ const footerLinks = computed(() => {
       children: group.items!.map(item => ({
         name: item.text || t(item.i18n!),
         subname: item.subtext || (item.subI18n ? t(item.subI18n) : undefined),
-        to: item.link
-      }))
+        to: item.link,
+      })),
     }))
 })
 
@@ -104,7 +104,7 @@ watch(
   () => route.path,
   () => {
     requestAnimationFrame(refreshScroll)
-  }
+  },
 )
 watch(expanded, value => {
   if (!isClient) return
@@ -190,7 +190,7 @@ function computeBarLength() {
   barLength.value = boundRange(
     (document.documentElement.clientHeight / (document.documentElement.scrollHeight || 1)) * 100,
     5,
-    99
+    99,
   )
 }
 
@@ -341,7 +341,7 @@ function refreshScroll() {
 </template>
 
 <style lang="scss">
-@use './style/mixins.scss' as *;
+@use './style/mixins' as *;
 
 #transfer-place {
   position: relative;

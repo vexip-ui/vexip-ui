@@ -42,8 +42,8 @@ const columns = reactive([
   {
     name: 'Last Name',
     key: 'lastName',
-    order: 1
-  }
+    order: 1,
+  },
 ])
 const data = reactive(
   Array.from({ length: 5 }, (_, index) => {
@@ -55,9 +55,9 @@ const data = reactive(
       job: `Job ${index}`,
       age: 20 + index,
       email: `email${index}@vexip.ui`,
-      address: `Address ${index}`
+      address: `Address ${index}`,
     }
-  })
+  }),
 )
 
 function jobAccessor(row: RowData) {
@@ -77,9 +77,9 @@ function renderAge({ row }: { row: RowData }) {
     'span',
     {
       class: 'my-age',
-      onClick: handleAgeClick
+      onClick: handleAgeClick,
     },
-    ['age: ', row.age]
+    ['age: ', row.age],
   )
 }
 </script>

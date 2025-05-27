@@ -26,7 +26,7 @@ export default defineConfig(({ command }) => {
       __VERSION__: JSON.stringify(upstreamPkg.version),
       __VUE_VERSION__: JSON.stringify(getVersion('vue')),
       __TS_VERSION__: JSON.stringify(getVersion('typescript')),
-      __REPL_VERSION__: JSON.stringify(getVersion('@vue/repl'))
+      __REPL_VERSION__: JSON.stringify(getVersion('@vue/repl')),
     },
     resolve: {
       alias: [
@@ -35,23 +35,24 @@ export default defineConfig(({ command }) => {
         { find: /^vexip-ui\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
-          replacement: resolve(__dirname, '../common/$1/src')
-        }
+          replacement: resolve(__dirname, '../common/$1/src'),
+        },
       ],
-      dedupe: useServer ? ['../components', 'vue'] : ['vue', 'vexip-ui']
+      dedupe: useServer ? ['../components', 'vue'] : ['vue', 'vexip-ui'],
     },
     esbuild: {
       drop: ['debugger'],
-      pure: ['console.log']
+      pure: ['console.log'],
     },
     server: {
       port: 6012,
+      host: true,
       fs: {
-        allow: ['..']
-      }
+        allow: ['..'],
+      },
     },
     build: {
-      chunkSizeWarningLimit: 10 * 1024
+      chunkSizeWarningLimit: 10 * 1024,
     },
     optimizeDeps: {
       force: true,
@@ -60,17 +61,17 @@ export default defineConfig(({ command }) => {
         '@vexip-ui/bem-helper',
         '@vexip-ui/hooks',
         '@vexip-ui/icons',
-        '@vexip-ui/utils'
+        '@vexip-ui/utils',
       ],
-      exclude: ['@vue/repl', 'vue/server-renderer']
+      exclude: ['@vue/repl'],
     },
     preview: {
-      port: 6012
+      port: 6012,
     },
     css: {
       postcss: {
-        plugins: [autoprefixer]
-      }
+        plugins: [autoprefixer],
+      },
     },
     plugins: [
       vue(),
@@ -83,12 +84,12 @@ export default defineConfig(({ command }) => {
             { 'http-equiv': 'Expires', content: '0' },
             { 'http-equiv': 'Pragma', content: 'no-cache' },
             { 'http-equiv': 'Cache', content: 'no-cache' },
-            { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' }
+            { 'http-equiv': 'Cache-control', content: 'no-store,no-cache,must-revalidate' },
           ]
 
           return metaAttrs.map(attrs => ({ tag: 'meta', attrs }))
-        }
-      }
-    ]
+        },
+      },
+    ],
   }
 })

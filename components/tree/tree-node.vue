@@ -18,8 +18,8 @@ defineOptions({ name: 'TreeNode', inheritAttrs: false })
 const props = defineProps({
   node: {
     type: Object as PropType<TreeNodeProps>,
-    default: () => ({})
-  }
+    default: () => ({}),
+  },
 })
 
 const treeState = inject(TREE_STATE)!
@@ -46,7 +46,7 @@ useModifier({
       [
         [
           () => modifier.up || modifier.down,
-          () => treeState.handleHittingChange(modifier.up ? 'up' : 'down')
+          () => treeState.handleHittingChange(modifier.up ? 'up' : 'down'),
         ],
         [
           () => modifier.left || modifier.right,
@@ -60,20 +60,20 @@ useModifier({
             } else {
               toggleExpanded(modifier.right)
             }
-          }
+          },
         ],
         [() => hasCheckbox.value && modifier.space, handleToggleCheck],
-        [() => modifier.enter, handleToggleSelect]
+        [() => modifier.enter, handleToggleSelect],
       ],
       {
         beforeMatchAny: () => {
           event.preventDefault()
           event.stopPropagation()
         },
-        afterMatchAny: modifier.resetAll
-      }
+        afterMatchAny: modifier.resetAll,
+      },
     )
-  }
+  },
 })
 
 const loaded = ref(!treeState.boundAsyncLoad || props.node.loaded)
@@ -90,7 +90,7 @@ const isReadonly = computed(() => {
 })
 // const depth = computed(() => parentState.depth + 1)
 const secondary = computed(
-  () => !props.node.matched && (props.node.childMatched || props.node.upperMatched)
+  () => !props.node.matched && (props.node.childMatched || props.node.upperMatched),
 )
 const hasLinkLine = computed(() => !!treeState.linkLine && props.node.depth > 0)
 const className = computed(() => {
@@ -109,7 +109,7 @@ const className = computed(() => {
     [nh.bem('node', 'no-arrow')]: !hasArrow.value,
     [nh.bem('node', 'is-floor')]: treeState.floorSelect && props.node.children?.length,
     [nh.bem('node', 'loaded')]: loaded.value,
-    [nh.bem('node', 'load-fail')]: loadFail.value
+    [nh.bem('node', 'load-fail')]: loadFail.value,
   }
 })
 const isLeaf = computed(() => {
@@ -147,7 +147,7 @@ const nodeState = reactive({
   el: wrapper,
   depth: computed(() => props.node.depth),
   disabled: isDisabled,
-  readonly: isReadonly
+  readonly: isReadonly,
 })
 
 watch([() => treeState.boundAsyncLoad, () => props.node.loaded], values => {
@@ -161,7 +161,7 @@ watch(
   (value, prev) => {
     treeState.nodeStates.delete(prev)
     treeState.nodeStates.set(value, nodeState)
-  }
+  },
 )
 
 treeState.nodeStates.set(props.node.id, nodeState)
@@ -272,7 +272,7 @@ function getNodeState() {
   return {
     el: wrapper.value,
     arrow: arrowEl.value,
-    node: props.node
+    node: props.node,
   }
 }
 

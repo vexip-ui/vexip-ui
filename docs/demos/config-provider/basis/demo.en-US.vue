@@ -28,22 +28,22 @@ const provideProps = reactive({
         h(
           'div',
           {
-            class: 'vxp-date-picker__month-label-inner'
+            class: 'vxp-date-picker__month-label-inner',
           },
-          months[month - 1]
-        )
-    }
+          months[month - 1],
+        ),
+    },
   },
   tag: {
     size: 'large',
     simple: true,
-    closable: true
-  }
+    closable: true,
+  },
 }) as PropsOptions
 
 const locale = reactive({
   input: {
-    placeholder: 'Input something...'
-  }
+    placeholder: 'Input something...',
+  },
 })
 </script>

@@ -12,7 +12,7 @@ import {
   ref,
   renderSlot,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -32,7 +32,7 @@ export default defineComponent({
     MenuRest,
     MenuItem,
     MenuGroup,
-    Overflow
+    Overflow,
   },
   props: menuProps,
   emits: ['update:active'],
@@ -40,12 +40,12 @@ export default defineComponent({
     const props = useProps('menu', _props, {
       active: {
         default: null,
-        static: true
+        static: true,
       },
       accordion: false,
       markerType: {
         default: 'right',
-        validator: value => menuMarkerTypes.includes(value)
+        validator: value => menuMarkerTypes.includes(value),
       },
       reduced: false,
       horizontal: false,
@@ -53,16 +53,16 @@ export default defineComponent({
       trigger: 'hover',
       groupType: {
         default: 'collapse',
-        validator: value => ['collapse', 'dropdown'].includes(value)
+        validator: value => ['collapse', 'dropdown'].includes(value),
       },
       tooltipReverse: null,
       options: {
         default: () => [],
-        static: true
+        static: true,
       },
       router: null,
       manualRoute: false,
-      indent: null
+      indent: null,
     })
 
     const nh = useNameHelper('menu')
@@ -94,8 +94,8 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('reduced')]: isReduced.value,
           [nh.bm('dropdown')]: props.groupType === 'dropdown',
-          [nh.bm('horizontal')]: props.horizontal
-        }
+          [nh.bm('horizontal')]: props.horizontal,
+        },
       ]
     })
     const style = computed(() => {
@@ -139,8 +139,8 @@ export default defineComponent({
         handleExpand,
         increaseItem,
         decreaseItem,
-        doForEachItem
-      })
+        doForEachItem,
+      }),
     )
 
     watch(
@@ -149,7 +149,7 @@ export default defineComponent({
         if (value !== currentActive.value) {
           currentActive.value = value
         }
-      }
+      },
     )
     watch(
       () => props.reduced,
@@ -161,7 +161,7 @@ export default defineComponent({
         } else {
           handleMenuExpand()
         }
-      }
+      },
     )
     watch(currentRoute, value => {
       if (!props.manualRoute && value) {
@@ -201,7 +201,7 @@ export default defineComponent({
           ...routeMeta,
           route,
           label: routeMeta.label || route.path,
-          name: routeMeta.name || route.name
+          name: routeMeta.name || route.name,
         } as MenuOptions
 
         if (!parent.children) {
@@ -283,7 +283,7 @@ export default defineComponent({
             el.removeEventListener('transitionend', callback)
 
             const selectedItem = Array.from(menuItemSet).find(
-              item => item.label === currentActive.value
+              item => item.label === currentActive.value,
             )
 
             requestAnimationFrame(() => {
@@ -341,7 +341,7 @@ export default defineComponent({
           </MenuGroup>
         ) : (
           renderMenuItem(menu)
-        )
+        ),
       )
     }
 
@@ -356,14 +356,14 @@ export default defineComponent({
                     default: renderMenus,
                     counter: ({ count }: { count: number }) => (
                       <MenuRest ref={rest} menus={menus.value.slice(-count)}></MenuRest>
-                    )
+                    ),
                   }}
-                </Overflow>
+                </Overflow>,
                 ]
               : renderMenus()
           })}
         </ul>
       )
     }
-  }
+  },
 })

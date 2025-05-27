@@ -32,6 +32,6 @@ export function useTriggerHandler(trigger: Ref<string>, currentVisible: Ref<bool
   return {
     handleTriggerEnter,
     handleTriggerLeave,
-    handleTriggerClick
+    handleTriggerClick,
   }
 }

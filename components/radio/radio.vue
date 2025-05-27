@@ -10,7 +10,7 @@ import {
   emitEvent,
   useIcons,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { radioProps } from './props'
 import { GROUP_STATE, radioShapes } from './symbol'
@@ -25,12 +25,12 @@ const props = useProps('radio', _props, {
   state: createStateProp(),
   value: {
     default: null,
-    static: true
+    static: true,
   },
   label: {
     default: null,
     static: true,
-    required: true
+    required: true,
   },
   labelClass: null,
   disabled: false,
@@ -39,12 +39,12 @@ const props = useProps('radio', _props, {
   loadingLock: false,
   name: {
     default: '',
-    static: true
+    static: true,
   },
   shape: {
     default: 'default',
-    validator: value => radioShapes.includes(value)
-  }
+    validator: value => radioShapes.includes(value),
+  },
 })
 
 const emit = defineEmits(['update:value'])
@@ -80,8 +80,8 @@ const className = computed(() => {
       [nh.bm('loading')]: isLoading.value,
       [nh.bm(size.value)]: size.value !== 'default',
       [nh.bm(state.value)]: state.value !== 'default',
-      [nh.bm(shape.value)]: shape.value !== 'default' && shape.value !== 'button-group'
-    }
+      [nh.bm(shape.value)]: shape.value !== 'default' && shape.value !== 'button-group',
+    },
   ]
 })
 const isButton = computed(() => shape.value === 'button' || shape.value === 'button-group')
@@ -90,7 +90,7 @@ watch(
   () => props.value,
   value => {
     currentValue.value = value
-  }
+  },
 )
 
 if (groupState) {

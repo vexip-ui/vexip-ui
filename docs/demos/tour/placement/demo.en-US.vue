@@ -21,17 +21,17 @@ const steps: TourStepOptions[] = [
   {
     target: '#start-2',
     title: 'Start Tour',
-    content: 'By default the tour tip will be below'
+    content: 'By default the tour tip will be below',
   },
   {
     target: '#button-2',
     title: 'A Button',
     content: 'You can also place it to the right of the target or other position',
-    placement: 'right'
+    placement: 'right',
   },
   {
     title: 'Center',
-    content: "If you don't specify a target then it will be in the center"
-  }
+    content: "If you don't specify a target then it will be in the center",
+  },
 ]
 </script>

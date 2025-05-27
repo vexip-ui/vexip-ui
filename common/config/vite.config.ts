@@ -8,7 +8,7 @@ const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')
 
 const externalPkgs = ['@vue'].concat(
   Object.keys(pkg.dependencies || {}),
-  Object.keys(pkg.peerDependencies || {})
+  Object.keys(pkg.peerDependencies || {}),
 )
 const external = (id: string) => externalPkgs.some(p => p === id || id.startsWith(`${p}/`))
 
@@ -18,11 +18,11 @@ export default defineConfig({
     lib: {
       entry: 'src/index.ts',
       formats: ['cjs', 'es'],
-      fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`
+      fileName: format => `index.${format === 'es' ? 'mjs' : 'cjs'}`,
     },
     rollupOptions: {
-      external
-    }
+      external,
+    },
   },
-  plugins: [dts({ rollupTypes: true })]
+  plugins: [dts({ rollupTypes: true })],
 })

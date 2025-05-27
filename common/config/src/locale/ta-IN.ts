@@ -54,8 +54,8 @@ export function taINLocale() {
         week4: 'வியாழன்',
         week5: 'வெள்ளி',
         week6: 'சனி',
-        week7: 'ஞாயிறு'
-      }
+        week7: 'ஞாயிறு',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function taINLocale() {
       doCaptcha: 'கீழே உள்ள கேப்ட்சாவை முடிக்கவும்',
       pointInOrder: 'வரிசையில் புள்ளி',
       trigger: 'கேப்ட்சா கிளிக் செய்யவும்',
-      completed: 'கேப்ட்சா முடிந்தது'
+      completed: 'கேப்ட்சா முடிந்தது',
     },
 
     checkbox: {
-      all: 'அனைத்தும்'
+      all: 'அனைத்தும்',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function taINLocale() {
       cancel: 'நிராகரி',
 
       ariaLabel: {
-        clear: 'தெளிவாக்கு'
-      }
+        clear: 'தெளிவாக்கு',
+      },
     },
 
     confirm: {
       confirm: 'உறுதிபடுத்து',
-      cancel: 'நிராகரி'
+      cancel: 'நிராகரி',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function taINLocale() {
         datetime: 'தேதி நேரம்',
         start: 'தொடக்கம்',
         end: 'முடிவு',
-        select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
+        select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்',
       },
       startTime: 'தொடக்கம் நேரம்',
       endTime: 'முடிவு நேரம்',
@@ -109,45 +109,45 @@ export function taINLocale() {
         date: 'தேதி',
         hour: 'மணி',
         minute: 'நிமிடம்',
-        second: 'வினாடி'
-      }
+        second: 'வினாடி',
+      },
     },
 
     drawer: {
       confirm: 'உறுதிபடுத்து',
-      cancel: 'நிராகரி'
+      cancel: 'நிராகரி',
     },
 
     form: {
       submit: 'ஒப்படை',
       reset: 'மீள் துவக்கு',
       notNullable: 'வெற்றிடமாக இருக்க கூடாது',
-      validateFail: 'சரிபார்த்தல் தோல்வியுற்றது'
+      validateFail: 'சரிபார்த்தல் தோல்வியுற்றது',
     },
 
     image: {
       placeholder: 'ஏற்றுகிறது...',
-      error: 'ஏற்றுதல் தோல்வியுற்றது'
+      error: 'ஏற்றுதல் தோல்வியுற்றது',
     },
 
     input: {
       placeholder: 'தயவுசெய்து உள்ளிடவும்',
 
       ariaLabel: {
-        clear: 'தெளிவாக்கு'
-      }
+        clear: 'தெளிவாக்கு',
+      },
     },
 
     layout: {
       signOut: 'வெளியேறு',
       signType: 'வழியமைப்பு முறை',
       majorColor: 'முதன்மை வண்ணம்',
-      themeMode: 'நிறமுறை'
+      themeMode: 'நிறமுறை',
     },
 
     modal: {
       confirm: 'உறுதிபடுத்து',
-      cancel: 'நிராகரி'
+      cancel: 'நிராகரி',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function taINLocale() {
       ariaLabel: {
         clear: 'தெளிவாக்கு',
         increase: 'அதிகரிக்க',
-        decrease: 'குறைக்க'
-      }
+        decrease: 'குறைக்க',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function taINLocale() {
       next: 'அடுத்து ',
       total: 'மொத்தம்',
       jumpTo: 'இதற்கு தாவு',
-      itemUnit: 'உருப்படி | உருப்படிகள்'
+      itemUnit: 'உருப்படி | உருப்படிகள்',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function taINLocale() {
       search: 'தேடு அல்லது உள்ளிடு',
 
       ariaLabel: {
-        clear: 'தெளிவாக்கு'
-      }
+        clear: 'தெளிவாக்கு',
+      },
     },
 
     table: {
       empty: 'தரவு இல்லை',
       filterConfirm: 'வடிகட்டு',
       filterReset: 'மீள் துவக்கு',
-      filterAll: 'அனைத்தும்'
+      filterAll: 'அனைத்தும்',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function taINLocale() {
       lastMonth: 'கடந்த மாதம்',
       months: 'மாதம்',
       lastYear: 'கடந்த வருடம்',
-      years: 'வருடங்கள்'
+      years: 'வருடங்கள்',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function taINLocale() {
         time: 'நேரம்',
         start: 'தொடக்கம்',
         end: 'முடிவு',
-        select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்'
+        select: 'தயவுசெய்து தேர்ந்தெடுக்கவும்',
       },
 
       ariaLabel: {
         clear: 'தெளிவாக்கு',
         hour: 'மணி',
         minute: 'நிமிடம்',
-        second: 'வினாடி'
-      }
+        second: 'வினாடி',
+      },
     },
 
     tour: {
       prev: 'முன்',
       next: 'அடுத்தவர்',
       done: 'முடிந்த',
-      stepCount: 'படிமுறை {n}'
+      stepCount: 'படிமுறை {n}',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function taINLocale() {
       target: 'இலக்கு',
       empty: 'தரவு இல்லை',
       reverse: 'மீள் தேர்வு',
-      search: 'தேடு'
+      search: 'தேடு',
     },
 
     tree: {
-      empty: 'தரவு இல்லை'
+      empty: 'தரவு இல்லை',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function taINLocale() {
 
       ariaLabel: {
         preview: 'முன்னோட்டம்',
-        delete: 'கோப்பை நீக்கு'
-      }
+        delete: 'கோப்பை நீக்கு',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function taINLocale() {
       fullWindowExit: 'முழு சாளர வெளியேற்றம்',
       fullScreen: 'முழுத் திரை',
       fullScreenExit: 'முழுத்திரை வெளியேறு',
-      chapterCount: 'அத்தியாயம் {n}'
+      chapterCount: 'அத்தியாயம் {n}',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function taINLocale() {
       zoomOut: 'சிறிதாக்கு',
       fullScreen: 'முழுத்திரை',
       fullScreenExit: 'முழுத்திரயிலிருந்து வெளியேறு',
-      reset: 'மீள்துவக்கு '
-    }
+      reset: 'மீள்துவக்கு ',
+    },
   })
 }

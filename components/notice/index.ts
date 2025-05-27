@@ -12,7 +12,7 @@ import type {
   NoticeInstance,
   NoticeOptions,
   NoticePlacement,
-  NoticeType
+  NoticeType,
 } from './symbol'
 
 export type { NoticeType, NoticePlacement, NoticeOptions }
@@ -35,7 +35,7 @@ const placementWhiteList: NoticePlacement[] = [
   'top-right',
   'top-left',
   'bottom-right',
-  'bottom-left'
+  'bottom-left',
 ]
 
 let count = 1
@@ -66,7 +66,7 @@ export class NoticeManager {
     options = {
       ...options,
       marker: !!options.marker,
-      duration: options.duration ? toNumber(options.duration) : 4000
+      duration: options.duration ? toNumber(options.duration) : 4000,
     }
 
     this._mountedApp = null
@@ -113,7 +113,7 @@ export class NoticeManager {
     state: boolean,
     success: string | NoticeOptions,
     error: string | NoticeOptions,
-    duration?: number
+    duration?: number,
   ) {
     if (state) {
       this.success(success, duration)
@@ -133,7 +133,7 @@ export class NoticeManager {
   config({ placement, ...others }: NoticeConfig & NoticeOptions) {
     if (placement) {
       this._getInstance()?.config({
-        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0]
+        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
       })
     }
 
@@ -220,7 +220,7 @@ export class NoticeManager {
     type: null | NoticeType,
     title: FuzzyOptions,
     content?: string | number,
-    _duration?: number
+    _duration?: number,
   ) {
     if (!isClient) {
       return noop
@@ -284,7 +284,7 @@ export class NoticeManager {
       type: type ?? options.type,
       onClose,
       onEnter,
-      onLeave
+      onLeave,
     }
 
     if (item.icon && typeof item.icon !== 'function') {

@@ -39,7 +39,7 @@ describe('Input', () => {
 
   it('value', async () => {
     const wrapper = mount(Input, {
-      props: { value: TEXT }
+      props: { value: TEXT },
     })
 
     await nextTick()
@@ -82,7 +82,7 @@ describe('Input', () => {
     const wrapper = mount(() => (
       <Input prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </Input>
     ))
@@ -113,7 +113,7 @@ describe('Input', () => {
     const wrapper = mount(() => (
       <Input suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </Input>
     ))
@@ -167,7 +167,7 @@ describe('Input', () => {
   it('change event', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Input, {
-      props: { onChange }
+      props: { onChange },
     })
     const input = wrapper.find('input').element
 
@@ -182,7 +182,7 @@ describe('Input', () => {
   it('input event', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Input, {
-      props: { onInput }
+      props: { onInput },
     })
     const input = wrapper.find('input').element
 
@@ -199,8 +199,8 @@ describe('Input', () => {
       props: {
         value: 1,
         onChange,
-        onInput
-      }
+        onInput,
+      },
     })
     const input = wrapper.find('input').element
 
@@ -218,7 +218,7 @@ describe('Input', () => {
   it('input throttle', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Input, {
-      props: { onInput }
+      props: { onInput },
     })
     const input = wrapper.find('input').element
 
@@ -237,7 +237,7 @@ describe('Input', () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(Input, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const input = wrapper.find('input')
 
@@ -260,8 +260,8 @@ describe('Input', () => {
       props: {
         clearable: true,
         suffix: Github,
-        onClear
-      }
+        onClear,
+      },
     })
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
@@ -283,8 +283,8 @@ describe('Input', () => {
       props: {
         clearable: true,
         sync: true,
-        onClear
-      }
+        onClear,
+      },
     })
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
@@ -317,7 +317,7 @@ describe('Input', () => {
     const wrapper = mount(() => (
       <Input before={TEXT}>
         {{
-          before: () => <span class={'before'}></span>
+          before: () => <span class={'before'}></span>,
         }}
       </Input>
     ))
@@ -338,7 +338,7 @@ describe('Input', () => {
     const wrapper = mount(() => (
       <Input after={TEXT}>
         {{
-          after: () => <span class={'after'}></span>
+          after: () => <span class={'after'}></span>,
         }}
       </Input>
     ))
@@ -350,7 +350,7 @@ describe('Input', () => {
 
   it('max length', async () => {
     const wrapper = mount(Input, {
-      props: { maxLength: 2 }
+      props: { maxLength: 2 },
     })
     const input = wrapper.find('input').element
 
@@ -388,8 +388,8 @@ describe('Input', () => {
   it('formatter', async () => {
     const wrapper = mount(Input, {
       props: {
-        formatter: (v: string) => `${v}1`
-      }
+        formatter: (v: string) => `${v}1`,
+      },
     })
 
     await wrapper.setProps({ value: TEXT })
@@ -404,7 +404,7 @@ describe('Input', () => {
 
   it('sync', async () => {
     const wrapper = mount(Input, {
-      props: { sync: true }
+      props: { sync: true },
     })
     const input = wrapper.find('input').element
 

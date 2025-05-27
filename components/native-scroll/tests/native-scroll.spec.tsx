@@ -33,14 +33,14 @@ describe('NativeScroll', () => {
   function mockScrollWidth(el: HTMLElement, value: number) {
     Object.defineProperty(el, 'scrollWidth', {
       configurable: true,
-      value
+      value,
     })
   }
 
   function mockScrollHeight(el: HTMLElement, value: number) {
     Object.defineProperty(el, 'scrollHeight', {
       configurable: true,
-      value
+      value,
     })
   }
 
@@ -52,11 +52,11 @@ describe('NativeScroll', () => {
         mode: 'both',
         width: 200,
         height: 200,
-        ...props
+        ...props,
       },
       slots: {
-        default: () => <span class={'content'}>{TEXT}</span>
-      }
+        default: () => <span class={'content'}>{TEXT}</span>,
+      },
     })
 
     const contentEl = scroll.find('.vxp-native-scroll__wrapper').element as HTMLElement
@@ -72,12 +72,12 @@ describe('NativeScroll', () => {
     Object.defineProperty(contentEl, 'scrollTop', {
       configurable: true,
       get: () => top,
-      set: v => (top = v)
+      set: v => (top = v),
     })
     Object.defineProperty(contentEl, 'scrollLeft', {
       configurable: true,
       get: () => left,
-      set: v => (left = v)
+      set: v => (left = v),
     })
     ;(scroll.vm as any).refresh()
     vi.runOnlyPendingTimers()
@@ -146,7 +146,7 @@ describe('NativeScroll', () => {
     const onYEnabledChange = vi.fn()
     wrapper = await createScroll({
       onXEnabledChange,
-      onYEnabledChange
+      onYEnabledChange,
     })
     const contentEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
@@ -169,7 +169,7 @@ describe('NativeScroll', () => {
   it('wheel event', async () => {
     const onWheel = vi.fn()
     wrapper = await createScroll({
-      onWheel
+      onWheel,
     })
     const wrapperEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
@@ -183,7 +183,7 @@ describe('NativeScroll', () => {
   it('scroll event', async () => {
     const onScroll = vi.fn()
     wrapper = await createScroll({
-      onScroll
+      onScroll,
     })
     const contentEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
@@ -199,7 +199,7 @@ describe('NativeScroll', () => {
       pointer: true,
       onScrollStart,
       onScroll,
-      onScrollEnd
+      onScrollEnd,
     })
     const wrapperEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
@@ -228,7 +228,7 @@ describe('NativeScroll', () => {
   it('auto play', async () => {
     wrapper = await createScroll({
       mode: 'vertical',
-      autoplay: true
+      autoplay: true,
     })
 
     vi.runOnlyPendingTimers()
@@ -244,7 +244,7 @@ describe('NativeScroll', () => {
       useYBar: true,
       onBarScrollStart,
       onBarScroll,
-      onBarScrollEnd
+      onBarScrollEnd,
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -258,7 +258,7 @@ describe('NativeScroll', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -269,7 +269,7 @@ describe('NativeScroll', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any

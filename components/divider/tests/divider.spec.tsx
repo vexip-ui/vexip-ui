@@ -22,8 +22,8 @@ describe('Divider', () => {
   it('with text', async () => {
     const wrapper = mount(Divider, {
       slots: {
-        default: () => TEXT
-      }
+        default: () => TEXT,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-divider--with-text')
@@ -38,11 +38,11 @@ describe('Divider', () => {
 
       if (position === 'center') {
         expect(wrapper.find('.vxp-divider').classes()).not.toContain(
-          'vxp-divider--with-text-center'
+          'vxp-divider--with-text-center',
         )
       } else {
         expect(wrapper.find('.vxp-divider').classes()).toContain(
-          `vxp-divider--with-text-${position}`
+          `vxp-divider--with-text-${position}`,
         )
       }
     })
@@ -50,7 +50,7 @@ describe('Divider', () => {
 
   it('margin', async () => {
     const wrapper = mount(Divider, {
-      props: { margin: 10 }
+      props: { margin: 10 },
     })
 
     expect(wrapper.attributes('style')).toContain('margin-top: 10px;')

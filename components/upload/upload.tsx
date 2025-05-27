@@ -13,7 +13,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { isClient, isDefined, isFalse, isPromise, noop, randomString } from '@vexip-ui/utils'
 import { uploadProps } from './props'
@@ -26,7 +26,7 @@ import type {
   UploadFileOptions,
   UploadFileState,
   UploadHttpError,
-  UploadSourceFile
+  UploadSourceFile,
 } from './symbol'
 
 function getDefaultFileState(): UploadFileState {
@@ -44,7 +44,7 @@ function getDefaultFileState(): UploadFileState {
     xhr: null,
     response: null,
     error: null,
-    abort: noop
+    abort: noop,
   }
 }
 
@@ -62,7 +62,7 @@ export default defineComponent({
       size,
       validateField,
       getFieldValue,
-      setFieldValue
+      setFieldValue,
     } = useFieldStore<UploadFileOptions[]>(focus)
 
     const props = useProps('upload', _props, {
@@ -70,11 +70,11 @@ export default defineComponent({
       locale: null,
       url: {
         default: '',
-        static: true
+        static: true,
       },
       fileList: {
         default: () => getFieldValue(),
-        static: true
+        static: true,
       },
       multiple: false,
       tip: '',
@@ -82,7 +82,7 @@ export default defineComponent({
       filter: '',
       maxSize: {
         default: null,
-        validator: value => value >= 0
+        validator: value => value >= 0,
       },
       field: 'file',
       data: () => ({}),
@@ -92,25 +92,25 @@ export default defineComponent({
       hiddenFiles: false,
       countLimit: {
         default: 0,
-        validator: value => value >= 0
+        validator: value => value >= 0,
       },
       allowDrag: false,
       onBeforeUpload: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       onBeforeSelect: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       iconRenderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       selectToAdd: false,
       listType: {
         default: 'name',
-        validator: value => uploadListTypes.includes(value)
+        validator: value => uploadListTypes.includes(value),
       },
       block: false,
       loadingText: null,
@@ -129,13 +129,13 @@ export default defineComponent({
       listStyle: null,
       name: {
         default: '',
-        static: true
+        static: true,
       },
       customFetch: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('upload')
@@ -165,8 +165,8 @@ export default defineComponent({
           [nh.bm('image')]: props.image,
           [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length,
           [nh.bm('readonly')]: readonly.value,
-          [nh.bm('loading')]: props.loading
-        }
+          [nh.bm('loading')]: props.loading,
+        },
       ]
     })
     const controlClass = computed(() => {
@@ -174,13 +174,13 @@ export default defineComponent({
         return {
           [nh.be('image-control')]: true,
           [nh.bem('image-control', 'drag-over')]: isDragOver.value,
-          [nh.bem('image-control', 'disabled')]: props.disabled
+          [nh.bem('image-control', 'disabled')]: props.disabled,
         }
       }
 
       return {
         [nh.be('control')]: true,
-        [nh.bem('control', 'drag-over')]: isDragOver.value
+        [nh.bem('control', 'drag-over')]: isDragOver.value,
       }
     })
     const acceptString = computed(() => {
@@ -214,12 +214,12 @@ export default defineComponent({
         fileStates.value = (value || []).map(file =>
           createFileState(
             file,
-            file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined
-          )
+            file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined,
+          ),
         )
         syncInputFiles()
       },
-      { immediate: true, deep: true }
+      { immediate: true, deep: true },
     )
 
     expose({
@@ -230,7 +230,7 @@ export default defineComponent({
       blur: () => {
         button.value?.$el.blur()
         panel.value?.blur()
-      }
+      },
     })
 
     function focus(options?: FocusOptions) {
@@ -287,7 +287,7 @@ export default defineComponent({
             name: file.name,
             size: file.size,
             type: file.type,
-            source: file
+            source: file,
           })
         }
 
@@ -349,7 +349,7 @@ export default defineComponent({
 
     function createFileState(
       file: UploadFileOptions,
-      defaults = getDefaultFileState()
+      defaults = getDefaultFileState(),
     ): UploadFileState {
       const { id, name, size, type, base64, status, percentage, source, url, path } = file
 
@@ -366,7 +366,7 @@ export default defineComponent({
         path: path || '',
         xhr: null,
         response: null,
-        error: null
+        error: null,
       })
 
       return defaults
@@ -382,7 +382,7 @@ export default defineComponent({
       }
 
       const uploadFiles = fileStates.value.filter(
-        item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
+        item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE,
       )
       const requests: Promise<any>[] = []
 
@@ -398,8 +398,8 @@ export default defineComponent({
         let result = props.onBeforeUpload(
           file,
           fileStates.value.filter(
-            item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
-          )
+            item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE,
+          ),
         )
 
         if (isPromise(result)) {
@@ -417,7 +417,7 @@ export default defineComponent({
             file.source = result
           } else {
             file.source = new File([result], file.name, {
-              type: file.type
+              type: file.type,
             })
           }
         }
@@ -451,7 +451,7 @@ export default defineComponent({
           },
           onAbort: () => {
             resolve(null)
-          }
+          },
         })
       })
     }
@@ -633,7 +633,7 @@ export default defineComponent({
 
                 resolve()
               })
-            })
+            }),
           )
         }
       }
@@ -656,10 +656,10 @@ export default defineComponent({
                   entry.file(file => {
                     file.path = `${prefix}/${file.name}`
                     resolve(file)
-                  })
-                )
-            )
-          )
+                  }),
+                ),
+            ),
+          ),
         )
       }
 
@@ -692,13 +692,13 @@ export default defineComponent({
                   icon={props.loadingIcon || icons.value.loading.icon}
                   label={'loading'}
                 />
-              )
+              ),
             }}
           </Button>
           {renderSlot(slots, 'tip', undefined, () => [
             <Renderer renderer={props.slots.tip}>
               {props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
-            </Renderer>
+            </Renderer>,
           ])}
         </>
       ) : (
@@ -715,7 +715,7 @@ export default defineComponent({
           {renderSlot(slots, 'tip', undefined, () => [
             <Renderer renderer={props.slots.tip}>
               <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
-            </Renderer>
+            </Renderer>,
           ])}
           <Icon
             {...icons.value.loading}
@@ -739,7 +739,7 @@ export default defineComponent({
             slots,
             'default',
             {
-              isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+              isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value,
             },
             () => [
               <Renderer
@@ -764,8 +764,8 @@ export default defineComponent({
                   />
                 )}
                 <span>{props.buttonLabel ?? locale.value.upload}</span>
-              </Renderer>
-            ]
+              </Renderer>,
+            ],
           )}
         </button>
       )
@@ -804,18 +804,18 @@ export default defineComponent({
               slots,
               'default',
               {
-                isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+                isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value,
               },
               () => [
                 <Renderer
                   renderer={props.slots.default}
                   data={{
-                    isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
+                    isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value,
                   }}
                 >
                   {renderNormalAction()}
-                </Renderer>
-              ]
+                </Renderer>,
+              ],
             )}
         </HtmlTag>
       )
@@ -840,20 +840,20 @@ export default defineComponent({
               slots.item || props.slots.item
                 ? (params: any) =>
                     renderSlot(slots, 'item', params, () => [
-                      <Renderer renderer={props.slots.item} data={params}></Renderer>
+                      <Renderer renderer={props.slots.item} data={params}></Renderer>,
                     ])
                 : null,
             icon:
               slots.icon || props.slots.icon
                 ? (params: any) =>
                     renderSlot(slots, 'icon', params, () => [
-                      <Renderer renderer={props.slots.icon} data={params}></Renderer>
+                      <Renderer renderer={props.slots.icon} data={params}></Renderer>,
                     ])
                 : null,
             suffix: () =>
               props.image && (!props.countLimit || renderFiles.value.length < props.countLimit)
                 ? renderControl()
-                : null
+                : null,
           }}
         </UploadList>
       )
@@ -870,6 +870,6 @@ export default defineComponent({
     execute: noop as () => Promise<false | any[]>,
     handleDelete: noop as (file: UploadFileState) => void,
     focus: noop as (options?: FocusOptions) => void,
-    blur: noop as () => void
-  }
+    blur: noop as () => void,
+  },
 })

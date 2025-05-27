@@ -21,7 +21,7 @@ export function useManualRef() {
 
           value = newValue
           updateSet.add(update)
-        }
+        },
       }
     })
   }

@@ -25,7 +25,7 @@ async function main() {
     'H5',
     'H6',
     'P',
-    'Strong'
+    'Strong',
   ]
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const components = exportComponents.filter(c => !plugins.includes(c))
@@ -70,7 +70,7 @@ async function main() {
       export interface GlobalComponents {
         ${[...components, ...typography]
           .map(
-            name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`
+            name => `${toCapitalCase(name)}: typeof import('vexip-ui')['${toCapitalCase(name)}']`,
           )
           .join(',\n')}
       }
@@ -98,7 +98,7 @@ async function main() {
         ${directives
           .map(
             directive =>
-              `"v${toCapitalCase(directive.name)}": ${JSON.stringify(directive.components)}`
+              `"v${toCapitalCase(directive.name)}": ${JSON.stringify(directive.components)}`,
           )
           .join(',\n')}
       }
@@ -150,12 +150,12 @@ async function main() {
     writeFile(
       demoPrefixPath,
       await format(demoPrefix, { ...prettierConfig, parser: 'typescript' }),
-      'utf-8'
-    )
+      'utf-8',
+    ),
   ])
 
   await ESLint.outputFixes(
-    await eslint.lintFiles([indexPath, typesPath, metaDataPath, demoPrefixPath])
+    await eslint.lintFiles([indexPath, typesPath, metaDataPath, demoPrefixPath]),
   )
 
   await runParallel(cpus().length, allComponents, async component => {
@@ -174,12 +174,12 @@ async function main() {
   await writeFile(
     resolve(rootDir, 'style/components.scss'),
     await format(componentsStyle, { ...prettierConfig, parser: 'scss' }),
-    'utf-8'
+    'utf-8',
   )
   await writeFile(
     resolve(rootDir, 'style/index.scss'),
     await format(styleIndex, { ...prettierConfig, parser: 'scss' }),
-    'utf-8'
+    'utf-8',
   )
 }
 
@@ -206,7 +206,7 @@ async function readDirectives() {
         }
 
         return { name: directive, components }
-      })
+      }),
   )
 
   return directives

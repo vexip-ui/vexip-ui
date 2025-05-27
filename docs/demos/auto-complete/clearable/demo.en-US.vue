@@ -27,6 +27,6 @@ const options = [
   'Switch',
   'TimePicker',
   'Upload',
-  'Wheel'
+  'Wheel',
 ]
 </script>

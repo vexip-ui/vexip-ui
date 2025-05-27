@@ -16,7 +16,7 @@ export default defineComponent({
       round: false,
       circle: false,
       block: false,
-      loading: true
+      loading: true,
     })
 
     const nh = useNameHelper('skeletonGroup')
@@ -29,15 +29,15 @@ export default defineComponent({
           typeof props.tag === 'string' ? props.tag : 'div',
           {
             class: [nh.b(), props.inherit && nh.bm('inherit')],
-            role: 'group'
+            role: 'group',
           },
           {
-            default: () => slots.default?.()
-          }
+            default: () => slots.default?.(),
+          },
         )
       }
 
       return renderSlot(slots, 'default')
     }
-  }
+  },
 })

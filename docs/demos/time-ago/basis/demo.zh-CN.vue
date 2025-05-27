@@ -20,6 +20,6 @@ const datetimes = [
   addDays(Date.now(), -32),
   addDays(Date.now(), -93),
   addDays(Date.now(), -366),
-  addDays(Date.now(), -732)
+  addDays(Date.now(), -732),
 ]
 </script>

@@ -44,7 +44,7 @@ async function main() {
         'CHANGELOG.md',
         '-s',
         '--commit-path',
-        '.'
+        '.',
       ]
 
       if (!isRoot) {
@@ -52,7 +52,7 @@ async function main() {
       }
 
       await run('npx', changelogArgs, { cwd: pkgDir })
-    }
+    },
   })
 }
 

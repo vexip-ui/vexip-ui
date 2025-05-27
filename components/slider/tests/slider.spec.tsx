@@ -51,20 +51,20 @@ describe('Slider', () => {
 
   it('value', async () => {
     const wrapper = mount(Slider, {
-      props: { value: 40 }
+      props: { value: 40 },
     })
 
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 0%; width: 40%;'
+      'left: 0%; width: 40%;',
     )
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 0%; width: 40%;'
+      'left: 0%; width: 40%;',
     )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 40%;')
 
     await wrapper.setProps({ value: 60 })
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 0%; width: 60%;'
+      'left: 0%; width: 60%;',
     )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 60%;')
   })
@@ -74,7 +74,7 @@ describe('Slider', () => {
 
     await nextTick()
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 0%; width: 10%;'
+      'left: 0%; width: 10%;',
     )
     expect(wrapper.find('.vxp-slider__trigger').attributes('style')).toContain('left: 10%;')
   })
@@ -95,7 +95,7 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element)
@@ -106,7 +106,7 @@ describe('Slider', () => {
     expect(wrapper.findComponent(Slider).emitted('update:value')![0][0]).toBe(40)
 
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 0%; width: 40%;'
+      'left: 0%; width: 40%;',
     )
     expect(trigger.attributes('style')).toContain('left: 40%;')
 
@@ -116,7 +116,7 @@ describe('Slider', () => {
   it('disabled', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Slider, {
-      props: { onChange }
+      props: { onChange },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-slider--disabled')
@@ -136,7 +136,7 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element)
@@ -158,7 +158,7 @@ describe('Slider', () => {
     const wrapper = mount(Slider)
 
     expect(wrapper.find('.vxp-slider__button').classes()).not.toContain(
-      'vxp-slider__button--loading'
+      'vxp-slider__button--loading',
     )
 
     await wrapper.setProps({ loading: true })
@@ -188,7 +188,7 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element, 2)
@@ -217,12 +217,12 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element)
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'top: 0%; height: 40%;'
+      'top: 0%; height: 40%;',
     )
     expect(trigger.attributes('style')).toContain('top: 40%;')
 
@@ -245,7 +245,7 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await toggleMove(wrapper.find('.vxp-slider').element, -40)
@@ -255,7 +255,7 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalledWith(40)
 
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'right: 0%; width: 40%;'
+      'right: 0%; width: 40%;',
     )
     expect(trigger.attributes('style')).toContain('right: 40%;')
 
@@ -280,14 +280,14 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const triggers = wrapper.findAll('.vxp-slider__trigger')
 
     expect(triggers.length).toEqual(2)
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 20%; width: 30%;'
+      'left: 20%; width: 30%;',
     )
 
     await toggleMove(wrapper.find('.vxp-slider').element, 30)
@@ -296,14 +296,14 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([30, 50])
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 30%; width: 20%;'
+      'left: 30%; width: 20%;',
     )
 
     await toggleMove(wrapper.find('.vxp-slider').element, 80)
     expect(onInput).toHaveBeenCalledWith([30, 80])
     expect(onChange).toHaveBeenCalledWith([30, 80])
     expect(wrapper.find('.vxp-slider__filler').attributes('style')).toContain(
-      'left: 30%; width: 50%;'
+      'left: 30%; width: 50%;',
     )
 
     trackMock.mockRestore()
@@ -345,7 +345,7 @@ describe('Slider', () => {
     const wrapper = mount(() => (
       <Slider value={[20, 50]} range>
         {{
-          filler: (params: any) => <span class={'filler'}>{(paramsRecord = params)}</span>
+          filler: (params: any) => <span class={'filler'}>{(paramsRecord = params)}</span>,
         }}
       </Slider>
     ))
@@ -356,7 +356,7 @@ describe('Slider', () => {
       sliding: [false, false],
       percent: [20, 50],
       disabled: false,
-      loading: false
+      loading: false,
     })
   })
 
@@ -375,7 +375,7 @@ describe('Slider', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await moveStart(wrapper.find('.vxp-slider').element, 40)

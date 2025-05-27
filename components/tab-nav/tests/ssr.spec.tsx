@@ -18,7 +18,7 @@ describe('SSR for TabNav', () => {
           <TabNav>
             <TabNavItem>{'tab'}</TabNavItem>
           </TabNav>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

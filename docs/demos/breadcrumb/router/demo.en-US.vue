@@ -21,7 +21,7 @@ const router = createRouter({
       component: {},
       meta: {
         label: '1',
-        name: 'Menu 1'
+        name: 'Menu 1',
       },
       children: [
         {
@@ -29,21 +29,21 @@ const router = createRouter({
           name: 'Child Menu 1',
           component: {},
           meta: {
-            label: '1-1'
+            label: '1-1',
           },
           children: [
             {
               path: 'cc1',
               component: {},
               meta: {
-                name: 'Child Menu 1-1'
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                name: 'Child Menu 1-1',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
 })
 
 // mock the push method
@@ -54,23 +54,23 @@ router.push = async (to: /* RouteLocationRaw */ any) => {
         path: '/m1',
         meta: {
           label: '1',
-          name: 'Menu 1'
-        }
+          name: 'Menu 1',
+        },
       },
       {
         path: '/m1/c1',
         name: 'Child Menu 1',
         meta: {
-          label: '1-1'
-        }
+          label: '1-1',
+        },
       },
       {
         path: '/m1/c1/cc1',
         meta: {
-          name: 'Child Menu 1-1'
-        }
-      }
-    ]
+          name: 'Child Menu 1-1',
+        },
+      },
+    ],
   }
 }
 

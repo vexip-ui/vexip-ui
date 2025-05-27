@@ -17,8 +17,8 @@ export const ellipsisProps = buildProps({
   tipDisabled: booleanProp,
   tipShift: {
     type: [Boolean, String] as PropType<boolean | TooltipShift>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type EllipsisProps = ExtractPropTypes<typeof ellipsisProps>

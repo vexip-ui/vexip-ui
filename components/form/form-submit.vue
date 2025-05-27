@@ -32,8 +32,8 @@ const props = useProps('form-submit', _props, {
   block: null,
   onBeforeSubmit: {
     default: null,
-    isFunc: true
-  }
+    isFunc: true,
+  },
 })
 
 const slots = defineSlots<{

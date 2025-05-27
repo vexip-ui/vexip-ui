@@ -6,7 +6,7 @@ import {
   iconProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -70,7 +70,7 @@ export const cascaderProps = buildProps({
   onChange: eventProp<ChangeEvent>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
-  onClear: eventProp()
+  onClear: eventProp(),
 })
 
 export type CascaderProps = ExtractPropTypes<typeof cascaderProps>

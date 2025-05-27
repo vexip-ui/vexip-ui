@@ -19,6 +19,6 @@ const paged = ref(false)
 const options = Array.from({ length: 40 }, (_, index) => ({
   value: index,
   label: `选项${index + 1}`,
-  disabled: index % 6 === 0
+  disabled: index % 6 === 0,
 }))
 </script>

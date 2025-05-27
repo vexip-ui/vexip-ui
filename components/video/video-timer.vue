@@ -12,16 +12,16 @@ defineOptions({ name: 'VideoTimer' })
 const props = defineProps({
   time: {
     type: Number,
-    default: 0
+    default: 0,
   },
   duration: {
     type: Number,
-    default: 0
+    default: 0,
   },
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['change'])
@@ -42,7 +42,7 @@ watch(
   () => props.time,
   value => {
     currentTime.value = value
-  }
+  },
 )
 watch(
   () => props.disabled,
@@ -50,7 +50,7 @@ watch(
     if (value) {
       editing.value = false
     }
-  }
+  },
 )
 
 onMounted(() => {
@@ -61,7 +61,7 @@ onMounted(() => {
         width.value = durationEl.value ? getRangeWidth(durationEl.value) * 2 + 20 : 84
       })
     },
-    { immediate: true }
+    { immediate: true },
   )
 })
 

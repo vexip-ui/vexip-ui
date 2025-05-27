@@ -14,24 +14,24 @@ const columns = reactive(
   defineTableColumns([
     {
       name: 'First Name',
-      key: 'firstName'
+      key: 'firstName',
     },
     {
       name: 'Last Name',
-      key: 'lastName'
+      key: 'lastName',
     },
     {
       name: 'Job',
       key: 'job',
       accessor: row => row.job,
-      formatter: job => `Good ${job}`
+      formatter: job => `Good ${job}`,
     },
     {
       name: 'Age',
       key: 'age',
-      formatter: age => `${age} (${currentYear - age})`
-    }
-  ])
+      formatter: age => `${age} (${currentYear - age})`,
+    },
+  ]),
 )
 
 const data = reactive(
@@ -44,8 +44,8 @@ const data = reactive(
       job: `Job ${index}`,
       age: 20 + index,
       email: `email${index}@vexip.ui`,
-      address: `Address ${index}`
+      address: `Address ${index}`,
     }
-  })
+  }),
 )
 </script>

@@ -23,24 +23,24 @@ const options: MenuOptions[] = [
     children: [
       { label: '1-1', name: 'Child Menu 1' },
       { label: '1-2', name: 'Child Menu 2' },
-      { label: '1-3', name: 'Child Menu 3' }
-    ]
+      { label: '1-3', name: 'Child Menu 3' },
+    ],
   },
   {
     label: '2',
     name: 'Menu 2',
     icon: City,
-    disabled: true
+    disabled: true,
   },
   {
     label: '3',
     name: 'Menu 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: 'Menu 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 </script>

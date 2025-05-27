@@ -8,7 +8,7 @@ const TEXT = 'Text'
 describe('Option', () => {
   it('render', () => {
     const wrapper = mount(Option, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).toContain('vxp-option-vars')
@@ -26,7 +26,7 @@ describe('Option', () => {
     const wrapper = mount(() => (
       <Option label={TEXT}>
         {{
-          default: () => <span class={'option'}></span>
+          default: () => <span class={'option'}></span>,
         }}
       </Option>
     ))
@@ -65,8 +65,8 @@ describe('Option', () => {
         divided: true,
         hitting: true,
         noHover: true,
-        selected: true
-      }
+        selected: true,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-option--divided')

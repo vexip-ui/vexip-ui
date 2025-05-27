@@ -22,12 +22,12 @@ export default defineComponent({
         appear: true,
         configs: [
           {
-            key: '选项1'
+            key: '选项1',
           },
           {
             key: '选项2',
             icon: User,
-            shortcut: 'Ctrl+A'
+            shortcut: 'Ctrl+A',
           },
           {
             key: '选项3',
@@ -37,43 +37,43 @@ export default defineComponent({
             children: [
               {
                 key: '选项3-1',
-                disabled: true
+                disabled: true,
               },
               {
                 key: '选项3-2',
-                divided: true
+                divided: true,
               },
               {
                 key: '选项3-3',
                 children: [
                   {
                     key: '选项3-3-1',
-                    shortcut: 'Ctrl+L'
+                    shortcut: 'Ctrl+L',
                   },
                   {
-                    key: '选项3-3-2'
-                  }
-                ]
-              }
-            ]
+                    key: '选项3-3-2',
+                  },
+                ],
+              },
+            ],
           },
           {
             key: '选项4',
             shortcut: 'Alt+I',
-            color: 'red'
+            color: 'red',
           },
           {
             key: '选项5',
             shortcut: 'Ctrl+Alt+I',
             icon: Fire,
             color: 'blue',
-            iconColor: 'green'
-          }
-        ]
+            iconColor: 'green',
+          },
+        ],
       })
 
       console.info(selectedKeys)
-    }
-  }
+    },
+  },
 })
 </script>

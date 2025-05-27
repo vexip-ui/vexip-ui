@@ -20,7 +20,7 @@ describe('Video', () => {
     const wrapper = mount(() => (
       <Video>
         {{
-          extra: () => <span class={'extra'}></span>
+          extra: () => <span class={'extra'}></span>,
         }}
       </Video>
     ))
@@ -30,7 +30,7 @@ describe('Video', () => {
 
   it('src', async () => {
     const wrapper = mount(Video, {
-      props: { src: 'a.mp4' }
+      props: { src: 'a.mp4' },
     })
 
     expect(wrapper.find('video').attributes('src')).toEqual('a.mp4')
@@ -56,7 +56,7 @@ describe('Video', () => {
 
   it('time', async () => {
     const wrapper = mount(Video, {
-      props: { src: 'a.mp4', time: 1 }
+      props: { src: 'a.mp4', time: 1 },
     })
     const video = wrapper.find('video')
 
@@ -69,7 +69,7 @@ describe('Video', () => {
 
   it('volume', async () => {
     const wrapper = mount(Video, {
-      props: { volume: 1 }
+      props: { volume: 1 },
     })
     const video = wrapper.find('video')
 
@@ -81,7 +81,7 @@ describe('Video', () => {
 
   it('volume', async () => {
     const wrapper = mount(Video, {
-      props: { playbackRate: 1 }
+      props: { playbackRate: 1 },
     })
     const video = wrapper.find('video')
 
@@ -103,7 +103,7 @@ describe('Video', () => {
     const wrapper = mount(() => (
       <Video poster={'a.jpg'}>
         {{
-          poster: () => <span class={'poster'}></span>
+          poster: () => <span class={'poster'}></span>,
         }}
       </Video>
     ))
@@ -130,7 +130,7 @@ describe('Video', () => {
 
   it('loading icon', async () => {
     const wrapper = mount(Video, {
-      props: { loading: true, loadingIcon: Activity }
+      props: { loading: true, loadingIcon: Activity },
     })
     wrapper.vm.stateHidden = true
     await nextTick()
@@ -143,7 +143,7 @@ describe('Video', () => {
     const wrapper = mount(() => (
       <Video>
         {{
-          player: () => <video class={'video'}></video>
+          player: () => <video class={'video'}></video>,
         }}
       </Video>
     ))
@@ -168,7 +168,7 @@ describe('Video', () => {
     const layout = {
       left: ['flip'],
       center: ['volume'],
-      right: ['play']
+      right: ['play'],
     }
     const wrapper = mount(() => <Video control-layout={layout}></Video>)
 
@@ -181,12 +181,12 @@ describe('Video', () => {
 
   it('custom control', async () => {
     const layout = {
-      left: ['foo']
+      left: ['foo'],
     }
     const wrapper = mount(() => (
       <Video control-layout={layout}>
         {{
-          controlFoo: () => <div class={'foo'}></div>
+          controlFoo: () => <div class={'foo'}></div>,
         }}
       </Video>
     ))

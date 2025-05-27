@@ -26,26 +26,26 @@ const extensionMap: Record<string, string> = {
   yml: 'yaml',
   styl: 'stylus',
   kt: 'kotlin',
-  rs: 'rust'
+  rs: 'rust',
 }
 
 const props = defineProps({
   src: {
     type: String,
-    default: ''
+    default: '',
   },
   demos: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   codes: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   alive: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -71,7 +71,7 @@ if (!props.alive) {
     rootMargin: '200 0 200 0',
     handler: entry => {
       intersected.value = entry.isIntersecting
-    }
+    },
   })
 }
 
@@ -271,7 +271,7 @@ function editOnPlayground() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .demo {
   margin-bottom: 1.4em;

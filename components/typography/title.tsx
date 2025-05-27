@@ -16,7 +16,7 @@ export default defineComponent({
       marker: false,
       aligned: false,
       thin: false,
-      markerType: null
+      markerType: null,
     })
 
     const nh = useNameHelper('title')
@@ -34,14 +34,14 @@ export default defineComponent({
         [nh.bm('aligned')]: props.aligned,
         [nh.bm('thin')]: props.thin,
         [nh.bm(`marker-${markerType.value}`)]:
-          !coloredMarker.value && markerType.value !== 'default'
+          !coloredMarker.value && markerType.value !== 'default',
       }
     })
     const level = computed(() => boundRange(Math.round(props.level), 1, 6) || 5)
     const style = computed(() => {
       return coloredMarker.value
         ? {
-            [nh.cv('marker-color')]: props.markerType
+            [nh.cv('marker-color')]: props.markerType,
           }
         : null
     })
@@ -55,5 +55,5 @@ export default defineComponent({
         </CustomTag>
       )
     }
-  }
+  },
 })

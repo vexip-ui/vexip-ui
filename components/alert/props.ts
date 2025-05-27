@@ -10,7 +10,7 @@ export const alertProps = buildProps({
   colorfulText: booleanProp,
   icon: {
     type: [Boolean, Object, Function],
-    default: null
+    default: null,
   },
   closable: booleanProp,
   iconColor: String,
@@ -23,7 +23,7 @@ export const alertProps = buildProps({
   slots: Object as PropType<AlertSlots>,
   onClose: eventProp(),
   onHide: eventProp(),
-  onScrollEnd: eventProp()
+  onScrollEnd: eventProp(),
 })
 
 export type AlertProps = ExtractPropTypes<typeof alertProps>

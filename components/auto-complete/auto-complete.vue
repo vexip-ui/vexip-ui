@@ -13,7 +13,7 @@ import {
   emitEvent,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { debounce, isNull, throttle, toNumber } from '@vexip-ui/utils'
@@ -25,7 +25,7 @@ import type {
   AutoCompleteRawOption,
   AutoCompleteSlots,
   ChangeEvent,
-  EnterEvent
+  EnterEvent,
 } from './symbol'
 
 defineOptions({ name: 'AutoComplete' })
@@ -43,7 +43,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<string | number>(() => control.value?.focus())
 
 const nh = useNameHelper('auto-complete')
@@ -56,11 +56,11 @@ const props = useProps('autoComplete', _props, {
   transfer: false,
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   filter: false,
   prefix: createIconProp(),
@@ -73,7 +73,7 @@ const props = useProps('autoComplete', _props, {
   dropDisabled: false,
   placement: {
     default: 'bottom',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   clearable: false,
   ignoreCase: false,
@@ -90,10 +90,10 @@ const props = useProps('autoComplete', _props, {
   showEmpty: false,
   name: {
     default: '',
-    static: true
+    static: true,
   },
   popperAlive: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -129,7 +129,7 @@ watch(
     if (control.value) {
       control.value.value = String(value)
     }
-  }
+  },
 )
 watch(currentIndex, computeHitting)
 watch(currentVisible, value => {
@@ -156,7 +156,7 @@ defineExpose({
   select,
   control,
   focus: (options?: FocusOptions) => control.value?.focus(options),
-  blur: () => control.value?.blur()
+  blur: () => control.value?.blur(),
 })
 
 onMounted(() => {

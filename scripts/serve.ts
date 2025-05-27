@@ -89,7 +89,7 @@ async function serveComponent() {
   writeFileSync(
     resolve(devDir, 'router', `port-${port}.ts`),
     await format(router, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
+    'utf-8',
   )
 
   const playPath = resolve(devDir, 'play.vue')
@@ -105,9 +105,9 @@ async function serveComponent() {
         <script setup lang="ts">
         // write something or copy from playground
         </script>`,
-        { ...prettierConfig, parser: 'vue' }
+        { ...prettierConfig, parser: 'vue' },
       ),
-      'utf-8'
+      'utf-8',
     )
   }
 
@@ -120,8 +120,8 @@ async function serveComponent() {
       DEMOS: JSON.stringify(demos),
       PORT: `${port}`,
       SOURCE_MAP: sourceMap ? 'true' : '',
-      THEME: theme ? 'true' : ''
-    }
+      THEME: theme ? 'true' : '',
+    },
   })
 }
 
@@ -133,8 +133,8 @@ async function serveTheme() {
       NODE_ENV: prodMode ? 'production' : 'development',
       PORT: `${port}`,
       SOURCE_MAP: sourceMap ? 'true' : '',
-      THEME: 'true'
-    }
+      THEME: 'true',
+    },
   })
 }
 
@@ -142,7 +142,7 @@ function queryDemos(target: string, lang: string) {
   const dir = resolve(rootDir, 'docs/demos', target)
 
   return readdirSync(dir).filter(
-    f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, `demo.${lang}.vue`))
+    f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, `demo.${lang}.vue`)),
   )
 }
 

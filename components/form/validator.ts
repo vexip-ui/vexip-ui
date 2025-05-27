@@ -42,7 +42,7 @@ const HOST_REG = '(?:[a-zA-Z0-9][\\w-]*\\.)?(?:[a-zA-Z0-9][\\w-]*)(?:\\.[a-zA-Z]
 const PARAM_REG =
   '(?:(?:[\\/]+[^\\?\\.]+)+)?(?:[\\/]*)?(\\?([^&\\.]+=[^&\\.]*)(&[^&\\.]+=[^&\\.]*)*)?(#.*)?'
 const URL_REG = new RegExp(
-  `^(?:[a-z]{2,5}:(\\/+)?)?\\/\\/((?:${IPV4_REG})|(?:${HOST_REG}))(?:${PARAM_REG})?$`
+  `^(?:[a-z]{2,5}:(\\/+)?)?\\/\\/((?:${IPV4_REG})|(?:${HOST_REG}))(?:${PARAM_REG})?$`,
 )
 
 const EMAIL_REG = /^(?:[a-zA-Z0-9][\w-]*)@(?:[a-zA-Z0-9][\w-]*)(?:\.[a-zA-Z]+){1,2}$/
@@ -58,7 +58,7 @@ const TYPE_LIST = new Set([
   'date',
   'url',
   'color',
-  'email'
+  'email',
 ] as Types[])
 
 export async function validate(
@@ -66,7 +66,7 @@ export async function validate(
   value: unknown,
   model: Record<string, unknown>,
   validateAll = true,
-  defaultMsg = DEFAULT_MESSAGE
+  defaultMsg = DEFAULT_MESSAGE,
 ) {
   if (!Array.isArray(rules)) {
     rules = [rules]

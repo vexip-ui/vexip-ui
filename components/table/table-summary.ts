@@ -11,7 +11,7 @@ type SummaryPropKey = keyof typeof tableSummaryProps
 
 const propKeys = Object.keys(tableSummaryProps) as SummaryPropKey[]
 const aliases: Partial<Record<SummaryPropKey, string>> = {
-  idKey: 'key'
+  idKey: 'key',
 }
 const ignoredProps: SummaryPropKey[] = ['renderer']
 const triggerProps: SummaryPropKey[] = ['idKey', 'cellSpan', 'order', 'above']
@@ -19,7 +19,7 @@ const triggerProps: SummaryPropKey[] = ['idKey', 'cellSpan', 'order', 'above']
 const funcProp = {
   default: null,
   isFunc: true,
-  static: true
+  static: true,
 }
 
 export default defineComponent({
@@ -30,7 +30,7 @@ export default defineComponent({
       idKey: {
         default: null,
         validator: value => !isNull(value),
-        static: true
+        static: true,
       },
       class: null,
       style: null,
@@ -38,14 +38,14 @@ export default defineComponent({
       cellSpan: funcProp,
       order: {
         default: 0,
-        static: true
+        static: true,
       },
       above: {
         default: false,
-        static: true
+        static: true,
       },
       meta: null,
-      renderer: funcProp
+      renderer: funcProp,
     })
 
     const tableAction = inject(TABLE_ACTIONS, null)
@@ -66,7 +66,7 @@ export default defineComponent({
           trigger
             ? tableAction?.updateSummaries()
             : tableAction?.setSummaryProp(options.key, key, value)
-        }
+        },
       )
     }
 
@@ -84,7 +84,7 @@ export default defineComponent({
         if (typeof data.column.summaryRenderer === 'function') {
           return data.column.summaryRenderer({
             ...data,
-            summary: options
+            summary: options,
           })
         }
 
@@ -101,5 +101,5 @@ export default defineComponent({
     }
 
     return () => null
-  }
+  },
 })

@@ -29,21 +29,21 @@ const rules = {
   // 单个规则
   input: {
     enum: ['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'],
-    message: '没有这个菜'
+    message: '没有这个菜',
   },
 
   // 单个规则复合验证
   input1: {
     required: true,
     enum: ['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'],
-    message: '没有这个菜'
+    message: '没有这个菜',
   },
 
   // 多个规则
   input2: [
     {
       required: true,
-      message: '点菜不可为空'
+      message: '点菜不可为空',
     },
 
     // 验证方法 + 错误信息
@@ -51,8 +51,8 @@ const rules = {
     {
       validator: (value: string) =>
         ['过桥米线', '干炒牛河', '大碗宽面', '油泼面', '新疆拌面'].includes(value),
-      message: '没有这个菜'
-    }
+      message: '没有这个菜',
+    },
   ],
 
   // 验证方法直接返回错误信息
@@ -64,7 +64,7 @@ const rules = {
 
       return '没有这个菜'
       // return new Error('没有这个菜')
-    }
+    },
   },
 
   // 异步验证 (返回 Promise)
@@ -84,7 +84,7 @@ const rules = {
           // reject(new Error('没有这个菜'))
         }, 1000)
       }),
-    message: '没有这个菜'
-  }
+    message: '没有这个菜',
+  },
 }
 </script>

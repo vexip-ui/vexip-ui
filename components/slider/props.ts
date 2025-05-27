@@ -28,7 +28,7 @@ export const sliderProps = buildProps({
   rangeDraggable: booleanProp,
   slots: Object as PropType<SliderSlots>,
   onChange: eventProp<(value: number | number[]) => void>(),
-  onInput: eventProp<(value: number | number[]) => void>()
+  onInput: eventProp<(value: number | number[]) => void>(),
 })
 
 export type SliderProps = ExtractPropTypes<typeof sliderProps>

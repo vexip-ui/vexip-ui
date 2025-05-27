@@ -21,18 +21,18 @@ const _props = defineProps(tabNavProps)
 const props = useProps('tabNav', _props, {
   active: {
     default: null,
-    static: true
+    static: true,
   },
   card: false,
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   align: 'left',
   placement: 'top',
   closable: false,
   showAdd: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active'])
@@ -56,7 +56,7 @@ const className = computed(() => {
     [nh.bm('inherit')]: props.inherit,
     [nh.bm(`align-${props.align}`)]: true,
     [nh.bm(props.placement)]: true,
-    [nh.bm('card')]: props.card
+    [nh.bm('card')]: props.card,
   }
 })
 const markerStyle = computed(() => {
@@ -64,7 +64,7 @@ const markerStyle = computed(() => {
 
   return {
     [position]: `${markerPosition.value}px`,
-    [length]: `${markerSize.value}px`
+    [length]: `${markerSize.value}px`,
   }
 })
 const items = computed(() => {
@@ -106,8 +106,8 @@ provide(
     decreaseItem,
     handleActive,
     handleClose,
-    refreshLabels
-  })
+    refreshLabels,
+  }),
 )
 
 watch(
@@ -115,13 +115,13 @@ watch(
   value => {
     currentActive.value = value
     updateMarkerPosition()
-  }
+  },
 )
 watch(
   () => props.placement,
   () => {
     requestAnimationFrame(updateMarkerPosition)
-  }
+  },
 )
 
 onMounted(updateMarkerPosition)
@@ -131,7 +131,7 @@ defineExpose({
   wrapper,
   scroll,
   updateMarkerPosition,
-  handleAdd
+  handleAdd,
 })
 
 function isActiveEmpty() {

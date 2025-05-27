@@ -12,16 +12,16 @@ export default defineComponent({
       appear: false,
       mode: {
         default: 'default',
-        validator: value => ['in-out', 'out-in', 'default'].includes(value)
+        validator: value => ['in-out', 'out-in', 'default'].includes(value),
       },
       horizontal: false,
       duration: {
         default: 250,
-        validator: (value: number) => value >= 200
+        validator: (value: number) => value >= 200,
       },
       timing: null,
       fadeEffect: false,
-      reverse: false
+      reverse: false,
     })
 
     let enterStage: 'before' | 'in' | null = null
@@ -252,10 +252,10 @@ export default defineComponent({
 
             leaveStage = null
             emitEvent(props.onLeaveCancelled, $el)
-          }
+          },
         },
-        slots
+        slots,
       )
     }
-  }
+  },
 })

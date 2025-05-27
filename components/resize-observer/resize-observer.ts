@@ -4,7 +4,7 @@ import {
   onBeforeUnmount,
   onMounted,
   renderSlot,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useProps } from '@vexip-ui/config'
@@ -19,9 +19,9 @@ export default defineComponent({
     const props = useProps('resizeObserver', _props, {
       throttle: {
         default: false,
-        validator: value => typeof value === 'boolean' || value > 0
+        validator: value => typeof value === 'boolean' || value > 0,
       },
-      disabled: false
+      disabled: false,
     })
 
     const { observeResize, unobserveResize } = useResize()
@@ -44,7 +44,7 @@ export default defineComponent({
         value => {
           value ? unobserve() : observe()
         },
-        { immediate: true, flush: 'post' }
+        { immediate: true, flush: 'post' },
       )
     })
 
@@ -86,5 +86,5 @@ export default defineComponent({
     }
 
     return () => renderSlot(slots, 'default')
-  }
+  },
 })

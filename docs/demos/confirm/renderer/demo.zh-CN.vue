@@ -15,16 +15,16 @@ async function confirm() {
       return h(
         'div',
         {
-          style: 'display: flex; align-items: center; padding: 10px'
+          style: 'display: flex; align-items: center; padding: 10px',
         },
         [
           h('span', options.content),
           h('span', { style: 'flex: auto' }),
           h(Button, { size: 'small', onClick: cancel }, '取消'),
-          h(Button, { type: 'primary', size: 'small', onClick: confirm }, '确认')
-        ]
+          h(Button, { type: 'primary', size: 'small', onClick: confirm }, '确认'),
+        ],
       )
-    }
+    },
   })
 
   if (isConfirm) {

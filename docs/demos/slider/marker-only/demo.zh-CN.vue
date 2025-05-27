@@ -18,13 +18,13 @@ const markers = ref({
   42: '42°C',
   68: {
     style: 'color: #fbc037',
-    label: '68°C'
+    label: '68°C',
   },
   100: {
     style: {
-      color: '#f03e3e'
+      color: '#f03e3e',
     },
-    label: '100°C'
-  }
+    label: '100°C',
+  },
 })
 </script>

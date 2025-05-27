@@ -8,7 +8,7 @@ import {
   hide,
   offset,
   platform,
-  shift
+  shift,
 } from '@floating-ui/dom'
 import { useRtl } from './rtl'
 import { isClient } from '@vexip-ui/utils'
@@ -20,7 +20,7 @@ import type {
   OffsetOptions,
   Placement,
   ShiftOptions,
-  VirtualElement
+  VirtualElement,
 } from '@floating-ui/dom'
 import type { TransferNode } from '@vexip-ui/utils'
 
@@ -89,7 +89,7 @@ export const placementWhileList = Object.freeze<Placement[]>([
   'left-end',
   'right',
   'right-start',
-  'right-end'
+  'right-end',
 ])
 
 export function usePopper(initOptions: UsePopperOptions) {
@@ -121,7 +121,7 @@ export function usePopper(initOptions: UsePopperOptions) {
       value => {
         setTransferTo(value)
         updatePopper()
-      }
+      },
     )
 
     setTransferTo(unref(transfer))
@@ -160,7 +160,7 @@ export function usePopper(initOptions: UsePopperOptions) {
           }
 
           return {}
-        }
+        },
       })
     }
 
@@ -170,7 +170,7 @@ export function usePopper(initOptions: UsePopperOptions) {
       if (Array.isArray(offsetOptions)) {
         offsetOptions = {
           mainAxis: offsetOptions[1],
-          crossAxis: offsetOptions[0]
+          crossAxis: offsetOptions[0],
         }
       }
 
@@ -199,8 +199,8 @@ export function usePopper(initOptions: UsePopperOptions) {
       placement: unref(initOptions.placement),
       platform: {
         ...platform,
-        isRTL: async () => rtl
-      }
+        isRTL: async () => rtl,
+      },
     }
 
     const update = async () => {
@@ -209,7 +209,7 @@ export function usePopper(initOptions: UsePopperOptions) {
         y,
         placement: activePlacement,
         strategy,
-        middlewareData
+        middlewareData,
       } = await computePosition(referenceEl, popperEl, options)
 
       if (unref(reference) !== referenceEl) {
@@ -217,7 +217,7 @@ export function usePopper(initOptions: UsePopperOptions) {
           Object.assign(popperEl.style, {
             position: '',
             top: '',
-            left: ''
+            left: '',
           })
         }
 
@@ -227,7 +227,7 @@ export function usePopper(initOptions: UsePopperOptions) {
       const style: Partial<CSSStyleDeclaration> = {
         position: strategy,
         top: `${y}px`,
-        left: `${x}px`
+        left: `${x}px`,
       }
 
       // if (middlewareData.hide?.escaped) {
@@ -242,7 +242,7 @@ export function usePopper(initOptions: UsePopperOptions) {
 
           Object.assign(arrowEl.style, {
             top: y != null ? `${y}px` : '',
-            left: x != null ? `${x}px` : ''
+            left: x != null ? `${x}px` : '',
           })
         } else {
           Object.assign(arrowEl.style, { top: '', left: '' })
@@ -305,6 +305,6 @@ export function usePopper(initOptions: UsePopperOptions) {
     popper,
     placement,
     transferTo,
-    updatePopper
+    updatePopper,
   }
 }

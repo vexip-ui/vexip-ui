@@ -18,7 +18,7 @@ const className = computed(() => {
     [nh.bm('selected')]: !props.disabled && props.selected,
     [nh.bm('divided')]: props.divided,
     [nh.bm('hitting')]: props.hitting,
-    [nh.bm('no-hover')]: props.noHover
+    [nh.bm('no-hover')]: props.noHover,
   }
 })
 

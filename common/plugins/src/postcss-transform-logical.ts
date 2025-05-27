@@ -58,7 +58,7 @@ function splitValue(value: string) {
 
 function createProcess(
   regexp: RegExp,
-  process: (matched: RegExpMatchArray, decl: Declaration) => void
+  process: (matched: RegExpMatchArray, decl: Declaration) => void,
 ) {
   return (decl: Declaration) => {
     const matched = decl.prop.match(regexp)
@@ -72,20 +72,20 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
 
   const sizeProp = {
     inline: 'width',
-    block: 'height'
+    block: 'height',
   }
   const inlineBaseProp = rtl
     ? {
         start: 'right',
-        end: 'left'
+        end: 'left',
       }
     : {
         start: 'left',
-        end: 'right'
+        end: 'right',
       }
   const blockBaseProp = {
     start: 'top',
-    end: 'bottom'
+    end: 'bottom',
   }
 
   const insert = !replace && !rtl
@@ -113,7 +113,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
   const normalProcess = (
     prefix: 'margin' | 'padding' | null,
     matched: RegExpMatchArray,
-    decl: Declaration
+    decl: Declaration,
   ) => {
     const boxType = matched[1] as 'inline' | 'block'
     const type = matched[3] as 'start' | 'end' | undefined
@@ -126,7 +126,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
       processDecl(
         decl,
         [`${usedPrefix}${prop.start}`, `${usedPrefix}${prop.end}`],
-        [start, end || start]
+        [start, end || start],
       )
     } else {
       processDecl(decl, [`${usedPrefix}${prop[type]}`])
@@ -159,13 +159,13 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
         'start-start': 'top-right',
         'start-end': 'top-left',
         'end-end': 'bottom-left',
-        'end-start': 'bottom-right'
+        'end-start': 'bottom-right',
       }
     : {
         'start-start': 'top-left',
         'start-end': 'top-right',
         'end-end': 'bottom-right',
-        'end-start': 'bottom-left'
+        'end-start': 'bottom-left',
       }
 
   const processRadius = createProcess(radiusRE, (matched, decl) => {
@@ -178,21 +178,21 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     ...(rtl
       ? {
           'inline-start': 'right',
-          'inline-end': 'left'
+          'inline-end': 'left',
         }
       : {
           'inline-start': 'left',
-          'inline-end': 'right'
+          'inline-end': 'right',
         }),
     'block-start': 'top',
-    'block-end': 'bottom'
+    'block-end': 'bottom',
   }
 
   const processValue = createProcess(valueRE, (_, decl) => {
     processDecl(
       decl,
       [decl.prop],
-      [logicalValue[decl.value.trim() as keyof typeof logicalValue] || decl.value]
+      [logicalValue[decl.value.trim() as keyof typeof logicalValue] || decl.value],
     )
   })
 
@@ -203,7 +203,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
     processMargin,
     processBorder,
     processRadius,
-    processValue
+    processValue,
   ]
 
   return {
@@ -214,7 +214,7 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
           processes.some(process => process(decl))
         })
       })
-    }
+    },
   }
 }
 

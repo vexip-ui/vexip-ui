@@ -11,7 +11,7 @@ export const spinProps = buildProps({
   inner: booleanProp,
   delay: {
     type: [Boolean, Number, Array] as PropType<boolean | number | number[]>,
-    default: null
+    default: null,
   },
   tip: String,
   hideMask: booleanProp,
@@ -22,7 +22,7 @@ export const spinProps = buildProps({
   slots: Object as PropType<SpinSlots>,
   onMaskClick: eventProp<(event: MouseEvent) => void>(),
   onShow: eventProp(),
-  onHide: eventProp()
+  onHide: eventProp(),
 })
 
 export type SpinProps = ExtractPropTypes<typeof spinProps>

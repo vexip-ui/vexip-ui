@@ -37,22 +37,22 @@ export default defineComponent({
       default: 0,
       validator: (value: number) => {
         return value >= 0 && value <= 360
-      }
+      },
     },
     value: {
       type: Number,
       default: 1,
       validator: (value: number) => {
         return value >= 0 && value <= 1
-      }
+      },
     },
     saturation: {
       type: Number,
       default: 0,
       validator: (value: number) => {
         return value >= 0 && value <= 1
-      }
-    }
+      },
+    },
   },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
@@ -87,7 +87,7 @@ export default defineComponent({
           prevLeft = currentLeft.value
           handleChange()
         }
-      }
+      },
     })
 
     const { moving: editing } = useMoving({
@@ -132,7 +132,7 @@ export default defineComponent({
       },
       onEnd: () => {
         emit('edit-end')
-      }
+      },
     })
 
     watch(
@@ -141,7 +141,7 @@ export default defineComponent({
         currentTop.value = (1 - value) * 100
         verifyPosition()
       },
-      { immediate: true }
+      { immediate: true },
     )
     watch(
       () => props.saturation,
@@ -149,7 +149,7 @@ export default defineComponent({
         currentLeft.value = value * 100
         verifyPosition()
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     function verifyPosition() {
@@ -161,7 +161,7 @@ export default defineComponent({
       emit('change', {
         h: props.hue,
         s: currentLeft.value / 100,
-        v: toFixed(1 - currentTop.value / 100, 3)
+        v: toFixed(1 - currentTop.value / 100, 3),
       })
     }
 
@@ -171,10 +171,10 @@ export default defineComponent({
       currentLeft,
       editing,
 
-      wrapper
+      wrapper,
 
       // handleMouseDown
     }
-  }
+  },
 })
 </script>

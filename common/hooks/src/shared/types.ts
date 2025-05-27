@@ -9,5 +9,5 @@ export type MaybeInstance = MaybeElement | ComponentPublicInstance
 
 export type {
   /** @deprecated Please use `MaybeRef` type from 'vue' to replace it */
-  MaybeRef
+  MaybeRef,
 }

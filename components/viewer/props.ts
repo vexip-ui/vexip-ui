@@ -6,7 +6,7 @@ import type {
   ViewerActionLayout,
   ViewerState,
   ViewerToolbarAction,
-  ViewerToolbarPlacement
+  ViewerToolbarPlacement,
 } from './symbol'
 
 export const viewerProps = buildProps({
@@ -37,7 +37,7 @@ export const viewerProps = buildProps({
   onFlipY: eventProp<(flip: boolean, state: ViewerState) => void>(),
   onZoom: eventProp<(zoom: number, state: ViewerState) => void>(),
   onFull: eventProp<(full: boolean, state: ViewerState) => void>(),
-  onReset: eventProp<(state: ViewerState) => void>()
+  onReset: eventProp<(state: ViewerState) => void>(),
 })
 
 export type ViewerProps = ExtractPropTypes<typeof viewerProps>

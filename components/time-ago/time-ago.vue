@@ -15,14 +15,14 @@ const props = useProps('timeAgo', _props, {
   locale: null,
   datetime: {
     default: () => Date.now(),
-    static: true
+    static: true,
   },
   interval: {
     default: false,
-    validator: value => typeof value === 'boolean' || value >= 1
+    validator: value => typeof value === 'boolean' || value >= 1,
   },
   title: false,
-  titleFormat: 'yyyy-MM-dd HH:mm:ss'
+  titleFormat: 'yyyy-MM-dd HH:mm:ss',
 })
 
 const nh = useNameHelper('time-ago')
@@ -38,7 +38,7 @@ const record = {
   locale,
   wordSpace,
   interval: parseInterval(props.interval),
-  updated: Date.now()
+  updated: Date.now(),
 }
 
 const currentTitle = computed(() => {
@@ -56,13 +56,13 @@ watch(
   value => {
     record.datetime = toDateValue(value)
     timeAgo.value = computeTimeAgo(datetime, Date.now(), locale.value, wordSpace.value)
-  }
+  },
 )
 watch(
   () => props.interval,
   value => {
     record.interval = parseInterval(value)
-  }
+  },
 )
 
 onBeforeUnmount(() => {

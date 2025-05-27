@@ -6,7 +6,7 @@ import {
   iconProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -31,7 +31,7 @@ export const colorPickerProps = buildProps({
   noInput: booleanProp,
   shortcut: {
     type: [Boolean, Array] as PropType<boolean | string[]>,
-    default: null
+    default: null,
   },
   placement: String as PropType<Placement>,
   transfer: booleanStringProp,
@@ -58,7 +58,7 @@ export const colorPickerProps = buildProps({
   onOutsideClose: eventProp(),
   onClear: eventProp(),
   onChange: eventProp<(color: FormattedColor) => void>(),
-  onShortcut: eventProp<(color: FormattedColor) => void>()
+  onShortcut: eventProp<(color: FormattedColor) => void>(),
 })
 
 export type ColorPickerProps = ExtractPropTypes<typeof colorPickerProps>

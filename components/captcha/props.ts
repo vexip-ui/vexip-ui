@@ -4,7 +4,7 @@ import {
   buildProps,
   eventProp,
   iconProp,
-  sizeProp
+  sizeProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -16,7 +16,7 @@ import type {
   CaptchaSliderSlots,
   CaptchaSlots,
   CaptchaType,
-  SuccessEvent
+  SuccessEvent,
 } from './symbol'
 
 export const captchaProps = buildProps({
@@ -50,7 +50,7 @@ export const captchaProps = buildProps({
   onDragStart: eventProp<(percent: number) => void>(),
   onDrag: eventProp<(percent: number) => void>(),
   onDragEnd: eventProp<(percent: number) => void>(),
-  onRefresh: eventProp()
+  onRefresh: eventProp(),
 })
 
 export type CaptchaProps = ExtractPropTypes<typeof captchaProps>
@@ -73,7 +73,7 @@ export const captchaSliderProps = buildProps({
   onFail: eventProp(),
   onDragStart: eventProp<(percent: number) => void>(),
   onDrag: eventProp<(percent: number) => void>(),
-  onDragEnd: eventProp<(percent: number) => void>()
+  onDragEnd: eventProp<(percent: number) => void>(),
 })
 
 export type CaptchaSliderProps = ExtractPropTypes<typeof captchaSliderProps>

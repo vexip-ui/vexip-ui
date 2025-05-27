@@ -19,8 +19,8 @@ function sendCustomizedMessage() {
           name: 'bell-slash',
           style: {
             marginRight: '5px',
-            color: '#339af0'
-          }
+            color: '#339af0',
+          },
         }),
         'A custom ',
         h(
@@ -28,13 +28,13 @@ function sendCustomizedMessage() {
           {
             style: {
               color: '#fab005',
-              fontStyle: 'italic'
-            }
+              fontStyle: 'italic',
+            },
           },
-          'message'
-        )
+          'message',
+        ),
       ])
-    }
+    },
   })
 }
 </script>

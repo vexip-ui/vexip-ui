@@ -13,7 +13,7 @@ export function bin(name: string) {
 export function fuzzyMatchComponent(
   partialComponents: string[],
   includeAll = false,
-  allComponents = components
+  allComponents = components,
 ) {
   const matched = fuzzyMatch(partialComponents, allComponents, includeAll)
 
@@ -28,12 +28,12 @@ export function fuzzyMatchComponent(
 export async function specifyComponent(
   args: ParsedArgs,
   allComponents = components,
-  required = true
+  required = true,
 ) {
   return await specifyFromList(args, allComponents, {
     required,
     message: 'Select a component:',
-    errorMessage: 'Component must be specified.'
+    errorMessage: 'Component must be specified.',
   })
 }
 
@@ -45,7 +45,7 @@ const packages = [
   'common/icons',
   'common/plugins',
   'common/scripts',
-  'common/utils'
+  'common/utils',
 ]
 
 export async function getPackageName(inputPkg: string) {
@@ -66,7 +66,7 @@ export async function getPackageName(inputPkg: string) {
           type: 'select',
           name: 'pkgName',
           message: 'Select release package:',
-          choices: options.map(n => ({ title: n, value: n }))
+          choices: options.map(n => ({ title: n, value: n })),
         })
       ).pkgName
     }
@@ -94,6 +94,6 @@ export async function getPackageInfo(inputPkg: string) {
     ...info,
     pkgName,
     isRoot,
-    currentVersion: info.pkg.version || '0.0.0'
+    currentVersion: info.pkg.version || '0.0.0',
   }
 }

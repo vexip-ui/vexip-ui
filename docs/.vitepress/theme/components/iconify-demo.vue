@@ -18,13 +18,13 @@ const providedProps: PropsOptions = {
           inline: true,
           rotate: props.rotate,
           flip: props.flip === 'both' ? 'horizontal,vertical' : props.flip,
-          style: props.size || (String(props.scale) !== '1' ? `font-size: ${props.scale}em` : '')
+          style: props.size || (String(props.scale) !== '1' ? `font-size: ${props.scale}em` : ''),
         })
       }
 
       return renderDefault()
-    }
-  }
+    },
+  },
 }
 
 // 替换组件库内部图标
@@ -32,7 +32,7 @@ const providedProps: PropsOptions = {
 const icons: IconsOptions = {
   loading: [{}, { name: 'eos-icons:three-dots-loading' }],
   clear: [{}, { name: 'icon-park-outline:clear-format' }],
-  calendar: [{}, { name: 'radix-icons:calendar' }]
+  calendar: [{}, { name: 'radix-icons:calendar' }],
 }
 </script>
 

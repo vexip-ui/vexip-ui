@@ -18,8 +18,8 @@ describe('Masker', () => {
       slots: {
         default: (payload: { show: boolean }) => (
           <span class={'content'} data-show={payload.show}></span>
-        )
-      }
+        ),
+      },
     })
 
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toContain('display: none;')
@@ -39,8 +39,8 @@ describe('Masker', () => {
         active: true,
         closable: true,
         onToggle,
-        onClose
-      }
+        onClose,
+      },
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')
@@ -70,7 +70,7 @@ describe('Masker', () => {
   it('before close', async () => {
     const onBeforeClose = vi.fn()
     const wrapper = mount(Masker, {
-      props: { closable: true, onBeforeClose }
+      props: { closable: true, onBeforeClose },
     })
 
     const openAndClose = async () => {
@@ -94,7 +94,7 @@ describe('Masker', () => {
       () =>
         new Promise(resolve => {
           resolveRef = resolve
-        })
+        }),
     )
     await openAndClose()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
@@ -120,7 +120,7 @@ describe('Masker', () => {
 
   it('auto remove', async () => {
     const wrapper = mount(Masker, {
-      props: { active: true, autoRemove: true }
+      props: { active: true, autoRemove: true },
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')

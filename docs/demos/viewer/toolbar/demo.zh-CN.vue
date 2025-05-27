@@ -36,7 +36,7 @@ const placements: ViewerToolbarPlacement[] = [
   'left-end',
   'right',
   'right-start',
-  'right-end'
+  'right-end',
 ]
 </script>
 

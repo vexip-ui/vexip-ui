@@ -1,4 +1,4 @@
-import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'
@@ -39,13 +39,13 @@ export interface FormItemProps {
 }
 
 export interface FieldOptions {
-  prop: ComputedRef<string>,
-  idFor: ComputedRef<string>,
-  labelId: ComputedRef<string>,
-  state: ComputedRef<ComponentState>,
-  disabled: ComputedRef<boolean>,
-  loading: ComputedRef<boolean>,
-  size: ComputedRef<ComponentSize>,
+  prop: Ref<string>,
+  idFor: Ref<string>,
+  labelId: Ref<string>,
+  state: Ref<ComponentState>,
+  disabled: Ref<boolean>,
+  loading: Ref<boolean>,
+  size: Ref<ComponentSize>,
   emitter: EventEmitter,
   labelWidth: Ref<number>,
   validate: () => Promise<string[] | null>,

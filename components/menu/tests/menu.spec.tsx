@@ -34,8 +34,8 @@ describe('Menu', () => {
             <MenuItem label={'1'}>{'1'}</MenuItem>
             <MenuItem label={'2'}>{'2'}</MenuItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-menu__item')
 
@@ -120,7 +120,7 @@ describe('Menu', () => {
                 <MenuItem label={'1-1'}>{'1-1'}</MenuItem>
                 <MenuItem label={'1-2'}>{'1-2'}</MenuItem>
               </>
-            )
+            ),
           }}
         </MenuItem>
         <MenuItem label={'2'}>{'2'}</MenuItem>
@@ -149,13 +149,13 @@ describe('Menu', () => {
         <MenuItem class={'p1'} label={'1'}>
           {{
             default: () => '1',
-            group: () => <MenuItem label={'1-1'}>{'1-1'}</MenuItem>
+            group: () => <MenuItem label={'1-1'}>{'1-1'}</MenuItem>,
           }}
         </MenuItem>
         <MenuItem class={'p2'} label={'2'}>
           {{
             default: () => '2',
-            group: () => <MenuItem label={'2-1'}>{'2-1'}</MenuItem>
+            group: () => <MenuItem label={'2-1'}>{'2-1'}</MenuItem>,
           }}
         </MenuItem>
       </Menu>
@@ -224,16 +224,16 @@ describe('Menu', () => {
             icon: Home,
             children: [
               { label: '1-1', meta: { foo: '1-1' } },
-              { label: '1-2', meta: { foo: '1-2' } }
-            ]
-          }
-        ]
+              { label: '1-2', meta: { foo: '1-2' } },
+            ],
+          },
+        ],
       },
       {
         label: '2',
         icon: User,
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => <Menu options={options} onSelect={onSelect}></Menu>)
     const group = wrapper.find('.vxp-menu-group')
@@ -261,8 +261,8 @@ describe('Menu', () => {
       component: {},
       meta: {
         label: '1-1',
-        name: 's1'
-      }
+        name: 's1',
+      },
     }
     const router = createRouter({
       history: createWebHistory(),
@@ -273,7 +273,7 @@ describe('Menu', () => {
           meta: {
             label: '1',
             name: 'l1',
-            icon: Home
+            icon: Home,
           },
           children: [
             testRoute,
@@ -282,17 +282,17 @@ describe('Menu', () => {
               component: {},
               meta: {
                 label: '1-2',
-                name: 's2'
-              }
-            }
-          ]
-        }
-      ]
+                name: 's2',
+              },
+            },
+          ],
+        },
+      ],
     })
     const pushRoute = vi.fn()
     router.push = pushRoute
     const wrapper = mount(Menu, {
-      props: { router }
+      props: { router },
     })
     const items = wrapper.findAll('.vxp-menu__item')
 

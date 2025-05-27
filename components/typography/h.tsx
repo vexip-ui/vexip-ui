@@ -17,7 +17,7 @@ function createHComponent(level: TitleLevel) {
         top: false,
         marker: false,
         aligned: false,
-        thin: false
+        thin: false,
       })
 
       return () => (
@@ -25,7 +25,7 @@ function createHComponent(level: TitleLevel) {
           {slots.default?.()}
         </Title>
       )
-    }
+    },
   })
 }
 

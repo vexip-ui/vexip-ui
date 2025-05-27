@@ -27,7 +27,7 @@ describe('SSR for Button', () => {
             <Button></Button>
             <Button></Button>
           </ButtonGroup>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

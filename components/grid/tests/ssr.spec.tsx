@@ -19,7 +19,7 @@ describe('SSR for Grid', () => {
             <Cell width={16}></Cell>
             <Cell width={8}></Cell>
           </Grid>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

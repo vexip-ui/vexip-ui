@@ -18,7 +18,7 @@ const props = useProps('timeline', _props, {
   spacing: null,
   flip: false,
   horizontal: false,
-  alternate: false
+  alternate: false,
 })
 
 const nh = useNameHelper('timeline')
@@ -32,7 +32,7 @@ const className = computed(() => {
     [nh.bm('pending')]: props.pending,
     [nh.bm('alternate')]: props.alternate,
     [nh.bm('flip')]: props.flip,
-    [nh.bm('horizontal')]: props.horizontal
+    [nh.bm('horizontal')]: props.horizontal,
   }
 })
 const height = computed(() => {
@@ -62,7 +62,7 @@ const state: TimelineState = reactive({
   horizontal: toRef(props, 'horizontal'),
   increaseItem,
   decreaseItem,
-  handleSignalClick
+  handleSignalClick,
 })
 
 provide(TIMELINE_STATE, state)

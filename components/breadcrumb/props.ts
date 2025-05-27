@@ -12,7 +12,7 @@ export const breadcrumbProps = buildProps({
   router: Object as PropType<Router>,
   slots: Object as PropType<BreadcrumbSlots>,
   onSelect: eventProp<EventListener<SelectEvent>>(),
-  onSeparatorClick: eventProp<EventListener<SelectEvent>>()
+  onSeparatorClick: eventProp<EventListener<SelectEvent>>(),
 })
 
 export type BreadcrumbProps = ExtractPropTypes<typeof breadcrumbProps>
@@ -21,10 +21,10 @@ export type BreadcrumbCProps = ConfigurableProps<BreadcrumbProps>
 export const breadcrumbItemProps = wrapProps({
   label: {
     type: [String, Number],
-    default: null
+    default: null,
   },
   onSelect: eventProp<EventListener<SelectEvent>>(),
-  onSeparatorClick: eventProp<EventListener<SelectEvent>>()
+  onSeparatorClick: eventProp<EventListener<SelectEvent>>(),
 })
 
 export type BreadcrumbItemProps = ExtractPropTypes<typeof breadcrumbItemProps>

@@ -54,8 +54,8 @@ export function deDELocale() {
         week4: 'Donnerstag',
         week5: 'Freitag',
         week6: 'Samstag',
-        week7: 'Sonntag'
-      }
+        week7: 'Sonntag',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function deDELocale() {
       doCaptcha: 'Bitte füllen Sie das folgende Captcha aus',
       pointInOrder: 'Bitte zeigen Sie in der Reihenfolge',
       trigger: 'Klicken Sie auf das Captcha',
-      completed: 'Captcha abgeschlossen'
+      completed: 'Captcha abgeschlossen',
     },
 
     checkbox: {
-      all: 'Alle'
+      all: 'Alle',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function deDELocale() {
       cancel: 'Abbrechen',
 
       ariaLabel: {
-        clear: 'Farbe löschen'
-      }
+        clear: 'Farbe löschen',
+      },
     },
 
     confirm: {
       confirm: 'Bestätigen',
-      cancel: 'Abbrechen'
+      cancel: 'Abbrechen',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function deDELocale() {
         datetime: 'Datum/Zeit',
         start: 'Start',
         end: 'Ende',
-        select: 'Bitte auswählen'
+        select: 'Bitte auswählen',
       },
       startTime: 'Start Zeit',
       endTime: 'Ende Zeit',
@@ -109,45 +109,45 @@ export function deDELocale() {
         date: 'Tag',
         hour: 'Stunde',
         minute: 'Minute',
-        second: 'Sekunde'
-      }
+        second: 'Sekunde',
+      },
     },
 
     drawer: {
       confirm: 'Bestätigen',
-      cancel: 'Abbrechen'
+      cancel: 'Abbrechen',
     },
 
     form: {
       submit: 'Senden',
       reset: 'Zurücksetzen',
       notNullable: 'Darf nicht leer sein',
-      validateFail: 'Überprüfung fehlgeschlagen'
+      validateFail: 'Überprüfung fehlgeschlagen',
     },
 
     image: {
       placeholder: 'Lade...',
-      error: 'Laden fehlgeschlagen'
+      error: 'Laden fehlgeschlagen',
     },
 
     input: {
       placeholder: 'Platzhalter',
 
       ariaLabel: {
-        clear: 'Löschen'
-      }
+        clear: 'Löschen',
+      },
     },
 
     layout: {
       signOut: 'Abmelden',
       signType: 'Navigationsart',
       majorColor: 'Hauptfarbe',
-      themeMode: 'Themeart'
+      themeMode: 'Themeart',
     },
 
     modal: {
       confirm: 'Bestätigen',
-      cancel: 'Abbrechen'
+      cancel: 'Abbrechen',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function deDELocale() {
       ariaLabel: {
         clear: 'Löschen',
         increase: 'Erhöhen',
-        decrease: 'Verringern'
-      }
+        decrease: 'Verringern',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function deDELocale() {
       next: 'Nächste',
       total: 'Total',
       jumpTo: 'Springe zu',
-      itemUnit: 'Item | Items'
+      itemUnit: 'Item | Items',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function deDELocale() {
       search: 'Suche Optionen',
 
       ariaLabel: {
-        clear: 'Löschen'
-      }
+        clear: 'Löschen',
+      },
     },
 
     table: {
       empty: 'Keien Daten',
       filterConfirm: 'Filtern',
       filterReset: 'Zurücksetzen',
-      filterAll: 'Alle'
+      filterAll: 'Alle',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function deDELocale() {
       lastMonth: 'Letzter Monat',
       months: 'Monate',
       lastYear: 'Letztes Jahr',
-      years: 'Jahre'
+      years: 'Jahre',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function deDELocale() {
         time: 'Zeit',
         start: 'Start',
         end: 'Ende',
-        select: 'Bitte auswählen'
+        select: 'Bitte auswählen',
       },
 
       ariaLabel: {
         clear: 'Zeit löschen',
         hour: 'Stunde',
         minute: 'Minute',
-        second: 'Sekunde'
-      }
+        second: 'Sekunde',
+      },
     },
 
     tour: {
       prev: 'Voherige',
       next: 'Nächste',
       done: 'Fertig',
-      stepCount: 'Schritt {n}'
+      stepCount: 'Schritt {n}',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function deDELocale() {
       target: 'Ziel',
       empty: 'Keine Daten',
       reverse: 'Auswahl umkehren',
-      search: 'Suche (Strg + F)'
+      search: 'Suche (Strg + F)',
     },
 
     tree: {
-      empty: 'Keine Daten'
+      empty: 'Keine Daten',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function deDELocale() {
 
       ariaLabel: {
         preview: 'Dateivorschau',
-        delete: 'Datei löschen'
-      }
+        delete: 'Datei löschen',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function deDELocale() {
       fullWindowExit: 'Volles Fenster beenden',
       fullScreen: 'Vollbild',
       fullScreenExit: 'Vollbild beenden',
-      chapterCount: 'Kapitel {n}'
+      chapterCount: 'Kapitel {n}',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function deDELocale() {
       zoomOut: 'Hinauszoomen',
       fullScreen: 'Vollbild',
       fullScreenExit: 'Vollbild beenden',
-      reset: 'Zurücksetzen'
-    }
+      reset: 'Zurücksetzen',
+    },
   })
 }

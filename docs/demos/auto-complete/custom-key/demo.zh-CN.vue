@@ -13,7 +13,7 @@ import { ref } from 'vue'
 
 const keyConfig = {
   label: 'myLabel',
-  value: 'myValue'
+  value: 'myValue',
 }
 
 const value = ref('')
@@ -24,7 +24,7 @@ function setOptions(value: string) {
     ? [
         { myValue: value, myLabel: value },
         { myValue: value + value, myLabel: value + value },
-        { myValue: value + value + value, myLabel: value + value + value }
+        { myValue: value + value + value, myLabel: value + value + value },
       ]
     : []
 }

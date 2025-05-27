@@ -3,11 +3,11 @@ import type {
   TableColumnOptions,
   TableFilterOptions,
   TableSorterOptions,
-  TableSummaryOptions
+  TableSummaryOptions,
 } from './symbol'
 
 export function defineTableFilter<D = Data, Val extends string | number = string | number>(
-  filter: TableFilterOptions<D, Val>
+  filter: TableFilterOptions<D, Val>,
 ) {
   return filter as TableFilterOptions<any, any>
 }
@@ -17,25 +17,25 @@ export function defineTableSorter<D = Data>(sorter: TableSorterOptions<D>) {
 }
 
 export function defineTableColumn<D = Data, Val extends string | number = string | number>(
-  column: TableColumnOptions<D, Val>
+  column: TableColumnOptions<D, Val>,
 ) {
   return column
 }
 
 export function defineTableColumns<D = Data, Val extends string | number = string | number>(
-  columns: TableColumnOptions<D, Val>[]
+  columns: TableColumnOptions<D, Val>[],
 ) {
   return columns
 }
 
 export function defineTableSummary<D = Data, Val extends string | number = string | number>(
-  summary: TableSummaryOptions<D, Val>
+  summary: TableSummaryOptions<D, Val>,
 ) {
   return summary
 }
 
 export function defineTableSummaries<D = Data, Val extends string | number = string | number>(
-  summaries: TableSummaryOptions<D, Val>[]
+  summaries: TableSummaryOptions<D, Val>[],
 ) {
   return summaries
 }
@@ -52,5 +52,5 @@ export {
   /** @deprecated Please use `defineTableSummary` to replace it */
   defineTableSummary as defineSummary,
   /** @deprecated Please use `defineTableSummaries` to replace it */
-  defineTableSummaries as defineSummaries
+  defineTableSummaries as defineSummaries,
 }

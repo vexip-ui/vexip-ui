@@ -13,14 +13,14 @@ import type {
   TreeNodePostCreate,
   TreeNodeProps,
   TreeNodeRenderFn,
-  TreeSlots
+  TreeSlots,
 } from './symbol'
 
 export const treeProps = buildProps({
   locale: localeProp('tree'),
   arrow: {
     type: [Boolean, String] as PropType<boolean | 'auto'>,
-    default: null
+    default: null,
   },
   data: Array as PropType<Data[]>,
   noBuildTree: booleanProp,
@@ -48,7 +48,7 @@ export const treeProps = buildProps({
   nodeProps: [Object, Function] as PropType<Data | NodePropsFn>,
   linkLine: {
     type: [Boolean, String] as PropType<boolean | TreeLinkLine>,
-    default: null
+    default: null,
   },
   postCreate: Function as PropType<TreeNodePostCreate>,
   virtual: booleanProp,
@@ -69,7 +69,7 @@ export const treeProps = buildProps({
   onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDrop: eventProp<(data: Data, node: TreeNodeProps, type: TreeNodeDropType) => void>(),
   onDragEnd: eventProp<(data: Data, node: TreeNodeProps) => void>(),
-  onLabelClick: eventProp<(data: Data, node: TreeNodeProps) => void>()
+  onLabelClick: eventProp<(data: Data, node: TreeNodeProps) => void>(),
 })
 
 export type TreeProps = ExtractPropTypes<typeof treeProps>

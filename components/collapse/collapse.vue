@@ -8,7 +8,7 @@ import {
   ref,
   toRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -25,15 +25,15 @@ const _props = defineProps(collapseProps)
 const props = useProps('collapse', _props, {
   expanded: {
     default: null,
-    static: true
+    static: true,
   },
   card: false,
   accordion: false,
   arrowType: {
     default: 'right' as CollapseArrowType,
-    validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value)
+    validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value),
   },
-  ghost: false
+  ghost: false,
 })
 
 const emit = defineEmits(['update:expanded'])
@@ -70,7 +70,7 @@ const { target: wrapper } = useModifier({
 
       clearExpanded()
     }
-  }
+  },
 })
 
 const className = computed(() => {
@@ -81,8 +81,8 @@ const className = computed(() => {
     {
       [nh.bm('inherit')]: props.inherit,
       [nh.bm('card')]: props.card,
-      [nh.bm('ghost')]: !props.card && props.ghost
-    }
+      [nh.bm('ghost')]: !props.card && props.ghost,
+    },
   ]
 })
 
@@ -111,8 +111,8 @@ provide(
     registerPanel,
     unregisterPanel,
     expandPanel,
-    refreshLabels
-  })
+    refreshLabels,
+  }),
 )
 
 watchEffect(() => {

@@ -23,7 +23,7 @@ function emitInput(input: HTMLInputElement, value: string) {
 describe('AutoComplete', () => {
   it('render', async () => {
     const wrapper = mount(AutoComplete, {
-      props: { value: '1', options: OPTIONS }
+      props: { value: '1', options: OPTIONS },
     })
 
     expect(wrapper.find('.vxp-auto-complete__input').exists()).toBe(true)
@@ -40,7 +40,7 @@ describe('AutoComplete', () => {
 
   it('placeholder', async () => {
     const wrapper = mount(AutoComplete, {
-      props: { placeholder: '1' }
+      props: { placeholder: '1' },
     })
 
     expect(wrapper.find('.vxp-auto-complete__input').attributes('placeholder')).toBe('1')
@@ -55,8 +55,8 @@ describe('AutoComplete', () => {
       props: {
         clearable: true,
         options: OPTIONS,
-        onClear: handleClear
-      }
+        onClear: handleClear,
+      },
     })
 
     expect(wrapper.find('.vxp-select__clear').exists()).toBe(false)
@@ -78,8 +78,8 @@ describe('AutoComplete', () => {
       props: {
         options: OPTIONS,
         filter: true,
-        ignoreCase: true
-      }
+        ignoreCase: true,
+      },
     })
     const input = wrapper.find('input').element
     const value = OPTIONS[0]
@@ -107,7 +107,7 @@ describe('AutoComplete', () => {
     const wrapper = mount(() => (
       <AutoComplete prefix={User}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </AutoComplete>
     ))
@@ -121,7 +121,7 @@ describe('AutoComplete', () => {
     const wrapper = mount(() => (
       <AutoComplete suffix={User}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </AutoComplete>
     ))
@@ -134,12 +134,12 @@ describe('AutoComplete', () => {
   it('prepend and append slots', async () => {
     const wrapper = mount(AutoComplete, {
       props: {
-        options: OPTIONS
+        options: OPTIONS,
       },
       slots: {
         prepend: () => <span class={'prepend'}></span>,
-        append: () => <span class={'append'}></span>
-      }
+        append: () => <span class={'append'}></span>,
+      },
     })
 
     expect(wrapper.find('.prepend').exists()).toBe(true)
@@ -149,11 +149,11 @@ describe('AutoComplete', () => {
   it('list slot', async () => {
     const wrapper = mount(AutoComplete, {
       props: {
-        options: OPTIONS
+        options: OPTIONS,
       },
       slots: {
-        list: () => <span class={'list'}></span>
-      }
+        list: () => <span class={'list'}></span>,
+      },
     })
 
     expect(wrapper.find('.list').exists()).toBe(true)

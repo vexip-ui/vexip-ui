@@ -18,8 +18,8 @@ function showCustomizedIconToast() {
     content: 'Render Method',
     icon: () =>
       h(Icon, {
-        icon: Share
-      })
+        icon: Share,
+      }),
   })
 }
 </script>

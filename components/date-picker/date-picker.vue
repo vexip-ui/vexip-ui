@@ -18,14 +18,14 @@ import {
   useLocale,
   useNameHelper,
   useProps,
-  useWordSpace
+  useWordSpace,
 } from '@vexip-ui/config'
 import {
   placementWhileList,
   useClickOutside,
   useHover,
   usePopper,
-  useSetTimeout
+  useSetTimeout,
 } from '@vexip-ui/hooks'
 import {
   boundRange,
@@ -39,7 +39,7 @@ import {
   startOfMonth,
   toAttrValue,
   toDate,
-  toFalse
+  toFalse,
 } from '@vexip-ui/utils'
 import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -53,7 +53,7 @@ import type {
   DatePickerSlots,
   DateTimeType,
   DateType,
-  TimeType
+  TimeType,
 } from './symbol'
 
 defineOptions({ name: 'DatePicker' })
@@ -68,7 +68,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<Dateable | Dateable[]>(() => reference.value?.focus())
 
 const nh = useNameHelper('date-picker')
@@ -80,23 +80,23 @@ const props = useProps('datePicker', _props, {
   locale: null,
   type: {
     default: 'date',
-    validator: value => datePickerTypes.includes(value)
+    validator: value => datePickerTypes.includes(value),
   },
   visible: false,
   placement: {
     default: 'bottom-start',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   transfer: false,
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   format: 'yMd Hms',
   valueFormat: null,
   filler: {
     default: '-',
-    validator: value => value.length === 1
+    validator: value => value.length === 1,
   },
   clearable: false,
   noAction: false,
@@ -106,7 +106,7 @@ const props = useProps('datePicker', _props, {
   shortcuts: () => [],
   disabledDate: {
     default: toFalse,
-    isFunc: true
+    isFunc: true,
   },
   steps: () => [1, 1, 1],
   ctrlSteps: () => [5, 5, 5],
@@ -121,7 +121,7 @@ const props = useProps('datePicker', _props, {
   cancelText: null,
   today: {
     default: () => new Date(),
-    validator: value => !Number.isNaN(new Date(value))
+    validator: value => !Number.isNaN(new Date(value)),
   },
   range: null,
   loading: () => loading.value,
@@ -137,7 +137,7 @@ const props = useProps('datePicker', _props, {
   weekStart: null,
   popperAlive: null,
   shortcutsPlacement: 'left',
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value', 'update:formatted-value', 'update:visible'])
@@ -171,7 +171,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   transfer,
   wrapper,
   popper: computed(() => popper.value?.wrapper),
-  isDrop: true
+  isDrop: true,
 })
 const { isHover } = useHover(reference)
 
@@ -219,8 +219,8 @@ const className = computed(() => {
       [nh.bm('no-second')]: !startState.enabled.second,
       [nh.bm('visible')]: currentVisible.value,
       [nh.bm(props.state)]: props.state !== 'default',
-      [nh.bm('is-range')]: props.range
-    }
+      [nh.bm('is-range')]: props.range,
+    },
   ]
 })
 const readonly = computed(() => props.loading && props.loadingLock)
@@ -234,7 +234,7 @@ const selectorClass = computed(() => {
     [`${baseCls}--loading`]: props.loading,
     [`${baseCls}--${props.size}`]: props.size !== 'default',
     [`${baseCls}--focused`]: focused.value,
-    [`${baseCls}--${props.state}`]: props.state !== 'default'
+    [`${baseCls}--${props.state}`]: props.state !== 'default',
   }
 })
 const hasPrefix = computed(() => {
@@ -413,7 +413,7 @@ watch(
 
     lastValue.value = (Array.isArray(value) ? value[0] || value[1] : value) ? getStringValue() : ''
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(
   () => props.type,
@@ -428,14 +428,14 @@ watch(
     startState.enabled.date = hasDate
     endState.enabled.date = hasDate
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(() => props.format, parseFormat, { immediate: true })
 watch(
   () => props.visible,
   value => {
     currentVisible.value = value
-  }
+  },
 )
 watch(currentVisible, value => {
   if (value) {
@@ -460,7 +460,7 @@ watch(
     if (!props.unitReadonly && currentVisible.value && currentState.value === 'start') {
       emitEvent(props.onChangeCol, value, 'start')
     }
-  }
+  },
 )
 watch(
   () => endState.column,
@@ -468,7 +468,7 @@ watch(
     if (!props.unitReadonly && currentVisible.value && currentState.value === 'end') {
       emitEvent(props.onChangeCol, value, 'end')
     }
-  }
+  },
 )
 watch(
   () => props.disabled,
@@ -477,7 +477,7 @@ watch(
       setVisible(false)
       handleBlur()
     }
-  }
+  },
 )
 watch(readonly, value => {
   if (value) {
@@ -503,7 +503,7 @@ defineExpose({
   panel: datePanel,
   updatePopper,
   focus: (options?: FocusOptions) => reference.value?.focus(options),
-  blur: () => reference.value?.blur()
+  blur: () => reference.value?.blur(),
 })
 
 function createDateState() {
@@ -514,7 +514,7 @@ function createDateState() {
     'date',
     'hour',
     'minute',
-    'second'
+    'second',
   ] as DateTimeType[])
 
   const dateValue = reactive({
@@ -523,7 +523,7 @@ function createDateState() {
     date: 1,
     hour: 0,
     minute: 0,
-    second: 0
+    second: 0,
   })
   const activated = reactive({
     year: false,
@@ -531,7 +531,7 @@ function createDateState() {
     date: false,
     hour: false,
     minute: false,
-    second: false
+    second: false,
   })
 
   let valueRecord = { ...dateValue }
@@ -562,7 +562,7 @@ function createDateState() {
         dateValue.date,
         dateValue.hour,
         dateValue.minute,
-        dateValue.second
+        dateValue.second,
       )
     },
     record() {
@@ -572,7 +572,7 @@ function createDateState() {
     restore() {
       Object.assign(dateValue, valueRecord)
       Object.assign(activated, activatedRecord)
-    }
+    },
   })
 }
 
@@ -752,7 +752,7 @@ function emitChange() {
                   ? valueFormat
                   : type === 'start'
                     ? valueFormat[0]
-                    : valueFormat[1]
+                    : valueFormat[1],
               )
           : timestamp => timestamp
 
@@ -760,7 +760,7 @@ function emitChange() {
       if (props.type === 'year') {
         emitValues[i] = new Date(
           i === 0 ? startState.dateValue.year : endState.dateValue.year,
-          0
+          0,
         ).getTime()
       } else if (props.type !== 'datetime') {
         emitValues[i] = new Date(values[i].split(' ')[0] + ' 00:00:00').getTime()

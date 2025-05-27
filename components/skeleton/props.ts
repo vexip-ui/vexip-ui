@@ -17,7 +17,7 @@ export const skeletonProps = buildProps({
   circle: booleanProp,
   block: booleanProp,
   spread: Number,
-  loading: booleanProp
+  loading: booleanProp,
 })
 
 export type SkeletonProps = ExtractPropTypes<typeof skeletonProps>
@@ -31,7 +31,7 @@ export const skeletonGroupProps = buildProps({
   round: booleanProp,
   circle: booleanProp,
   block: booleanProp,
-  loading: booleanProp
+  loading: booleanProp,
 })
 
 export type SkeletonGroupProps = ExtractPropTypes<typeof skeletonGroupProps>

@@ -50,5 +50,5 @@ export const trackStyleMap = Object.freeze({
   top: ['left', 'width'],
   right: ['top', 'height'],
   bottom: ['left', 'width'],
-  left: ['top', 'height']
+  left: ['top', 'height'],
 } as const)

@@ -34,7 +34,7 @@ const props = useProps('viewer', _props, {
   toolbarFade: false,
   noTransition: false,
   centerScale: false,
-  actionLayout: () => []
+  actionLayout: () => [],
 })
 
 defineSlots<{
@@ -62,7 +62,7 @@ const {
   target: container,
   x: currentLeft,
   y: currentTop,
-  moving
+  moving,
 } = useMoving({
   onStart: (_, event) => {
     if (props.moveDisabled || event.button > 0) {
@@ -76,7 +76,7 @@ const {
   },
   onEnd: () => {
     emitEvent(props.onMoveStart, getState())
-  }
+  },
 })
 
 const state = reactive({
@@ -87,12 +87,12 @@ const state = reactive({
   full,
   moving,
   x: currentLeft,
-  y: currentTop
+  y: currentTop,
 }) as ViewerState
 
 const zoomOrigin = {
   x: 0,
-  y: 0
+  y: 0,
 }
 
 useModifier({
@@ -111,7 +111,7 @@ useModifier({
 
       modifier.resetAll()
     }
-  }
+  },
 })
 
 function getState() {
@@ -119,7 +119,7 @@ function getState() {
 }
 
 function getActionProp<
-  K extends Exclude<keyof ViewerToolbarAction, 'name' | 'icon' | 'iconRenderer' | 'process'>
+  K extends Exclude<keyof ViewerToolbarAction, 'name' | 'icon' | 'iconRenderer' | 'process'>,
 >(action: ViewerToolbarAction, prop: K) {
   return callIfFunc(action[prop] as any, state) as Exclude<
     ViewerToolbarAction[K],
@@ -138,7 +138,7 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, icons.value.rotateRight),
     class: getActionClass(InternalActionName.RotateRight),
     title: () => locale.value.rotateRight,
-    hidden: () => props.rotateDisabled
+    hidden: () => props.rotateDisabled,
   },
   {
     name: InternalActionName.RotateLeft,
@@ -146,7 +146,7 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, icons.value.rotateLeft),
     class: getActionClass(InternalActionName.RotateLeft),
     title: () => locale.value.rotateLeft,
-    hidden: () => props.rotateDisabled
+    hidden: () => props.rotateDisabled,
   },
   {
     name: InternalActionName.FlipX,
@@ -154,7 +154,7 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, icons.value.flipX),
     class: getActionClass(InternalActionName.FlipX),
     title: () => locale.value.flipHorizontal,
-    hidden: () => props.flipDisabled
+    hidden: () => props.flipDisabled,
   },
   {
     name: InternalActionName.FlipY,
@@ -162,7 +162,7 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, icons.value.flipY),
     class: getActionClass(InternalActionName.FlipY),
     title: () => locale.value.flipVertical,
-    hidden: () => props.flipDisabled
+    hidden: () => props.flipDisabled,
   },
   {
     name: InternalActionName.ZoomIn,
@@ -170,7 +170,7 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, icons.value.zoomIn),
     class: getActionClass(InternalActionName.ZoomIn),
     title: () => locale.value.zoomIn,
-    hidden: () => props.zoomDisabled
+    hidden: () => props.zoomDisabled,
   },
   {
     name: InternalActionName.ZoomOut,
@@ -178,7 +178,7 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, icons.value.zoonOut),
     class: getActionClass(InternalActionName.ZoomOut),
     title: () => locale.value.zoomOut,
-    hidden: () => props.zoomDisabled
+    hidden: () => props.zoomDisabled,
   },
   {
     name: InternalActionName.FullScreen,
@@ -186,15 +186,15 @@ const internalActions: ViewerToolbarAction[] = [
     iconRenderer: () => h(Icon, full.value ? icons.value.resetScreen : icons.value.fullScreen),
     class: getActionClass(InternalActionName.FullScreen),
     title: () => (full.value ? locale.value.fullScreenExit : locale.value.fullScreen),
-    hidden: () => props.fullDisabled
+    hidden: () => props.fullDisabled,
   },
   {
     name: InternalActionName.Reset,
     process: () => handleReset(),
     iconRenderer: () => h(Icon, icons.value.refresh),
     class: getActionClass(InternalActionName.Reset),
-    title: () => locale.value.reset
-  }
+    title: () => locale.value.reset,
+  },
 ]
 
 const className = computed(() => {
@@ -206,13 +206,13 @@ const className = computed(() => {
     [nh.bm('resizable')]: !props.zoomDisabled,
     [nh.bm('full')]: full.value,
     [nh.bm('moving')]: moving.value,
-    [nh.bm('static')]: props.noTransition
+    [nh.bm('static')]: props.noTransition,
   }
 })
 const style = computed(() => {
   return {
     width: toCssSize(props.width),
-    height: toCssSize(props.height)
+    height: toCssSize(props.height),
   }
 })
 const toolbarVertical = computed(() => {
@@ -228,19 +228,19 @@ const toolbarClass = computed(() => {
     [nh.be('toolbar')]: true,
     [nh.bem('toolbar', 'active')]: toolbarFade.value < 300 || toolbarActive.value,
     [nh.bem('toolbar', props.toolbarPlacement)]: true,
-    [nh.bem('toolbar', 'vertical')]: toolbarVertical.value
+    [nh.bem('toolbar', 'vertical')]: toolbarVertical.value,
   }
 })
 const contentStyle = computed(() => {
   return {
-    transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scale(${zoom.value})`
+    transform: `translate3d(${currentLeft.value}px, ${currentTop.value}px, 0) scale(${zoom.value})`,
   }
 })
 const transitionStyle = computed(() => {
   return {
     transform: `scaleX(${flipX.value ? -1 : 1}) scaleY(${flipY.value ? -1 : 1}) rotate(${
       rotate.value
-    }deg)`
+    }deg)`,
   }
 })
 const allActions = computed(() => {
@@ -286,7 +286,7 @@ defineExpose({
   toggleFlipVertical: toggleFlipY,
   handleZoom,
   toggleFull,
-  handleReset
+  handleReset,
 })
 
 onMounted(() => {
@@ -405,7 +405,7 @@ function normalizeProps() {
         if (transition.value) {
           transition.value.style.transitionDuration = ''
         }
-      }
+      },
     )
   }
 

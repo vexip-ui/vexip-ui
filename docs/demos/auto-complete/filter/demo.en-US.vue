@@ -45,6 +45,6 @@ const options = [
   'Tooltip',
   'Tree',
   'Upload',
-  'Wheel'
+  'Wheel',
 ]
 </script>

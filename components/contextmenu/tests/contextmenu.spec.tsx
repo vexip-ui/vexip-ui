@@ -17,7 +17,7 @@ function createContextmenu() {
       app?.use(Contextmenu)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Contextmenu
@@ -37,7 +37,7 @@ describe('Contextmenu', () => {
     Contextmenu.open({
       clientX: 10,
       clientY: 5,
-      configs: menus
+      configs: menus,
     })
     await nextTick()
     const wrapper = document.querySelector<HTMLElement>('.vxp-contextmenu')!
@@ -57,7 +57,7 @@ describe('Contextmenu', () => {
     const promise = Contextmenu.open({
       clientX: 10,
       clientY: 5,
-      configs: menus
+      configs: menus,
     })
     await nextTick()
     const wrapper = document.querySelector<HTMLElement>('.vxp-contextmenu')!
@@ -76,7 +76,7 @@ describe('Contextmenu', () => {
     const promise = Contextmenu.open({
       clientX: 10,
       clientY: 5,
-      configs: menus
+      configs: menus,
     })
     await nextTick()
 
@@ -94,15 +94,15 @@ describe('Contextmenu', () => {
         label: 'label',
         color: 'red',
         icon: Github,
-        shortcut: 'shortcut'
-      }
+        shortcut: 'shortcut',
+      },
     ]
     const Contextmenu = createContextmenu()
 
     Contextmenu.open({
       clientX: 10,
       clientY: 5,
-      configs: menus
+      configs: menus,
     })
     await nextTick()
 
@@ -113,10 +113,10 @@ describe('Contextmenu', () => {
     expect(item).toBeTruthy()
     expect(item.querySelector<HTMLElement>('.vxp-contextmenu__label')!.textContent).toEqual('label')
     expect(item.querySelector<HTMLElement>('.vxp-contextmenu__label')!.style.cssText).toContain(
-      'color: red;'
+      'color: red;',
     )
     expect(item.querySelector<HTMLElement>('.vxp-contextmenu__shortcut')!.textContent).toEqual(
-      'shortcut'
+      'shortcut',
     )
     expect(item.querySelector<HTMLElement>('.vxp-contextmenu__icon')).toBeTruthy()
     expect(item.querySelector('svg')).toBeTruthy()
@@ -131,7 +131,7 @@ describe('Contextmenu', () => {
       clientX: 10,
       clientY: 5,
       configs: menus,
-      target: el
+      target: el,
     })
     await nextTick()
     expect(el.querySelector('.vxp-contextmenu')).toBeTruthy()

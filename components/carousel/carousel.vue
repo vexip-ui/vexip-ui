@@ -19,36 +19,36 @@ const _props = defineProps(carouselProps)
 const props = useProps('carousel', _props, {
   active: {
     default: 0,
-    static: true
+    static: true,
   },
   viewSize: {
     default: 3,
-    validator: value => value > 0
+    validator: value => value > 0,
   },
   vertical: false,
   disabled: false,
   loop: false,
   arrow: {
     default: 'outside',
-    validator: value => ['outside', 'inside', 'none'].includes(value)
+    validator: value => ['outside', 'inside', 'none'].includes(value),
   },
   arrowTrigger: {
     default: 'hover',
-    validator: value => ['hover', 'always'].includes(value)
+    validator: value => ['hover', 'always'].includes(value),
   },
   autoplay: {
     default: false,
-    validator: value => (typeof value === 'number' ? value > 500 : true)
+    validator: value => (typeof value === 'number' ? value > 500 : true),
   },
   pointer: {
     default: 'none',
-    validator: value => ['outside', 'inside', 'none'].includes(value)
+    validator: value => ['outside', 'inside', 'none'].includes(value),
   },
   speed: 300,
   activeOffset: 0,
   height: null,
   ignoreHover: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active'])
@@ -66,16 +66,16 @@ const arrowActive = ref(props.arrowTrigger === 'always')
 
 const listRect = reactive({
   width: 0,
-  height: 0
+  height: 0,
 })
 const trackRect = reactive({
   width: 0,
   height: 0,
-  offset: 0
+  offset: 0,
 })
 const itemRect = reactive({
   width: 0,
-  height: 0
+  height: 0,
 })
 
 const { wrapper, isHover } = useHover()
@@ -92,7 +92,7 @@ const className = computed(() => {
     [nh.bs('vars')]: true,
     [nh.bm('inherit')]: props.inherit,
     [nh.bm('vertical')]: props.vertical,
-    [nh.bm('disabled')]: isDisabled.value
+    [nh.bm('disabled')]: isDisabled.value,
   }
 })
 const style = computed(() => {
@@ -100,13 +100,13 @@ const style = computed(() => {
     height:
       props.vertical && props.height
         ? `${props.height}${typeof props.height === 'number' ? 'px' : ''}`
-        : undefined
+        : undefined,
   }
 })
 const listStyle = computed(() => {
   return {
     width: listRect.width ? `${listRect.width}px` : undefined,
-    height: listRect.height ? `${listRect.height}px` : undefined
+    height: listRect.height ? `${listRect.height}px` : undefined,
   }
 })
 const trackStyle = computed(() => {
@@ -118,7 +118,7 @@ const trackStyle = computed(() => {
           isRtl.value && !props.vertical ? `${-trackRect.offset}` : trackRect.offset
         }px) translateZ(0)`
       : undefined,
-    transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`
+    transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`,
   }
 })
 const disabledPrev = computed(() => {
@@ -142,7 +142,7 @@ watch(
   () => props.active,
   value => {
     handleWheel(value - props.activeOffset)
-  }
+  },
 )
 watch(isHover, value => {
   if (props.ignoreHover) return
@@ -179,8 +179,8 @@ provide<CarouselState>(
     increaseItem,
     decreaseItem,
     isItemActive,
-    handleSelect
-  })
+    handleSelect,
+  }),
 )
 
 // 初始化时不使用过渡效果
@@ -209,7 +209,7 @@ defineExpose({
   wrapper,
   prev,
   next,
-  refresh
+  refresh,
 })
 
 function increaseItem(item: ItemState) {

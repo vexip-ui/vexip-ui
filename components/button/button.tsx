@@ -12,7 +12,7 @@ import {
   emitEvent,
   useIcons,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { adjustAlpha, isClient, mixColor, parseColorToRgba } from '@vexip-ui/utils'
 import { buttonProps } from './props'
@@ -29,7 +29,7 @@ export default defineComponent({
       size: createSizeProp(fieldActions ? fieldActions.size : undefined),
       type: {
         default: null,
-        validator: value => buttonTypes.includes(value)
+        validator: value => buttonTypes.includes(value),
       },
       dashed: false,
       text: false,
@@ -44,13 +44,13 @@ export default defineComponent({
       color: null,
       buttonType: {
         default: 'button',
-        validator: value => ['button', 'submit', 'reset'].includes(value)
+        validator: value => ['button', 'submit', 'reset'].includes(value),
       },
       block: false,
       tag: 'button',
       noPulse: false,
       badge: null,
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const groupState = inject(GROUP_STATE, null)
@@ -88,7 +88,7 @@ export default defineComponent({
         [nh.bm('pulsing')]: pulsing.value,
         [nh.bm('first')]: index.value === 1,
         [nh.bm('last')]: isLast.value,
-        [nh.bm('block')]: props.block
+        [nh.bm('block')]: props.block,
       }
     })
     const colorMap = computed(() => {
@@ -109,7 +109,7 @@ export default defineComponent({
         opacity7: adjustAlpha(baseColor, 0.3).toString(),
         opacity8: adjustAlpha(baseColor, 0.2).toString(),
         white8: adjustAlpha(white, 0.2).toString(),
-        white9: adjustAlpha(white, 0.1).toString()
+        white9: adjustAlpha(white, 0.1).toString(),
       }
     })
     const style = computed<Record<string, string>>(() => {
@@ -125,7 +125,7 @@ export default defineComponent({
         opacity7,
         opacity8,
         white8,
-        white9
+        white9,
       } = colorMap.value
       const { cvm, gnv } = nh
 
@@ -146,7 +146,7 @@ export default defineComponent({
           'b-color-focus': light2,
           'b-color-active': dark1,
           'b-color-disabled': gnv('content-color-disabled'),
-          'pulse-s-color': dark1
+          'pulse-s-color': dark1,
         })
       }
 
@@ -167,7 +167,7 @@ export default defineComponent({
           'b-color-focus': opacity3,
           'b-color-active': opacity3,
           'b-color-disabled': gnv('border-color-light-1'),
-          'pulse-s-color': dark1
+          'pulse-s-color': dark1,
         })
       }
 
@@ -179,14 +179,14 @@ export default defineComponent({
                 'b-color-hover': light2,
                 'b-color-focus': light2,
                 'b-color-active': dark1,
-                'pulse-s-color': dark1
+                'pulse-s-color': dark1,
               }
             : {}),
           color: base,
           'color-hover': light2,
           'color-focus': light2,
           'color-active': dark1,
-          'color-disabled': opacity4
+          'color-disabled': opacity4,
         })
       }
 
@@ -206,7 +206,7 @@ export default defineComponent({
         'b-color-focus': light2,
         'b-color-active': dark1,
         'b-color-disabled': gnv('border-color-light-1'),
-        'pulse-s-color': dark1
+        'pulse-s-color': dark1,
       })
     })
 
@@ -248,7 +248,7 @@ export default defineComponent({
                 icon={props.loadingIcon || icons.value.loading.icon}
                 label={'loading'}
               ></Icon>
-            </Renderer>
+            </Renderer>,
           ])}
         </div>
       )
@@ -262,7 +262,7 @@ export default defineComponent({
           {renderSlot(slots, 'icon', undefined, () => [
             <Renderer renderer={props.slots.icon}>
               {props.icon ? <Icon icon={props.icon}></Icon> : null}
-            </Renderer>
+            </Renderer>,
           ])}
         </div>
       )
@@ -277,7 +277,7 @@ export default defineComponent({
             {renderSlot(slots, 'icon', undefined, () => [
               <Renderer renderer={props.slots.icon}>
                 <Icon icon={props.icon}></Icon>
-              </Renderer>
+              </Renderer>,
             ])}
           </div>
         )
@@ -323,11 +323,11 @@ export default defineComponent({
           {isIconOnly.value ? renderSingleIcon() : renderCollapseIcon()}
           {!isIconOnly.value &&
             renderSlot(slots, 'default', undefined, () => [
-              <Renderer renderer={props.slots.default}></Renderer>
+              <Renderer renderer={props.slots.default}></Renderer>,
             ])}
           {!isIconOnly.value && (props.badge || props.badge === 0) ? renderBadge() : null}
         </Button>
       )
     }
-  }
+  },
 })

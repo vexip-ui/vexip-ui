@@ -63,18 +63,18 @@ describe('Viewer', () => {
         'left-end',
         'right',
         'right-start',
-        'right-end'
+        'right-end',
       ] as const
     ).forEach(placement => {
       const wrapper = mount(() => <Viewer toolbar-placement={placement}></Viewer>)
 
       expect(wrapper.find('.vxp-viewer__toolbar').classes()).toContain(
-        `vxp-viewer__toolbar--${placement}`
+        `vxp-viewer__toolbar--${placement}`,
       )
 
       if (placement.startsWith('left') || placement.startsWith('right')) {
         expect(wrapper.find('.vxp-viewer__toolbar').classes()).toContain(
-          'vxp-viewer__toolbar--vertical'
+          'vxp-viewer__toolbar--vertical',
         )
       }
     })
@@ -91,7 +91,7 @@ describe('Viewer', () => {
     await nextTick()
     await toggleMove(container)
     expect(wrapper.find('.vxp-viewer__content').attributes('style')).toContain(
-      'translate3d(40px, 40px, 0)'
+      'translate3d(40px, 40px, 0)',
     )
   })
 
@@ -132,8 +132,8 @@ describe('Viewer', () => {
         name: 'test',
         title: 'Title',
         icon: Github,
-        process
-      }
+        process,
+      },
     ]
     const wrapper = mount(() => (
       <Viewer actions={actions}>

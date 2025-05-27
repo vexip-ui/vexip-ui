@@ -20,11 +20,11 @@ const props = useProps('imageViewer', _props, {
   index: 0,
   srcList: {
     default: '',
-    static: true
+    static: true,
   },
   transfer: false,
   viewerProps: () => ({}),
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
@@ -50,13 +50,13 @@ watch(
   () => props.active,
   value => {
     currentActive.value = value
-  }
+  },
 )
 watch(
   () => props.index,
   value => {
     currentIndex.value = value
-  }
+  },
 )
 watch(() => srcArray.value.length, verifyIndex)
 
@@ -65,7 +65,7 @@ defineExpose({
   currentIndex,
   prevDisabled,
   nextDisabled,
-  viewer
+  viewer,
 })
 
 function setActive(active: boolean) {

@@ -11,7 +11,7 @@ const renderIcon: IconRenderer = (props, attrs) => {
   return h('div', {
     ...attrs,
     class: 'my-icon',
-    style: props.size || (String(props.scale) !== '1' ? `font-size: ${props.scale}em` : '')
+    style: props.size || (String(props.scale) !== '1' ? `font-size: ${props.scale}em` : ''),
   })
 }
 </script>

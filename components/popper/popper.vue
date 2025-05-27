@@ -38,7 +38,7 @@ import { popperProps } from './props'
 export default defineComponent({
   name: 'Popper',
   components: {
-    Portal
+    Portal,
   },
   inheritAttrs: false,
   props: popperProps,
@@ -51,7 +51,7 @@ export default defineComponent({
       to: '',
       transition: () => nh.ns('drop'),
       appear: false,
-      role: 'dialog'
+      role: 'dialog',
     })
     const getIndex = useZIndex()
 
@@ -66,7 +66,7 @@ export default defineComponent({
           zIndex.value = getIndex()
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     function emitHookEvent(name: 'be' | 'e' | 'ae' | 'ec' | 'bl' | 'l' | 'al' | 'lc', el: Element) {
@@ -105,8 +105,8 @@ export default defineComponent({
 
       wrapper,
 
-      emitHookEvent
+      emitHookEvent,
     }
-  }
+  },
 })
 </script>

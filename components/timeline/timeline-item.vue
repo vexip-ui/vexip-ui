@@ -13,16 +13,16 @@ const _props = defineProps(timelineItemProps)
 const props = useProps('timelineItem', _props, {
   type: {
     default: 'primary',
-    validator: value => timelineItemTypes.includes(value)
+    validator: value => timelineItemTypes.includes(value),
   },
   color: '',
   label: {
     default: null,
-    static: true
+    static: true,
   },
   dashed: null,
   lineColor: null,
-  spacing: null
+  spacing: null,
 })
 
 defineSlots<{
@@ -40,13 +40,13 @@ const content = ref<HTMLElement>()
 const className = computed(() => {
   return {
     [nh.be('item')]: true,
-    [nh.bem('item', props.type)]: timelineItemTypes.includes(props.type)
+    [nh.bem('item', props.type)]: timelineItemTypes.includes(props.type),
   }
 })
 const itemStyle = computed(() => {
   const spacing = props.spacing || props.spacing === 0 ? props.spacing : timelineState?.spacing
   const style: Record<string, any> = {
-    [nh.cv('item-span')]: typeof spacing === 'number' ? `${spacing}px` : spacing
+    [nh.cv('item-span')]: typeof spacing === 'number' ? `${spacing}px` : spacing,
   }
 
   if (props.color) {
@@ -62,7 +62,7 @@ const lineStyle = computed(() => {
 
   return {
     borderInlineStartStyle: isDashed ? ('dashed' as const) : undefined,
-    borderInlineStartColor: color
+    borderInlineStartColor: color,
   }
 })
 
@@ -73,7 +73,7 @@ if (timelineState) {
     label: currentLabel,
     index: 0,
     total: 0,
-    height: 0
+    height: 0,
   })
 
   timelineState.increaseItem(state)

@@ -13,6 +13,6 @@ export function createCounter(count = 0) {
     getCount: () => count++,
     setCount: (newCount: number) => {
       count = newCount
-    }
+    },
   }
 }

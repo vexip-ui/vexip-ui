@@ -43,12 +43,12 @@ export const enUS = defineI18n({
     openSettings: 'Open setting panel',
     adjustSettings: 'Adjust Document Setting',
     changeOrder: 'Change SFC block order',
-    orderChanged: 'Change SFC block order successfully'
+    orderChanged: 'Change SFC block order successfully',
   },
   alert: {
     info: 'Tip',
     warning: 'Attention',
-    error: 'Warning'
+    error: 'Warning',
   },
   guide: {
     introduction: 'Introduction',
@@ -63,7 +63,7 @@ export const enUS = defineI18n({
     ssr: 'Server-Side Rendering',
     customFormControl: 'Custom Form Control',
     developmentGuide: 'Development Guide',
-    changeIcons: 'Change Icons'
+    changeIcons: 'Change Icons',
   },
   group: {
     basis: 'Basis',
@@ -72,7 +72,7 @@ export const enUS = defineI18n({
     form: 'Form',
     data: 'Data',
     effect: 'Effect',
-    else: 'Else'
+    else: 'Else',
   },
   footer: {
     resources: 'Resources',
@@ -88,7 +88,7 @@ export const enUS = defineI18n({
     contribute: 'Contribute',
     qqGroup: 'Support QQ Group',
     sponsor: 'Buy a Cup of Coffee',
-    releaseScripts: 'Release Scripts'
+    releaseScripts: 'Release Scripts',
   },
   component: {
     // Basis
@@ -181,6 +181,6 @@ export const enUS = defineI18n({
     Renderer: 'Renderer',
     ResizeObserver: 'ResizeObserver',
     Scrollbar: 'Scrollbar',
-    VirtualList: 'VirtualList'
-  }
+    VirtualList: 'VirtualList',
+  },
 })

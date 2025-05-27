@@ -12,7 +12,7 @@ import type {
   LayoutMediaJudger,
   LayoutMenuProps,
   LayoutSignType,
-  LayoutUser
+  LayoutUser,
 } from './symbol'
 
 const breakpointProp = {
@@ -20,7 +20,7 @@ const breakpointProp = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     boolean | BreakPoint | LayoutMediaJudger | (string & {})
   >,
-  default: null
+  default: null,
 }
 
 export const layoutProps = buildProps({
@@ -61,7 +61,7 @@ export const layoutProps = buildProps({
   onNavChange: eventProp<(type: LayoutSignType) => void>(),
   onColorChange: eventProp<(color: string) => void>(),
   onToggleTheme: eventProp<(isDark: boolean) => void>(),
-  onContentResize: eventProp<() => void>()
+  onContentResize: eventProp<() => void>(),
 })
 
 export type LayoutProps = ExtractPropTypes<typeof layoutProps>
@@ -80,7 +80,7 @@ export const layoutAsideProps = buildProps({
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onSignClick: eventProp<(event: MouseEvent) => void>(),
-  onMenuSelect: eventProp<(label: string, meta: any) => void>()
+  onMenuSelect: eventProp<(label: string, meta: any) => void>(),
 })
 
 export type LayoutAsideProps = ExtractPropTypes<typeof layoutAsideProps>
@@ -110,7 +110,7 @@ export const layoutHeaderProps = buildProps({
   onExpandedChange: eventProp<(expanded: boolean) => void>(),
   onReducedChange: eventProp<(reduced: boolean) => void>(),
   onMenuSelect: eventProp<(label: string, meta: any) => void>(),
-  onToggleTheme: eventProp<(isDark: boolean) => void>()
+  onToggleTheme: eventProp<(isDark: boolean) => void>(),
 })
 
 export type LayoutHeaderProps = ExtractPropTypes<typeof layoutHeaderProps>
@@ -118,7 +118,7 @@ export type LayoutHeaderCProps = ConfigurableProps<LayoutHeaderProps, 'user' | '
 
 export const layoutMainProps = buildProps({
   tag: String,
-  fixed: booleanProp
+  fixed: booleanProp,
 })
 
 export type LayoutMainProps = ExtractPropTypes<typeof layoutMainProps>
@@ -128,7 +128,7 @@ export const layoutFooterProps = buildProps({
   tag: String,
   copyright: String,
   links: Array as PropType<LayoutFooterLink[]>,
-  verticalLinks: booleanStringProp
+  verticalLinks: booleanStringProp,
 })
 
 export type LayoutFooterProps = ExtractPropTypes<typeof layoutFooterProps>

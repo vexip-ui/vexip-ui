@@ -19,7 +19,7 @@ const placements = ['top', 'left'] as TabNavPlacement[]
 const placement = ref(placements[0])
 
 const tabs = Array.from({ length: 30 }).map((_, index) => ({
-  label: index + 1
+  label: index + 1,
 }))
 const active = ref(1)
 </script>

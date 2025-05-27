@@ -16,8 +16,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Button' },
         { name: 'Icon' },
         { name: 'Linker' },
-        { name: 'Typography', since: '2.0.0' }
-      ]
+        { name: 'Typography', since: '2.0.0' },
+      ],
     },
     {
       name: 'layout',
@@ -29,8 +29,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Row' },
         { name: 'Scroll' },
         { name: 'Space', since: '2.0.0' },
-        { name: 'Split' }
-      ]
+        { name: 'Split' },
+      ],
     },
     {
       name: 'navigation',
@@ -39,8 +39,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Breadcrumb' },
         { name: 'Dropdown' },
         { name: 'Menu' },
-        { name: 'Pagination' }
-      ]
+        { name: 'Pagination' },
+      ],
     },
     {
       name: 'form',
@@ -62,8 +62,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'TimePicker' },
         { name: 'Transfer', since: '2.0.0' },
         { name: 'Upload' },
-        { name: 'Wheel' }
-      ]
+        { name: 'Wheel' },
+      ],
     },
     {
       name: 'data',
@@ -88,8 +88,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Tooltip' },
         { name: 'Tree' },
         { name: 'Video', since: '2.3.0' },
-        { name: 'Viewer', since: '2.0.0' }
-      ]
+        { name: 'Viewer', since: '2.0.0' },
+      ],
     },
     {
       name: 'effect',
@@ -106,8 +106,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Skeleton', since: '2.0.0' },
         { name: 'Spin', since: '1.3.0' },
         { name: 'Toast', since: '2.0.0' },
-        { name: 'Tour', since: '2.2.0' }
-      ]
+        { name: 'Tour', since: '2.2.0' },
+      ],
     },
     {
       name: 'else',
@@ -120,8 +120,8 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Renderer' },
         { name: 'ResizeObserver', since: '2.0.0' },
         { name: 'Scrollbar' },
-        { name: 'VirtualList', since: '2.0.0' }
-      ]
-    }
+        { name: 'VirtualList', since: '2.0.0' },
+      ],
+    },
   ]
 }

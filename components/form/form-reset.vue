@@ -31,8 +31,8 @@ const props = useProps('formReset', _props, {
   block: null,
   onBeforeReset: {
     default: null,
-    isFunc: true
-  }
+    isFunc: true,
+  },
 })
 
 const slots = defineSlots<{

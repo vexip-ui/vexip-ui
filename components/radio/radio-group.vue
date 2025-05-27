@@ -10,7 +10,7 @@ import {
   createStateProp,
   emitEvent,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { debounceMinor, isClient, isObject } from '@vexip-ui/utils'
 import { radioGroupProps } from './props'
@@ -30,7 +30,7 @@ const {
   size,
   validateField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<string | number | boolean>(focus)
 
 const _props = defineProps(radioGroupProps)
@@ -39,13 +39,13 @@ const props = useProps('radioGroup', _props, {
   state: createStateProp(state),
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   vertical: false,
   disabled: () => disabled.value,
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   loading: () => loading.value,
   loadingIcon: createIconProp(),
@@ -53,8 +53,8 @@ const props = useProps('radioGroup', _props, {
   loadingEffect: null,
   shape: {
     default: 'default',
-    validator: value => radioGroupShapes.includes(value)
-  }
+    validator: value => radioGroupShapes.includes(value),
+  },
 })
 
 const emit = defineEmits(['update:value'])
@@ -76,8 +76,8 @@ const className = computed(() => {
       [nh.bm('loading')]: props.loading,
       [nh.bm(props.size)]: props.size !== 'default',
       [nh.bm(props.state)]: props.state !== 'default',
-      [nh.bm(props.shape)]: props.shape !== 'default'
-    }
+      [nh.bm(props.shape)]: props.shape !== 'default',
+    },
   ]
 })
 
@@ -93,7 +93,7 @@ const groupState = reactive({
   shape: toRef(props, 'shape'),
   updateValue: debounceMinor(updateValue),
   registerInput,
-  unregisterInput
+  unregisterInput,
 })
 
 // 此处直接定义 reactive 会出现类型推断错误，存疑？
@@ -103,7 +103,7 @@ watch(
   () => props.value,
   value => {
     currentValue.value = value
-  }
+  },
 )
 
 defineExpose({
@@ -113,7 +113,7 @@ defineExpose({
     for (const input of inputSet) {
       input.value?.blur()
     }
-  }
+  },
 })
 
 function updateValue(value: string | number | boolean) {

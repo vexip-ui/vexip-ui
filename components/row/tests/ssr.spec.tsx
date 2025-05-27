@@ -20,7 +20,7 @@ describe('SSR for Row', () => {
             <Column span={8}></Column>
             <Column span={16}></Column>
           </Row>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

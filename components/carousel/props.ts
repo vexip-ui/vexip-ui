@@ -6,7 +6,7 @@ import type {
   CarouselArrowTrigger,
   CarouselArrowType,
   CarouselPointerType,
-  CarouselSlots
+  CarouselSlots,
 } from './symbol'
 
 export const carouselProps = buildProps({
@@ -27,7 +27,7 @@ export const carouselProps = buildProps({
   onChange: eventProp<(active: number) => void>(),
   onPrev: eventProp<(active: number) => void>(),
   onNext: eventProp<(active: number) => void>(),
-  onSelect: eventProp<(active: number) => void>()
+  onSelect: eventProp<(active: number) => void>(),
 })
 
 export type CarouselProps = ExtractPropTypes<typeof carouselProps>

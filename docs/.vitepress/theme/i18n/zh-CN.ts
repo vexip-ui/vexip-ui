@@ -43,12 +43,12 @@ export const zhCN = defineI18n({
     openSettings: '打开配置面板',
     adjustSettings: '调整文档配置',
     changeOrder: '换个 SFC 块顺序',
-    orderChanged: 'SFC 块顺序修改成功'
+    orderChanged: 'SFC 块顺序修改成功',
   },
   alert: {
     info: '提示',
     warning: '注意',
-    error: '警告'
+    error: '警告',
   },
   guide: {
     introduction: '介绍',
@@ -63,7 +63,7 @@ export const zhCN = defineI18n({
     ssr: '服务端渲染',
     customFormControl: '自定义表单控件',
     developmentGuide: '开发指南',
-    changeIcons: '修改图标'
+    changeIcons: '修改图标',
   },
   group: {
     basis: '基础',
@@ -72,7 +72,7 @@ export const zhCN = defineI18n({
     form: '表单',
     data: '数据',
     effect: '反应',
-    else: '其他'
+    else: '其他',
   },
   footer: {
     resources: '资源',
@@ -88,7 +88,7 @@ export const zhCN = defineI18n({
     contribute: '参与贡献',
     qqGroup: '技术支持 Q 群',
     sponsor: '赞助一杯喜茶',
-    releaseScripts: '发布脚本'
+    releaseScripts: '发布脚本',
   },
   component: {
     // Basis
@@ -181,6 +181,6 @@ export const zhCN = defineI18n({
     Renderer: '渲染器',
     ResizeObserver: '缩放观察',
     Scrollbar: '滚动条',
-    VirtualList: '虚拟列表'
-  }
+    VirtualList: '虚拟列表',
+  },
 })

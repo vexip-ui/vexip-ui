@@ -14,8 +14,8 @@ defineOptions({ name: 'TableBody' })
 const props = defineProps({
   fixed: {
     type: String as PropType<'left' | 'right' | undefined>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const { state, getters } = inject(TABLE_STORE)!
@@ -45,14 +45,14 @@ const style = computed(() => {
     [nh.cv('expanded-fix-width')]:
       props.fixed === 'right' && width ? `${width + padLeft + padRight}px` : '0px',
     minWidth: width && `${width + padLeft + padRight}px`,
-    minHeight: `${state.totalHeight}px`
+    minHeight: `${state.totalHeight}px`,
   }
 })
 const emptyStyle = computed(() => {
   const { rowHeight, rowMinHeight } = state
 
   return {
-    minHeight: `${rowHeight || rowMinHeight}px`
+    minHeight: `${rowHeight || rowMinHeight}px`,
   }
 })
 </script>

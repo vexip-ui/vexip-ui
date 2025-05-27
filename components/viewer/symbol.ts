@@ -62,7 +62,7 @@ export const enum InternalActionName {
   ZoomIn = 'zoom-in',
   ZoomOut = 'zoom-out',
   FullScreen = 'full-screen',
-  Reset = 'reset'
+  Reset = 'reset',
 }
 
 const defaultActionLayout: ViewerActionLayout = [
@@ -70,7 +70,7 @@ const defaultActionLayout: ViewerActionLayout = [
   ['flip-x', 'flip-y'],
   ['zoom-in', 'zoom-out'],
   ['full-screen'],
-  ['reset']
+  ['reset'],
 ]
 
 for (let i = 0, len = defaultActionLayout.length; i < len; ++i) {

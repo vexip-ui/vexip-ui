@@ -24,7 +24,7 @@ function setOptions(value: string) {
         `${value}@gmail.com`,
         `${value}@163.com`,
         `${value}@126.com`,
-        `${value}@sina.com`
+        `${value}@sina.com`,
       ]
     : []
 }

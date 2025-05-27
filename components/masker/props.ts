@@ -20,7 +20,7 @@ export const maskerProps = buildProps({
   onHide: eventProp(),
   onShow: eventProp(),
   onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
-  onMaskClick: eventProp<(event: MouseEvent) => void>()
+  onMaskClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type MaskerProps = ExtractPropTypes<typeof maskerProps>

@@ -24,13 +24,13 @@ const tagTypes = Object.freeze<TagType[]>([
   'cyan',
   'navy',
   'gold',
-  'purple'
+  'purple',
 ])
 
 export default defineComponent({
   name: 'Tag',
   components: {
-    Icon
+    Icon,
   },
   props: tagProps,
   emits: [],
@@ -39,7 +39,7 @@ export default defineComponent({
       size: createSizeProp(),
       type: {
         default: 'default',
-        validator: (value: TagType) => tagTypes.includes(value)
+        validator: (value: TagType) => tagTypes.includes(value),
       },
       border: false,
       closable: false,
@@ -53,7 +53,7 @@ export default defineComponent({
       suffixBg: '',
       suffixColor: '',
       disabled: false,
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('tag')
@@ -70,7 +70,7 @@ export default defineComponent({
         [nh.bm('simple')]: props.simple,
         [nh.bm('circle')]: props.circle,
         [nh.bm('closable')]: props.closable,
-        [nh.bm('disabled')]: props.disabled
+        [nh.bm('disabled')]: props.disabled,
       }
     })
     const style = computed(() => {
@@ -90,14 +90,14 @@ export default defineComponent({
         ...(props.simple || props.border
           ? {
               color: base,
-              'close-color': base
+              'close-color': base,
             }
           : {}),
         ...(props.simple
           ? {
-              'bg-color': adjustAlpha(baseColor, 0.2).toString()
+              'bg-color': adjustAlpha(baseColor, 0.2).toString(),
             }
-          : {})
+          : {}),
       })
     })
 
@@ -132,17 +132,17 @@ export default defineComponent({
               style={{
                 color: props.prefixColor,
                 backgroundColor: props.prefixBg,
-                borderColor: props.prefixBg
+                borderColor: props.prefixBg,
               }}
             >
               {renderSlot(slots, 'prefix', undefined, () => [
-                <Renderer renderer={props.slots.prefix}>{props.prefix}</Renderer>
+                <Renderer renderer={props.slots.prefix}>{props.prefix}</Renderer>,
               ])}
             </span>
           ) : null}
           <span class={[nh.be('unit'), nh.be('content')]}>
             {renderSlot(slots, 'default', undefined, () => [
-              <Renderer renderer={props.slots.default}></Renderer>
+              <Renderer renderer={props.slots.default}></Renderer>,
             ])}
             {!hasSuffix && renderClose()}
           </span>
@@ -152,11 +152,11 @@ export default defineComponent({
               style={{
                 color: props.suffixColor,
                 backgroundColor: props.suffixBg,
-                borderColor: props.suffixBg
+                borderColor: props.suffixBg,
               }}
             >
               {renderSlot(slots, 'suffix', undefined, () => [
-                <Renderer renderer={props.slots.suffix}>{props.suffix}</Renderer>
+                <Renderer renderer={props.slots.suffix}>{props.suffix}</Renderer>,
               ])}
               {renderClose()}
             </span>
@@ -164,5 +164,5 @@ export default defineComponent({
         </div>
       )
     }
-  }
+  },
 })

@@ -12,15 +12,15 @@ const _props = defineProps(bubbleProps)
 const props = useProps('bubble', _props, {
   placement: {
     default: 'right',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   type: {
     default: null,
-    validator: value => bubbleTypes.includes(value)
+    validator: value => bubbleTypes.includes(value),
   },
   background: '',
   shadow: false,
-  contentClass: null
+  contentClass: null,
 })
 
 const nh = useNameHelper('bubble')
@@ -37,15 +37,15 @@ const className = computed(() => {
       [nh.bm('inherit')]: props.inherit,
       [nh.bm('background')]: props.background,
       [nh.bm('shadow')]: props.shadow,
-      [nh.bm(props.type)]: props.type !== 'default'
-    }
+      [nh.bm(props.type)]: props.type !== 'default',
+    },
   ]
 })
 const style = computed(() => {
   if (props.background) {
     return {
       [nh.cv('color')]: nh.gnv('color-white'),
-      [nh.cv('bg-color')]: props.background
+      [nh.cv('bg-color')]: props.background,
     }
   }
 

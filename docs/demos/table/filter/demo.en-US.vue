@@ -43,14 +43,14 @@
                   :disabled="
                     Number.isNaN(filter.meta.values[0]) || Number.isNaN(filter.meta.values[1])
                   "
-                  @click="handleFilter(filter.meta.values), toggleVisible(false)"
+                  @click="(handleFilter(filter.meta.values), toggleVisible(false))"
                 >
                   筛选
                 </Button>
                 <Button
                   text
                   size="small"
-                  @click="resetAgeFilter(), handleFilter(null), toggleVisible(false)"
+                  @click="(resetAgeFilter(), handleFilter(null), toggleVisible(false))"
                 >
                   重置
                 </Button>
@@ -91,7 +91,7 @@ const columns = defineTableColumns([
   { type: 'selection' },
   {
     type: 'order',
-    name: '#'
+    name: '#',
   },
   {
     name: 'First Name',
@@ -99,12 +99,12 @@ const columns = defineTableColumns([
     filter: defineTableFilter({
       options: [
         { label: 'Starts with A', value: 'A' },
-        { label: 'Starts with E', value: 'E' }
+        { label: 'Starts with E', value: 'E' },
       ],
       method: (value, row: RowData) => {
         return row.firstName.startsWith(value)
-      }
-    })
+      },
+    }),
   },
   {
     name: 'Last Name',
@@ -114,7 +114,7 @@ const columns = defineTableColumns([
         { label: 'Starts with D', value: 'D' },
         { label: 'Starts with F', value: 'F' },
         { label: 'Starts with R', value: 'R' },
-        { label: 'Starts with T', value: 'T' }
+        { label: 'Starts with T', value: 'T' },
       ],
       multiple: true,
       method: (values, row: RowData) => {
@@ -125,24 +125,24 @@ const columns = defineTableColumns([
         }
 
         return false
-      }
-    })
+      },
+    }),
   },
   {
     name: 'Job',
-    key: 'job'
-  }
+    key: 'job',
+  },
 ])
 
 const ageFilter = defineTableFilter({
   custom: true,
   meta: {
-    values: [NaN, NaN]
+    values: [NaN, NaN],
   },
   method: (value: number[], row: RowData) => {
     const age = parseFloat(row.age)
     return age >= value[0] && age <= value[1]
-  }
+  },
 })
 
 const data = ref([
@@ -152,7 +152,7 @@ const data = ref([
     email: 'Angelique_Walsh2268@twace.org',
     firstName: 'Angelique',
     lastName: 'Walsh',
-    age: '58'
+    age: '58',
   },
   {
     id: '2',
@@ -160,7 +160,7 @@ const data = ref([
     email: 'Aeris_Drake5867@gmail.com',
     firstName: 'Aeris',
     lastName: 'Drake',
-    age: '40'
+    age: '40',
   },
   {
     id: '3',
@@ -168,7 +168,7 @@ const data = ref([
     email: 'Elisabeth_Rogers7566@sheye.org',
     firstName: 'Elisabeth',
     lastName: 'Rogers',
-    age: '56'
+    age: '56',
   },
   {
     id: '4',
@@ -176,7 +176,7 @@ const data = ref([
     email: 'Sharon_Tanner5855@nickia.com',
     firstName: 'Sharon',
     lastName: 'Tanner',
-    age: '58'
+    age: '58',
   },
   {
     id: '5',
@@ -184,8 +184,8 @@ const data = ref([
     email: 'Evie_Farmer6650@typill.biz',
     firstName: 'Evie',
     lastName: 'Farmer',
-    age: '26'
-  }
+    age: '26',
+  },
 ])
 
 function extraFilter(data: RowData) {

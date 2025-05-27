@@ -20,8 +20,8 @@ function showCustomizedToast() {
         style: {
           marginBottom: '5px',
           color: '#339af0',
-          scale: 1.6
-        }
+          scale: 1.6,
+        },
       }),
       'Custom Render',
       h(
@@ -29,12 +29,12 @@ function showCustomizedToast() {
         {
           style: {
             color: '#fab005',
-            fontStyle: 'italic'
-          }
+            fontStyle: 'italic',
+          },
         },
-        'Tip'
-      )
-    ]
+        'Tip',
+      ),
+    ],
   })
 }
 </script>

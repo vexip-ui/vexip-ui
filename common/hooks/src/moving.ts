@@ -97,7 +97,7 @@ export function useMoving(options: UseMovingOptions) {
     clientY: 0,
     deltaX: 0,
     deltaY: 0,
-    lazy: false
+    lazy: false,
   }
 
   let current = 0
@@ -126,7 +126,7 @@ export function useMoving(options: UseMovingOptions) {
       yEnd: y.value,
       clientX: event.clientX,
       clientY: event.clientY,
-      lazy: lazy.value
+      lazy: lazy.value,
     })
 
     if (options.onStart?.(internalState, event) === false) {
@@ -189,6 +189,6 @@ export function useMoving(options: UseMovingOptions) {
     x,
     y,
     lazy,
-    disabled
+    disabled,
   }
 }

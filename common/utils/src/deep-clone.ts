@@ -25,7 +25,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
   }
 
   const { cloneObject = noop } = options
-  const temp = {} as any
+  const temp = Object.create(null) as any
 
   // 循环数组栈
   const loopList: Array<{
@@ -36,8 +36,8 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
     {
       parent: temp,
       prop: 'root',
-      data: obj
-    }
+      data: obj,
+    },
   ]
 
   const referenceMap = new WeakMap<any, any>()
@@ -68,7 +68,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
 
     // 初始化克隆对象
     const cloned: any = (parent[prop] =
-      type === 'Array' || type === 'Set' || type === 'Map' ? [] : {})
+      type === 'Array' || type === 'Set' || type === 'Map' ? [] : Object.create(null))
 
     if (type === 'Set' || type === 'Map') {
       let i = 0
@@ -81,7 +81,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
             loopList.push({
               parent: cloned,
               prop: i,
-              data: item
+              data: item,
             })
           } else {
             cloned[i] = item
@@ -103,7 +103,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
               loopList.push({
                 parent: clonedEntry,
                 prop: i,
-                data: item
+                data: item,
               })
             } else {
               clonedEntry[i] = item
@@ -128,7 +128,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
           loopList.push({
             parent: cloned,
             prop: key,
-            data: item
+            data: item,
           })
         } else {
           cloned[key] = item

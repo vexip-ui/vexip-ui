@@ -12,5 +12,5 @@ export type {
   CarouselArrowType,
   CarouselArrowTrigger,
   CarouselPointerType,
-  CarouselSlots
+  CarouselSlots,
 } from './symbol'

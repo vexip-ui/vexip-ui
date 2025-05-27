@@ -20,13 +20,13 @@ function renderPermalink(
   slug: string,
   _opts: anchor.AnchorOptions,
   state: StateCore,
-  index: number
+  index: number,
 ) {
   const [startToken, contentToken] = state.tokens.slice(index, index + 2)
 
   startToken.attrs = [
     ['class', 'anchor'],
-    ['data-anchor', '']
+    ['data-anchor', ''],
   ]
 
   if (startToken.tag !== 'h2' && startToken.tag !== 'h3') return
@@ -38,19 +38,19 @@ function renderPermalink(
       attrs: [
         ['id', id],
         ['class', 'anchor__title'],
-        ['data-level', startToken.tag[1]]
-      ]
+        ['data-level', startToken.tag[1]],
+      ],
     }),
     Object.assign(new state.Token('html_block', '', 0), { content: contentToken.content }),
     new state.Token('', 'span', -1),
     Object.assign(new state.Token('link_open', 'a', 1), {
       attrs: [
         ['class', 'anchor__link'],
-        ['href', `#${id}`]
-      ]
+        ['href', `#${id}`],
+      ],
     }),
     Object.assign(new state.Token('html_block', '', 0), { content: '#' }),
-    new state.Token('link_close', 'a', -1)
+    new state.Token('link_close', 'a', -1),
   ]
 }
 
@@ -78,7 +78,7 @@ function useContainer(md: MarkdownIt) {
     .use(container, 'v-pre', {
       render(tokens: Token[], index: number) {
         return tokens[index].nesting === 1 ? '<div v-pre>\n' : '</div>\n'
-      }
+      },
     })
     .use(...createDemoContainer())
 }
@@ -99,8 +99,8 @@ function createAlertContainer(type: string) {
         }
 
         return '</TipContainer>\n'
-      }
-    }
+      },
+    },
   ] as const
 }
 
@@ -123,8 +123,8 @@ function createDemoContainer() {
         } else {
           return '</Demo>\n'
         }
-      }
-    }
+      },
+    },
   ] as const
 }
 
@@ -167,7 +167,7 @@ function useTag(md: MarkdownIt) {
     // deprecated
     d: value => ['error', value || 'deprecated'],
     // since
-    s: value => ['warning', `Since v${value}`]
+    s: value => ['warning', `Since v${value}`],
   }
 
   md.inline.ruler.before('emphasis', 'tag', (state, silent) => {

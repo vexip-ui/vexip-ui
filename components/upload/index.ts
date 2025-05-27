@@ -20,5 +20,5 @@ export type {
   SourceFile,
   HttpError,
   FileState,
-  FileOptions
+  FileOptions,
 } from './symbol'

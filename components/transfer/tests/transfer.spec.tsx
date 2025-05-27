@@ -16,14 +16,14 @@ function createOptions(includeDisabled = false) {
   return Array.from({ length: 40 }, (_, index) => ({
     value: index,
     label: `选项${index + 1}`,
-    disabled: includeDisabled && index % 6 === 0
+    disabled: includeDisabled && index % 6 === 0,
   }))
 }
 
 function getPanels(wrapper: VueWrapper<any>) {
   return {
     source: wrapper.find('.vxp-transfer__panel--source'),
-    target: wrapper.find('.vxp-transfer__panel--target')
+    target: wrapper.find('.vxp-transfer__panel--target'),
   }
 }
 
@@ -83,7 +83,7 @@ describe('Transfer', () => {
     expect(onSelect).toHaveBeenCalledWith(
       'source',
       { source: [options[20].value], target: [] },
-      { source: [options[20]], target: [] }
+      { source: [options[20]], target: [] },
     )
 
     await target.find('.vxp-transfer__option').trigger('click')
@@ -91,7 +91,7 @@ describe('Transfer', () => {
     expect(onSelect).toHaveBeenCalledWith(
       'target',
       { source: [options[20].value], target: [options[0].value] },
-      { source: [options[20]], target: [options[0]] }
+      { source: [options[20]], target: [options[0]] },
     )
   })
 

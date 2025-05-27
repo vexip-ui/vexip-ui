@@ -31,8 +31,8 @@ const searchOptions = computed(() => {
   for (const group of getComponentConfig()) {
     rawOptions.push(
       ...group.components.map(
-        ({ name }) => t(`component.${name}`) + (locale.value !== 'en-US' ? ` ${name}` : '')
-      )
+        ({ name }) => t(`component.${name}`) + (locale.value !== 'en-US' ? ` ${name}` : ''),
+      ),
     )
   }
 
@@ -91,7 +91,7 @@ function toComponentDoc(fullName: string) {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .doc-search {
   flex: auto;

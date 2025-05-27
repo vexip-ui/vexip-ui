@@ -34,7 +34,7 @@ const className = computed(() => {
   return {
     [baseClass]: true,
     [`${baseClass}--disabled`]: props.disabled,
-    [`${baseClass}--active`]: !props.disabled && active.value
+    [`${baseClass}--active`]: !props.disabled && active.value,
   }
 })
 
@@ -43,7 +43,7 @@ watch(
   value => {
     currentLabel.value = value
     tabsState?.refreshLabels()
-  }
+  },
 )
 watch(active, value => {
   emitEvent(props.onToggle!, value)
@@ -56,7 +56,7 @@ if (tabsState) {
     icon: toRef(props, 'icon'),
     disabled: toRef(props, 'disabled'),
     closable: toRef(props, 'closable'),
-    labelRenderer: null
+    labelRenderer: null,
   }) as ItemState
 
   watch(
@@ -64,7 +64,7 @@ if (tabsState) {
     value => {
       state.labelRenderer = value ? data => value(data) : null
     },
-    { immediate: true }
+    { immediate: true },
   )
   watch(currentLabel, () => {
     active.value = currentLabel.value === tabsState.currentActive
@@ -74,7 +74,7 @@ if (tabsState) {
     value => {
       active.value = currentLabel.value === value
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   tabsState.increaseItem(state)

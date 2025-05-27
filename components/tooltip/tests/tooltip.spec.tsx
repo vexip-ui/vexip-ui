@@ -16,8 +16,8 @@ describe('Tooltip', () => {
       props,
       slots: {
         trigger: () => <span class={'trigger'}>{TEXT}</span>,
-        default: () => <span class={'tip'}>{TEXT}</span>
-      }
+        default: () => <span class={'tip'}>{TEXT}</span>,
+      },
     })
   }
 
@@ -184,7 +184,7 @@ describe('Tooltip', () => {
     wrapper = createTooltip({ visible: true, noHover: true })
 
     expect(wrapper.find('.vxp-tooltip__popper').classes()).toContain(
-      'vxp-tooltip__popper--no-hover'
+      'vxp-tooltip__popper--no-hover',
     )
   })
 
@@ -192,7 +192,7 @@ describe('Tooltip', () => {
     wrapper = createTooltip({ visible: true, noArrow: true })
 
     expect(wrapper.find('.vxp-tooltip__popper').classes()).toContain(
-      'vxp-tooltip__popper--no-arrow'
+      'vxp-tooltip__popper--no-arrow',
     )
   })
 })

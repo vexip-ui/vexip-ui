@@ -11,7 +11,7 @@ export const resultProps = buildProps({
   icon: iconProp,
   iconColor: String,
   description: String,
-  slots: Object as PropType<ResultSlots>
+  slots: Object as PropType<ResultSlots>,
 })
 
 export type ResultProps = ExtractPropTypes<typeof resultProps>

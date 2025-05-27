@@ -7,7 +7,8 @@ module.exports = defineConfig({
     '@typescript-eslint/no-use-before-define': 'off',
     'vue/no-v-html': 'off',
     'vue/no-textarea-mustache': 'off',
-    'react/jsx-key': 'off'
+    'react/jsx-key': 'off',
+    '@typescript-eslint/comma-dangle': ['error', 'always-multiline']
   },
   overrides: [
     {

@@ -19,7 +19,7 @@ import {
   times,
   toFixed,
   toNumber,
-  toPrecision
+  toPrecision,
 } from '../src'
 
 describe('number', () => {

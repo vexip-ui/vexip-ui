@@ -28,37 +28,37 @@ import {
   ClockRotateLeft,
   EnvelopesBulk,
   GithubB,
-  User
+  User,
 } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const menus: MenuOptions[] = [
   {
     label: '1',
     name: 'Menu 1',
-    icon: EnvelopesBulk
+    icon: EnvelopesBulk,
   },
   {
     label: '2',
     name: 'Menu 2',
-    icon: City
+    icon: City,
   },
   {
     label: '3',
     name: 'Menu 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: 'Menu 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 
 const links = [
@@ -66,46 +66,46 @@ const links = [
     name: 'Resources',
     children: [
       {
-        name: 'Design Resources'
+        name: 'Design Resources',
       },
       {
-        name: 'Icon Library'
+        name: 'Icon Library',
       },
       {
         name: 'Third-Party Libraries',
-        subname: 'Not yet'
-      }
-    ]
+        subname: 'Not yet',
+      },
+    ],
   },
   {
     name: 'Help',
     children: [
       {
         name: 'GitHub',
-        icon: GithubB
+        icon: GithubB,
       },
       {
         name: 'Change Log',
-        icon: ClockRotateLeft
+        icon: ClockRotateLeft,
       },
       {
         name: 'Common Issues',
-        icon: Bug
+        icon: Bug,
       },
       {
         name: 'Contributing',
-        icon: Chalkboard
-      }
-    ]
+        icon: Chalkboard,
+      },
+    ],
   },
   {
     name: 'Group',
-    children: [{ name: 'Link' }, { name: 'Link' }, { name: 'Link' }]
+    children: [{ name: 'Link' }, { name: 'Link' }, { name: 'Link' }],
   },
   {
     name: 'Group',
-    children: [{ name: 'Link' }, { name: 'Link' }, { name: 'Link' }]
-  }
+    children: [{ name: 'Link' }, { name: 'Link' }, { name: 'Link' }],
+  },
 ]
 </script>
 

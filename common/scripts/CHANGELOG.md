@@ -1,3 +1,30 @@
+# [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.3.1...scripts@1.4.0) (2025-05-14)
+
+
+### ✨ Features
+
+* **scripts:** add secondConfirmMsg option for relase ([a95a8bc](https://github.com/vexip-ui/vexip-ui/commit/a95a8bc684424bc13063e31fff0d090f1a7a7cf5))
+
+
+
+## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.3.0...scripts@1.3.1) (2025-05-14)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** should log package name for process ([9772b87](https://github.com/vexip-ui/vexip-ui/commit/9772b878cfa1ddc25fec094770e541203e8e319f))
+
+
+
+# [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.2.0...scripts@1.3.0) (2025-05-12)
+
+
+### ✨ Features
+
+* **scripts:** add updateVersionByType option for release ([66a40c2](https://github.com/vexip-ui/vexip-ui/commit/66a40c215808f33a42341fe31deaa6705047d03e))
+
+
+
 ## 1.2.0 (2025-01-14)
 
 * build: upgrade dev dependencies ([c4be7dd](https://github.com/vexip-ui/vexip-ui/commit/c4be7dd))

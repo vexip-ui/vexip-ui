@@ -11,16 +11,16 @@ const value = ref()
 const options = [
   'Option 1',
   {
-    value: 'Option 2'
+    value: 'Option 2',
   },
   {
     label: 'Option 3',
-    value: 3
+    value: 3,
   },
   {
     label: 'Option 4',
-    value: true
-  }
+    value: true,
+  },
 ]
 </script>
 

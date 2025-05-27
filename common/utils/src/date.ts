@@ -78,7 +78,7 @@ const formatters: Formatters = {
     const quarter = Math.ceil((date.getMonth() + 1) / 3)
 
     return match.length === 2 ? doubleDigits(quarter) : quarter
-  }
+  },
 }
 
 const formatRegExp = /[yMdHmsq](\w)*|./g
@@ -167,7 +167,7 @@ export function getTime(date: Dateable) {
   date = toDate(date)
 
   return `${doubleDigits(date.getHours())}:${doubleDigits(date.getMinutes())}:${doubleDigits(
-    date.getSeconds()
+    date.getSeconds(),
   )}`
 }
 

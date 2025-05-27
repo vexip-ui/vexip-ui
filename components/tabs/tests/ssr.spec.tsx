@@ -18,7 +18,7 @@ describe('SSR for Tabs', () => {
           <Tabs>
             <TabPanel>{'content'}</TabPanel>
           </Tabs>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

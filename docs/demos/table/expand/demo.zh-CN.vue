@@ -46,9 +46,9 @@ const data = reactive(
       job: `Job ${index}`,
       age: 20 + index,
       email: `email${index}@vexip.ui`,
-      address: `Address ${index}`
+      address: `Address ${index}`,
     }
-  })
+  }),
 )
 
 data[1].expanded = true

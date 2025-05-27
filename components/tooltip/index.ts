@@ -7,5 +7,5 @@ export type {
   TooltipTrigger,
   TooltipShift,
   TooltipVirtual,
-  TooltipExposed
+  TooltipExposed,
 } from './symbol'

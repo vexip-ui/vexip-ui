@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/scripts",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "type": "module",
   "license": "MIT",
   "private": false,
@@ -37,20 +37,20 @@
   "dependencies": {
     "@vexip-ui/utils": "workspace:*",
     "compare-versions": "^6.1.1",
-    "execa": "^9.5.2",
+    "execa": "^9.5.3",
     "kolorist": "^1.8.0",
-    "local-pkg": "^1.0.0",
+    "local-pkg": "^1.1.1",
     "prompts": "^2.4.2",
-    "semver": "^7.6.3",
+    "semver": "^7.7.2",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@pnpm/types": "^12.2.0",
     "@types/minimist": "^1.2.5",
-    "@types/node": "^22.10.6",
+    "@types/node": "^22.15.19",
     "@types/prompts": "^2.4.9",
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.0",
     "@types/yargs": "^17.0.33",
-    "tsup": "^8.3.5"
+    "tsup": "^8.5.0"
   }
 }

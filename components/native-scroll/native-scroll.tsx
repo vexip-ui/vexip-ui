@@ -10,7 +10,7 @@ import {
   renderSlot,
   shallowReadonly,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -39,7 +39,7 @@ export default defineComponent({
       scrollAttrs: null,
       mode: {
         default: 'vertical',
-        validator: value => scrollModes.includes(value)
+        validator: value => scrollModes.includes(value),
       },
       width: '',
       height: '',
@@ -47,11 +47,11 @@ export default defineComponent({
       pointer: false,
       scrollX: {
         default: 0,
-        static: true
+        static: true,
       },
       scrollY: {
         default: 0,
-        static: true
+        static: true,
       },
       useXBar: false,
       useYBar: false,
@@ -64,7 +64,7 @@ export default defineComponent({
       useBarTrack: false,
       scrollTag: 'div',
       observeDeep: false,
-      scrollOnly: false
+      scrollOnly: false,
     })
 
     const emitter = createEventEmitter()
@@ -104,7 +104,7 @@ export default defineComponent({
       scrollTo,
       scrollBy,
       scrollToElement,
-      triggerUpdate
+      triggerUpdate,
     } = useScrollWrapper({
       mode: toRef(props, 'mode'),
       disabled: toRef(props, 'disabled'),
@@ -124,7 +124,7 @@ export default defineComponent({
           initialized = true
           startAutoplay()
         }
-      }
+      },
     })
 
     const slotParams = shallowReadonly({
@@ -133,7 +133,7 @@ export default defineComponent({
       scrollTo,
       scrollBy,
       scrollToElement,
-      ensureInView
+      ensureInView,
     })
 
     /* autoplay */
@@ -229,8 +229,8 @@ export default defineComponent({
         {
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('scrolling')]: scrolling.value,
-          [nh.bm('using-bar')]: usingBar.value
-        }
+          [nh.bm('using-bar')]: usingBar.value,
+        },
       ]
     })
     const style = computed(() => {
@@ -250,7 +250,7 @@ export default defineComponent({
               ? height
               : `${Number(height)}px`
             : `${height}px`
-          : undefined
+          : undefined,
       }
     })
     const wrapperClass = computed(() => {
@@ -275,7 +275,7 @@ export default defineComponent({
 
       observer = new MutationObserver(handleMutate)
       observer.observe(contentEl.value, {
-        childList: true
+        childList: true,
       })
     }
 
@@ -290,7 +290,7 @@ export default defineComponent({
         clearMutation()
         createMutation()
       },
-      { immediate: true }
+      { immediate: true },
     )
     watch(enableXScroll, value => {
       emitEvent(props.onXEnabledChange, value)
@@ -325,7 +325,7 @@ export default defineComponent({
       getXScrollLimit,
       getYScrollLimit,
       addScrollListener,
-      removeScrollListener
+      removeScrollListener,
     })
 
     function getCommonPayload() {
@@ -333,7 +333,7 @@ export default defineComponent({
         clientX: (isRtl.value ? -1 : 1) * x.value,
         clientY: y.value,
         percentX: percentX.value,
-        percentY: percentY.value
+        percentY: percentY.value,
       }
     }
 
@@ -448,7 +448,7 @@ export default defineComponent({
       prepareScroll()
       emitEvent(props.onBarScrollStart, {
         ...getCommonPayload(),
-        type
+        type,
       })
     }
 
@@ -457,7 +457,7 @@ export default defineComponent({
       startAutoplay()
       emitEvent(props.onBarScrollEnd, {
         ...getCommonPayload(),
-        type
+        type,
       })
     }
 
@@ -467,7 +467,7 @@ export default defineComponent({
       triggerUpdate()
       emitEvent(props.onBarScroll, {
         ...getCommonPayload(),
-        type: 'horizontal'
+        type: 'horizontal',
       })
       emitScrollEvent('horizontal')
     }
@@ -478,7 +478,7 @@ export default defineComponent({
       triggerUpdate()
       emitEvent(props.onBarScroll, {
         ...getCommonPayload(),
-        type: 'vertical'
+        type: 'vertical',
       })
       emitScrollEvent('vertical')
     }
@@ -486,11 +486,11 @@ export default defineComponent({
     function emitScrollEvent(type: NativeScrollMode) {
       emitEvent(props.onScroll, {
         ...getCommonPayload(),
-        type
+        type,
       })
       emitter.emit('scroll', {
         ...getCommonPayload(),
-        type
+        type,
       })
     }
 
@@ -503,7 +503,7 @@ export default defineComponent({
         percentX,
         percentY,
         enableXScroll: enableXScroll.value,
-        enableYScroll: enableYScroll.value
+        enableYScroll: enableYScroll.value,
       }
     }
 
@@ -579,14 +579,14 @@ export default defineComponent({
               class={nh.be('extra')}
               style={{
                 width: willMutate.value ? undefined : `${content.scrollWidth}px`,
-                height: willMutate.value ? undefined : `${content.scrollHeight}px`
+                height: willMutate.value ? undefined : `${content.scrollHeight}px`,
               }}
             >
               <div
                 class={nh.be('extra-inner')}
                 style={{
                   width: `${content.offsetWidth}px`,
-                  height: `${content.offsetHeight}px`
+                  height: `${content.offsetHeight}px`,
                 }}
               >
                 {renderSlot(slots, 'extra', slotParams)}
@@ -659,5 +659,5 @@ export default defineComponent({
         </div>
       )
     }
-  }
+  },
 })

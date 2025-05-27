@@ -10,12 +10,12 @@ import { computeSeriesColors } from '../common/series-color'
 defineProps({
   hideList: {
     type: Boolean,
-    default: false
+    default: false,
   },
   showLabel: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['change'])
@@ -28,7 +28,7 @@ const rootStyle = rootEl && getComputedStyle(rootEl)
 
 const majorColor = ref(rootStyle ? rootStyle.getPropertyValue('--vxp-color-primary-base') : '')
 const seriesColors = ref<Record<string, string[]>>(
-  majorColor.value ? computeSeriesColors(majorColor.value) : {}
+  majorColor.value ? computeSeriesColors(majorColor.value) : {},
 )
 
 watch(majorColor, value => {
@@ -91,7 +91,7 @@ function resetMajorColor() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .major-color {
   display: flex;

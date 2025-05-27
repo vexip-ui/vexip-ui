@@ -6,7 +6,7 @@ import type { FullScreenType } from './symbol'
 
 export const fullScreenProps = buildProps({
   tag: String,
-  onToggle: eventProp<(full: false | FullScreenType) => void>()
+  onToggle: eventProp<(full: false | FullScreenType) => void>(),
 })
 
 export type FullScreenProps = ExtractPropTypes<typeof fullScreenProps>

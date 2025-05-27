@@ -47,9 +47,9 @@ const formModel = reactive({
   skills: [
     {
       value: '',
-      priority: 0
-    }
-  ]
+      priority: 0,
+    },
+  ],
 })
 
 const form = ref<InstanceType<typeof Form>>()

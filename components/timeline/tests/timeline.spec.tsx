@@ -73,10 +73,10 @@ describe('Timeline', () => {
     ))
 
     expect(wrapper.find('.vxp-timeline__item').attributes('style')).toContain(
-      '--vxp-timeline-pointer-color: red;'
+      '--vxp-timeline-pointer-color: red;',
     )
     expect(wrapper.find('.vxp-timeline__item').attributes('style')).toContain(
-      '--vxp-timeline-pointer-b-color: red;'
+      '--vxp-timeline-pointer-b-color: red;',
     )
   })
 
@@ -103,10 +103,10 @@ describe('Timeline', () => {
     const items = wrapper.findAll('.vxp-timeline__item')
 
     expect(items[0].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-inline-start-color: yellow;'
+      'border-inline-start-color: yellow;',
     )
     expect(items[1].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-inline-start-color: red;'
+      'border-inline-start-color: red;',
     )
   })
 
@@ -121,11 +121,11 @@ describe('Timeline', () => {
     const items = wrapper.findAll('.vxp-timeline__item')
 
     expect(items[0].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-inline-start-style: dashed;'
+      'border-inline-start-style: dashed;',
     )
     expect(items[1].find('.vxp-timeline__line').attributes('style')).toBeUndefined()
     expect(items[2].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-inline-start-style: dashed;'
+      'border-inline-start-style: dashed;',
     )
   })
 
@@ -134,7 +134,7 @@ describe('Timeline', () => {
       <Timeline line-color={'yellow'}>
         <TimelineItem>
           {{
-            signal: () => <Github></Github>
+            signal: () => <Github></Github>,
           }}
         </TimelineItem>
       </Timeline>

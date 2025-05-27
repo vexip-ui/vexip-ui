@@ -9,11 +9,12 @@ import { useHover } from '@vexip-ui/hooks'
 import {
   debounceMinor,
   differenceDays,
+  differenceWeeks,
   endOfDay,
   rangeDate,
   startOfDay,
   startOfWeek,
-  toFalse
+  toFalse,
 } from '@vexip-ui/utils'
 import { calendarPanelProps } from './props'
 
@@ -27,37 +28,38 @@ const props = useProps('calendarBase', _props, {
   locale: null,
   value: {
     default: null,
-    static: true
+    static: true,
   },
   year: () => new Date().getFullYear(),
   month: {
     default: () => new Date().getMonth() + 1,
-    validator: value => value > 0 && value <= 12
+    validator: value => value > 0 && value <= 12,
   },
   weekDays: {
     default: null,
-    validator: value => !value || value.length === 0 || value.length === 7
+    validator: value => !value || value.length === 0 || value.length === 7,
   },
   weekStart: {
     default: 0,
-    validator: value => value >= 0 && value < 7
+    validator: value => value >= 0 && value < 7,
   },
   today: {
     default: () => new Date(),
-    validator: value => !Number.isNaN(+new Date(value))
+    validator: value => !Number.isNaN(+new Date(value)),
   },
   disabledDate: {
     default: toFalse,
-    isFunc: true
+    isFunc: true,
   },
   valueType: {
     default: 'start',
-    validator: value => value === 'start' || value === 'end'
+    validator: value => value === 'start' || value === 'end',
   },
   min: null,
   max: null,
   range: null,
-  slots: () => ({})
+  selectRow: false,
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -71,7 +73,7 @@ const endValue = ref<Date | null>(null)
 const dateRange = ref<Date[]>([])
 const hoveredDate = ref<Date | null>(null)
 
-const { wrapper, isHover } = useHover()
+const { wrapper: body, isHover } = useHover()
 const locale = useLocale('calendar', toRef(props, 'locale'))
 
 const min = computed(() => (props.min ? +startOfDay(props.min) : -Infinity))
@@ -103,14 +105,14 @@ watch(hoveredDate, value => {
 defineExpose({
   startValue,
   endValue,
-  body: wrapper,
+  body,
   isSelected,
   isHovered,
   isPrevMonth,
   isNextMonth,
   isDisabled,
   isToday,
-  isInRange
+  isInRange,
 })
 
 function getWeekLabel(index: number) {
@@ -120,7 +122,7 @@ function getWeekLabel(index: number) {
 function setDateRange() {
   dateRange.value = rangeDate(
     startOfWeek(new Date(props.year, props.month - 1, 1), props.weekStart),
-    42
+    42,
   )
 }
 
@@ -142,14 +144,19 @@ function parseValue(value: Dateable | Dateable[]) {
   }
 }
 
+function isSameRow(current: Date, target: Date) {
+  return props.selectRow && differenceWeeks(current, target) === 0
+}
+
 function isSelected(date: Date) {
   if (!date || (!startValue.value && !endValue.value)) {
     return false
   }
 
   return !!(
-    (startValue.value && !differenceDays(date, startValue.value)) ||
-    (endValue.value && !differenceDays(date, endValue.value))
+    (startValue.value &&
+      (!differenceDays(date, startValue.value) || isSameRow(date, startValue.value))) ||
+    (endValue.value && (!differenceDays(date, endValue.value) || isSameRow(date, endValue.value)))
   )
 }
 
@@ -180,7 +187,7 @@ function isHovered(date: Date) {
     return false
   }
 
-  return !differenceDays(date, hoveredDate.value)
+  return !differenceDays(date, hoveredDate.value) || isSameRow(date, hoveredDate.value)
 }
 
 function isPrevMonth(date: Date) {
@@ -265,7 +272,12 @@ function isInRange(date: Date) {
 
 <template>
   <div
-    :class="[nh.be('panel'), nh.bs('vars'), props.inherit && nh.bem('panel', 'inherit')]"
+    :class="[
+      nh.be('panel'),
+      nh.bs('vars'),
+      props.selectRow && nh.bem('panel', 'select-row'),
+      props.inherit && nh.bem('panel', 'inherit')
+    ]"
     role="grid"
   >
     <slot name="header">

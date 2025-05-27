@@ -14,7 +14,7 @@ import {
   renderSlot,
   toRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import { stateProp, useIcons, useNameHelper } from '@vexip-ui/config'
@@ -31,68 +31,68 @@ export default defineComponent({
   props: {
     type: {
       type: String as PropType<'source' | 'target'>,
-      default: null
+      default: null,
     },
     state: {
       type: stateProp,
-      default: 'default'
+      default: 'default',
     },
     selected: {
       type: Set as PropType<Set<string | number>>,
-      default: () => new Set()
+      default: () => new Set(),
     },
     paged: {
       type: Boolean,
-      default: false
+      default: false,
     },
     filter: {
       type: Function as PropType<(value: string, options: TransferOptionState) => boolean>,
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     options: {
       type: Array as PropType<TransferOptionState[]>,
-      default: () => []
+      default: () => [],
     },
     emptyText: {
       type: String,
-      default: '暂无数据'
+      default: '暂无数据',
     },
     optionHeight: {
       type: Number,
-      default: 32
+      default: 32,
     },
     deepState: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loadingIcon: {
       type: [Object, Function],
-      default: null
+      default: null,
     },
     loadingLock: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loadingEffect: {
       type: String,
-      default: null
+      default: null,
     },
     locale: {
       type: Object as PropType<LocaleConfig['transfer']>,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   emits: ['update:selected', 'select', 'enter', 'switch'],
   setup(props, { slots, emit }) {
@@ -133,7 +133,7 @@ export default defineComponent({
 
                   if (lastSelected) {
                     currentHitting.value = props.options.findIndex(
-                      option => option.value === lastSelected
+                      option => option.value === lastSelected,
                     )
                   } else if (list.value) {
                     currentHitting.value = Math.round(list.value.scrollOffset / props.optionHeight)
@@ -144,24 +144,24 @@ export default defineComponent({
                   currentHitting.value = boundRange(
                     findEnabledIndex(
                       currentHitting.value + (modifier.up ? -1 : 1),
-                      modifier.up ? -1 : 1
+                      modifier.up ? -1 : 1,
                     ),
                     0,
-                    currentOptions.value.length - 1
+                    currentOptions.value.length - 1,
                   )
                 }
 
                 if (!props.paged) {
                   ensureOptionInView(currentHitting.value, modifier.up ? 'top' : 'bottom')
                 }
-              }
+              },
             ],
             [
               () => props.paged && (modifier.left || modifier.right) && event.ctrlKey,
               () => {
                 handlePageChange(currentPage.value + (modifier.left ? -1 : 1))
                 currentHitting.value = 0
-              }
+              },
             ],
             [
               () =>
@@ -172,7 +172,7 @@ export default defineComponent({
                 currentHitting.value = -1
                 lastSelected = null
                 emit('switch')
-              }
+              },
             ],
             [
               () => modifier.space,
@@ -181,11 +181,11 @@ export default defineComponent({
 
                 if (option) {
                   currentSelected.value[currentSelected.value.has(option.value) ? 'delete' : 'add'](
-                    option.value
+                    option.value,
                   )
                   emitSelectedChange()
                 }
-              }
+              },
             ],
             [() => modifier.enter, () => emit('enter')],
             [
@@ -193,22 +193,22 @@ export default defineComponent({
               () => {
                 event.stopPropagation()
                 input.value!.focus()
-              }
-            ]
+              },
+            ],
           ],
           {
             beforeMatchAny: () => event.preventDefault(),
-            afterMatchAny: modifier.resetAll
-          }
+            afterMatchAny: modifier.resetAll,
+          },
         )
-      }
+      },
     })
 
     const className = computed(() => {
       return {
         [nh.be('panel')]: true,
         [nh.bem('panel', props.state)]: props.state !== 'default',
-        [nh.bem('panel', 'disabled')]: props.disabled
+        [nh.bem('panel', 'disabled')]: props.disabled,
       }
     })
     const visibleOptions = computed(() => {
@@ -225,7 +225,7 @@ export default defineComponent({
     const pagedOptions = computed(() => {
       return visibleOptions.value.slice(
         (currentPage.value - 1) * pageSize.value,
-        currentPage.value * pageSize.value
+        currentPage.value * pageSize.value,
       )
     })
     const currentOptions = computed(() => (props.paged ? pagedOptions.value : visibleOptions.value))
@@ -235,7 +235,7 @@ export default defineComponent({
       () => props.selected,
       value => {
         currentSelected.value = value
-      }
+      },
     )
     watch(optionSize, () => {
       keyUsed = false
@@ -461,7 +461,7 @@ export default defineComponent({
       selected: computed(() => Array.from(currentSelected.value)),
       options: computed(() => visibleOptions.value),
       toggleSelectAll,
-      handleReverse
+      handleReverse,
     })
 
     function renderOption({ option, index }: { option: TransferOptionState, index: number }) {
@@ -477,7 +477,7 @@ export default defineComponent({
           class={{
             [nh.be('option')]: true,
             [nh.bem('option', 'disabled')]: disabled,
-            [nh.bem('option', 'hitting')]: currentHitting.value === index
+            [nh.bem('option', 'hitting')]: currentHitting.value === index,
           }}
           role={'option'}
           aria-disabled={disabled ? 'true' : undefined}
@@ -495,9 +495,9 @@ export default defineComponent({
             ></Checkbox>,
             <span key={2} class={nh.be('label')}>
               {renderSlot(slots, 'label', { type: props.type, option, index }, () => [
-                option.label
+                option.label,
               ])}
-            </span>
+            </span>,
           ])}
         </li>
       )
@@ -549,7 +549,7 @@ export default defineComponent({
                   </div>
                 )}
               </CollapseTransition>
-            </>
+            </>,
           ])}
         </div>
       )
@@ -576,7 +576,7 @@ export default defineComponent({
             onBlur={() => (searching.value = false)}
           >
             {{
-              suffix: () => <Icon {...icons.value.search}></Icon>
+              suffix: () => <Icon {...icons.value.search}></Icon>,
             }}
           </Input>
         </div>
@@ -593,7 +593,7 @@ export default defineComponent({
                   pagedOptions.value.map((option, index) => renderOption({ option, index }))
                 ) : (
                   <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
-                )
+                ),
               ])}
             </ul>
           </ResizeObserver>
@@ -616,7 +616,7 @@ export default defineComponent({
           {{
             default: ({ item, index }: { item: TransferOptionState, index: number }) =>
               renderOption({ option: item, index }),
-            empty: () => <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>
+            empty: () => <div class={nh.be('empty')}>{props.emptyText || props.locale.empty}</div>,
           }}
         </VirtualList>
       )
@@ -633,7 +633,7 @@ export default defineComponent({
                 {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
                 class={[
                   nh.be('page-plus'),
-                  currentPage.value <= 1 && nh.bem('page-plus', 'disabled')
+                  currentPage.value <= 1 && nh.bem('page-plus', 'disabled'),
                 ]}
                 onClick={() => handlePageChange(currentPage.value - 1)}
               ></Icon>
@@ -652,11 +652,11 @@ export default defineComponent({
                 {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
                 class={[
                   nh.be('page-minus'),
-                  currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled')
+                  currentPage.value >= totalPages.value && nh.bem('page-minus', 'disabled'),
                 ]}
                 onClick={() => handlePageChange(currentPage.value + 1)}
               ></Icon>
-            </div>
+            </div>,
           ])}
         </div>
       )
@@ -670,5 +670,5 @@ export default defineComponent({
         {renderFooter()}
       </div>
     )
-  }
+  },
 })

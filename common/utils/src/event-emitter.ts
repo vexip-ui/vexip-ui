@@ -79,6 +79,6 @@ export function createEventEmitter() {
           handler(...payload)
         })
       }
-    }
+    },
   } as EventEmitter
 }

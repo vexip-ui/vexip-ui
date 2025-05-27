@@ -12,7 +12,7 @@ export const dividerProps = buildProps({
    */
   primary: booleanProp,
   dashed: booleanProp,
-  margin: [String, Number]
+  margin: [String, Number],
 })
 
 export type DividerProps = ExtractPropTypes<typeof dividerProps>

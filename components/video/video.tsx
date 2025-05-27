@@ -14,7 +14,7 @@ import {
   ref,
   renderSlot,
   shallowReadonly,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
@@ -38,17 +38,17 @@ export default defineComponent({
     const props = useProps('video', _props, {
       src: {
         static: true,
-        default: ''
+        default: '',
       },
       srcList: {
         static: true,
-        default: null
+        default: null,
       },
       noControls: false,
       videoAttrs: null,
       time: {
         static: true,
-        default: 0
+        default: 0,
       },
       volume: 1,
       playbackRate: 1,
@@ -58,14 +58,14 @@ export default defineComponent({
       poster: '',
       video: {
         static: true,
-        default: null
+        default: null,
       },
       segments: () => [],
       loading: false,
       loadingIcon: null,
       loadingEffect: null,
       shortcuts: () => ({}),
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('video')
@@ -77,7 +77,7 @@ export default defineComponent({
     const pipEnabled = isClient && document.pictureInPictureEnabled
 
     const currentSrc = ref(
-      props.src || props.srcList?.[0] || (props.videoAttrs?.src as string) || ''
+      props.src || props.srcList?.[0] || (props.videoAttrs?.src as string) || '',
     )
     const playing = ref(false)
     const currentTime = ref(props.time)
@@ -133,25 +133,25 @@ export default defineComponent({
               () => modifier.up,
               () => {
                 currentVolume.value = Math.min(1, currentVolume.value + 0.05)
-              }
+              },
             ],
             [
               () => modifier.down,
-              () => (currentVolume.value = Math.max(0, currentVolume.value - 0.05))
+              () => (currentVolume.value = Math.max(0, currentVolume.value - 0.05)),
             ],
             [
               () => modifier.right,
-              () => (currentTime.value = Math.min(duration.value, currentTime.value + 5))
+              () => (currentTime.value = Math.min(duration.value, currentTime.value + 5)),
             ],
             [() => modifier.left, () => (currentTime.value = Math.max(0, currentTime.value - 5))],
             [() => modifier[shortcuts.value.volume || 'M'], () => volumeRef.value?.toggleMute()],
             ...Object.keys(shortcutRecord).map(key => {
               return [() => modifier[key], shortcutRecord[key]] as [() => boolean, () => void]
-            })
+            }),
           ],
-          { afterMatchAny: modifier.resetAll }
+          { afterMatchAny: modifier.resetAll },
         )
-      }
+      },
     })
 
     const className = computed(() => {
@@ -159,8 +159,8 @@ export default defineComponent({
         nh.b(),
         nh.bs('vars'),
         {
-          [nh.bm('loading')]: props.loading
-        }
+          [nh.bm('loading')]: props.loading,
+        },
       ]
     })
     const playIcon = computed(() => (playing.value ? icons.value.pause : icons.value.play))
@@ -228,8 +228,8 @@ export default defineComponent({
         changeRate,
         changeTime,
         changeVolume,
-        toggleFull
-      })
+        toggleFull,
+      }),
     )
 
     watch(
@@ -238,25 +238,25 @@ export default defineComponent({
         resetMetaState()
         currentSrc.value = value
       },
-      { flush: 'pre' }
+      { flush: 'pre' },
     )
     watch(
       () => props.time,
       value => {
         changeTime(value, false)
-      }
+      },
     )
     watch(
       () => props.volume,
       value => {
         changeVolume(value, false)
-      }
+      },
     )
     watch(
       () => props.playbackRate,
       value => {
         changeRate(value, false)
-      }
+      },
     )
     watch(playing, value => {
       if (value) {
@@ -325,7 +325,7 @@ export default defineComponent({
       stateHidden,
       wrapper,
       video,
-      resetMetaState
+      resetMetaState,
     })
 
     function togglePlaying(value = !playing.value) {
@@ -666,7 +666,7 @@ export default defineComponent({
         default:
           return createSlotRender(slots, [
             `control-${name}`,
-            `control${toCapitalCase(name as string)}`
+            `control${toCapitalCase(name as string)}`,
           ])?.(slotParams)
       }
     }
@@ -687,7 +687,7 @@ export default defineComponent({
         <div
           class={{
             [nh.be('controls')]: true,
-            [nh.bem('controls', 'collapsed')]: hasPlayed.value && !interacting.value
+            [nh.bem('controls', 'collapsed')]: hasPlayed.value && !interacting.value,
           }}
         >
           <section class={nh.be('controls-top')}>
@@ -728,7 +728,7 @@ export default defineComponent({
                 src={currentSrc.value || props.videoAttrs?.src}
               >
                 {renderSlot(slots, 'default')}
-              </video>
+              </video>,
             ])}
           </div>
           {!hasPlayed.value && (props.poster || slots.poster || props.slots.poster) && (
@@ -736,7 +736,7 @@ export default defineComponent({
               {renderSlot(slots, 'poster', undefined, () => [
                 <Renderer renderer={props.slots.poster}>
                   <img src={props.poster} />
-                </Renderer>
+                </Renderer>,
               ])}
             </div>
           )}
@@ -744,7 +744,7 @@ export default defineComponent({
             {canPlay.value && stateShow.value && (
               <div class={nh.be('state')}>
                 {renderSlot(slots, 'state', { active: stateShow.value }, () => [
-                  <Icon {...stateIcon.value} scale={+(stateIcon.value.scale || 1) * 5}></Icon>
+                  <Icon {...stateIcon.value} scale={+(stateIcon.value.scale || 1) * 5}></Icon>,
                 ])}
               </div>
             )}
@@ -759,7 +759,7 @@ export default defineComponent({
                     label={'loading'}
                     effect={props.loadingEffect || icons.value.loading.effect}
                     scale={+(stateIcon.value.scale || 1) * 5}
-                  ></Icon>
+                  ></Icon>,
                 ])}
               </div>
             )}
@@ -784,5 +784,5 @@ export default defineComponent({
         </FullScreen>
       )
     }
-  }
+  },
 })

@@ -16,11 +16,11 @@ const _props = defineProps(tabNavItemProps)
 const props = useProps('tabNavItem', _props, {
   label: {
     static: true,
-    default: null
+    default: null,
   },
   disabled: false,
   icon: createIconProp(),
-  closable: null
+  closable: null,
 })
 
 const tabNavState = inject(TAB_NAV_STATE, null)
@@ -40,7 +40,7 @@ const contentClass = computed(() => {
   return {
     [baseClass]: true,
     [`${baseClass}--disabled`]: props.disabled,
-    [`${baseClass}--active`]: !props.disabled && active.value
+    [`${baseClass}--active`]: !props.disabled && active.value,
   }
 })
 const isClosable = computed(() => {
@@ -56,7 +56,7 @@ watch(
   value => {
     currentLabel.value = value
     tabNavState?.refreshLabels()
-  }
+  },
 )
 watch(active, value => {
   emitEvent(props.onToggle!, value)
@@ -67,7 +67,7 @@ if (tabNavState) {
     el: wrapper,
     label: currentLabel,
     index,
-    total
+    total,
   })
 
   watch(currentLabel, () => {
@@ -78,7 +78,7 @@ if (tabNavState) {
     value => {
       active.value = currentLabel.value === value
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   tabNavState.increaseItem(state)

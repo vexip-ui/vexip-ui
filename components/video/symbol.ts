@@ -67,7 +67,7 @@ export interface VideoSlots {
 const defaultLayout: Required<VideoControlLayout> = {
   left: ['play-prev', 'play', 'play-next', 'refresh', 'timer'],
   center: [],
-  right: ['playback-rate', 'volume', 'flip', 'pip', 'full-window', 'full-browser']
+  right: ['playback-rate', 'volume', 'flip', 'pip', 'full-window', 'full-browser'],
 }
 
 for (const key of Object.keys(defaultLayout) as (keyof VideoControlLayout)[]) {
@@ -85,7 +85,7 @@ export const videoDefaultShortcuts = Object.freeze({
   volume: 'M',
   pip: 'P',
   'full-window': 'G',
-  'full-browser': 'F'
+  'full-browser': 'F',
 })
 
 export const VIDEO_STATE = '__VXP_VIDEO_STATE' as unknown as InjectionKey<VideoState>

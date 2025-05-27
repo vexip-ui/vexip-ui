@@ -42,7 +42,7 @@ import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const menus: MenuOptions[] = [
@@ -53,25 +53,25 @@ const menus: MenuOptions[] = [
     children: [
       { label: '1-1', name: '子菜单 1' },
       { label: '1-2', name: '子菜单 2' },
-      { label: '1-3', name: '子菜单 3' }
-    ]
+      { label: '1-3', name: '子菜单 3' },
+    ],
   },
   {
     label: '2',
     name: '菜单 2',
     icon: City,
-    disabled: true
+    disabled: true,
   },
   {
     label: '3',
     name: '菜单 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: '菜单 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 
 function handleUserAction(label: string) {

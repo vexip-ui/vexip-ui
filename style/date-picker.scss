@@ -2,7 +2,7 @@
 
 @use './shared' as *;
 @use './design' as *;
-@use './input.scss' as input;
+@use './input' as input;
 
 $date-picker: () !default;
 $date-picker: map.merge(
@@ -319,6 +319,11 @@ $date-picker: map.merge(
     .#{$namespace}-calendar {
       &__row--week {
         margin-bottom: 6px;
+      }
+
+      &__index {
+        width: 28px;
+        height: 28px;
       }
     }
   }

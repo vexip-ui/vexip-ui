@@ -17,13 +17,13 @@ async function main() {
   logger.withBothLn(() => logger.successText('start building full lib...'))
 
   await run('pnpm', ['bootstrap'])
-  await run('pnpm', ['props'])
+  await run('pnpm', ['gen:props'])
   await run('vite', ['build', '--config', 'vite.full.config.ts'], {
     stdio: 'inherit',
     env: {
       NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
-    }
+      SOURCE_MAP: sourceMap ? 'true' : '',
+    },
   })
 
   logger.ln()

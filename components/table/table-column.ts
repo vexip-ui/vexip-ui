@@ -5,7 +5,7 @@ import {
   onBeforeUnmount,
   reactive,
   renderSlot,
-  watch
+  watch,
 } from 'vue'
 
 import { createSizeProp, useProps } from '@vexip-ui/config'
@@ -19,13 +19,13 @@ type ColumnPropKey = keyof typeof tableColumnProps
 
 const propKeys = Object.keys(tableColumnProps) as ColumnPropKey[]
 const aliases: Partial<Record<ColumnPropKey, string>> = {
-  idKey: 'key'
+  idKey: 'key',
 }
 const ignoredProps: ColumnPropKey[] = [
   'renderer',
   'headRenderer',
   'filterRenderer',
-  'summaryRenderer'
+  'summaryRenderer',
 ]
 const triggerProps: ColumnPropKey[] = [
   'idKey',
@@ -37,14 +37,14 @@ const triggerProps: ColumnPropKey[] = [
   'orderLabel',
   'disableRow',
   'headSpan',
-  'cellSpan'
+  'cellSpan',
 ]
 const aligns: TableTextAlign[] = ['left', 'center', 'right']
 
 const funcProp = {
   default: null,
   isFunc: true,
-  static: true
+  static: true,
 }
 
 export default defineComponent({
@@ -56,20 +56,20 @@ export default defineComponent({
       idKey: {
         default: null,
         validator: value => !isNull(value),
-        static: true
+        static: true,
       },
       name: {
         default: '',
-        static: true
+        static: true,
       },
       accessor: {
         default: null,
         isFunc: true,
-        static: true
+        static: true,
       },
       fixed: {
         default: false,
-        static: true
+        static: true,
       },
       class: null,
       style: null,
@@ -77,7 +77,7 @@ export default defineComponent({
       type: {
         default: null,
         validator: value => columnTypes.includes(value),
-        static: true
+        static: true,
       },
       width: null,
       filter: null,
@@ -87,34 +87,34 @@ export default defineComponent({
       filterRenderer: funcProp,
       order: {
         default: 0,
-        static: true
+        static: true,
       },
       ellipsis: null,
       checkboxSize: {
         ...createSizeProp(),
-        default: null
+        default: null,
       },
       selectionSize: {
         ...createSizeProp(),
-        default: null
+        default: null,
       },
       disableRow: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       truthIndex: false,
       orderLabel: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       meta: null,
       textAlign: {
         default: 'left',
-        validator: value => aligns.includes(value)
+        validator: value => aligns.includes(value),
       },
       headSpan: {
         default: 1,
-        static: true
+        static: true,
       },
       cellSpan: funcProp,
       noSummary: false,
@@ -122,9 +122,9 @@ export default defineComponent({
       indented: false,
       formatter: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
-      singleSelect: false
+      singleSelect: false,
     })
 
     const selectionSize = computed(() => {
@@ -172,7 +172,7 @@ export default defineComponent({
           value => {
             update(value)
             tableAction?.updateColumns()
-          }
+          },
         )
       } else if (key === 'filter') {
         const filterWithoutMeta = computed(() => {
@@ -190,7 +190,7 @@ export default defineComponent({
             options.filter = props.filter
             tableAction?.updateColumns()
           },
-          { deep: true }
+          { deep: true },
         )
       } else {
         const trigger = triggerProps.includes(key)
@@ -202,7 +202,7 @@ export default defineComponent({
             trigger
               ? tableAction?.updateColumns()
               : tableAction?.setColumnProp(options.key, key, value)
-          }
+          },
         )
       }
     }
@@ -265,7 +265,7 @@ export default defineComponent({
         const result = formatter(
           typeof props.accessor === 'function'
             ? props.accessor(row as Data, rowIndex)
-            : (row as TableRowState)[options.key as unknown as keyof TableRowState]
+            : (row as TableRowState)[options.key as unknown as keyof TableRowState],
         )
 
         return isNull(result) ? '' : String(result)
@@ -324,5 +324,5 @@ export default defineComponent({
     }
 
     return () => null
-  }
+  },
 })

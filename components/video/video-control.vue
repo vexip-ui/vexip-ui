@@ -18,17 +18,17 @@ const props = useProps('videoControl', _props, {
   type: 'button',
   label: {
     static: true,
-    default: ''
+    default: '',
   },
   tipClass: null,
   disabled: false,
   shortcut: {
     static: true,
-    default: ''
+    default: '',
   },
   focusable: false,
   value: null,
-  options: () => []
+  options: () => [],
 })
 
 defineSlots<{
@@ -49,7 +49,7 @@ const className = computed(() => {
   return {
     [nh.be('control')]: true,
     [nh.bem('control', props.type)]: props.type !== 'button',
-    [nh.bem('control', 'disabled')]: props.disabled
+    [nh.bem('control', 'disabled')]: props.disabled,
   }
 })
 const tipClass = computed(() => {
@@ -74,7 +74,7 @@ watch(
       removeShortcut = videoState.addShortcut(value, handleClick)
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 onBeforeUnmount(() => removeShortcut?.())

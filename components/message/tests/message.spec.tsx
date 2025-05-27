@@ -21,7 +21,7 @@ function createMessage() {
       app?.use(Message)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Message
@@ -45,7 +45,7 @@ describe('Message', () => {
 
     await wrapper.vm.add({
       content: TEXT,
-      icon: Github
+      icon: Github,
     })
     const item = wrapper.find('.vxp-message__item')
 
@@ -85,7 +85,7 @@ describe('Message', () => {
 
     Message.open({
       content: TEXT,
-      closable: true
+      closable: true,
     })
     await messageOpened()
     expect(document.querySelector('.vxp-message__close')).toBeTruthy()
@@ -96,14 +96,14 @@ describe('Message', () => {
 
     Message.open({
       content: TEXT,
-      icon: Github
+      icon: Github,
     })
     await messageOpened()
     expect(document.querySelector('.vxp-message__icon')).toBeTruthy()
 
     const icon = mount(Github)
     expect(document.querySelector('.vxp-message__icon')!.querySelector('svg')?.innerHTML).toEqual(
-      icon.find('svg').element.innerHTML
+      icon.find('svg').element.innerHTML,
     )
   })
 
@@ -112,7 +112,7 @@ describe('Message', () => {
 
     Message.open({
       content: '<div class="test"></div>',
-      parseHtml: true
+      parseHtml: true,
     })
     await messageOpened()
     expect(document.querySelector('.test')).toBeTruthy()

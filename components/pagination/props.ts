@@ -24,7 +24,7 @@ export const paginationProps = buildProps({
   listTag: String,
   slots: Object as PropType<PaginationSlots>,
   onChange: eventProp<(page: number) => void>(),
-  onPageSizeChange: eventProp<(size: number) => void>()
+  onPageSizeChange: eventProp<(size: number) => void>(),
 })
 
 export type PaginationProps = ExtractPropTypes<typeof paginationProps>

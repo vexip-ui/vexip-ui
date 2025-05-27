@@ -19,18 +19,18 @@ const nodeData = reactive<NodeData[]>([
     id: 1,
     label: '动物',
     parent: 0,
-    expanded: true
+    expanded: true,
   },
   {
     id: 3,
     label: '无脊椎动物',
-    parent: 1
+    parent: 1,
   },
   {
     id: 5,
     label: '脊椎动物',
-    parent: 1
-  }
+    parent: 1,
+  },
 ])
 
 function loadData(data: NodeData) {
@@ -42,27 +42,27 @@ function loadData(data: NodeData) {
             id: 7,
             label: '蚯蚓',
             parent: 3,
-            isLeaf: true
+            isLeaf: true,
           },
           {
             id: 8,
             label: '水母',
             parent: 3,
-            loaded: true
-          }
+            loaded: true,
+          },
         )
       } else if (data.id === 5) {
         nodeData.push(
           {
             id: 2,
             label: '鸟类',
-            parent: 5
+            parent: 5,
           },
           {
             id: 4,
             label: '哺乳动物',
-            parent: 5
-          }
+            parent: 5,
+          },
         )
       } else if (data.id === 2) {
         nodeData.push(
@@ -70,14 +70,14 @@ function loadData(data: NodeData) {
             id: 6,
             label: '喜鹊',
             parent: 2,
-            isLeaf: true
+            isLeaf: true,
           },
           {
             id: 10,
             label: '红隼',
             parent: 2,
-            loaded: true
-          }
+            loaded: true,
+          },
         )
       } else if (data.id === 4) {
         // nodeData.push({

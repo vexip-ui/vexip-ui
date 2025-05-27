@@ -19,7 +19,7 @@ describe('Badge', () => {
 
   it('dot', () => {
     const wrapper = mount(Badge, {
-      props: { isDot: true }
+      props: { isDot: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-badge--is-dot')
@@ -31,11 +31,11 @@ describe('Badge', () => {
 
       if (type === 'error') {
         expect(wrapper.find('.vxp-badge__content').classes()).not.toContain(
-          `vxp-badge__content--${type}`
+          `vxp-badge__content--${type}`,
         )
       } else {
         expect(wrapper.find('.vxp-badge__content').classes()).toContain(
-          `vxp-badge__content--${type}`
+          `vxp-badge__content--${type}`,
         )
       }
     })
@@ -43,7 +43,7 @@ describe('Badge', () => {
 
   it('max', async () => {
     const wrapper = mount(Badge, {
-      props: { content: 100 }
+      props: { content: 100 },
     })
 
     expect(wrapper.find('.vxp-badge__content').text()).toBe('100')
@@ -54,11 +54,11 @@ describe('Badge', () => {
 
   it('color', async () => {
     const wrapper = mount(Badge, {
-      props: { color: 'cyan' }
+      props: { color: 'cyan' },
     })
 
     expect(wrapper.find('.vxp-badge__content').attributes('style')).toContain(
-      'background-color: cyan;'
+      'background-color: cyan;',
     )
   })
 })

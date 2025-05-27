@@ -8,7 +8,7 @@ export function animateScrollTo(
   from: number,
   to: number,
   duration: number,
-  callback: unknown
+  callback: unknown,
 ): void {
   const distance = to - from
   const step = Math.ceil((distance / duration) * 16)

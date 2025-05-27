@@ -15,5 +15,5 @@ export type {
   SliderSlotParams,
   SliderTriggerParams,
   SliderMarkerSlotParams,
-  SliderSlots
+  SliderSlots,
 } from './symbol'

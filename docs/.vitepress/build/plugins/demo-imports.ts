@@ -14,11 +14,11 @@ export function demoImports(): Plugin {
       const component = basename(id, '.md')
       const scriptSetups = [
         `const demos = import.meta.glob('@docs/demos/${component}/**/*.vue', { eager: true, import: 'default' })`,
-        `const codes = import.meta.glob('@docs/demos/${component}/**/*.vue', { eager: true, import: 'default', query: '?raw' })`
+        `const codes = import.meta.glob('@docs/demos/${component}/**/*.vue', { eager: true, import: 'default', query: '?raw' })`,
       ]
 
       return combineMarkdown(code, [`\n<script setup>\n${scriptSetups.join('\n')}\n</script>\n`])
-    }
+    },
   }
 }
 

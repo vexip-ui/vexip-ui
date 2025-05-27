@@ -11,7 +11,7 @@ import {
   provide,
   reactive,
   ref,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -36,11 +36,11 @@ const _props = defineProps(anchorProps)
 const props = useProps('anchor', _props, {
   active: {
     default: '',
-    static: true
+    static: true,
   },
   viewer: {
     default: null,
-    static: true
+    static: true,
   },
   offset: 8,
   marker: false,
@@ -48,11 +48,11 @@ const props = useProps('anchor', _props, {
   markerTransition: () => nh.ns('fade'),
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   bindHash: false,
   forceActive: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active'])
@@ -83,15 +83,15 @@ provide<AnchorState>(
     currentActive,
     increaseLink,
     decreaseLink,
-    handleActive
-  })
+    handleActive,
+  }),
 )
 
 watch(
   () => props.active,
   value => {
     currentActive.value = value
-  }
+  },
 )
 watch(() => props.viewer, updateContainer)
 
@@ -229,7 +229,7 @@ function computeCurrentLink(scrollTop: number) {
     if (element) {
       offsetList.push({
         link: id,
-        offset: element.offsetTop
+        offset: element.offsetTop,
       })
     }
   })
@@ -237,7 +237,7 @@ function computeCurrentLink(scrollTop: number) {
   offsetList.sort((prev, next) => prev.offset - next.offset)
   offsetList.push({
     link: '',
-    offset: Infinity
+    offset: Infinity,
   })
 
   let currentLink = ''
@@ -313,7 +313,7 @@ function handleActive(link: string) {
     // const from = containerEl.scrollTop
     const to = Math.min(
       elementTop - containerEl.offsetTop - props.offset,
-      containerEl.scrollHeight - containerEl.clientHeight
+      containerEl.scrollHeight - containerEl.clientHeight,
     )
 
     animateScrollTo(containerEl, prevScrollTop, to, duration, () => {
@@ -346,7 +346,7 @@ function handleActive(link: string) {
 
 function computeMarkerPosition() {
   const currentLink = Array.from(linkStates).find(
-    state => state.to && state.to === currentActive.value
+    state => state.to && state.to === currentActive.value,
   )
 
   if (currentLink?.el) {

@@ -65,7 +65,7 @@ const defaultAliasMap: Record<string, string> = {
   up: 'arrowup',
   down: 'arrowdown',
   left: 'arrowleft',
-  right: 'arrowright'
+  right: 'arrowright',
 }
 
 const separatorRE = /[+_-]/
@@ -80,7 +80,7 @@ export function useModifier(options: UseModifierOptions = {}) {
     passive = true,
     strictTarget = false,
     onKeyDown = noop,
-    onKeyUp = noop
+    onKeyUp = noop,
   } = options
 
   const target = options.target || ref(null)
@@ -156,7 +156,7 @@ export function useModifier(options: UseModifierOptions = {}) {
       }
 
       return unref(Reflect.get(target, prop, receiver))
-    }
+    },
   })
 
   useListener(
@@ -170,7 +170,7 @@ export function useModifier(options: UseModifierOptions = {}) {
       updateModifier(event, true)
       onKeyDown(event, modifierProxy)
     },
-    { capture, passive, disabled }
+    { capture, passive, disabled },
   )
   useListener(
     target,
@@ -183,7 +183,7 @@ export function useModifier(options: UseModifierOptions = {}) {
       updateModifier(event, false)
       onKeyUp(event, modifierProxy)
     },
-    { capture, passive, disabled }
+    { capture, passive, disabled },
   )
 
   if (autoReset) {

@@ -32,21 +32,21 @@ const options: MenuOptions[] = [
         name: '子菜单 3',
         children: [
           { label: '1-3-1', name: '三级菜单 1' },
-          { label: '1-3-2', name: '三级菜单 2' }
-        ]
-      }
-    ]
+          { label: '1-3-2', name: '三级菜单 2' },
+        ],
+      },
+    ],
   },
   {
     label: '2',
     name: '菜单 2',
-    icon: City
+    icon: City,
   },
   {
     label: '3',
     name: '菜单 3',
     icon: ChartPie,
-    disabled: true
+    disabled: true,
   },
   {
     label: '4',
@@ -55,13 +55,13 @@ const options: MenuOptions[] = [
     children: [
       { label: '4-1', name: '子菜单 1' },
       { label: '4-2', name: '子菜单 2', disabled: true },
-      { label: '4-3', name: '子菜单 3' }
-    ]
+      { label: '4-3', name: '子菜单 3' },
+    ],
   },
   {
     label: '5',
     name: '菜单 5',
-    icon: Marker
-  }
+    icon: Marker,
+  },
 ]
 </script>

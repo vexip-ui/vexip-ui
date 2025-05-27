@@ -37,5 +37,5 @@ export const popupPlacements = Object.freeze<PopupPlacement[]>([
   'top-left',
   'bottom-right',
   'bottom-center',
-  'bottom-left'
+  'bottom-left',
 ])

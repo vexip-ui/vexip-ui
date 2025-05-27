@@ -12,13 +12,13 @@ function defineGetter(obj: Record<string, any>, prop: string, value: any, defaul
 
   Object.defineProperty(obj, prop, {
     configurable: true,
-    get: () => value
+    get: () => value,
   })
 
   return () => {
     Object.defineProperty(obj, prop, {
       configurable: true,
-      get: () => oldValue
+      get: () => oldValue,
     })
   }
 }
@@ -55,14 +55,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: -200,
-        bottom: -200
+        bottom: -200,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop: 200
-        }
-      }
+          scrollTop: 200,
+        },
+      },
     })
 
     expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(false)
@@ -78,8 +78,8 @@ describe('Affix', () => {
   it('render offset props', async () => {
     const wrapper = mount(Affix, {
       props: {
-        offset: 100
-      }
+        offset: 100,
+      },
     })
 
     const affixRectMock = vi
@@ -88,14 +88,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: -200,
-        bottom: -200
+        bottom: -200,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop: 200
-        }
-      }
+          scrollTop: 200,
+        },
+      },
     })
 
     window.dispatchEvent(evt)
@@ -111,8 +111,8 @@ describe('Affix', () => {
     const wrapper = mount(Affix, {
       props: {
         position: 'bottom',
-        offset: 30
-      }
+        offset: 30,
+      },
     })
 
     const affixRectMock = vi
@@ -121,14 +121,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: 999,
-        bottom: 1000
+        bottom: 1000,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop: 1
-        }
-      }
+          scrollTop: 1,
+        },
+      },
     })
 
     window.dispatchEvent(evt)
@@ -143,8 +143,8 @@ describe('Affix', () => {
   it('render z-index props', async () => {
     const wrapper = mount(Affix, {
       props: {
-        zIndex: 9999
-      }
+        zIndex: 9999,
+      },
     })
 
     const affixRectMock = vi
@@ -153,14 +153,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: -200,
-        bottom: -200
+        bottom: -200,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop: 200
-        }
-      }
+          scrollTop: 200,
+        },
+      },
     })
 
     window.dispatchEvent(evt)
@@ -185,17 +185,17 @@ describe('Affix', () => {
           </div>
         </>
       ),
-      { attachTo: document.body }
+      { attachTo: document.body },
     )
     const targetEl = document.querySelector('.affix-container')! as HTMLElement
     const bgEl = document.querySelector('.background')! as HTMLElement
 
     setStyles(targetEl, {
       height: '400px',
-      overflow: 'auto'
+      overflow: 'auto',
     })
     setStyles(bgEl, {
-      height: '500px'
+      height: '500px',
     })
 
     let scrollTop = 100
@@ -205,7 +205,7 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: 300,
-        bottom: 332
+        bottom: 332,
       } as DOMRect)
     const targetRectMock = vi
       .spyOn(wrapper.find('.affix-container').element, 'getBoundingClientRect')
@@ -213,14 +213,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: 0,
-        bottom: 500
+        bottom: 500,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop
-        }
-      }
+          scrollTop,
+        },
+      },
     })
 
     targetEl.dispatchEvent(evt)
@@ -233,13 +233,13 @@ describe('Affix', () => {
       height: 40,
       width: 1000,
       top: 0,
-      bottom: 32
+      bottom: 32,
     } as DOMRect)
     targetRectMock.mockReturnValue({
       height: 40,
       width: 1000,
       top: 0,
-      bottom: 500
+      bottom: 500,
     } as DOMRect)
 
     targetEl.dispatchEvent(evt)
@@ -265,14 +265,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: -200,
-        bottom: -200
+        bottom: -200,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop: 200
-        }
-      }
+          scrollTop: 200,
+        },
+      },
     })
 
     expect(wrapper.find('.vxp-affix--fixed').exists()).toBe(false)
@@ -302,14 +302,14 @@ describe('Affix', () => {
         height: 40,
         width: 1000,
         top: -200,
-        bottom: -200
+        bottom: -200,
       } as DOMRect)
     const evt = new CustomEvent('scroll', {
       detail: {
         target: {
-          scrollTop: 200
-        }
-      }
+          scrollTop: 200,
+        },
+      },
     })
 
     window.dispatchEvent(evt)
@@ -319,7 +319,7 @@ describe('Affix', () => {
     expect(onScroll).toHaveBeenCalled()
     expect(onScroll).toHaveBeenCalledWith({
       scrollTop: 200,
-      fixed: true
+      fixed: true,
     })
 
     affixRectMock.mockRestore()

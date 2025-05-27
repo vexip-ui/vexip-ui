@@ -23,7 +23,7 @@ function nextFrame() {
 describe('DatePicker', () => {
   it('render', () => {
     const wrapper = mount(DatePicker, {
-      props: { visible: true }
+      props: { visible: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-date-picker-vars')
@@ -42,7 +42,7 @@ describe('DatePicker', () => {
 
   it('transfer', async () => {
     const wrapper = mount(DatePicker, {
-      props: { visible: true, transfer: true }
+      props: { visible: true, transfer: true },
     })
 
     await nextTick()
@@ -53,7 +53,7 @@ describe('DatePicker', () => {
 
   it('type', async () => {
     const wrapper = mount(DatePicker, {
-      props: { visible: true, type: 'datetime' }
+      props: { visible: true, type: 'datetime' },
     })
 
     wrapper.vm.handleFocused()
@@ -76,7 +76,7 @@ describe('DatePicker', () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(DatePicker, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
     // const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -121,7 +121,7 @@ describe('DatePicker', () => {
     const onEnter = vi.fn()
     const onCancel = vi.fn()
     const wrapper = mount(DatePicker, {
-      props: { onEnter, onCancel }
+      props: { onEnter, onCancel },
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
     const input = wrapper.find('.vxp-date-picker__input')
@@ -169,7 +169,7 @@ describe('DatePicker', () => {
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(DatePicker, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.trigger('click')
@@ -196,13 +196,13 @@ describe('DatePicker', () => {
 
     await wrapper.trigger('click')
     expect(wrapper.find('.vxp-date-picker__popper').attributes('style') || '').not.toContain(
-      'display: none;'
+      'display: none;',
     )
   })
 
   it('popper will be removed when alive false', async () => {
     const wrapper = mount(DatePicker, {
-      props: { popperAlive: false }
+      props: { popperAlive: false },
     })
 
     expect(wrapper.find('.vxp-date-picker__popper').exists()).toBe(false)
@@ -215,7 +215,7 @@ describe('DatePicker', () => {
     vi.setSystemTime('2022-05-27 09:24:47')
 
     const wrapper = mount(DatePicker, {
-      props: { visible: true }
+      props: { visible: true },
     })
     await nextTick()
 
@@ -256,7 +256,7 @@ describe('DatePicker', () => {
     vi.setSystemTime('2022-05-26 00:00:00')
 
     const wrapper = mount(DatePicker, {
-      props: { type: 'datetime', value: '2022-05-27 09:24:47' }
+      props: { type: 'datetime', value: '2022-05-27 09:24:47' },
     })
     const units = wrapper.findAll('.vxp-date-picker__unit')
 
@@ -303,7 +303,7 @@ describe('DatePicker', () => {
     vi.setSystemTime('2022-05-26 00:00:00')
 
     const wrapper = mount(DatePicker, {
-      props: { type: 'datetime', value: '2022-05-27 09:24:47' }
+      props: { type: 'datetime', value: '2022-05-27 09:24:47' },
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
 
@@ -332,7 +332,7 @@ describe('DatePicker', () => {
 
     await wrapper.trigger('click')
     expect(wrapper.find('.vxp-date-picker__selector').text()).toEqual(
-      '----年/--月/--日--时:--分:--秒'
+      '----年/--月/--日--时:--分:--秒',
     )
   })
 
@@ -387,7 +387,7 @@ describe('DatePicker', () => {
     const wrapper = mount(() => (
       <DatePicker prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </DatePicker>
     ))
@@ -418,7 +418,7 @@ describe('DatePicker', () => {
     const wrapper = mount(() => (
       <DatePicker suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </DatePicker>
     ))
@@ -432,7 +432,7 @@ describe('DatePicker', () => {
     const wrapper = mount(() => <DatePicker size={'large'}></DatePicker>)
 
     expect(wrapper.find('.vxp-date-picker__selector').classes()).toContain(
-      'vxp-date-picker__selector--large'
+      'vxp-date-picker__selector--large',
     )
   })
 
@@ -441,7 +441,7 @@ describe('DatePicker', () => {
       const wrapper = mount(() => <DatePicker state={state}></DatePicker>)
 
       expect(wrapper.find('.vxp-date-picker__selector').classes()).toContain(
-        `vxp-date-picker__selector--${state}`
+        `vxp-date-picker__selector--${state}`,
       )
     })
   })
@@ -480,14 +480,14 @@ describe('DatePicker', () => {
 
     const onChange = vi.fn()
     const wrapper = mount(DatePicker, {
-      props: { onChange }
+      props: { onChange },
     })
 
     await wrapper.trigger('click')
     await wrapper.trigger('clickoutside')
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenLastCalledWith(
-      new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(),
     )
   })
 
@@ -502,7 +502,7 @@ describe('DatePicker', () => {
     await wrapper.trigger('clickoutside')
     expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
     expect(wrapper.emitted('update:formatted-value')![0][0]).toMatch(
-      format(date, 'yyyy-MM-dd HH:mm:')
+      format(date, 'yyyy-MM-dd HH:mm:'),
     )
     wrapper.unmount()
 
@@ -513,14 +513,14 @@ describe('DatePicker', () => {
     expect(formatFn).toHaveBeenCalled()
     expect(formatFn).toHaveBeenLastCalledWith(
       new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(),
-      'start'
+      'start',
     )
     expect(wrapper.emitted()).toHaveProperty('update:formatted-value')
     expect(wrapper.emitted('update:formatted-value')![0]).toEqual(['1'])
     wrapper.unmount()
 
     wrapper = mount(DatePicker, {
-      props: { range: true, valueFormat: formatFn }
+      props: { range: true, valueFormat: formatFn },
     })
     await wrapper.trigger('click')
     await wrapper.trigger('clickoutside')
@@ -532,8 +532,8 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker, {
       props: {
         clearable: true,
-        onClear
-      }
+        onClear,
+      },
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
 
@@ -566,8 +566,8 @@ describe('DatePicker', () => {
       props: {
         type: 'datetime',
         value: '2022-05-27 09:24:47',
-        onChangeCol
-      }
+        onChangeCol,
+      },
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
 
@@ -605,8 +605,8 @@ describe('DatePicker', () => {
         onInput,
         onPlus,
         onMinus,
-        onChangeCol
-      }
+        onChangeCol,
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -682,10 +682,10 @@ describe('DatePicker', () => {
     const onShortcut = vi.fn()
     const shortcuts = [
       { name: 'Labor Day', value: '2022-05-01' },
-      { name: "Children's Day", value: fnValue }
+      { name: "Children's Day", value: fnValue },
     ]
     const wrapper = mount(DatePicker, {
-      props: { shortcuts, onShortcut }
+      props: { shortcuts, onShortcut },
     })
     const selector = wrapper.find('.vxp-date-picker__selector')
 
@@ -716,12 +716,12 @@ describe('DatePicker', () => {
     ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const shortcuts = [{ name: 'Labor Day', value: '2022-05-01' }]
       const wrapper = mount(DatePicker, {
-        props: { visible: true, shortcuts, shortcutsPlacement: placement }
+        props: { visible: true, shortcuts, shortcutsPlacement: placement },
       })
 
       expect(wrapper.find('.vxp-date-picker__shortcuts').exists()).toBe(true)
       expect(wrapper.find('.vxp-date-picker__shortcuts').classes()).toContain(
-        `vxp-date-picker__shortcuts--${placement}`
+        `vxp-date-picker__shortcuts--${placement}`,
       )
     })
   })
@@ -736,8 +736,8 @@ describe('DatePicker', () => {
       props: {
         range: true,
         onChange,
-        onChangeCol
-      }
+        onChangeCol,
+      },
     })
     await wrapper.trigger('click')
 
@@ -775,7 +775,7 @@ describe('DatePicker', () => {
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith([
       new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime(),
-      new Date(date.getFullYear(), 10, 16).getTime()
+      new Date(date.getFullYear(), 10, 16).getTime(),
     ])
   })
 
@@ -784,8 +784,8 @@ describe('DatePicker', () => {
       props: {
         type: 'year',
         value: '2020',
-        min: '2020'
-      }
+        min: '2020',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -803,8 +803,8 @@ describe('DatePicker', () => {
       props: {
         type: 'month',
         value: '2020-05',
-        min: '2020-05'
-      }
+        min: '2020-05',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -821,8 +821,8 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker, {
       props: {
         value: '2020-05-15',
-        min: '2020-05-15'
-      }
+        min: '2020-05-15',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -840,8 +840,8 @@ describe('DatePicker', () => {
       props: {
         type: 'year',
         value: '2020',
-        max: '2020'
-      }
+        max: '2020',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -859,8 +859,8 @@ describe('DatePicker', () => {
       props: {
         type: 'month',
         value: '2020-05',
-        max: '2020-05'
-      }
+        max: '2020-05',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -877,8 +877,8 @@ describe('DatePicker', () => {
     const wrapper = mount(DatePicker, {
       props: {
         value: '2020-05-15',
-        max: '2020-05-15'
-      }
+        max: '2020-05-15',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -896,8 +896,8 @@ describe('DatePicker', () => {
       props: {
         value: '2020-05-15',
         min: '2020-05-18',
-        max: '2020-05-15'
-      }
+        max: '2020-05-15',
+      },
     })
     const input = wrapper.find('.vxp-date-picker__input')
     const units = wrapper.findAll('.vxp-date-picker__unit')
@@ -913,8 +913,8 @@ describe('DatePicker', () => {
   it('placeholder', async () => {
     const wrapper = mount(DatePicker, {
       props: {
-        placeholder: 'test'
-      }
+        placeholder: 'test',
+      },
     })
 
     expect(wrapper.find('.vxp-date-picker__placeholder').exists()).toBe(true)
@@ -933,8 +933,8 @@ describe('DatePicker', () => {
       props: {
         value: '2022-05-27',
         unitReadonly: true,
-        onChangeCol
-      }
+        onChangeCol,
+      },
     })
 
     await wrapper.trigger('click')

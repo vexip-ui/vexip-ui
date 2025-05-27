@@ -17,7 +17,7 @@ export const toastProps = buildProps({
   maskClass: classProp,
   maskStyle: styleProp,
   parseHtml: booleanProp,
-  renderer: Function as PropType<(options: ToastOptions) => any>
+  renderer: Function as PropType<(options: ToastOptions) => any>,
 })
 
 export type ToastProps = ExtractPropTypes<typeof toastProps>

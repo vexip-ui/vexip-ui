@@ -19,7 +19,7 @@ function createNotice() {
       app?.use(Notice)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Notice
@@ -44,7 +44,7 @@ describe('Notice', () => {
     await wrapper.vm.add({
       title: TEXT,
       content: TEXT,
-      icon: Github
+      icon: Github,
     })
     const item = wrapper.find('.vxp-notice__item')
 
@@ -105,7 +105,7 @@ describe('Notice', () => {
 
     Notice.open({
       content: TEXT,
-      closable: true
+      closable: true,
     })
     await noticeOpened()
     expect(document.querySelector('.vxp-notice__close')).toBeTruthy()
@@ -116,14 +116,14 @@ describe('Notice', () => {
 
     Notice.open({
       content: TEXT,
-      icon: Github
+      icon: Github,
     })
     await noticeOpened()
     expect(document.querySelector('.vxp-notice__icon')).toBeTruthy()
 
     const icon = mount(Github)
     expect(document.querySelector('.vxp-notice__icon')!.querySelector('svg')?.innerHTML).toEqual(
-      icon.find('svg').element.innerHTML
+      icon.find('svg').element.innerHTML,
     )
   })
 
@@ -133,7 +133,7 @@ describe('Notice', () => {
     Notice.open({
       title: '<div class="test1"></div>',
       content: '<div class="test2"></div>',
-      parseHtml: true
+      parseHtml: true,
     })
     await noticeOpened()
     expect(document.querySelector('.test1')).toBeTruthy()

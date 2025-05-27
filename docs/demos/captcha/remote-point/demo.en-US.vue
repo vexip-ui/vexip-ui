@@ -56,7 +56,7 @@ function useMockRemote() {
       { text: 'E', x: 0.32, y: 0.58, radian: 0.45 },
       { text: 'F', x: 0.6, y: 0.46, radian: 1.8 },
       { text: 'G', x: 0.72, y: 0.26, radian: 0.85 },
-      { text: 'H', x: 0.3, y: 0.85, radian: 1.1 }
+      { text: 'H', x: 0.3, y: 0.85, radian: 1.1 },
     ]
 
     const indexSet = new Set<number>()

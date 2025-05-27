@@ -19,30 +19,30 @@ const props = useProps('calendar', _props, {
   locale: null,
   value: {
     default: null,
-    static: true
+    static: true,
   },
   year: () => new Date().getFullYear(),
   month: {
     default: () => new Date().getMonth() + 1,
-    validator: value => value > 0 && value <= 12
+    validator: value => value > 0 && value <= 12,
   },
   weekDays: {
     default: null,
-    validator: value => !value || value.length === 0 || value.length === 7
+    validator: value => !value || value.length === 0 || value.length === 7,
   },
   weekStart: {
     default: 0,
-    validator: value => value >= 0 && value < 7
+    validator: value => value >= 0 && value < 7,
   },
   today: {
     default: () => new Date(),
-    validator: value => !Number.isNaN(+new Date(value))
+    validator: value => !Number.isNaN(+new Date(value)),
   },
   disabledDate: {
     default: () => false,
-    isFunc: true
+    isFunc: true,
   },
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value', 'update:year', 'update:month'])
@@ -60,19 +60,19 @@ watch(
   () => props.value,
   value => {
     calendarValue.value = value
-  }
+  },
 )
 watch(
   () => props.year,
   value => {
     calendarYear.value = value
-  }
+  },
 )
 watch(
   () => props.month,
   value => {
     calendarMonth.value = value
-  }
+  },
 )
 
 defineExpose({ calendarValue, calendarYear, calendarMonth })

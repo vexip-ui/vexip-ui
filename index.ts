@@ -15,7 +15,7 @@ export {
   taINLocale,
   zhCNLocale,
   zhHKLocale,
-  zhTWLocale
+  zhTWLocale,
 } from '@vexip-ui/config'
 
 export type {
@@ -24,5 +24,5 @@ export type {
   LocaleConfig,
   LocaleNames,
   LocaleOptions,
-  IconsOptions
+  IconsOptions,
 } from '@vexip-ui/config'

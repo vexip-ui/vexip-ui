@@ -42,9 +42,9 @@ describe('deep clone', () => {
       f: new Map<any, any>([
         ['g', 6],
         ['h', { i: 7 }],
-        ['j', new Set([8])]
+        ['j', new Set([8])],
       ]),
-      k: new Date('2000-01-01')
+      k: new Date('2000-01-01'),
     }
 
     obj.d.add(obj)

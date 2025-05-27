@@ -19,7 +19,7 @@ describe('SSR for Breadcrumb', () => {
             <BreadcrumbItem>{'item1'}</BreadcrumbItem>
             <BreadcrumbItem>{'item2'}</BreadcrumbItem>
           </Breadcrumb>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

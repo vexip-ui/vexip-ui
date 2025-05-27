@@ -6,7 +6,7 @@ import {
   provide,
   reactive,
   renderSlot,
-  watch
+  watch,
 } from 'vue'
 
 import TableColumn from './table-column'
@@ -30,27 +30,27 @@ const TableColumnGroup = defineComponent({
     const props = useProps('tableColumn', _props, {
       name: {
         default: '',
-        static: true
+        static: true,
       },
       fixed: {
         default: false,
-        static: true
+        static: true,
       },
       order: {
         default: 0,
-        static: true
+        static: true,
       },
       ellipsis: null,
       textAlign: 'center',
       renderer: {
         default: null,
         isFunc: true,
-        static: true
+        static: true,
       },
       children: {
         default: () => [],
-        static: true
-      }
+        static: true,
+      },
     })
     const tableAction = inject(TABLE_ACTIONS, null)
     const parentActions = inject(COLUMN_GROUP_ACTIONS, null)
@@ -74,7 +74,7 @@ const TableColumnGroup = defineComponent({
           trigger
             ? tableAction?.updateColumns()
             : tableAction?.setColumnProp(options.key, key, value)
-        }
+        },
       )
     }
 
@@ -82,7 +82,7 @@ const TableColumnGroup = defineComponent({
 
     provide(COLUMN_GROUP_ACTIONS, {
       increaseColumn,
-      decreaseColumn
+      decreaseColumn,
     })
 
     if (parentActions) {
@@ -134,7 +134,7 @@ const TableColumnGroup = defineComponent({
     }
 
     return () => [renderSlot(slots, 'default'), ...renderChildren()]
-  }
+  },
 })
 
 // eslint-disable-next-line vue/require-direct-export

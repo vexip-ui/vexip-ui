@@ -9,7 +9,7 @@ export default defineComponent({
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('ul', _props, {
-      listStyle: 'circle'
+      listStyle: 'circle',
     })
 
     const nh = useNameHelper('ul')
@@ -18,7 +18,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bm('inherit')]: props.inherit,
-        [nh.bm('no-marker')]: props.listStyle === 'none'
+        [nh.bm('no-marker')]: props.listStyle === 'none',
       }
     })
 
@@ -27,5 +27,5 @@ export default defineComponent({
         {slots.default?.()}
       </ul>
     )
-  }
+  },
 })

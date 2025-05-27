@@ -49,5 +49,5 @@ export const defaultKeyConfig: Required<SelectKeyConfig> = Object.freeze({
   divided: 'divided',
   title: 'title',
   group: 'group',
-  children: 'children'
+  children: 'children',
 })

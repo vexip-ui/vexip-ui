@@ -23,6 +23,6 @@ const colors = [
   'var(--vxp-color-info-base)',
   'var(--vxp-color-success-base)',
   'var(--vxp-color-warning-base)',
-  'var(--vxp-color-error-base)'
+  'var(--vxp-color-error-base)',
 ]
 </script>

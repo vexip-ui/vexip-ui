@@ -15,7 +15,7 @@ export const anchorProps = buildProps({
   bindHash: booleanProp,
   forceActive: booleanProp,
   slots: Object as PropType<AnchorSlots>,
-  onChange: eventProp<(value: string) => void>()
+  onChange: eventProp<(value: string) => void>(),
 })
 
 export type AnchorProps = ExtractPropTypes<typeof anchorProps>
@@ -24,16 +24,16 @@ export type AnchorCProps = ConfigurableProps<AnchorProps, 'viewer'>
 export const anchorLinkProps = wrapProps({
   to: {
     type: String,
-    default: ''
+    default: '',
   },
   title: {
     type: String,
-    default: ''
+    default: '',
   },
   children: {
     type: Array as PropType<AnchorLinkOptions[]>,
-    default: () => []
-  }
+    default: () => [],
+  },
 })
 
 export type AnchorLinkProps = ExtractPropTypes<typeof anchorLinkProps>

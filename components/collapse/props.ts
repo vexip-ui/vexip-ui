@@ -10,7 +10,7 @@ export const collapseProps = buildProps({
   accordion: booleanProp,
   arrowType: String as PropType<CollapseArrowType>,
   ghost: booleanProp,
-  onChange: eventProp<(expanded: (string | number)[]) => void>()
+  onChange: eventProp<(expanded: (string | number)[]) => void>(),
 })
 
 export type CollapseProps = ExtractPropTypes<typeof collapseProps>
@@ -26,7 +26,7 @@ export const collapsePanelProps = buildProps({
   arrowType: String as PropType<CollapseArrowType>,
   icon: iconProp,
   ghost: booleanProp,
-  onToggle: eventProp<(expanded: boolean) => void>()
+  onToggle: eventProp<(expanded: boolean) => void>(),
 })
 
 export type CollapsePanelProps = ExtractPropTypes<typeof collapsePanelProps>
@@ -55,7 +55,7 @@ export const collapseTransitionProps = buildProps({
   onBeforeLeave: eventProp<(el: Element) => void>(),
   onLeave: eventProp<(el: Element) => void>(),
   onAfterLeave: eventProp<(el: Element) => void>(),
-  onLeaveCancelled: eventProp<(el: Element) => void>()
+  onLeaveCancelled: eventProp<(el: Element) => void>(),
 })
 
 export type CollapseTransitionProps = ExtractPropTypes<typeof collapseTransitionProps>

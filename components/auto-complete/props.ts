@@ -6,7 +6,7 @@ import {
   iconProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -19,7 +19,7 @@ import type {
   AutoCompleteRawOption,
   AutoCompleteSlots,
   ChangeEvent,
-  EnterEvent
+  EnterEvent,
 } from './symbol'
 
 export const autoCompleteProps = buildProps({
@@ -31,7 +31,7 @@ export const autoCompleteProps = buildProps({
   options: Array as PropType<AutoCompleteRawOption[]>,
   filter: {
     type: [Boolean, Function] as PropType<boolean | AutoCompleteFilter>,
-    default: null
+    default: null,
   },
   prefix: iconProp,
   prefixColor: String,
@@ -65,7 +65,7 @@ export const autoCompleteProps = buildProps({
   onChange: eventProp<EventListener<ChangeEvent>>(),
   onToggle: eventProp<(visible: boolean) => void>(),
   onEnter: eventProp<EventListener<EnterEvent>>(),
-  onClear: eventProp()
+  onClear: eventProp(),
 })
 
 export type AutoCompleteProps = ExtractPropTypes<typeof autoCompleteProps>

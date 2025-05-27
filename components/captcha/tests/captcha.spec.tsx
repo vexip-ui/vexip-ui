@@ -48,7 +48,7 @@ describe('Captcha', () => {
 
   async function createSlideCaptcha(
     props: InstanceType<typeof Captcha>['$props'] = {},
-    slots: any = {}
+    slots: any = {},
   ) {
     vi.useRealTimers()
 
@@ -72,8 +72,8 @@ describe('Captcha', () => {
         height: 100,
         right: 0,
         bottom: 0,
-        toJSON: noop
-      }))
+        toJSON: noop,
+      })),
     )
 
     return wrapper
@@ -96,7 +96,7 @@ describe('Captcha', () => {
 
   async function createCaptcha(
     props: InstanceType<typeof Captcha>['$props'] = {},
-    slots: any = {}
+    slots: any = {},
   ) {
     vi.useRealTimers()
 
@@ -162,7 +162,7 @@ describe('Captcha', () => {
     expect(wrapper.find('.vxp-captcha').classes()).toContain('vxp-captcha--fail')
     expect(wrapper.find('.vxp-captcha__image-tip').exists()).toBe(true)
     expect(wrapper.find('.vxp-captcha__image-tip').classes()).toContain(
-      'vxp-captcha__image-tip--fail'
+      'vxp-captcha__image-tip--fail',
     )
 
     await afterReset()
@@ -174,13 +174,13 @@ describe('Captcha', () => {
   it('success tip', async () => {
     wrapper = await createSlideCaptcha({
       slideTarget: 50,
-      successTip: 'tip'
+      successTip: 'tip',
     })
 
     await toggleMove(50)
     expect(wrapper.find('.vxp-captcha__image-tip').exists()).toBe(true)
     expect(wrapper.find('.vxp-captcha__image-tip').classes()).toContain(
-      'vxp-captcha__image-tip--success'
+      'vxp-captcha__image-tip--success',
     )
     expect(wrapper.find('.vxp-captcha__image-tip').text()).toEqual('tip')
   })
@@ -188,7 +188,7 @@ describe('Captcha', () => {
   it('tolerance', async () => {
     wrapper = await createSlideCaptcha({
       slideTarget: 50,
-      tolerance: 5
+      tolerance: 5,
     })
 
     await toggleMove(40)
@@ -222,7 +222,7 @@ describe('Captcha', () => {
     await wrapper.setProps({ disabled: true })
     expect(wrapper.find('.vxp-captcha').classes()).toContain('vxp-captcha--disabled')
     expect(wrapper.find('.vxp-captcha__slider').classes()).toContain(
-      'vxp-captcha__slider--disabled'
+      'vxp-captcha__slider--disabled',
     )
   })
 
@@ -285,12 +285,12 @@ describe('Captcha', () => {
     await toggleMove(40)
     await afterReset()
     expect(wrapper.find('.vxp-captcha__slider').classes()).not.toContain(
-      'vxp-captcha__slider--disabled'
+      'vxp-captcha__slider--disabled',
     )
     await toggleMove(60)
     await afterReset()
     expect(wrapper.find('.vxp-captcha__slider').classes()).toContain(
-      'vxp-captcha__slider--disabled'
+      'vxp-captcha__slider--disabled',
     )
     expect(wrapper.classes()).toContain('vxp-captcha--fail-locked')
   })
@@ -301,7 +301,7 @@ describe('Captcha', () => {
       type: 'point',
       texts: ['A', 'B'],
       remotePoint: true,
-      onBeforeTest
+      onBeforeTest,
     })
 
     let length = -1
@@ -325,7 +325,7 @@ describe('Captcha', () => {
   it('use trigger', async () => {
     wrapper = await createCaptcha({
       slideTarget: 50,
-      useTrigger: true
+      useTrigger: true,
     })
     const button = wrapper.find('.vxp-captcha__button')
 
@@ -356,8 +356,8 @@ describe('Captcha', () => {
         height: 100,
         right: 0,
         bottom: 0,
-        toJSON: noop
-      }))
+        toJSON: noop,
+      })),
     )
 
     await toggleMove(50)
@@ -371,7 +371,7 @@ describe('Captcha', () => {
   it('trigger text', async () => {
     wrapper = await createCaptcha({
       useTrigger: true,
-      triggerText: 'text'
+      triggerText: 'text',
     })
 
     expect(wrapper.find('.vxp-captcha__button').exists()).toBe(true)
@@ -392,7 +392,7 @@ describe('Captcha', () => {
     vi.useRealTimers()
 
     const wrapper = mount(CaptchaSlider, {
-      props: { tolerance: 5 }
+      props: { tolerance: 5 },
     })
     const trigger = wrapper.find('.vxp-captcha__trigger')
 
@@ -412,8 +412,8 @@ describe('Captcha', () => {
         height: 100,
         right: 0,
         bottom: 0,
-        toJSON: noop
-      }))
+        toJSON: noop,
+      })),
     )
 
     expect(wrapper.classes()).not.toContain('vxp-captcha__slider--success')
@@ -449,7 +449,7 @@ describe('Captcha', () => {
 
   it('slider loading icon', async () => {
     const wrapper = mount(CaptchaSlider, {
-      props: { loadingIcon: Hand }
+      props: { loadingIcon: Hand },
     })
 
     expect(wrapper.findComponent(Hand).exists()).toBe(false)

@@ -16,9 +16,9 @@ const items = ref(
     return {
       id: index,
       value: `元素${index}`,
-      height: Math.round(Math.random() * 36 + 36)
+      height: Math.round(Math.random() * 36 + 36),
     }
-  })
+  }),
 )
 </script>
 

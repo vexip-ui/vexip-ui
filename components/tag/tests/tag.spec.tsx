@@ -38,8 +38,8 @@ describe('Tag', () => {
       props: {
         border: true,
         simple: true,
-        circle: true
-      }
+        circle: true,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-tag--border')
@@ -50,7 +50,7 @@ describe('Tag', () => {
   it('closable', async () => {
     const onClose = vi.fn()
     const wrapper = mount(Tag, {
-      props: { onClose }
+      props: { onClose },
     })
 
     expect(wrapper.find('.vxp-tag__close').exists()).toBe(false)
@@ -65,7 +65,7 @@ describe('Tag', () => {
   it('disabled', async () => {
     const onClose = vi.fn()
     const wrapper = mount(Tag, {
-      props: { disabled: true, closable: true, onClose }
+      props: { disabled: true, closable: true, onClose },
     })
 
     expect(wrapper.find('.vxp-tag').classes()).toContain('vxp-tag--disabled')

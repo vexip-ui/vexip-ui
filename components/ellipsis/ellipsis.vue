@@ -16,20 +16,20 @@ const _props = defineProps(ellipsisProps)
 const props = useProps('ellipsis', _props, {
   placement: {
     default: 'top',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   transfer: 'body',
   noHover: false,
   transitionName: () => nh.ns('fade'),
   tooltipTheme: {
     default: 'dark',
-    validator: value => ['light', 'dark'].includes(value)
+    validator: value => ['light', 'dark'].includes(value),
   },
   tipClass: null,
   maxLines: null,
   tipMaxWidth: 500,
   tipDisabled: false,
-  tipShift: false
+  tipShift: false,
 })
 
 const hoverDelay = useHoverDelay()
@@ -44,7 +44,7 @@ const className = computed(() => {
   return {
     [nh.b()]: true,
     [nh.bm('inherit')]: props.inherit,
-    [nh.bm('multiple')]: props.maxLines
+    [nh.bm('multiple')]: props.maxLines,
   }
 })
 const ellipsisStyle = computed(() => {
@@ -55,13 +55,13 @@ const tipStyle = computed(() => {
     maxWidth:
       typeof props.tipMaxWidth === 'string'
         ? parseFloat(props.tipMaxWidth) || props.tipMaxWidth
-        : `${props.tipMaxWidth}px`
+        : `${props.tipMaxWidth}px`,
   }
 })
 
 defineExpose({
   visible,
-  wrapper
+  wrapper,
 })
 
 function handleTriggerEnter() {
@@ -86,7 +86,7 @@ function handleTriggerEnter() {
       visible.value = getRangeWidth(wrapper.value) > wrapper.value.getBoundingClientRect().width
     }
 
-    content.value = visible.value ? wrapper.value.textContent ?? '' : ''
+    content.value = visible.value ? (wrapper.value.textContent ?? '') : ''
   }, hoverDelay.value)
 }
 

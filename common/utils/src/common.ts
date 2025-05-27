@@ -41,7 +41,7 @@ export function has(value: Record<string, any>, key: string | symbol): key is ke
  * @returns 是否已定义
  */
 export function isDefined<T = unknown>(
-  value: T | undefined | null
+  value: T | undefined | null,
 ): value is Exclude<T, undefined | null> {
   return value !== undefined && value !== null
 }
@@ -166,7 +166,7 @@ export function isArray<T = any>(value: unknown): value is T[] {
  * @returns 是否为对象
  */
 export function isObject<T extends Record<any, any> = Record<any, any>>(
-  value: unknown
+  value: unknown,
 ): value is T {
   return is(value, 'Object')
 }
@@ -396,7 +396,7 @@ export async function decide(
      * 当匹配任意一个条件时，会在该条件对应的回调函数执行完后执行
      */
     afterMatchAny?: () => void | Promise<void>
-  } = {}
+  } = {},
 ) {
   if (conditions.length) {
     for (const [condition, callback] of conditions) {

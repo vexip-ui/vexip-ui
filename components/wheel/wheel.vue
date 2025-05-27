@@ -26,17 +26,17 @@ const props = useProps('wheel', _props, {
   horizontal: false,
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   candidate: {
     default: 2,
-    validator: value => [0, 1, 2, 3].includes(value)
+    validator: value => [0, 1, 2, 3].includes(value),
   },
   arrow: false,
   pointer: USE_TOUCH,
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   insertEmpty: false,
   disabled: () => disabled.value,
@@ -44,11 +44,11 @@ const props = useProps('wheel', _props, {
   loadingLock: false,
   disabledItem: {
     default: toFalse,
-    isFunc: true
+    isFunc: true,
   },
   noTransition: false,
   selectable: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value'])
@@ -81,7 +81,7 @@ useModifier({
       event.preventDefault()
       modifier.up ? handlePrev() : handleNext()
     }
-  }
+  },
 })
 
 const normalizedOptions = computed<WheelOption[]>(() => {
@@ -93,7 +93,7 @@ const normalizedOptions = computed<WheelOption[]>(() => {
         value,
         label: label || String(value),
         disabled,
-        meta: option
+        meta: option,
       }
     }
 
@@ -105,7 +105,7 @@ const normalizedOptions = computed<WheelOption[]>(() => {
       value: '',
       label: typeof props.insertEmpty === 'string' ? props.insertEmpty : '-',
       disabled: false,
-      meta: ''
+      meta: '',
     })
   }
 
@@ -125,39 +125,39 @@ const className = computed(() => {
       [nh.bm(props.state)]: props.state !== 'default',
       [nh.bm('disabled')]: props.disabled,
       [nh.bm('readonly')]: readonly.value,
-      [nh.bm('loading')]: props.loading
-    }
+      [nh.bm('loading')]: props.loading,
+    },
   ]
 })
 const listStyle = computed(() => {
   if (props.horizontal) {
     return {
       paddingRight: `${horizontalPadding.value}px`,
-      paddingLeft: `${horizontalPadding.value}px`
+      paddingLeft: `${horizontalPadding.value}px`,
     }
   }
 
   return {
     paddingTop: `${verticalPadding.value}px`,
-    paddingBottom: `${verticalPadding.value}px`
+    paddingBottom: `${verticalPadding.value}px`,
   }
 })
 const maskStyle = computed(() => {
   if (props.horizontal) {
     return {
-      width: horizontalPadding.value ? `${horizontalPadding.value}px` : undefined
+      width: horizontalPadding.value ? `${horizontalPadding.value}px` : undefined,
     }
   }
 
   return {
-    height: verticalPadding.value ? `${verticalPadding.value}px` : undefined
+    height: verticalPadding.value ? `${verticalPadding.value}px` : undefined,
   }
 })
 const borderStyle = computed(() => {
   const style: Record<string, string> = {
     inset: props.horizontal
       ? `0 ${horizontalPadding.value - 1}px`
-      : `${verticalPadding.value - 1}px 0`
+      : `${verticalPadding.value - 1}px 0`,
   }
 
   if (props.horizontal) {
@@ -190,14 +190,14 @@ const prevIcon = computed(() =>
     ? isRtl.value
       ? icons.value.angleRight
       : icons.value.angleLeft
-    : icons.value.angleUp
+    : icons.value.angleUp,
 )
 const nextIcon = computed(() =>
   props.horizontal
     ? isRtl.value
       ? icons.value.angleLeft
       : icons.value.angleRight
-    : icons.value.angleDown
+    : icons.value.angleDown,
 )
 
 provide(WHEEL_STATE, { increaseItem, decreaseItem })
@@ -205,7 +205,7 @@ provide(WHEEL_STATE, { increaseItem, decreaseItem })
 const updateActive = debounceMinor(() => {
   const active = Math.max(
     itemList.value.findIndex(item => item.value === props.value),
-    0
+    0,
   )
 
   setActive(findEnabledActive(active))
@@ -268,7 +268,7 @@ watch(
     updateActive()
     refreshScroll()
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(() => props.horizontal, computeSize)
 watch(() => props.candidate, computeSize)
@@ -286,7 +286,7 @@ defineExpose({
   scroll,
   refreshScroll,
   focus: (options?: FocusOptions) => wrapper.value?.focus(options),
-  blur: () => wrapper.value?.blur()
+  blur: () => wrapper.value?.blur(),
 })
 
 function isItemDisabled(item: ItemState) {
@@ -381,7 +381,7 @@ function handleScrollEnd({ clientX, clientY }: { clientX: number, clientY: numbe
 function handleWheel({
   sign,
   clientX,
-  clientY
+  clientY,
 }: {
   clientX: number,
   clientY: number,

@@ -14,7 +14,7 @@ import { Bullhorn } from '@vexip-ui/icons'
 
 const texts = [
   'Time with force, heaven and earth to ship it to the hero is not free.',
-  'The way to be happy is to make others happy.'
+  'The way to be happy is to make others happy.',
 ]
 
 const count = ref(0)

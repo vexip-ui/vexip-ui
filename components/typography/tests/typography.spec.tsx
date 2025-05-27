@@ -99,7 +99,7 @@ describe('Typography', () => {
     const wrapper = mount(() => <Title marker marker-type={'pink'}></Title>)
 
     expect(wrapper.find('.vxp-title').attributes('style')).toContain(
-      '--vxp-title-marker-color: pink;'
+      '--vxp-title-marker-color: pink;',
     )
   })
 

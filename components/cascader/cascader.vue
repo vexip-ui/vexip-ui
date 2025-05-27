@@ -19,7 +19,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { placementWhileList, useClickOutside, useHover, usePopper } from '@vexip-ui/hooks'
 import { flatTree, getLast, isNull, isPromise, toAttrValue, transformTree } from '@vexip-ui/utils'
@@ -31,7 +31,7 @@ import type {
   CascaderOptionState,
   CascaderSlots,
   CascaderValue,
-  Data
+  Data,
 } from './symbol'
 
 type ChangeListener = (value: CascaderValue, data: Data[] | Data[][]) => void
@@ -44,7 +44,7 @@ const defaultKeyConfig: Required<CascaderKeyConfig> = {
   label: 'label',
   children: 'children',
   disabled: 'disabled',
-  hasChild: 'hasChild'
+  hasChild: 'hasChild',
 }
 
 defineOptions({ name: 'Cascader' })
@@ -59,7 +59,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<CascaderValue>(() => reference.value?.focus())
 
 const _props = defineProps(cascaderProps)
@@ -70,15 +70,15 @@ const props = useProps('cascader', _props, {
   locale: null,
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   visible: {
     default: false,
-    static: true
+    static: true,
   },
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   placeholder: null,
   prefix: createIconProp(),
@@ -91,7 +91,7 @@ const props = useProps('cascader', _props, {
   clearable: false,
   placement: {
     default: 'bottom-start',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   transfer: false,
   staticSuffix: false,
@@ -101,7 +101,7 @@ const props = useProps('cascader', _props, {
   keyConfig: () => ({}),
   separator: {
     default: '/',
-    validator: value => value.length === 1
+    validator: value => value.length === 1,
   },
   hoverTrigger: false,
   maxTagCount: 0,
@@ -109,7 +109,7 @@ const props = useProps('cascader', _props, {
   noRestTip: false,
   onAsyncLoad: {
     default: null,
-    isFunc: true
+    isFunc: true,
   },
   mergeTags: false,
   tagType: null,
@@ -120,7 +120,7 @@ const props = useProps('cascader', _props, {
   loadingEffect: null,
   transparent: false,
   popperAlive: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:visible', 'update:value'])
@@ -144,10 +144,10 @@ const optionTree = ref<CascaderOptionState[]>(null!)
 const isAsyncLoad = computed(() => typeof props.onAsyncLoad === 'function')
 const usingMerged = computed(() => props.mergeTags && !props.noCascaded)
 const templateValues = computed(() =>
-  usingMerged.value ? mergedValues.value : currentValues.value
+  usingMerged.value ? mergedValues.value : currentValues.value,
 )
 const templateLabels = computed(() =>
-  usingMerged.value ? mergedLabels.value : currentLabels.value
+  usingMerged.value ? mergedLabels.value : currentLabels.value,
 )
 
 let optionList: CascaderOptionState[] = null!
@@ -173,7 +173,7 @@ watchEffect(() => {
     keyField: ID_KEY,
     parentField: PARENT_KEY,
     childField: props.keyConfig.children ?? defaultKeyConfig.children,
-    forceInject: true
+    forceInject: true,
   })
 
   updateTrigger.value++
@@ -209,7 +209,7 @@ const openedIds = ref<number[]>([])
 const optionsList = computed(() => {
   return [
     optionTree.value,
-    ...openedIds.value.map(id => optionIdMap.get(id)?.children).filter(Boolean)
+    ...openedIds.value.map(id => optionIdMap.get(id)?.children).filter(Boolean),
   ]
 })
 
@@ -220,7 +220,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   transfer,
   wrapper,
   popper: computed(() => popper.value?.wrapper),
-  isDrop: true
+  isDrop: true,
 })
 const { isHover } = useHover(reference)
 
@@ -236,7 +236,7 @@ const className = computed(() => {
     [nh.bs('vars')]: true,
     [nh.bm('inherit')]: props.inherit,
     [nh.bm('multiple')]: props.multiple,
-    [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0
+    [nh.bm('responsive')]: props.multiple && props.maxTagCount <= 0,
   }
 })
 const readonly = computed(() => props.loading && props.loadingLock)
@@ -253,7 +253,7 @@ const selectorClass = computed(() => {
     [`${baseCls}--${props.state}`]: props.state !== 'default',
     [`${baseCls}--has-prefix`]: hasPrefix.value,
     [`${baseCls}--has-suffix`]: !props.noSuffix,
-    [`${baseCls}--transparent`]: props.transparent
+    [`${baseCls}--transparent`]: props.transparent,
   }
 })
 const hasPrefix = computed(() => {
@@ -269,7 +269,7 @@ watch(
   () => props.visible,
   value => {
     currentVisible.value = value
-  }
+  },
 )
 watch(currentVisible, async value => {
   if (value) {
@@ -307,7 +307,7 @@ watch(
       })
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(
   () => props.briefLabel,
@@ -317,7 +317,7 @@ watch(
       .filter(Boolean)
 
     // nextTick(computeTagsOverflow)
-  }
+  },
 )
 watch(isAsyncLoad, value => {
   if (value) {
@@ -365,7 +365,7 @@ watch(
       getLast(panelElList.value)?.$el?.focus()
       prevClosedId = -1
     })
-  }
+  },
 )
 watch(
   () => props.disabled,
@@ -373,7 +373,7 @@ watch(
     if (value) {
       setVisible(false)
     }
-  }
+  },
 )
 watch(readonly, value => {
   if (value) {
@@ -411,7 +411,7 @@ defineExpose({
   handleClear,
   handlePanelBack,
   focus: (options?: FocusOptions) => reference.value?.focus(options),
-  blur: () => reference.value?.blur()
+  blur: () => reference.value?.blur(),
 })
 
 function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
@@ -419,7 +419,7 @@ function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
     value: valueKey,
     label: labelKey,
     disabled: disabledKey,
-    hasChild: hasChildKey
+    hasChild: hasChildKey,
   } = { ...defaultKeyConfig, ...props.keyConfig }
 
   return rawOptions.map(rawOption => {
@@ -429,7 +429,7 @@ function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
       [valueKey]: value,
       [labelKey]: label,
       [disabledKey]: disabled,
-      [hasChildKey]: hasChild
+      [hasChildKey]: hasChild,
     } = rawOption
 
     return reactive<CascaderOptionState>({
@@ -448,7 +448,7 @@ function createOptionStates(rawOptions: Record<string | symbol, any>[]) {
       loaded: false,
       error: false,
       childrenLoaded: false,
-      data: rawOption
+      data: rawOption,
     })
   })
 }
@@ -584,7 +584,7 @@ function initValueAndLabel(value: CascaderValue | null) {
 
     if (!props.noCascaded) {
       const originalOptions = selectedOptions.concat(
-        Array.from(optionIdMap.values()).filter(option => option.disabled && option.checked)
+        Array.from(optionIdMap.values()).filter(option => option.disabled && option.checked),
       )
 
       for (let i = 0, len = originalOptions.length; i < len; ++i) {
@@ -798,7 +798,7 @@ function handleOptionCheck(option: CascaderOptionState) {
 
   if (!props.noCascaded) {
     const originalOptions = [option].concat(
-      options.filter(option => option.disabled && option.checked)
+      options.filter(option => option.disabled && option.checked),
     )
 
     for (let i = 0, len = originalOptions.length; i < len; ++i) {
@@ -921,7 +921,7 @@ function queryArrayMeta(fullValue: string) {
 
   return {
     value: value.reverse(),
-    data: data.reverse()
+    data: data.reverse(),
   }
 }
 

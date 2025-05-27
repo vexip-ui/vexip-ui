@@ -4,7 +4,7 @@ import {
   buildProps,
   classProp,
   eventProp,
-  styleProp
+  styleProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -46,7 +46,7 @@ export const scrollProps = buildProps({
   onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
   onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
   onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>(),
-  onReady: eventProp()
+  onReady: eventProp(),
 })
 
 export type ScrollProps = ExtractPropTypes<typeof scrollProps>

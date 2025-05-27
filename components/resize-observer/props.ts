@@ -6,7 +6,7 @@ import type { ConfigurableProps } from '@vexip-ui/config'
 export const resizeObserverProps = buildProps({
   throttle: booleanNumberProp,
   disabled: booleanProp,
-  onResize: eventProp<(entry: ResizeObserverEntry) => void>()
+  onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
 })
 
 export type ResizeObserverProps = ExtractPropTypes<typeof resizeObserverProps>

@@ -28,5 +28,5 @@ export const timelineItemTypes = Object.freeze<TimelineItemType[]>([
   'success',
   'error',
   'warning',
-  'disabled'
+  'disabled',
 ])

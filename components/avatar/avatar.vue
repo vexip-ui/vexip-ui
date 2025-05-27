@@ -19,14 +19,14 @@ const props = useProps('avatar', _props, {
   size: 'default',
   src: {
     default: '',
-    static: true
+    static: true,
   },
   icon: createIconProp(),
   circle: false,
   alt: '',
   fit: {
     default: 'cover',
-    validator: value => objectFitValues.includes(value)
+    validator: value => objectFitValues.includes(value),
   },
   srcSet: '',
   gap: 4,
@@ -34,7 +34,7 @@ const props = useProps('avatar', _props, {
   fallbackSrc: '',
   color: null,
   background: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<{
@@ -62,14 +62,14 @@ const className = computed(() => {
     [nh.bm('inherit')]: props.inherit,
     [nh.bm(size.value as ComponentSize)]:
       typeof size.value !== 'number' && size.value !== 'default',
-    [nh.bm('circle')]: props.circle
+    [nh.bm('circle')]: props.circle,
   }
 })
 const style = computed(() => {
   const style: StyleType = {
     [nh.cv('color')]: props.color,
     [nh.cv('bg-color')]: props.background,
-    [nh.cv('image-fit')]: props.fit
+    [nh.cv('image-fit')]: props.fit,
   }
 
   if (typeof size.value === 'number') {
@@ -85,18 +85,18 @@ watch(
     loadFail.value = false
     fallbackFail.value = false
     scaleText()
-  }
+  },
 )
 watch(
   () => props.fallbackSrc,
   () => {
     fallbackFail.value = false
     scaleText()
-  }
+  },
 )
 watch(
   () => props.gap,
-  () => scaleText()
+  () => scaleText(),
 )
 
 defineExpose({ loadFail, fallbackFail })
@@ -122,7 +122,7 @@ function scaleText(force = false) {
     const ratio = Math.min(
       (avatarWidth - padding) / (textWidth || 1),
       (avatarHeight - padding) / (textHeight || 1),
-      1
+      1,
     )
 
     textEl.style.transform = `scale(${ratio})`

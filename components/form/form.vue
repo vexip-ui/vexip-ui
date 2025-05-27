@@ -15,18 +15,18 @@ const _props = defineProps(formProps)
 const props = useProps('form', _props, {
   method: {
     default: 'post',
-    validator: value => submitMethods.includes(value)
+    validator: value => submitMethods.includes(value),
   },
   action: null,
   model: {
     default: () => ({}),
-    static: true
+    static: true,
   },
   rules: () => ({}),
   labelWidth: 'auto',
   labelAlign: {
     default: 'right',
-    validator: value => labelAligns.includes(value)
+    validator: value => labelAligns.includes(value),
   },
   allRequired: false,
   labelSuffix: '',
@@ -39,7 +39,7 @@ const props = useProps('form', _props, {
   inline: false,
   gap: [8, 0],
   justify: 'start',
-  align: 'top'
+  align: 'top',
 })
 
 const nh = useNameHelper('form')
@@ -55,8 +55,8 @@ const className = computed(() => {
       [nh.bm('disabled')]: props.disabled,
       [nh.bm('loading')]: props.loading,
       [nh.bm(props.size)]: props.size !== 'default',
-      [nh.bm('inline')]: props.inline
-    }
+      [nh.bm('inline')]: props.inline,
+    },
   ]
 })
 const labelWidth = computed(() => {
@@ -72,7 +72,7 @@ provide(FORM_ACTIONS, {
   reset,
   resetFields,
   clearError,
-  clearFieldsError
+  clearFieldsError,
 })
 
 defineExpose({
@@ -81,7 +81,7 @@ defineExpose({
   reset,
   resetFields,
   clearError,
-  clearFieldsError
+  clearFieldsError,
 })
 
 function getLabelWidth() {

@@ -8,7 +8,7 @@ export const firstSfcOptions = Object.freeze<FirstSfcType[]>(['script', 'templat
 
 const firstSfcKey = 'vexip-docs-prefer-demo-first-sfc'
 const firstSfc = ref<FirstSfcType>(
-  isClient ? (localStorage.getItem(firstSfcKey) as FirstSfcType) || 'script' : 'script'
+  isClient ? (localStorage.getItem(firstSfcKey) as FirstSfcType) || 'script' : 'script',
 )
 
 const templateRE = /<template>[\s\S]*<\/template>/

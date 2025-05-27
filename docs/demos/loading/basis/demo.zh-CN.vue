@@ -12,7 +12,7 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      timer: undefined! as ReturnType<typeof setTimeout>
+      timer: undefined! as ReturnType<typeof setTimeout>,
     }
   },
   methods: {
@@ -25,7 +25,7 @@ export default defineComponent({
         Loading.open(100)
         this.loading = false
       }, 5000)
-    }
-  }
+    },
+  },
 })
 </script>

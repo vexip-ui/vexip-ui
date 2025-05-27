@@ -54,8 +54,8 @@ export function enUSLocale() {
         week4: 'Thursday',
         week5: 'Friday',
         week6: 'Saturday',
-        week7: 'Sunday'
-      }
+        week7: 'Sunday',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function enUSLocale() {
       doCaptcha: 'Please complete the captcha below',
       pointInOrder: 'Please point in order',
       trigger: 'Click to trigger captcha',
-      completed: 'Captcha completed'
+      completed: 'Captcha completed',
     },
 
     checkbox: {
-      all: 'All'
+      all: 'All',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function enUSLocale() {
       cancel: 'Cancel',
 
       ariaLabel: {
-        clear: 'Clear color'
-      }
+        clear: 'Clear color',
+      },
     },
 
     confirm: {
       confirm: 'Confirm',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function enUSLocale() {
         datetime: 'datetime',
         start: 'Start',
         end: 'End',
-        select: 'Please select'
+        select: 'Please select',
       },
       startTime: 'Start Time',
       endTime: 'End Time',
@@ -109,45 +109,45 @@ export function enUSLocale() {
         date: 'Date',
         hour: 'Hour',
         minute: 'Minute',
-        second: 'Second'
-      }
+        second: 'Second',
+      },
     },
 
     drawer: {
       confirm: 'Confirm',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
     },
 
     form: {
       submit: 'Submit',
       reset: 'Reset',
       notNullable: 'must not be null',
-      validateFail: 'Validate failed'
+      validateFail: 'Validate failed',
     },
 
     image: {
       placeholder: 'Loading...',
-      error: 'Loading fail'
+      error: 'Loading fail',
     },
 
     input: {
       placeholder: 'Please input',
 
       ariaLabel: {
-        clear: 'Clear input'
-      }
+        clear: 'Clear input',
+      },
     },
 
     layout: {
       signOut: 'Sign out',
       signType: 'Navigation Type',
       majorColor: 'Major Color',
-      themeMode: 'Theme Mode'
+      themeMode: 'Theme Mode',
     },
 
     modal: {
       confirm: 'Confirm',
-      cancel: 'Cancel'
+      cancel: 'Cancel',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function enUSLocale() {
       ariaLabel: {
         clear: 'Clear number',
         increase: 'Increase',
-        decrease: 'Decrease'
-      }
+        decrease: 'Decrease',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function enUSLocale() {
       next: 'Next',
       total: 'Total',
       jumpTo: 'Jump to',
-      itemUnit: 'Item | Items'
+      itemUnit: 'Item | Items',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function enUSLocale() {
       search: 'Search options',
 
       ariaLabel: {
-        clear: 'Clear select'
-      }
+        clear: 'Clear select',
+      },
     },
 
     table: {
       empty: 'No data',
       filterConfirm: 'Filter',
       filterReset: 'Reset',
-      filterAll: 'All'
+      filterAll: 'All',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function enUSLocale() {
       lastMonth: 'Last month',
       months: 'Months',
       lastYear: 'Last year',
-      years: 'Years'
+      years: 'Years',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function enUSLocale() {
         time: 'time',
         start: 'Start',
         end: 'End',
-        select: 'Please select'
+        select: 'Please select',
       },
 
       ariaLabel: {
         clear: 'Clear time',
         hour: 'Hour',
         minute: 'Minute',
-        second: 'Second'
-      }
+        second: 'Second',
+      },
     },
 
     tour: {
       prev: 'Prev',
       next: 'Next',
       done: 'Done',
-      stepCount: 'Step {n}'
+      stepCount: 'Step {n}',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function enUSLocale() {
       target: 'Target',
       empty: 'No data',
       reverse: 'Reverse selection',
-      search: 'Search (Ctrl + F)'
+      search: 'Search (Ctrl + F)',
     },
 
     tree: {
-      empty: 'No data'
+      empty: 'No data',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function enUSLocale() {
 
       ariaLabel: {
         preview: 'Preview file',
-        delete: 'Delete file'
-      }
+        delete: 'Delete file',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function enUSLocale() {
       fullWindowExit: 'Full window exit',
       fullScreen: 'Full screen',
       fullScreenExit: 'Full screen exit',
-      chapterCount: 'Chapter {n}'
+      chapterCount: 'Chapter {n}',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function enUSLocale() {
       zoomOut: 'Zoom out',
       fullScreen: 'Full screen',
       fullScreenExit: 'Full screen exit',
-      reset: 'Reset'
-    }
+      reset: 'Reset',
+    },
   })
 }

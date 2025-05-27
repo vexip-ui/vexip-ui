@@ -9,7 +9,7 @@ export const timeAgoProps = buildProps({
   datetime: [String, Number, Date] as PropType<Dateable>,
   interval: booleanNumberProp,
   title: booleanStringProp,
-  titleFormat: String
+  titleFormat: String,
 })
 
 export type TimeAgoProps = ExtractPropTypes<typeof timeAgoProps>

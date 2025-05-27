@@ -71,7 +71,7 @@ async function main() {
   await writeFile(
     resolve(rootDir, 'types', 'index.d.ts'),
     await format(types, { parser: 'typescript', semi: false, singleQuote: true }),
-    'utf-8'
+    'utf-8',
   )
 
   console.log()
@@ -88,7 +88,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
 
   const svgFiles = await glob('*.svg', {
     cwd: resolve(rootDir, 'src', dir),
-    absolute: true
+    absolute: true,
   })
 
   suffix = suffix.toLocaleUpperCase()
@@ -118,12 +118,12 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
       await writeFile(
         resolve(outDir, `${fileName}.vue`),
         await format(vue, { parser: 'vue', semi: false, singleQuote: true }),
-        'utf-8'
+        'utf-8',
       )
 
       exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
       types += `export const ${name}: SvgIcon\n`
-    })
+    }),
   )
 
   console.log(cyan(`Generated icon Vue components for: ${dir}`))

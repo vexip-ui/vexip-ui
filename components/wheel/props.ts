@@ -26,7 +26,7 @@ export const wheelProps = buildProps({
   onChange: eventProp<(value: string | number, data: WheelRawOption) => void>(),
   onPrev: eventProp<(value: string | number, data: WheelRawOption) => void>(),
   onNext: eventProp<(value: string | number, data: WheelRawOption) => void>(),
-  onItemClick: eventProp<(value: string | number, data: WheelRawOption) => void>()
+  onItemClick: eventProp<(value: string | number, data: WheelRawOption) => void>(),
 })
 
 export type WheelProps = ExtractPropTypes<typeof wheelProps>

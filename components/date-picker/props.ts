@@ -6,7 +6,7 @@ import {
   iconProp,
   localeProp,
   sizeProp,
-  stateProp
+  stateProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -26,7 +26,7 @@ import type {
   TimePickerSlots,
   TimeShortcut,
   TimeShortcutsPlacement,
-  TimeType
+  TimeType,
 } from './symbol'
 
 export interface DatePickerShortcutEvent {
@@ -94,7 +94,7 @@ export const datePickerProps = buildProps({
   onBlur: eventProp(),
   onChangeCol: eventProp<(type: DateTimeType | null, inputType: 'start' | 'end') => void>(),
   onClickOutside: eventProp(),
-  onOutsideClose: eventProp()
+  onOutsideClose: eventProp(),
 })
 
 export type DatePickerProps = ExtractPropTypes<typeof datePickerProps>
@@ -163,7 +163,7 @@ export const timePickerProps = buildProps({
   onBlur: eventProp(),
   onChangeCol: eventProp<(type: TimeType | null, inputType: 'start' | 'end') => void>(),
   onClickOutside: eventProp(),
-  onOutsideClose: eventProp()
+  onOutsideClose: eventProp(),
 })
 
 export type TimePickerProps = ExtractPropTypes<typeof timePickerProps>

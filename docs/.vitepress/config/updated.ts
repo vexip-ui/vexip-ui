@@ -17,7 +17,7 @@ export async function getUpdatedFiles(prevVersionLimit = 2): Promise<Record<stri
   try {
     const versionsLog = (
       await execa('git', ['log', '--grep=release:', '--oneline', '-n', `${prevVersionLimit}`], {
-        stdio: 'pipe'
+        stdio: 'pipe',
       })
     ).stdout
     const commit = versionsLog.split('\n').at(-1)?.trim().split(' ')[0]
@@ -32,9 +32,9 @@ export async function getUpdatedFiles(prevVersionLimit = 2): Promise<Record<stri
           `${commit}..`,
           '--name-only',
           '--oneline',
-          ...['feat', 'fix', 'refactor', 'docs'].map(type => ['--grep', `^${type}`]).flat(1)
+          ...['feat', 'fix', 'refactor', 'docs'].map(type => ['--grep', `^${type}`]).flat(1),
         ],
-        { stdio: 'pipe' }
+        { stdio: 'pipe' },
       )
     ).stdout
   } catch (e) {
@@ -69,14 +69,14 @@ export async function getUpdatedFiles(prevVersionLimit = 2): Promise<Record<stri
             //   return `${locale}/component/${component}`
             // }
           })
-          .flat()
-      )
+          .flat(),
+      ),
     ].map(path => {
       const [locale, ...units] = path.split('/')
 
       return { locale, path: `/${units.join('/')}` }
     }),
-    'locale'
+    'locale',
   )
 
   const updated: Record<string, Set<string>> = {}

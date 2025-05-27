@@ -22,7 +22,7 @@ export const confirmProps = buildProps({
   cancelText: String,
   icon: {
     type: [Boolean, Object, Function],
-    default: null
+    default: null,
   },
   className: classProp,
   style: styleProp,
@@ -34,7 +34,7 @@ export const confirmProps = buildProps({
   parseHtml: booleanProp,
   cancelable: booleanProp,
   xOffset: positionType,
-  yOffset: positionType
+  yOffset: positionType,
 })
 
 export type ConfirmProps = ExtractPropTypes<typeof confirmProps>

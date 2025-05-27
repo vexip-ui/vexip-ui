@@ -23,12 +23,12 @@ export const i18n = createI18n<[I18nConfig], 'en-US' | 'zh-CN'>({
   fallbackLocale: __ROLLBACK_LANG__,
   messages: {
     'zh-CN': zhCN,
-    'en-US': enUS
-  }
+    'en-US': enUS,
+  },
 })
 
 export const vexipuiLocale = ref<LocaleOptions>({
-  locale: 'zh-CN'
+  locale: 'zh-CN',
 })
 
 registerLocale(enUSLocale())

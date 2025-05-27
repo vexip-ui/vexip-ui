@@ -1,12 +1,12 @@
 import { dirname, resolve } from 'node:path'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import autoprefixer from 'autoprefixer'
 import discardCss from 'postcss-discard-duplicates'
-import inspect from 'vite-plugin-inspect'
 import { demoImports } from './.vitepress/build/plugins/demo-imports'
 
 import type { ConfigEnv, UserConfigExport } from 'vite'
@@ -26,56 +26,69 @@ export default defineConfig(({ command }: ConfigEnv): any => {
     define: {
       // __VUE_PROD_DEVTOOLS__: JSON.stringify(true),
       __ROLLBACK_LANG__: JSON.stringify('zh-CN'),
-      __VERSION__: JSON.stringify(pkg.version || '')
+      __VERSION__: JSON.stringify(pkg.version || ''),
     },
     resolve: {
       alias: [
         { find: /^@docs\/(.+)/, replacement: resolve(__dirname, '$1') },
         {
           find: /^@vp\/(.+)/,
-          replacement: resolve(__dirname, '.vitepress/$1')
+          replacement: resolve(__dirname, '.vitepress/$1'),
         },
         { find: /^@\/(.+)/, replacement: resolve(__dirname, '../$1') },
         {
           find: /^@vexip-ui\/(bem-helper|utils|hooks|config)/,
-          replacement: resolve(__dirname, '../common/$1/src')
+          replacement: resolve(__dirname, '../common/$1/src'),
         },
-        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') }
+        { find: /^vexip-ui\/(.+)/, replacement: resolve(__dirname, '../$1') },
+        { find: /^vexip-ui$/, replacement: resolve(__dirname, '../index.ts') },
       ],
-      dedupe: isServe ? ['../components', 'vue'] : ['vue']
+      dedupe: isServe ? ['../components', 'vue'] : ['vue'],
     },
     optimizeDeps: {
       include: [
         '@vexip-ui/icons',
-        ...Object.keys(pkg.dependencies).filter((dep: string) => !dep.includes('vexip-ui'))
-      ]
+        ...Object.keys(pkg.dependencies).filter((dep: string) => !dep.includes('vexip-ui')),
+      ],
     },
     esbuild: {
       drop: isServe ? undefined : ['debugger'],
-      pure: isServe ? undefined : ['console.log']
+      pure: isServe ? undefined : ['console.log'],
     },
     server: {
       port: 9000,
-      host: '0.0.0.0'
+      host: '0.0.0.0',
     },
     build: {
       // sourcemap: true,
       reportCompressedSize: false,
-      chunkSizeWarningLimit: 10 * 1024
+      chunkSizeWarningLimit: 10 * 1024,
     },
     ssr: {
-      noExternal: ['vue-i18n', 'prismjs']
+      noExternal: ['vue-i18n', 'prismjs'],
     },
     css: {
       postcss: {
-        plugins: [autoprefixer, ...(isServe ? [] : [discardCss])]
-      }
+        plugins: [autoprefixer, ...(isServe ? [] : [discardCss])],
+      },
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler',
+          importers: [
+            {
+              findFileUrl(url) {
+                if (url.startsWith('vexip-ui')) {
+                  return new URL(
+                    `file://${resolve(__dirname, '..', url.replace('vexip-ui/', ''))}.scss`,
+                  )
+                }
+                return null
+              },
+            },
+          ],
+        },
+      },
     },
-    plugins: [
-      vueJsx(),
-      i18n({ include: resolve(__dirname, './vitepress/i18n') }),
-      inspect(),
-      demoImports()
-    ]
+    plugins: [vueJsx(), i18n({ include: resolve(__dirname, './vitepress/i18n') }), demoImports()],
   }
 })

@@ -28,24 +28,24 @@ defineOptions({ name: 'VideoProgress' })
 const props = defineProps({
   time: {
     type: Number,
-    default: 0
+    default: 0,
   },
   duration: {
     type: Number,
-    default: 0
+    default: 0,
   },
   segments: {
     type: Array as PropType<VideoSegment[]>,
-    default: () => []
+    default: () => [],
   },
   noPreview: {
     type: Boolean,
-    default: false
+    default: false,
   },
   previewSrc: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const emit = defineEmits(['change'])
@@ -78,7 +78,7 @@ const className = computed(() => {
   return {
     [nh.be('progress')]: true,
     [nh.bem('progress', 'sliding')]: sliding.value,
-    [nh.bem('progress', 'disabled')]: props.duration <= 0
+    [nh.bem('progress', 'disabled')]: props.duration <= 0,
   }
 })
 const points = computed<PointState[]>(() => {
@@ -105,7 +105,7 @@ const points = computed<PointState[]>(() => {
       endPercent: (end / duration) * 100,
       duration: pointDuration,
       durationPercent: (pointDuration / duration) * 100,
-      width: ((end - start) / duration) * 100
+      width: ((end - start) / duration) * 100,
     })
   }
 
@@ -160,7 +160,7 @@ useListener(
     if (!sliding.value) {
       processMoveOnTrack(event)
     }
-  })
+  }),
 )
 
 function processMoveOnTrack(event: PointerEvent) {
@@ -169,7 +169,7 @@ function processMoveOnTrack(event: PointerEvent) {
   const offsetX = boundRange(
     event.clientX - sliderEl.value.getBoundingClientRect().left,
     0,
-    sliderWidth
+    sliderWidth,
   )
 
   hoveredTime.value = (offsetX / sliderWidth) * props.duration
@@ -177,7 +177,7 @@ function processMoveOnTrack(event: PointerEvent) {
   previewLeft.value = boundRange(
     offsetX - previewWidth * 0.5 + paddingX[0],
     0,
-    sliderWidth - previewWidth + paddingX[0] + paddingX[1]
+    sliderWidth - previewWidth + paddingX[0] + paddingX[1],
   )
 }
 

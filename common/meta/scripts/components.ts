@@ -27,7 +27,7 @@ async function main() {
     'H5',
     'H6',
     'P',
-    'Strong'
+    'Strong',
   ]
   const exportComponents = allComponents.filter(c => !ignores.includes(c))
   const directives = await readDirectives()
@@ -44,7 +44,7 @@ async function main() {
   "directives": {
     ${directives
       .map(
-        directive => `"v${toCapitalCase(directive.name)}": ${JSON.stringify(directive.components)}`
+        directive => `"v${toCapitalCase(directive.name)}": ${JSON.stringify(directive.components)}`,
       )
       .join(',\n')}
   }
@@ -54,7 +54,7 @@ async function main() {
   await writeFile(
     resolve(outputDir, 'components.json'),
     JSON.stringify(JSON.parse(metaData)),
-    'utf-8'
+    'utf-8',
   )
   logger.success(`Generated components meta data in ${Date.now() - startTime}ms`)
 }
@@ -82,7 +82,7 @@ async function readDirectives() {
         }
 
         return { name: directive, components }
-      })
+      }),
   )
 
   return directives

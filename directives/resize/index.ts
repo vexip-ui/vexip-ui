@@ -19,7 +19,7 @@ interface ResizeRecord {
 
 function createObserver(
   el: HTMLElement & { __resize?: ResizeRecord },
-  binding: DirectiveBinding<ResizeHandler | VResizeOptions>
+  binding: DirectiveBinding<ResizeHandler | VResizeOptions>,
 ) {
   const options: VResizeOptions =
     typeof binding.value === 'function' ? { handler: binding.value } : { ...binding.value }
@@ -27,7 +27,7 @@ function createObserver(
 
   el.__resize = {
     useThrottle,
-    observed: false
+    observed: false,
   }
 
   if (options.disabled) {
@@ -92,5 +92,5 @@ export const vResize: ObjectDirective<
     }
 
     delete el.__resize
-  }
+  },
 }

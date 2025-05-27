@@ -22,7 +22,7 @@ const appear = ref(false)
 
 const position = reactive({
   x: 0,
-  y: 0
+  y: 0,
 })
 
 const onSelect = ref<((keys: Key[]) => void) | null>(null)

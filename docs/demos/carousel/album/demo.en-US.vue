@@ -31,6 +31,6 @@ const images = [
   'https://www.vexipui.com/picture-2.jpg',
   'https://www.vexipui.com/picture-3.jpg',
   'https://www.vexipui.com/picture-4.jpg',
-  'https://www.vexipui.com/picture-5.jpg'
+  'https://www.vexipui.com/picture-5.jpg',
 ]
 </script>

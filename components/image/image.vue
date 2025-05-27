@@ -21,13 +21,13 @@ const _props = defineProps(imageProps)
 const props = useProps('image', _props, {
   src: {
     default: '',
-    static: true
+    static: true,
   },
   fallbackSrc: '',
   alt: '',
   fit: {
     default: 'cover',
-    validator: value => objectFitValues.includes(value)
+    validator: value => objectFitValues.includes(value),
   },
   width: '',
   height: '',
@@ -35,7 +35,7 @@ const props = useProps('image', _props, {
   lazy: false,
   root: {
     default: null,
-    static: true
+    static: true,
   },
   rootMargin: '',
   preview: false,
@@ -47,7 +47,7 @@ const props = useProps('image', _props, {
   previewSrc: '',
   viewerTransfer: null,
   viewerProps: () => ({}),
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<ImageSlots>()
@@ -80,8 +80,8 @@ const className = computed(() => {
       [nh.bm('border')]: props.border,
       [nh.bm('loading')]: loading.value,
       [nh.bm('error')]: showError.value,
-      [nh.bm('preview')]: groupState?.preview || hasPreview.value
-    }
+      [nh.bm('preview')]: groupState?.preview || hasPreview.value,
+    },
   ]
 })
 const style = computed(() => {
@@ -89,7 +89,7 @@ const style = computed(() => {
     width: toCssSize(props.width),
     height: toCssSize(props.height),
     [nh.cv('fit')]: props.fit,
-    [nh.cv('radius')]: props.radius ? `${props.radius}px` : ''
+    [nh.cv('radius')]: props.radius ? `${props.radius}px` : '',
   }
 
   if (props.border && typeof props.border === 'string') {
@@ -123,7 +123,7 @@ watch(
       loading.value = showImg.value
       currentSrc.value = value
     }
-  }
+  },
 )
 
 currentSrc.value = imageSrc.value
@@ -131,7 +131,7 @@ currentSrc.value = imageSrc.value
 const state: ImageState = reactive({
   src: computed(() => props.previewSrc || currentSrc.value),
   index: 0,
-  total: 0
+  total: 0,
 })
 
 if (groupState) {
@@ -169,7 +169,7 @@ if (!useImgLoading) {
           disconnect = undefined
           showImg.value = true
           loading.value = true
-        }
+        },
       }).disconnect
     }
   })
@@ -185,7 +185,7 @@ defineExpose({
   fallbackFail,
   viewerActive,
   hidden,
-  wrapper
+  wrapper,
 })
 
 function handleLoad(event: Event) {

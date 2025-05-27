@@ -54,7 +54,7 @@ import {
   TrashCanR,
   Upload,
   User,
-  Xmark
+  Xmark,
 } from '@vexip-ui/icons'
 
 import type { IconsOptions } from 'vexip-ui'
@@ -117,7 +117,7 @@ const icons: IconsOptions = {
   fileImage: FileImageR,
   fileAudio: FileAudioR,
   fileVideo: FileVideoR,
-  fileZip: FileZipperR
+  fileZip: FileZipperR,
 }
 
 // #endregion snippet

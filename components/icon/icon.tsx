@@ -11,7 +11,7 @@ const internalEffects = Object.freeze<IconPresetEffect[]>([
   'spin-in',
   'spin-out',
   'pulse-in',
-  'pulse-out'
+  'pulse-out',
 ])
 
 const angleRE = /(^\s*[+-]?\d*\.?\d+\s*)(deg|grad|turn|rad)?\s*/i
@@ -24,14 +24,14 @@ export default defineComponent({
       icon: {
         isFunc: true,
         default: null,
-        static: true
+        static: true,
       },
       scale: 1,
       title: null,
       label: null,
       flip: {
         default: null,
-        validator: value => ['horizontal', 'vertical', 'both'].includes(value)
+        validator: value => ['horizontal', 'vertical', 'both'].includes(value),
       },
       effect: null,
       size: null,
@@ -39,8 +39,8 @@ export default defineComponent({
       rotate: null,
       renderer: {
         default: null,
-        isFunc: true
-      }
+        isFunc: true,
+      },
     })
 
     const nh = useNameHelper('icon')
@@ -57,7 +57,7 @@ export default defineComponent({
       return {
         [nh.b()]: true,
         [nh.bm(`flip-${props.flip}`)]: props.flip,
-        [effectCls]: effectCls
+        [effectCls]: effectCls,
       }
     })
     const computedScale = computed(() => toNumber(props.scale) || 1)
@@ -80,7 +80,7 @@ export default defineComponent({
     })
     const style = computed(() => {
       const style: CSSProperties = {
-        color: props.color
+        color: props.color,
       }
 
       if (props.size) {
@@ -103,7 +103,7 @@ export default defineComponent({
         title: props.title,
         role: (attrs.role as string) || (props.label || props.title ? 'img' : undefined),
         'aria-label': props.label,
-        'aria-hidden': !(props.label || props.title)
+        'aria-hidden': !(props.label || props.title),
       }
 
       if (slots.default) {
@@ -132,5 +132,5 @@ export default defineComponent({
 
       return renderDefault()
     }
-  }
+  },
 })

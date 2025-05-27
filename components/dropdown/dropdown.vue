@@ -8,7 +8,7 @@ import {
   useClickOutside,
   usePopper,
   useRtl,
-  useSetTimeout
+  useSetTimeout,
 } from '@vexip-ui/hooks'
 import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import DropdownDrop from './dropdown-drop'
@@ -27,20 +27,20 @@ const _props = defineProps(dropdownProps)
 const props = useProps('dropdown', _props, {
   visible: {
     default: false,
-    static: true
+    static: true,
   },
   placement: {
     default: 'bottom',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   outsideClose: true,
   trigger: {
     default: 'hover',
-    validator: value => ['hover', 'click', 'custom'].includes(value)
+    validator: value => ['hover', 'click', 'custom'].includes(value),
   },
   label: {
     default: null,
-    static: true
+    static: true,
   },
   transitionName: () => nh.ns('drop'),
   transfer: false,
@@ -48,7 +48,7 @@ const props = useProps('dropdown', _props, {
   appear: false,
   meta: null,
   alive: false,
-  custom: false
+  custom: false,
 })
 
 const emit = defineEmits(['update:visible'])
@@ -73,7 +73,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   wrapper,
   popper: computed(() => popper.value?.wrapper),
   isDrop: true,
-  offset: isNested ? [-5, 0] : undefined
+  offset: isNested ? [-5, 0] : undefined,
 })
 const currentLabel = useLabel(label, reference)
 
@@ -82,7 +82,7 @@ const className = computed(() => {
     [nh.b()]: true,
     [nh.bs('vars')]: true,
     [nh.bm('inherit')]: props.inherit,
-    [nh.bm('visible')]: currentVisible.value
+    [nh.bm('visible')]: currentVisible.value,
   }
 })
 const isAlive = computed(() => parentState?.alive || props.alive)
@@ -95,22 +95,22 @@ provide(SELECT_HANDLER, null!)
       alive: isAlive,
       handleSelect,
       handleTriggerEnter,
-      handleTriggerLeave
-    })
+      handleTriggerLeave,
+    }),
   )
 
 watch(
   () => props.visible,
   value => {
     currentVisible.value = value
-  }
+  },
 )
 
 watch(
   () => props.placement,
   value => {
     setPlacement(value)
-  }
+  },
 )
 
 watch(currentVisible, value => {
@@ -134,7 +134,7 @@ defineExpose({
   popper,
   handleTriggerEnter,
   handleTriggerLeave,
-  handleTriggerClick
+  handleTriggerClick,
 })
 
 function setVisible(visible: boolean) {

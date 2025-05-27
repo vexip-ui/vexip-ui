@@ -39,7 +39,7 @@ const contributors = computed(() => {
       contributors.push({
         avatar: user.avatarUrl,
         name: user.name || user.login,
-        homepage: user.url
+        homepage: user.url,
       })
   }
 

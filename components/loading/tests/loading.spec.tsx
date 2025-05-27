@@ -7,10 +7,6 @@ import { LoadingManager } from '..'
 
 vi.useFakeTimers()
 
-function nextFrame() {
-  return new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
-}
-
 function createLoading() {
   const Loading = new LoadingManager()
 
@@ -22,7 +18,7 @@ function createLoading() {
       app?.use(Loading)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Loading
@@ -74,7 +70,7 @@ describe('Loading', () => {
 
     wrapper.vm.startLoading({ percent: 10, position: 'bottom' })
     await vi.runAllTimersAsync()
-    await nextFrame()
+
     expect(wrapper.find('.vxp-loading').attributes('style')).toContain('bottom: 0px;')
   })
 
@@ -93,14 +89,13 @@ describe('Loading', () => {
 
         wrapper.vm.startLoading({ percent: 0, state })
         await vi.runAllTimersAsync()
-        await nextFrame()
 
         if (state === 'default') {
           expect(wrapper.find('.vxp-loading').classes()).not.toContain(`vxp-loading--${state}`)
         } else {
           expect(wrapper.find('.vxp-loading').classes()).toContain(`vxp-loading--${state}`)
         }
-      })
+      }),
     )
   })
 

@@ -12,7 +12,7 @@ import type {
   VideoPlaybackRate,
   VideoSegment,
   VideoShortcutOptions,
-  VideoSlots
+  VideoSlots,
 } from './symbol'
 
 export const videoProps = buildProps({
@@ -45,7 +45,7 @@ export const videoProps = buildProps({
   onToggleFull: eventProp<(full: false | FullScreenType) => void>(),
   onPrev: eventProp(),
   onNext: eventProp(),
-  onRefresh: eventProp()
+  onRefresh: eventProp(),
 })
 
 export type VideoProps = ExtractPropTypes<typeof videoProps>
@@ -65,7 +65,7 @@ export const videoControlProps = buildProps({
   onLeave: eventProp(),
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
-  onSelect: eventProp<(option: VideoControlOption) => void>()
+  onSelect: eventProp<(option: VideoControlOption) => void>(),
 })
 
 export type VideoControlProps = ExtractPropTypes<typeof videoControlProps>

@@ -70,7 +70,7 @@ const months = [
   '9月',
   '10月',
   '11月',
-  '12月'
+  '12月',
 ]
 const random = () => Math.round(100 * Math.random())
 
@@ -90,9 +90,9 @@ const data = reactive(
       m9: random(),
       m10: random(),
       m11: random(),
-      m12: random()
+      m12: random(),
     }
-  })
+  }),
 )
 
 function sum(item: (typeof data)[0]) {

@@ -21,7 +21,7 @@ import { reactive, ref } from 'vue'
 const visible = ref(false)
 const position = reactive({
   x: 0,
-  y: 0
+  y: 0,
 })
 
 function handleClick(event: MouseEvent) {

@@ -14,7 +14,7 @@ import {
   toFalse,
   toFixed,
   toNumber,
-  walkTree
+  walkTree,
 } from '@vexip-ui/utils'
 import { DEFAULT_KEY_FIELD, TABLE_FOOT_PREFIX, TABLE_HEAD_PREFIX, columnTypes } from './symbol'
 
@@ -52,13 +52,13 @@ import type {
   TableSelectionColumn,
   TableSorterOptions,
   TableSummaryData,
-  TableSummaryOptions
+  TableSummaryOptions,
 } from './symbol'
 
 const defaultSummaryData = Object.freeze<TableSummaryData>({
   sum: NaN,
   min: NaN,
-  max: NaN
+  max: NaN,
 })
 
 let indexId = 1
@@ -115,7 +115,7 @@ export function useStore(options: StoreOptions) {
     sidePadding: options.sidePadding || [0, 0],
     locked: false,
     barScrolling: false,
-    heightTrigger: 0
+    heightTrigger: 0,
   }) as StoreState
 
   setColumns(options.columns)
@@ -153,7 +153,7 @@ export function useStore(options: StoreOptions) {
   const disableCheckRows = computed(() => {
     const rowData = processedData.value
     const selectionColumn = state.columns.find(
-      item => (item as TableSelectionColumn).type === 'selection'
+      item => (item as TableSelectionColumn).type === 'selection',
     ) as TableSelectionColumn | undefined
     const disableCheckRows = new Set<Key>()
 
@@ -174,7 +174,7 @@ export function useStore(options: StoreOptions) {
   const disableExpandRows = computed(() => {
     const rowData = processedData.value
     const expandColumn = state.columns.find(
-      item => (item as TableExpandColumn).type === 'expand'
+      item => (item as TableExpandColumn).type === 'expand',
     ) as TableExpandColumn | undefined
     const disableExpandRows = new Set<Key>()
 
@@ -297,7 +297,7 @@ export function useStore(options: StoreOptions) {
     topFixedHeights,
     bottomFixedHeights,
     indentedColumn,
-    hasFixedColumn
+    hasFixedColumn,
   })
 
   const mutations = {
@@ -386,13 +386,13 @@ export function useStore(options: StoreOptions) {
     flatTreeRows,
     refreshRowDepth,
     triggerHeightChange,
-    queryRow
+    queryRow,
   }
 
   watchEffect(() => {
     state.heightBITree = createBITree(
       processedData.value.length,
-      state.rowHeight || state.rowMinHeight
+      state.rowHeight || state.rowMinHeight,
     )
 
     state.totalHeight = -1
@@ -468,7 +468,7 @@ export function useStore(options: StoreOptions) {
       _columns: TableColumnRawOptions[],
       fixed?: boolean | 'left' | 'right',
       row = 0,
-      result: ColumnRawWithKey[][] = []
+      result: ColumnRawWithKey[][] = [],
     ) => {
       _columns = _columns
         .filter(column => !('children' in column) || isGroupColumn(column))
@@ -794,7 +794,7 @@ export function useStore(options: StoreOptions) {
       checked: checkedKey,
       height: heightKey,
       expanded: expandedKey,
-      treeExpanded: treeExpandedKey
+      treeExpanded: treeExpandedKey,
     } = keyConfig
 
     for (let i = 0, len = allColumns.length; i < len; ++i) {
@@ -832,7 +832,7 @@ export function useStore(options: StoreOptions) {
             [checkedKey]: checked,
             [heightKey]: height,
             [expandedKey]: expanded,
-            [treeExpandedKey]: treeExpanded
+            [treeExpandedKey]: treeExpanded,
           } = row.data !== item ? Object.assign(row.data, item) : row.data
 
           row.checked = !isNull(checked) ? !!checked : row.checked
@@ -844,7 +844,7 @@ export function useStore(options: StoreOptions) {
             [checkedKey]: checked,
             [heightKey]: height,
             [expandedKey]: expanded,
-            [treeExpandedKey]: treeExpanded
+            [treeExpandedKey]: treeExpanded,
           } = item
 
           row = {
@@ -865,7 +865,7 @@ export function useStore(options: StoreOptions) {
             cellHeights: reactive({}),
             last: false,
             expandAnimate: false,
-            data: item
+            data: item,
           }
 
           idMaps.set(item, key)
@@ -1211,7 +1211,7 @@ export function useStore(options: StoreOptions) {
 
   const { updateCheckedUpward, updateCheckedDown } = useCascadedChecked({
     getNode: key => state.rowMap.get(key),
-    disableNode: row => disableCheckRows.value.has(row.key)
+    disableNode: row => disableCheckRows.value.has(row.key),
   })
 
   function computeChecked(key: Key) {
@@ -1222,7 +1222,7 @@ export function useStore(options: StoreOptions) {
 
     const rowList = [rowMap.get(key)!].concat(
       // 需要包含被禁用且被勾选的节点
-      rowData.filter(row => disableCheckRows.has(row.key) && row.checked)
+      rowData.filter(row => disableCheckRows.has(row.key) && row.checked),
     )
 
     for (let i = 0, len = rowList.length; i < len; ++i) {
@@ -1492,7 +1492,7 @@ export function useStore(options: StoreOptions) {
       multiple = false,
       active = null,
       method = null,
-      meta
+      meta,
     } = filter
     // 防止内部变化触发 deep watch
     const options = deepClone(filter.options ?? [])
@@ -1523,7 +1523,7 @@ export function useStore(options: StoreOptions) {
   function filterData(
     filters: Map<Key, ParsedFilterOptions>,
     data: TableRowState[],
-    isSingle: boolean
+    isSingle: boolean,
   ) {
     const usedFilter: ParsedFilterOptions[] = []
     const usedData: TableRowState[] = []
@@ -1567,7 +1567,7 @@ export function useStore(options: StoreOptions) {
     sorters: Map<Key, ParsedTableSorterOptions>,
     data: TableRowState[],
     columns: TableColumnOptions[],
-    isSingle: boolean
+    isSingle: boolean,
   ) {
     const usedSorter = []
 
@@ -1591,7 +1591,7 @@ export function useStore(options: StoreOptions) {
             }
 
             return row.data[key]
-          }
+          },
         })
 
         if (isSingle) break
@@ -1636,7 +1636,7 @@ export function useStore(options: StoreOptions) {
       resized.add(key)
       widths.set(
         key,
-        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth)
+        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth),
       )
     }
 
@@ -1672,7 +1672,7 @@ export function useStore(options: StoreOptions) {
       belowSummaries,
       rowData,
       cellSpanMap,
-      collapseMap
+      collapseMap,
     } = state
     const { processedData } = getters
 
@@ -1686,7 +1686,7 @@ export function useStore(options: StoreOptions) {
       columnIndex: number,
       fixed: 'left' | 'default' | 'right',
       getSpan: () => Required<CellSpanResult>,
-      prefix = ''
+      prefix = '',
     ) {
       const masterKey = `${prefix}${rowIndex},${columnIndex}`
       const collapsed = collapseMap.get(fixed)!
@@ -1734,7 +1734,7 @@ export function useStore(options: StoreOptions) {
         allColumns = state.allColumns.map(columns => columns.slice(0, left))
       } else if (fixed === 'right') {
         allColumns = state.allColumns.map(columns =>
-          columns.slice(right, state.allColumns[0].length)
+          columns.slice(right, state.allColumns[0].length),
         )
       } else {
         allColumns = state.allColumns.map(columns => columns.slice(left, right))
@@ -1766,7 +1766,7 @@ export function useStore(options: StoreOptions) {
 
               return span
             },
-            'h'
+            'h',
           )
         }
       }
@@ -1782,7 +1782,7 @@ export function useStore(options: StoreOptions) {
               result = column.cellSpan({
                 row: row.data,
                 index: row.index,
-                fixed: columnFixed
+                fixed: columnFixed,
               })
             } else if (typeof state.cellSpan === 'function') {
               result = state.cellSpan({
@@ -1790,7 +1790,7 @@ export function useStore(options: StoreOptions) {
                 rowIndex: row.index,
                 column,
                 columnIndex: column.index,
-                fixed: columnFixed
+                fixed: columnFixed,
               })
             }
 
@@ -1807,7 +1807,7 @@ export function useStore(options: StoreOptions) {
 
         for (const { prefix, summaries } of [
           { prefix: 'af', summaries: aboveSummaries },
-          { prefix: 'bf', summaries: belowSummaries }
+          { prefix: 'bf', summaries: belowSummaries },
         ]) {
           for (let i = 0, len = summaries.length; i < len; ++i) {
             const summary = summaries[i]
@@ -1823,7 +1823,7 @@ export function useStore(options: StoreOptions) {
                   result = summary.cellSpan({
                     column,
                     index: column.index,
-                    fixed: columnFixed
+                    fixed: columnFixed,
                   })
                 }
 
@@ -1835,7 +1835,7 @@ export function useStore(options: StoreOptions) {
 
                 return span
               },
-              prefix
+              prefix,
             )
           }
         }
@@ -1851,7 +1851,7 @@ export function useStore(options: StoreOptions) {
     }
 
     return mapTree(treeRowData, row => ({ ...row.data }), {
-      childField: keyConfig.children as 'children'
+      childField: keyConfig.children as 'children',
     })
   }
 

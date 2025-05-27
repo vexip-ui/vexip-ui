@@ -11,7 +11,7 @@ const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
 describe('Radio', () => {
   it('render', () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).toContain('vxp-radio-vars')
@@ -26,7 +26,7 @@ describe('Radio', () => {
       <Radio label={TEXT}>
         {{
           default: () => <span class={'label'}></span>,
-          extra: () => <span class={'extra'}></span>
+          extra: () => <span class={'extra'}></span>,
         }}
       </Radio>
     ))
@@ -38,7 +38,7 @@ describe('Radio', () => {
 
   it('size', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT, size: 'large' }
+      props: { label: TEXT, size: 'large' },
     })
 
     expect(wrapper.find('.vxp-radio').classes()).toContain('vxp-radio--large')
@@ -49,7 +49,7 @@ describe('Radio', () => {
 
   it('toggle checked', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--checked')
@@ -75,8 +75,8 @@ describe('Radio', () => {
     const wrapper = mount(Radio, {
       props: {
         label: TEXT,
-        onChange
-      }
+        onChange,
+      },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--disabled')
@@ -91,7 +91,7 @@ describe('Radio', () => {
 
   it('shape border', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--border')
@@ -110,7 +110,7 @@ describe('Radio', () => {
 
   it('loading', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.find('.vxp-radio__signal--active').exists()).toBe(false)
@@ -181,9 +181,9 @@ describe('Radio', () => {
         default: () => [
           <Radio label={'1'}></Radio>,
           <Radio label={'2'} loading={false}></Radio>,
-          <Radio label={'3'} loading></Radio>
-        ]
-      }
+          <Radio label={'3'} loading></Radio>,
+        ],
+      },
     })
 
     const items = wrapper.findAllComponents(Radio)

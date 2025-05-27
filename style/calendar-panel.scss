@@ -24,7 +24,8 @@ $calendar-panel: map.merge(
     index-b-color-selected: value('color-primary-opacity-2'),
     index-b-color-disabled: value('border-color-opacity-2'),
     index-b-color-outside: value('border-color-opacity-1'),
-    index-size: 28px,
+    index-width: 100%,
+    index-height: auto,
     index-border: value('calendar-index-b-width') value('calendar-index-b-style')
       value('calendar-index-b-color'),
     index-radius: value('radius-base'),
@@ -67,8 +68,8 @@ $calendar-panel: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    width: value('calendar-index-size');
-    height: value('calendar-index-size');
+    width: value('calendar-index-width');
+    height: value('calendar-index-height');
     cursor: pointer;
     user-select: none;
     background-color: transparent;
@@ -102,6 +103,7 @@ $calendar-panel: map.merge(
     }
 
     &:hover &-inner,
+    &--hovered &-inner,
     &:focus &-inner {
       color: value('calendar-index-color-hover');
       background-color: value('calendar-index-bg-color-hover');
@@ -110,6 +112,7 @@ $calendar-panel: map.merge(
 
     &--selected &-inner,
     &--selected:hover &-inner,
+    &--selected#{&}--hovered &-inner,
     &--selected:focus &-inner {
       color: value('calendar-index-color-selected');
       background-color: value('calendar-index-bg-color-selected');
@@ -118,6 +121,7 @@ $calendar-panel: map.merge(
 
     &--disabled &-inner,
     &--disabled:hover &-inner,
+    &--disabled#{&}--hovered &-inner,
     &--disabled:focus &-inner {
       color: value('calendar-index-color-disabled');
       cursor: not-allowed;
@@ -138,6 +142,36 @@ $calendar-panel: map.merge(
     &--in-range {
       &::before {
         display: block;
+      }
+    }
+  }
+
+  &__panel--select-row &__index {
+    &,
+    &-inner {
+      border-radius: 0;
+    }
+  }
+
+  $index: #{&}__index;
+  $index-inner: #{&}__index-inner;
+
+  &__panel--select-row &__cell {
+    padding: 0;
+
+    &:first-child {
+      #{$index},
+      #{$index-inner} {
+        border-start-start-radius: value('calendar-index-radius');
+        border-end-start-radius: value('calendar-index-radius');
+      }
+    }
+
+    &:last-child {
+      #{$index},
+      #{$index-inner} {
+        border-start-end-radius: value('calendar-index-radius');
+        border-end-end-radius: value('calendar-index-radius');
       }
     }
   }

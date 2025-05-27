@@ -25,8 +25,8 @@ describe('Row', () => {
     const wrapper = mount(Row, {
       props: { gap: 8 },
       slots: {
-        default: () => <Column></Column>
-      }
+        default: () => <Column></Column>,
+      },
     })
 
     expect(wrapper.attributes('style')).toContain('--vxp-row-h-gap: 8px;')
@@ -46,7 +46,7 @@ describe('Row', () => {
         const wrapper = mount(() => <Row justify={justify}></Row>)
 
         expect(wrapper.find('.vxp-row').classes()).toContain(`vxp-row--${justify}`)
-      }
+      },
     )
   })
 

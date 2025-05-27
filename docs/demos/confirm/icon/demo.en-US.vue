@@ -18,8 +18,8 @@ async function confirm(hasIcon = true) {
     icon: hasIcon && TriangleExclamation,
     iconProps: {
       style: { color: '#f03e3e' },
-      scale: 2
-    }
+      scale: 2,
+    },
   })
 
   if (isConfirm) {

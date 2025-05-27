@@ -56,54 +56,95 @@ export function getLast(value: string | any[]) {
   return value[value.length - 1]
 }
 
+type RecordKey = string | number | symbol
+
+const defaultAccessor = (v: unknown) => v
+
+export function listToMap<T = any, K extends keyof T = keyof T>(
+  list: T[],
+  prop: K,
+  useMap?: false
+): Record<T[K] extends RecordKey ? T[K] : RecordKey, T>
+export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
+  list: T[],
+  prop: K,
+  accessor?: (item: T) => O,
+  useMap?: false
+): Record<T[K] extends RecordKey ? T[K] : RecordKey, O>
+export function listToMap<T = any, K = RecordKey>(
+  list: T[],
+  prop: (item: T) => K,
+  useMap?: false
+): Record<K extends RecordKey ? K : RecordKey, T>
+export function listToMap<T = any, O = T, K = RecordKey>(
+  list: T[],
+  prop: (item: T) => K,
+  accessor?: (item: T) => O,
+  useMap?: false
+): Record<K extends RecordKey ? K : RecordKey, O>
+export function listToMap<T = any, K extends keyof T = keyof T>(
+  list: T[],
+  prop: K,
+  useMap?: true
+): Map<T[K], T>
+export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
+  list: T[],
+  prop: K,
+  accessor?: (item: T) => O,
+  useMap?: true
+): Map<T[K], O>
+export function listToMap<T = any, K = any>(
+  list: T[],
+  prop: (item: T) => K,
+  useMap?: true
+): Map<K, T>
+export function listToMap<T = any, O = T, K = any>(
+  list: T[],
+  prop: (item: T) => K,
+  accessor?: (item: T) => O,
+  useMap?: true
+): Map<K, O>
 /**
  * 根据数组元素中某个或多个属性的值转换为映射对象
  *
  * @param list 需要被转换的数组
  * @param prop 需要被转换的属性或提供一个读取方法
  * @param accessor 映射的值的读取方法，默认返回元素本身
- * @param isMap 是否使用 Map 对象储存结果
+ * @param useMap 是否使用 Map 对象储存结果
  *
  * @returns 转换后的映射对象
  */
 export function listToMap<T = any, O = T>(
   list: T[],
   prop: keyof T | ((item: T) => any),
-  accessor?: (item: T) => O,
-  isMap?: false
-): Record<string, O>
-export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
-  list: T[],
-  prop: K,
-  accessor?: (item: T) => O,
-  isMap?: true
-): Map<T[K], O>
-export function listToMap<T = any, O = T, K = any>(
-  list: T[],
-  prop: (item: T) => K,
-  accessor?: (item: T) => O,
-  isMap?: true
-): Map<K extends keyof T ? T[K] : unknown, O>
-export function listToMap<T = any, O = T>(
-  list: T[],
-  prop: keyof T | ((item: T) => any),
-  accessor: (item: T) => O = v => v as any,
-  isMap = false
+  accessor?: boolean | ((item: T) => O),
+  useMap?: boolean,
 ) {
-  const map = (isMap ? new Map<string, any>() : {}) as any
+  let normalizeAccessor: (item: T) => O
+
+  if (typeof accessor !== 'function' && useMap === undefined) {
+    useMap = !!accessor
+    normalizeAccessor = defaultAccessor as any
+  } else {
+    normalizeAccessor = typeof accessor === 'function' ? accessor : (defaultAccessor as any)
+  }
+
+  const map = (useMap ? new Map<string, any>() : {}) as any
 
   if (!isDefined(prop)) return map
 
-  const set = isMap
+  const set = useMap
     ? (key: any, value: O) => map.set(key, value)
     : (key: any, value: O) => (map[key] = value)
   const propAccessor = isFunction(prop) ? prop : (item: T) => item[prop]
 
   list.forEach(item => {
+    if (!isDefined(item)) return
+
     const key = propAccessor(item)
 
     if (isDefined(key)) {
-      set(key, accessor(item))
+      set(key, normalizeAccessor(item))
     }
   })
 
@@ -112,7 +153,7 @@ export function listToMap<T = any, O = T>(
 
 export {
   /** @deprecated please use listToMap to replace it */
-  listToMap as transformListToMap
+  listToMap as transformListToMap,
 }
 
 /**
@@ -127,7 +168,7 @@ export {
 export function removeArrayItem<T = any>(
   array: T[],
   item: T | ((item: T) => boolean),
-  isFn = false
+  isFn = false,
 ): T | null {
   let index = -1
 
@@ -154,7 +195,7 @@ export function removeArrayItem<T = any>(
  */
 export function groupByProps<T = any>(
   list: T[],
-  props: Array<string | ((item: T) => any)> | string | ((item: T) => any) = []
+  props: Array<string | ((item: T) => any)> | string | ((item: T) => any) = [],
 ): Record<string, T[]> {
   if (typeof props === 'string' || typeof props === 'function') {
     props = [props]
@@ -213,7 +254,7 @@ export function transformTree<T = any>(list: T[], options: TreeOptions<keyof T> 
     keyField = 'id' as keyof T,
     childField = 'children' as keyof T,
     parentField = 'parent' as keyof T,
-    rootId = null
+    rootId = null,
   } = options
 
   const hasRootId = isDefined(rootId) && rootId !== ''
@@ -280,7 +321,7 @@ export function flatTree<T = any>(
     cascaded?: boolean,
     /** 是否强制为节点插入 ID 值 */
     forceInject?: boolean
-  } = {}
+  } = {},
 ) {
   const {
     keyField = 'id' as keyof T,
@@ -292,7 +333,7 @@ export function flatTree<T = any>(
     buildId = i => i,
     filter = toTrue,
     cascaded = false,
-    forceInject = false
+    forceInject = false,
   } = options
 
   let idCount = 1
@@ -359,7 +400,7 @@ export function walkTree<T = any>(
     /** 是否为深度优先遍历 */
     depthFirst?: boolean,
     childField?: keyof T
-  } = {}
+  } = {},
 ) {
   const { childField = 'children' as keyof T, depthFirst = false } = options
   const loop = [...tree.map(item => ({ item, depth: 0, parent: null as T | null }))]
@@ -372,7 +413,7 @@ export function walkTree<T = any>(
 
     if (isIterable(children)) {
       loop[depthFirst ? 'unshift' : 'push'](
-        ...Array.from(children).map(child => ({ item: child, depth: depth + 1, parent: item }))
+        ...Array.from(children).map(child => ({ item: child, depth: depth + 1, parent: item })),
       )
     }
   }
@@ -396,7 +437,7 @@ export function mapTree<T = any, R = any>(
     childField?: keyof T,
     /** 是否强制重置 `children` 字段 */
     clearChildren?: boolean
-  } = {}
+  } = {},
 ) {
   const { childField = 'children' as keyof T, depthFirst = false, clearChildren = true } = options
   const result: R[] = []
@@ -423,8 +464,8 @@ export function mapTree<T = any, R = any>(
             item: child,
             depth: depth + 1,
             parent: item,
-            result: newItem[childField]
-          }))
+            result: newItem[childField],
+          })),
         )
       }
     }
@@ -451,12 +492,12 @@ export function filterTree<T = any>(
     /** 是否只对叶子节点进行过滤 */
     leafOnly?: boolean,
     childField?: keyof T
-  } = {}
+  } = {},
 ) {
   const {
     childField = 'children' as keyof T,
     leafOnly = false,
-    isLeaf = item => !isIterable(item[childField])
+    isLeaf = item => !isIterable(item[childField]),
   } = options
 
   const filter = (data: T[], depth: number, parent: T | null): T[] => {
@@ -528,7 +569,7 @@ const defaultSortMethod = (prev: any, next: any) => {
  */
 export function sortByProps<T = any>(
   list: T[],
-  props: keyof T | SortOptions<keyof T> | (keyof T | SortOptions<keyof T>)[]
+  props: keyof T | SortOptions<keyof T> | (keyof T | SortOptions<keyof T>)[],
 ) {
   if (
     !list.sort ||
@@ -551,9 +592,9 @@ export function sortByProps<T = any>(
           ? {
               key: value,
               method: defaultSortMethod,
-              type: 'asc'
+              type: 'asc',
             }
-          : value) as SortOptions<keyof T>
+          : value) as SortOptions<keyof T>,
     )
     .map(value => {
       if (typeof value.accessor !== 'function') {
@@ -600,7 +641,7 @@ export function sortByProps<T = any>(
 export function mergeObjects<T extends Record<string, any>, U extends Record<string, any>>(
   sourceObj: T,
   targetObj: U,
-  isNewObj = true
+  isNewObj = true,
 ) {
   sourceObj = isNewObj ? deepClone(sourceObj) : sourceObj
 
@@ -610,8 +651,8 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
   }> = [
     {
       source: sourceObj,
-      target: targetObj
-    }
+      target: targetObj,
+    },
   ]
 
   while (loop.length) {
@@ -620,12 +661,12 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
     Object.keys(target).forEach(key => {
       if (isObject(target[key])) {
         if (!isObject(source[key])) {
-          source[key] = {}
+          source[key] = Object.create(null)
         }
 
         loop.push({
           source: source[key],
-          target: target[key]
+          target: target[key],
         })
       } else if (Array.isArray(target[key])) {
         if (!Array.isArray(source[key])) {
@@ -634,7 +675,7 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
 
         loop.push({
           source: source[key],
-          target: target[key]
+          target: target[key],
         })
       } else {
         source[key] = target[key]

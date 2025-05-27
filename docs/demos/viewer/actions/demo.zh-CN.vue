@@ -56,8 +56,8 @@ const actions: ViewerToolbarAction[] = [
     name: 'contrast',
     process: state => {
       state.contrast = !state.contrast
-    }
-  }
+    },
+  },
 ]
 
 const actionLayout = [...viewerDefaultActionLayout, ['contrast']]

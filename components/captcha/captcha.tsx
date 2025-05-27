@@ -17,7 +17,7 @@ import {
   renderSlot,
   shallowRef,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import CaptchaSlider from './captcha-slider.vue'
@@ -28,7 +28,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { createSlotRender, useSetTimeout } from '@vexip-ui/hooks'
 import {
@@ -37,7 +37,7 @@ import {
   isNull,
   nextFrameOnce,
   random,
-  randomHardColor
+  randomHardColor,
 } from '@vexip-ui/utils'
 import { captchaProps } from './props'
 import { heartPath, puzzlePath, shieldPath, squarePath } from './hollow-paths'
@@ -66,7 +66,7 @@ export default defineComponent({
           } else {
             return value >= 0 && value <= 100
           }
-        }
+        },
       },
       title: null,
       tip: null,
@@ -75,7 +75,7 @@ export default defineComponent({
       image: null,
       tolerance: {
         default: 1,
-        validator: value => value >= 0
+        validator: value => value >= 0,
       },
       canvasSize: () => [1000, 600],
       refreshIcon: createIconProp(),
@@ -85,11 +85,11 @@ export default defineComponent({
       loadingEffect: null,
       onBeforeTest: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       texts: {
         default: () => [],
-        validator: value => !value.find(text => text.length > 1)
+        validator: value => !value.find(text => text.length > 1),
       },
       failLimit: 0,
       remotePoint: false,
@@ -99,13 +99,13 @@ export default defineComponent({
       transfer: false,
       hideDelay: {
         default: 3000,
-        validator: value => value >= 0
+        validator: value => value >= 0,
       },
       hollowShape: {
         default: squarePath,
-        isFunc: true
+        isFunc: true,
       },
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('captcha')
@@ -160,14 +160,14 @@ export default defineComponent({
           [nh.bm('dragging')]: dragging.value,
           [nh.bm('disabled')]: props.disabled,
           [nh.bm('loading')]: isLoading.value,
-          [nh.bm('fail-locked')]: failLocked.value
-        }
+          [nh.bm('fail-locked')]: failLocked.value,
+        },
       ]
     })
     const subCanvasStyle = computed(() => {
       return {
         left: `${currentLeft.value}%`,
-        [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined
+        [nh.cv('trigger-transition')]: resetting.value ? 'left 250ms ease' : undefined,
       }
     })
     const canvasSize = computed(() => {
@@ -179,7 +179,7 @@ export default defineComponent({
       () => props.slideTarget,
       value => {
         currentTarget.value = parseTarget(value)
-      }
+      },
     )
     watch([() => props.image, wrapper], async () => {
       image = undefined
@@ -191,9 +191,9 @@ export default defineComponent({
         currentTarget,
         () => props.canvasSize[0],
         () => props.canvasSize[1],
-        () => props.hollowShape
+        () => props.hollowShape,
       ],
-      drawImageNextFrame
+      drawImageNextFrame,
     )
     watch(
       [() => props.type, () => props.remotePoint],
@@ -205,11 +205,11 @@ export default defineComponent({
         ) {
           console.warn(
             "[vexip-ui:Captcha] You should specify 'on-before-test' prop to valid the captcha " +
-              "if you are using the 'point' type in remote"
+              "if you are using the 'point' type in remote",
           )
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
     watch(
       [() => props.type, () => props.texts, () => props.texts.length, () => props.remotePoint],
@@ -217,7 +217,7 @@ export default defineComponent({
         if (props.type === 'point' && props.texts.length && !props.remotePoint && image) {
           drawImageNextFrame()
         }
-      }
+      },
     )
     watch(visible, async value => {
       if (value) {
@@ -250,7 +250,7 @@ export default defineComponent({
       canvas,
       subCanvas,
       slider,
-      reset
+      reset,
     })
 
     // 避免多次触发时发生竞态问题
@@ -316,7 +316,7 @@ export default defineComponent({
         x: number,
         y: number,
         radian = 0,
-        color = randomHardColor()
+        color = randomHardColor(),
       ) => {
         ctx.save()
         ctx.translate(x, y)
@@ -418,7 +418,7 @@ export default defineComponent({
         x: targetX,
         y: targetY,
         width: props.canvasSize[0],
-        height: props.canvasSize[1]
+        height: props.canvasSize[1],
       })
 
       pathCtx.stroke()
@@ -441,7 +441,7 @@ export default defineComponent({
         0,
         clipY,
         clipWidth,
-        clipHeight
+        clipHeight,
       )
 
       ctx.save()
@@ -455,7 +455,7 @@ export default defineComponent({
         x: targetX,
         y: targetY,
         width: props.canvasSize[0],
-        height: props.canvasSize[1]
+        height: props.canvasSize[1],
       })
 
       ctx.stroke()
@@ -660,7 +660,7 @@ export default defineComponent({
               <div
                 class={[
                   nh.be('image-tip'),
-                  nh.bem('image-tip', isSuccess.value ? 'success' : 'fail')
+                  nh.bem('image-tip', isSuccess.value ? 'success' : 'fail'),
                 ]}
                 onClick={stopPropagation}
               >
@@ -698,8 +698,8 @@ export default defineComponent({
               renderSlot(slots, 'tip', { success: isSuccess.value }, () => [
                 <Renderer renderer={props.slots.tip} data={{ success: isSuccess.value }}>
                   {props.tip ?? locale.value.slide}
-                </Renderer>
-              ])
+                </Renderer>,
+              ]),
           }}
         </CaptchaSlider>
       )
@@ -712,7 +712,7 @@ export default defineComponent({
             {renderSlot(slots, 'tip', { success: isSuccess.value }, () => [
               <Renderer renderer={props.slots.tip} data={{ success: isSuccess.value }}>
                 {props.tip ?? locale.value.pointInOrder}
-              </Renderer>
+              </Renderer>,
             ])}
           </div>
           <span>{':'}</span>
@@ -723,7 +723,7 @@ export default defineComponent({
                   {text}
                 </span>
               ))}
-            </Renderer>
+            </Renderer>,
           ])}
         </div>
       )
@@ -751,7 +751,7 @@ export default defineComponent({
               {renderSlot(slots, 'title', { success: isSuccess.value }, () => [
                 <Renderer renderer={props.slots.title} data={{ success: isSuccess.value }}>
                   {props.title ?? locale.value.doCaptcha}
-                </Renderer>
+                </Renderer>,
               ])}
             </div>
             <span role={'none'} style={'flex: auto'}></span>
@@ -759,7 +759,7 @@ export default defineComponent({
               class={[
                 nh.be('action'),
                 nh.be('refresh'),
-                actionLocked.value && nh.bem('action', 'disabled')
+                actionLocked.value && nh.bem('action', 'disabled'),
               ]}
               type={'button'}
               onClick={handleRefresh}
@@ -770,7 +770,7 @@ export default defineComponent({
                     {...icons.value.refresh}
                     icon={props.refreshIcon || icons.value.refresh.icon}
                   ></Icon>
-                </Renderer>
+                </Renderer>,
               ])}
             </button>
           </div>
@@ -779,7 +779,7 @@ export default defineComponent({
               default: renderImage,
               icon: createSlotRender(slots, ['loading-icon', 'loadingIcon'], () => (
                 <Renderer renderer={props.slots.loadingIcon}></Renderer>
-              ))
+              )),
             }}
           </Spin>
           {renderFooter()}
@@ -809,8 +809,8 @@ export default defineComponent({
               {props.triggerText ??
                 (isSuccess.value ? locale.value.completed : locale.value.trigger)}
             </Button>
-          </Renderer>
-        ]
+          </Renderer>,
+        ],
       )
     }
 
@@ -827,7 +827,7 @@ export default defineComponent({
           >
             {{
               trigger: renderTrigger,
-              default: renderPanel
+              default: renderPanel,
             }}
           </Tooltip>
         )
@@ -835,5 +835,5 @@ export default defineComponent({
 
       return renderPanel()
     }
-  }
+  },
 })

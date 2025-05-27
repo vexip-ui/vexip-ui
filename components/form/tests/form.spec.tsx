@@ -51,7 +51,7 @@ describe('Form', () => {
 
   it('form rule required', () => {
     const rules = {
-      input: { required: true }
+      input: { required: true },
     }
     const wrapper = mount(() => (
       <Form rules={rules}>
@@ -215,10 +215,11 @@ describe('Form', () => {
       </Form>
     ))
     const item = wrapper.find('.vxp-form__item')
+    const helpIcon = item.find('.vxp-form__label .vxp-form__help')
 
-    expect(item.find('.vxp-form__help').exists()).toBe(true)
+    expect(helpIcon.exists()).toBe(true)
 
-    await item.find('.vxp-form__help').trigger('mouseenter')
+    await helpIcon.trigger('mouseenter')
     vi.runOnlyPendingTimers()
     await nextTick()
     await nextTick()
@@ -238,16 +239,17 @@ describe('Form', () => {
         <FormItem required label={'input'} prop={'input'}>
           {{
             default: () => <Input></Input>,
-            help: () => <span class={'help'}>{'help'}</span>
+            help: () => <span class={'help'}>{'help'}</span>,
           }}
         </FormItem>
       </Form>
     ))
     const item = wrapper.find('.vxp-form__item')
+    const helpIcon = item.find('.vxp-form__label .vxp-form__help')
 
-    expect(item.find('.vxp-form__help').exists()).toBe(true)
+    expect(helpIcon.exists()).toBe(true)
 
-    await item.find('.vxp-form__help').trigger('mouseenter')
+    await helpIcon.trigger('mouseenter')
     vi.runOnlyPendingTimers()
     await nextTick()
     await nextTick()

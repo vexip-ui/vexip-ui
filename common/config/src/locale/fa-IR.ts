@@ -54,8 +54,8 @@ export function faIRLocale() {
         week4: 'پنج‌شنبه',
         week5: 'جمعه',
         week6: 'شنبه',
-        week7: 'یک‌شنبه'
-      }
+        week7: 'یک‌شنبه',
+      },
     },
 
     captcha: {
@@ -66,11 +66,11 @@ export function faIRLocale() {
       doCaptcha: 'لطفاً راستی‌آزمایی زیر را کامل کنید',
       pointInOrder: 'لطفاً براساس اولویت روی تصویر انتخاب کنید',
       trigger: 'برای شروع راستی‌آزمایی کلیک کنید',
-      completed: 'راستی‌آزمایی کامل شد'
+      completed: 'راستی‌آزمایی کامل شد',
     },
 
     checkbox: {
-      all: 'همه'
+      all: 'همه',
     },
 
     colorPicker: {
@@ -78,13 +78,13 @@ export function faIRLocale() {
       cancel: 'انصراف',
 
       ariaLabel: {
-        clear: 'پاکسازی رنگ'
-      }
+        clear: 'پاکسازی رنگ',
+      },
     },
 
     confirm: {
       confirm: 'تایید',
-      cancel: 'انصراف'
+      cancel: 'انصراف',
     },
 
     datePicker: {
@@ -97,7 +97,7 @@ export function faIRLocale() {
         datetime: 'زمان',
         start: 'شروع',
         end: 'پایان',
-        select: 'انتخاب'
+        select: 'انتخاب',
       },
       startTime: 'شروع زمان',
       endTime: 'پایان زمان',
@@ -109,45 +109,45 @@ export function faIRLocale() {
         date: 'تاریخ',
         hour: 'ساعت',
         minute: 'دقیقه',
-        second: 'ثانیه'
-      }
+        second: 'ثانیه',
+      },
     },
 
     drawer: {
       confirm: 'تایید',
-      cancel: 'انصراف'
+      cancel: 'انصراف',
     },
 
     form: {
       submit: 'ارسال',
       reset: 'باز‌نشانی',
       notNullable: '‌نباید خالی باشد',
-      validateFail: 'اعتبار‌سنجی نشد'
+      validateFail: 'اعتبار‌سنجی نشد',
     },
 
     image: {
       placeholder: 'درحال بارگزاری...',
-      error: 'بارگزاری نشد'
+      error: 'بارگزاری نشد',
     },
 
     input: {
       placeholder: 'لطفاً وارد کنید',
 
       ariaLabel: {
-        clear: 'پاکسازی ورودی'
-      }
+        clear: 'پاکسازی ورودی',
+      },
     },
 
     layout: {
       signOut: 'خروج',
       signType: 'نوع پیمایش',
       majorColor: 'رنگ اصلی',
-      themeMode: 'حالت رنگ‌بندی'
+      themeMode: 'حالت رنگ‌بندی',
     },
 
     modal: {
       confirm: 'تایید',
-      cancel: 'انصراف'
+      cancel: 'انصراف',
     },
 
     numberInput: {
@@ -157,8 +157,8 @@ export function faIRLocale() {
       ariaLabel: {
         clear: 'پاکسازی عدد',
         increase: 'افزایش',
-        decrease: 'کاهش'
-      }
+        decrease: 'کاهش',
+      },
     },
 
     pagination: {
@@ -170,7 +170,7 @@ export function faIRLocale() {
       next: 'بعدی',
       total: 'مجموع',
       jumpTo: 'برو به ',
-      itemUnit: 'مورد'
+      itemUnit: 'مورد',
     },
 
     select: {
@@ -179,15 +179,15 @@ export function faIRLocale() {
       search: 'جستجوی گزینه‌ها',
 
       ariaLabel: {
-        clear: 'پاکسازی انتخاب'
-      }
+        clear: 'پاکسازی انتخاب',
+      },
     },
 
     table: {
       empty: 'بدون داده',
       filterConfirm: 'فیلتر',
       filterReset: 'بازنشانی',
-      filterAll: 'همه'
+      filterAll: 'همه',
     },
 
     timeAgo: {
@@ -202,7 +202,7 @@ export function faIRLocale() {
       lastMonth: 'ماه گذشته',
       months: 'ماه',
       lastYear: 'سال گذشته',
-      years: 'سال'
+      years: 'سال',
     },
 
     timePicker: {
@@ -212,22 +212,22 @@ export function faIRLocale() {
         time: 'زمان',
         start: 'شروع',
         end: 'پایان',
-        select: 'لطفاً انتخاب کنید'
+        select: 'لطفاً انتخاب کنید',
       },
 
       ariaLabel: {
         clear: 'پاکسازی زمان',
         hour: 'ساعت',
         minute: 'دقیقه',
-        second: 'ثانیه'
-      }
+        second: 'ثانیه',
+      },
     },
 
     tour: {
       prev: 'قبلی',
       next: 'بعدی',
       done: 'پایان',
-      stepCount: 'گام {n}'
+      stepCount: 'گام {n}',
     },
 
     transfer: {
@@ -235,11 +235,11 @@ export function faIRLocale() {
       target: 'منتخب',
       empty: 'بدون داده',
       reverse: 'معکوس‌کردن انتخاب‌ها',
-      search: 'جستجو (Ctrl + F)'
+      search: 'جستجو (Ctrl + F)',
     },
 
     tree: {
-      empty: 'بدون داده'
+      empty: 'بدون داده',
     },
 
     upload: {
@@ -249,8 +249,8 @@ export function faIRLocale() {
 
       ariaLabel: {
         preview: 'پیش‌نمایش سند',
-        delete: 'حذف سند'
-      }
+        delete: 'حذف سند',
+      },
     },
 
     video: {
@@ -266,7 +266,7 @@ export function faIRLocale() {
       fullWindowExit: 'خروج از تمام‌پنجره',
       fullScreen: 'تمام‌صفحه',
       fullScreenExit: 'خروج از تمام‌صفحه',
-      chapterCount: 'سرفصل {n}'
+      chapterCount: 'سرفصل {n}',
     },
 
     viewer: {
@@ -278,7 +278,7 @@ export function faIRLocale() {
       zoomOut: 'کوچک‌نمایی',
       fullScreen: 'تمام‌صفحه',
       fullScreenExit: 'خروج از تمام‌صفحه',
-      reset: 'بازنشانی'
-    }
+      reset: 'بازنشانی',
+    },
   })
 }

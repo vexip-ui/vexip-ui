@@ -28,10 +28,10 @@ export function ussTocAnchor(initLevel: 2 | 3 | (2 | 3)[] = 2, wrapper = ref<HTM
         [
           '.demo',
           ...ensureArray(level).map(
-            l => `:not(.demo__description) > h${l}.anchor > .anchor__title[id]`
-          )
-        ].join()
-      )
+            l => `:not(.demo__description) > h${l}.anchor > .anchor__title[id]`,
+          ),
+        ].join(),
+      ),
     ).forEach(el => {
       let id: string
       let label: string

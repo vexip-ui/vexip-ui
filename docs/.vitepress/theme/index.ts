@@ -36,7 +36,7 @@ export default {
     if (isClient) {
       window.vueVersion = version
     }
-  }
+  },
 }
 
 function syncThemeColors() {
@@ -76,9 +76,9 @@ function enhanceApp(app: App) {
     props: {
       default: {
         transfer: true,
-        autoRemove: true
-      }
-    }
+        autoRemove: true,
+      },
+    },
   })
 }
 

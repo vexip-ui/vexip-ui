@@ -15,12 +15,12 @@ defineOptions({ name: 'TableIcon' })
 const props = defineProps({
   name: {
     type: String as PropType<TableIconName>,
-    required: true
+    required: true,
   },
   origin: {
     type: Object,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const tableActions = inject(TABLE_ACTIONS)!

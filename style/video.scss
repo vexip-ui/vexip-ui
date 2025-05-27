@@ -276,9 +276,8 @@ $video: map.merge(
 
       $size: value('video-progress-indicator-size');
       $pos: calc(
-        100% - #{$size} * 0.5 - #{value('video-progress-pad')} + #{value(
-            'video-progress-trigger-height'
-          )} * 0.25
+        100% - #{$size} * 0.5 - #{value('video-progress-pad')} +
+          #{value('video-progress-trigger-height')} * 0.25
       );
       $color: value('video-progress-indicator-color');
 

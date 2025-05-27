@@ -17,7 +17,7 @@ function createConfirm() {
       app?.use(Confirm)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Confirm
@@ -51,7 +51,7 @@ describe('Confirm', () => {
       content: 'content',
       icon: Github,
       confirmText: 'ok',
-      cancelText: 'no'
+      cancelText: 'no',
     })
     await waitRender()
 
@@ -59,7 +59,7 @@ describe('Confirm', () => {
     expect(wrapper).toBeTruthy()
     const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
     expect(wrapper.querySelector<HTMLElement>('.vxp-confirm__content')!.textContent).toEqual(
-      'content'
+      'content',
     )
     expect(wrapper.querySelector('svg')).toBeTruthy()
     expect(buttons[0].textContent).toEqual('no')
@@ -73,7 +73,7 @@ describe('Confirm', () => {
       content: 'content',
       icon: Github,
       confirmText: 'ok',
-      cancelText: 'no'
+      cancelText: 'no',
     })
     await waitRender()
 
@@ -92,7 +92,7 @@ describe('Confirm', () => {
       content: 'content',
       icon: Github,
       confirmText: 'ok',
-      cancelText: 'no'
+      cancelText: 'no',
     })
     await waitRender()
 
@@ -109,7 +109,7 @@ describe('Confirm', () => {
 
     Confirm.open({
       title: 'title',
-      content: 'content'
+      content: 'content',
     })
     await waitRender()
 
@@ -125,7 +125,7 @@ describe('Confirm', () => {
     Confirm.open({
       title: 'title',
       content: 'content',
-      closable: true
+      closable: true,
     })
     await waitRender()
 
@@ -140,7 +140,7 @@ describe('Confirm', () => {
     Confirm.open({
       content: 'content',
       contentAlign: 'left',
-      actionsAlign: 'right'
+      actionsAlign: 'right',
     })
     await waitRender()
 
@@ -149,12 +149,12 @@ describe('Confirm', () => {
     expect(
       wrapper
         .querySelector<HTMLElement>('.vxp-confirm__body')!
-        .classList.contains('vxp-confirm__body--left')
+        .classList.contains('vxp-confirm__body--left'),
     ).toBe(true)
     expect(
       wrapper
         .querySelector<HTMLElement>('.vxp-confirm__footer')!
-        .classList.contains('vxp-confirm__footer--right')
+        .classList.contains('vxp-confirm__footer--right'),
     ).toBe(true)
   })
 
@@ -163,7 +163,7 @@ describe('Confirm', () => {
 
     Confirm.open({
       content: 'content',
-      cancelable: false
+      cancelable: false,
     })
     await waitRender()
 

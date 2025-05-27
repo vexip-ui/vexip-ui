@@ -19,14 +19,14 @@ import {
   useLocale,
   useNameHelper,
   useProps,
-  useWordSpace
+  useWordSpace,
 } from '@vexip-ui/config'
 import {
   placementWhileList,
   useClickOutside,
   useHover,
   usePopper,
-  useSetTimeout
+  useSetTimeout,
 } from '@vexip-ui/hooks'
 import { USE_TOUCH, boundRange, callIfFunc, doubleDigits, toAttrValue } from '@vexip-ui/utils'
 import { timePickerProps } from './props'
@@ -48,7 +48,7 @@ const {
   validateField,
   clearField,
   getFieldValue,
-  setFieldValue
+  setFieldValue,
 } = useFieldStore<string | string[]>(() => reference.value?.focus())
 
 const nh = useNameHelper('time-picker')
@@ -61,18 +61,18 @@ const props = useProps('timePicker', _props, {
   visible: false,
   placement: {
     default: 'bottom-start',
-    validator: value => placementWhileList.includes(value)
+    validator: value => placementWhileList.includes(value),
   },
   transfer: false,
   format: 'HH:mm:ss',
   separator: ':',
   value: {
     default: () => getFieldValue(),
-    static: true
+    static: true,
   },
   filler: {
     default: '-',
-    validator: value => value.length === 1
+    validator: value => value.length === 1,
   },
   clearable: false,
   noAction: false,
@@ -80,7 +80,7 @@ const props = useProps('timePicker', _props, {
   pointer: USE_TOUCH,
   candidate: {
     default: 3,
-    validator: value => [0, 1, 2, 3].includes(value)
+    validator: value => [0, 1, 2, 3].includes(value),
   },
   steps: () => [1, 1, 1],
   labels: () => ({}),
@@ -109,7 +109,7 @@ const props = useProps('timePicker', _props, {
   unitReadonly: false,
   popperAlive: null,
   shortcutsPlacement: 'left',
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:value', 'update:visible'])
@@ -139,7 +139,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   transfer,
   wrapper,
   popper: computed(() => popper.value?.wrapper),
-  isDrop: true
+  isDrop: true,
 })
 const { isHover } = useHover(reference)
 const { isTimeDisabled } = useTimeBound(toRef(props, 'min'), toRef(props, 'max'))
@@ -181,8 +181,8 @@ const className = computed(() => {
       [nh.bm('no-second')]: !startState.enabled.second,
       [nh.bm('visible')]: currentVisible.value,
       [nh.bm(props.state)]: props.state !== 'default',
-      [nh.bm('is-range')]: props.range
-    }
+      [nh.bm('is-range')]: props.range,
+    },
   ]
 })
 const readonly = computed(() => props.loading && props.loadingLock)
@@ -196,7 +196,7 @@ const selectorClass = computed(() => {
     [`${baseCls}--loading`]: props.loading,
     [`${baseCls}--${props.size}`]: props.size !== 'default',
     [`${baseCls}--focused`]: focused.value,
-    [`${baseCls}--${props.state}`]: props.state !== 'default'
+    [`${baseCls}--${props.state}`]: props.state !== 'default',
   }
 })
 const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
@@ -237,14 +237,14 @@ watch(
     parseValue(value)
     lastValue.value = (Array.isArray(value) ? value[0] || value[1] : value) ? getStringValue() : ''
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(() => props.format, parseFormat, { immediate: true })
 watch(
   () => props.visible,
   value => {
     currentVisible.value = value
-  }
+  },
 )
 watch(currentVisible, value => {
   if (value) {
@@ -269,7 +269,7 @@ watch(
     if (!props.unitReadonly && currentVisible.value && currentState.value === 'start') {
       emitEvent(props.onChangeCol, value, 'start')
     }
-  }
+  },
 )
 watch(
   () => endState.column,
@@ -277,7 +277,7 @@ watch(
     if (!props.unitReadonly && currentVisible.value && currentState.value === 'end') {
       emitEvent(props.onChangeCol, value, 'end')
     }
-  }
+  },
 )
 watch(
   () => props.disabled,
@@ -286,7 +286,7 @@ watch(
       setVisible(false)
       handleBlur()
     }
-  }
+  },
 )
 watch(readonly, value => {
   if (value) {
@@ -312,25 +312,25 @@ defineExpose({
   end: endInput,
   updatePopper,
   focus: (options?: FocusOptions) => reference.value?.focus(options),
-  blur: () => reference.value?.blur()
+  blur: () => reference.value?.blur(),
 })
 
 function createTimeState() {
   const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
     'hour',
     'minute',
-    'second'
+    'second',
   ] as TimeType[])
 
   const timeValue = reactive({
     hour: 0,
     minute: 0,
-    second: 0
+    second: 0,
   })
   const activated = reactive({
     hour: false,
     minute: false,
-    second: false
+    second: false,
   })
 
   return reactive({
@@ -339,7 +339,7 @@ function createTimeState() {
     activated,
     timeValue,
     resetColumn,
-    enterColumn
+    enterColumn,
   })
 }
 

@@ -14,7 +14,7 @@ import type {
   BreadcrumbOptions,
   BreadcrumbSlots,
   BreadcrumbState,
-  SelectEvent
+  SelectEvent,
 } from './symbol'
 
 defineOptions({ name: 'Breadcrumb' })
@@ -25,10 +25,10 @@ const props = useProps('breadcrumb', _props, {
   border: false,
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   router: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<BreadcrumbSlots>()
@@ -41,7 +41,7 @@ const className = computed(() => {
     [nh.b()]: true,
     [nh.bs('vars')]: true,
     [nh.bm('inherit')]: props.inherit,
-    [nh.bm('border')]: props.border
+    [nh.bm('border')]: props.border,
   }
 })
 const normalizedOptions = computed(() => {
@@ -58,7 +58,7 @@ const normalizedOptions = computed(() => {
 
       options.push({
         label: meta.label || route.path,
-        name: meta.name || route.name
+        name: meta.name || route.name,
       })
     }
 
@@ -89,7 +89,7 @@ const state: BreadcrumbState = reactive({
   decreaseItem,
   handleSelect,
   refreshLabels,
-  handleSeparatorClick
+  handleSeparatorClick,
 })
 
 provide(BREADCRUMB_STATE, state)
@@ -103,7 +103,7 @@ watch(
         ? data => propValue(data)
         : null
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 function increaseItem(item: BreadcrumbItemState) {

@@ -7,5 +7,5 @@ export type {
   NativeScrollMode,
   NativeScrollPayload,
   NativeScrollSlotParams,
-  NativeScrollExposed
+  NativeScrollExposed,
 } from './symbol'

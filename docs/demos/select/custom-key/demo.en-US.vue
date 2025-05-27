@@ -9,22 +9,22 @@ const value = ref<number>()
 
 const keyConfig = {
   label: 'customLabel',
-  value: 'customValue'
+  value: 'customValue',
 }
 
 const options = [
   {
     customLabel: 'Option 1',
-    customValue: 1
+    customValue: 1,
   },
   {
     customLabel: 'Option 2',
-    customValue: 2
+    customValue: 2,
   },
   {
     customLabel: 'Option 3',
-    customValue: 3
-  }
+    customValue: 3,
+  },
 ]
 </script>
 

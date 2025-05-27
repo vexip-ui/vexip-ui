@@ -19,7 +19,7 @@ const props = useProps('avatarGroup', _props, {
   size: 'default',
   options: {
     default: () => [],
-    static: true
+    static: true,
   },
   circle: false,
   max: null,
@@ -29,7 +29,7 @@ const props = useProps('avatarGroup', _props, {
   offset: null,
   restColor: null,
   restBackground: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 defineSlots<AvatarGroupSlots>()
@@ -61,7 +61,7 @@ const className = computed(() => {
     [nh.bm(props.size as ComponentSize)]:
       typeof props.size !== 'number' && props.size !== 'default',
     [nh.bm('circle')]: props.circle,
-    [nh.bm('vertical')]: props.vertical
+    [nh.bm('vertical')]: props.vertical,
   }
 })
 const style = computed(() => {

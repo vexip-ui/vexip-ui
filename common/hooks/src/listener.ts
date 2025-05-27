@@ -15,7 +15,7 @@ export function useListener<E = Event>(
   target: MaybeRef<EventTarget | null | undefined>,
   event: string,
   listener: (event: E) => any,
-  options?: UseListenerOptions | boolean
+  options?: UseListenerOptions | boolean,
 ) {
   if (!target) {
     return noop
@@ -54,7 +54,7 @@ export function useListener<E = Event>(
         remove = noop
       }
     },
-    { immediate: true, flush: 'post' }
+    { immediate: true, flush: 'post' },
   )
 
   const stop = () => {

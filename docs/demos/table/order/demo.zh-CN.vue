@@ -12,25 +12,25 @@ const columns = reactive(
     {
       name: 'Order',
       type: 'order',
-      key: 'order'
+      key: 'order',
     },
     {
       name: 'First Name',
-      key: 'firstName'
+      key: 'firstName',
     },
     {
       name: 'Last Name',
-      key: 'lastName'
+      key: 'lastName',
     },
     {
       name: 'Job',
-      key: 'job'
+      key: 'job',
     },
     {
       name: 'Age',
-      key: 'age'
-    }
-  ])
+      key: 'age',
+    },
+  ]),
 )
 const data = reactive(
   Array.from({ length: 5 }, (_, index) => {
@@ -42,8 +42,8 @@ const data = reactive(
       job: `Job ${index}`,
       age: 20 + index,
       email: `email${index}@vexip.ui`,
-      address: `Address ${index}`
+      address: `Address ${index}`,
     }
-  })
+  }),
 )
 </script>

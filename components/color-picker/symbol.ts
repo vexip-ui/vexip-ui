@@ -35,7 +35,7 @@ export const defaultShortcuts = Object.freeze([
   '#cddc39',
   '#607d8b',
   '#000000',
-  '#ffffff'
+  '#ffffff',
 ])
 
 export const getDefaultHsv = () => rgbToHsv(0, 0, 0)

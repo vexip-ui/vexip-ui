@@ -17,7 +17,7 @@ export const components: Record<string, Component> = {
   TipContainer,
   InternalIcons,
   InternalPrevIcons,
-  IconifyDemo
+  IconifyDemo,
 }
 
 export function installGlobals(app: App) {

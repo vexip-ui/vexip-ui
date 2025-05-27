@@ -20,7 +20,7 @@ export const virtualListProps = buildProps({
   ignoreResize: booleanProp,
   disabled: booleanProp,
   onScroll: eventProp<(payload: ScrollPayload) => void>(),
-  onResize: eventProp<(entry: ResizeObserverEntry) => void>()
+  onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
 })
 
 export type VirtualListProps = ExtractPropTypes<typeof virtualListProps>

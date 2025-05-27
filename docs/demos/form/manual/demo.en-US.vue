@@ -28,7 +28,7 @@ import type { Form } from 'vexip-ui'
 
 const providedProps = {
   default: { clearable: true },
-  formItem: { required: true }
+  formItem: { required: true },
 }
 
 const form = ref<InstanceType<typeof Form>>()

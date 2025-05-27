@@ -7,7 +7,7 @@ import {
   ref,
   shallowRef,
   watch,
-  watchEffect
+  watchEffect,
 } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
@@ -29,7 +29,7 @@ const props = useProps('affix', _props, {
   offset: 0,
   zIndex: 100,
   position: 'top',
-  target: null
+  target: null,
 })
 
 const nh = useNameHelper('affix')
@@ -53,7 +53,7 @@ const transform = ref(0)
 const affixStyle = computed<CSSProperties>(() => {
   return {
     height: fixed.value ? `${affixHeight.value}px` : '',
-    width: fixed.value ? `${affixWidth.value}px` : ''
+    width: fixed.value ? `${affixWidth.value}px` : '',
   }
 })
 const fixedStyle = computed<CSSProperties>(() => {
@@ -75,7 +75,7 @@ const fixedStyle = computed<CSSProperties>(() => {
     width: `${affixWidth.value}px`,
     top: props.position === 'top' ? `${_top}px` : '',
     bottom: props.position === 'bottom' ? `${_bottom}px` : '',
-    zIndex: props.zIndex
+    zIndex: props.zIndex,
   }
 })
 
@@ -148,7 +148,7 @@ function handleContainerScroll() {
 
   emitEvent(props.onScroll, {
     scrollTop: scrollTop.value,
-    fixed: fixed.value
+    fixed: fixed.value,
   })
 }
 
@@ -172,7 +172,7 @@ function updateContainer() {
         const _scroller = new Proxy({} as any, {
           get(_, key) {
             return (proxy as any)?.[key] ?? (exposeProxy as any)?.[key] ?? (exposed as any)?.[key]
-          }
+          },
         })
         const scrollerEl = _scroller?.$el as HTMLElement
 

@@ -3,7 +3,7 @@ import {
   DAY_ON_MILLISECONDS,
   HOUR_ON_MILLISECONDS,
   MINUTE_ON_MILLISECONDS,
-  SECOND_ON_MILLISECONDS
+  SECOND_ON_MILLISECONDS,
 } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
@@ -47,7 +47,7 @@ export function subscribe(id: number, record: TimeAgoRecord) {
             record.datetime,
             current,
             record.locale.value,
-            record.wordSpace.value
+            record.wordSpace.value,
           )
           record.updated = current
         }
@@ -69,7 +69,7 @@ export function computeTimeAgo(
   date: Date,
   current: number,
   locale: Record<string, string>,
-  wordSpace: boolean
+  wordSpace: boolean,
 ) {
   const diff = Math.abs(current - date.getTime())
   const type = current > date.getTime() ? locale.ago : locale.late

@@ -6,8 +6,8 @@ import { HeadphonesSimple } from '@vexip-ui/icons'
 const props = defineProps({
   src: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const audio = ref<HTMLAudioElement>()

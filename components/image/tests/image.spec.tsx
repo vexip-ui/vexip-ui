@@ -28,7 +28,7 @@ describe('Image', () => {
 
   it('width', async () => {
     const wrapper = mount(Image, {
-      props: { width: 200 }
+      props: { width: 200 },
     })
 
     expect(wrapper.find('.vxp-image__img').attributes('width')).toEqual('200')
@@ -39,7 +39,7 @@ describe('Image', () => {
 
   it('height', async () => {
     const wrapper = mount(Image, {
-      props: { height: 200 }
+      props: { height: 200 },
     })
 
     expect(wrapper.find('.vxp-image__img').attributes('height')).toEqual('200')
@@ -50,7 +50,7 @@ describe('Image', () => {
 
   it('border', async () => {
     const wrapper = mount(Image, {
-      props: { border: true }
+      props: { border: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-image--border')
@@ -82,8 +82,8 @@ describe('Image', () => {
     const wrapper = mount(Image, {
       props: { src: IMAGE },
       slots: {
-        placeholder: () => <span class={'test'}></span>
-      }
+        placeholder: () => <span class={'test'}></span>,
+      },
     })
 
     expect(wrapper.find('.test').exists()).toBe(true)
@@ -119,8 +119,8 @@ describe('Image', () => {
     const wrapper = mount(Image, {
       props: { src: IMAGE },
       slots: {
-        error: () => <span class={'test'}></span>
-      }
+        error: () => <span class={'test'}></span>,
+      },
     })
     const img = wrapper.find('.vxp-image__img')
 
@@ -199,8 +199,8 @@ describe('Image', () => {
             <Image src={IMAGE}></Image>
             <Image src={IMAGE}></Image>
           </>
-        )
-      }
+        ),
+      },
     })
 
     await nextTick()
@@ -252,7 +252,7 @@ describe('Image', () => {
   it('viewer toggle active', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(ImageViewer, {
-      props: { active: true, onToggle }
+      props: { active: true, onToggle },
     })
 
     await wrapper.find('.vxp-image-viewer__close').trigger('click')
@@ -277,8 +277,8 @@ describe('Image', () => {
         srcList: ['1', '2'],
         onPrev,
         onNext,
-        onChange
-      }
+        onChange,
+      },
     })
     const prev = wrapper.find('.vxp-image-viewer__prev')
     const next = wrapper.find('.vxp-image-viewer__next')
@@ -313,11 +313,11 @@ describe('Image', () => {
     const wrapper = mount(ImageViewer, {
       props: {
         active: true,
-        srcList: ['1', '2']
+        srcList: ['1', '2'],
       },
       slots: {
-        prev: () => <span class={'test'}></span>
-      }
+        prev: () => <span class={'test'}></span>,
+      },
     })
 
     expect(wrapper.find('.vxp-image-viewer__prev').find('.test').exists()).toBe(true)
@@ -327,11 +327,11 @@ describe('Image', () => {
     const wrapper = mount(ImageViewer, {
       props: {
         active: true,
-        srcList: ['1', '2']
+        srcList: ['1', '2'],
       },
       slots: {
-        next: () => <span class={'test'}></span>
-      }
+        next: () => <span class={'test'}></span>,
+      },
     })
 
     expect(wrapper.find('.vxp-image-viewer__next').find('.test').exists()).toBe(true)
@@ -341,8 +341,8 @@ describe('Image', () => {
     const wrapper = mount(ImageViewer, {
       props: { active: true },
       slots: {
-        close: () => <span class={'test'}></span>
-      }
+        close: () => <span class={'test'}></span>,
+      },
     })
 
     expect(wrapper.find('.vxp-image-viewer__close').find('.test').exists()).toBe(true)

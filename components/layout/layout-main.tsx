@@ -10,7 +10,7 @@ export default defineComponent({
   setup(_props, { slots }) {
     const props = useProps('layoutMain', _props, {
       tag: 'main',
-      fixed: false
+      fixed: false,
     })
 
     const nh = useNameHelper('layout')
@@ -25,5 +25,5 @@ export default defineComponent({
 
       return <CustomTag class={className.value}>{slots.default?.()}</CustomTag>
     }
-  }
+  },
 })

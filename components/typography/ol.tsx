@@ -9,7 +9,7 @@ export default defineComponent({
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('ol', _props, {
-      type: '1'
+      type: '1',
     })
 
     const nh = useNameHelper('ol')
@@ -19,5 +19,5 @@ export default defineComponent({
         {slots.default?.()}
       </ol>
     )
-  }
+  },
 })

@@ -21,7 +21,7 @@ type PropertiesMap = [
   'fullscreenElement',
   'fullscreenEnabled',
   'fullscreenchange',
-  'fullscreenerror'
+  'fullscreenerror',
 ]
 
 const functionsMap = [
@@ -31,7 +31,7 @@ const functionsMap = [
     'fullscreenElement',
     'fullscreenEnabled',
     'fullscreenchange',
-    'fullscreenerror'
+    'fullscreenerror',
   ],
   // New WebKit
   [
@@ -40,7 +40,7 @@ const functionsMap = [
     'webkitFullscreenElement',
     'webkitFullscreenEnabled',
     'webkitfullscreenchange',
-    'webkitfullscreenerror'
+    'webkitfullscreenerror',
   ],
   // Old WebKit
   [
@@ -49,7 +49,7 @@ const functionsMap = [
     'webkitCurrentFullScreenElement',
     'webkitCancelFullScreen',
     'webkitfullscreenchange',
-    'webkitfullscreenerror'
+    'webkitfullscreenerror',
   ],
   [
     'mozRequestFullScreen',
@@ -57,7 +57,7 @@ const functionsMap = [
     'mozFullScreenElement',
     'mozFullScreenEnabled',
     'mozfullscreenchange',
-    'mozfullscreenerror'
+    'mozfullscreenerror',
   ],
   [
     'msRequestFullscreen',
@@ -65,8 +65,8 @@ const functionsMap = [
     'msFullscreenElement',
     'msFullscreenEnabled',
     'MSFullscreenChange',
-    'MSFullscreenError'
-  ]
+    'MSFullscreenError',
+  ],
 ] as PropertiesMap[]
 
 let map!: PropertiesMap
@@ -86,7 +86,7 @@ const notSupportedResult = {
   full: computed(() => false),
   enter: noop,
   exit: noop,
-  toggle: noop
+  toggle: noop,
 }
 
 const states = new Set<Ref<boolean>>()
@@ -111,7 +111,7 @@ if (isClient && map) {
         }
       }
     },
-    false
+    false,
   )
 }
 
@@ -122,7 +122,7 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
       if (isRef(target)) {
         target.value = el
       }
-    }
+    },
   })
 
   if (!isClient || !supported) {
@@ -138,7 +138,7 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
       old && subscriptions.delete(old)
       el && subscriptions.set(el, full)
     },
-    { immediate: true, flush: 'post' }
+    { immediate: true, flush: 'post' },
   )
 
   states.add(full)
@@ -187,6 +187,6 @@ export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseF
     full: computed(() => full.value),
     enter,
     exit,
-    toggle
+    toggle,
   }
 }

@@ -27,5 +27,5 @@ export const objectFitValues = Object.freeze<AvatarObjectFit[]>([
   'contain',
   'cover',
   'none',
-  'scale-down'
+  'scale-down',
 ])

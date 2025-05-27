@@ -28,7 +28,7 @@ if (isClient) {
         }
       })
     },
-    true
+    true,
   )
 }
 
@@ -40,7 +40,7 @@ if (isClient) {
  */
 export function useClickOutside(
   handler: () => void,
-  target: Ref<HTMLElement | null | undefined> = ref(null)
+  target: Ref<HTMLElement | null | undefined> = ref(null),
 ) {
   let remove = noop
 
@@ -60,7 +60,7 @@ export function useClickOutside(
         remove = noop
       }
     },
-    { immediate: true, flush: 'post' }
+    { immediate: true, flush: 'post' },
   )
 
   const stop = () => {

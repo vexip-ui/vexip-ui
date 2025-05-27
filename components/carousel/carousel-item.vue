@@ -19,7 +19,7 @@ const state: ItemState = reactive({
   label: -1,
   width: 0,
   height: 0,
-  offset: 0
+  offset: 0,
 })
 
 const active = computed(() => {
@@ -28,7 +28,7 @@ const active = computed(() => {
 const className = computed(() => {
   return {
     [nh.be('item')]: true,
-    [nh.bem('item', 'active')]: active.value
+    [nh.bem('item', 'active')]: active.value,
   }
 })
 const style = computed(() => {
@@ -37,7 +37,7 @@ const style = computed(() => {
   return {
     width: width ? `${width}px` : undefined,
     height: height ? `${height}px` : undefined,
-    transform: offset ? `translate${carouselState?.vertical ? 'Y' : 'X'}(${offset}px)` : undefined
+    transform: offset ? `translate${carouselState?.vertical ? 'Y' : 'X'}(${offset}px)` : undefined,
   }
 })
 

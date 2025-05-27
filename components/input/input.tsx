@@ -13,7 +13,7 @@ import {
   useIcons,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { debounce, isNull, noop, throttle, toNumber } from '@vexip-ui/utils'
 import { inputProps } from './props'
@@ -43,7 +43,7 @@ export default defineComponent({
       validateField,
       clearField,
       getFieldValue,
-      setFieldValue
+      setFieldValue,
     } = useFieldStore<string | number>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
@@ -52,7 +52,7 @@ export default defineComponent({
       locale: null,
       type: {
         default: 'text',
-        validator: value => inputTypes.includes(value)
+        validator: value => inputTypes.includes(value),
       },
       prefix: createIconProp(),
       prefixColor: '',
@@ -60,11 +60,11 @@ export default defineComponent({
       suffixColor: '',
       formatter: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       value: {
         default: () => getFieldValue(),
-        static: true
+        static: true,
       },
       placeholder: null,
       autofocus: false,
@@ -89,9 +89,9 @@ export default defineComponent({
       controlAttrs: null,
       name: {
         default: '',
-        static: true
+        static: true,
       },
-      slots: () => ({})
+      slots: () => ({}),
     })
 
     const initValue = toNotNullString(props.value)
@@ -138,7 +138,7 @@ export default defineComponent({
         [nh.bs('wrapper')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
-        [nh.bm(props.size)]: props.size !== 'default'
+        [nh.bm(props.size)]: props.size !== 'default',
       }
     })
     const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
@@ -156,8 +156,8 @@ export default defineComponent({
           [nh.bm('before')]: slots.beforeAction || slots['before-action'] || props.slots.before,
           [nh.bm('after')]: slots.afterAction || slots['after-action'] || props.slots.after,
           [nh.bm('transparent')]: props.transparent,
-          [nh.bm('plain-password')]: props.plainPassword
-        }
+          [nh.bm('plain-password')]: props.plainPassword,
+        },
       ]
     })
     const wrapperClass = computed(() => {
@@ -166,7 +166,7 @@ export default defineComponent({
         [nh.bm(`wrapper--${props.size}`)]: props.size !== 'default',
         [nh.bs('wrapper--before-only')]: hasBefore.value && !hasAfter.value,
         [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value,
-        [nh.bm('transparent')]: props.transparent
+        [nh.bm('transparent')]: props.transparent,
       }
     })
     const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
@@ -190,7 +190,7 @@ export default defineComponent({
         : currentValue.value
     })
     const passwordIcon = computed(() =>
-      showPassword.value ? icons.value.plainText : icons.value.cipherText
+      showPassword.value ? icons.value.plainText : icons.value.cipherText,
     )
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
@@ -214,7 +214,7 @@ export default defineComponent({
         currentValue.value = toNotNullString(value)
         lastValue = currentValue.value
         limitValueLength()
-      }
+      },
     )
     watch(
       [formattedValue, inputControl],
@@ -223,7 +223,7 @@ export default defineComponent({
           inputControl.value.value = formattedValue.value
         }
       },
-      { immediate: true, flush: 'post' }
+      { immediate: true, flush: 'post' },
     )
 
     // Expose api methods.
@@ -243,7 +243,7 @@ export default defineComponent({
       },
       blur: () => {
         inputControl.value?.blur()
-      }
+      },
     })
 
     function handleFocus(event: FocusEvent) {
@@ -444,7 +444,7 @@ export default defineComponent({
           {renderSlot(slots, 'prefix', undefined, () => [
             <Renderer renderer={props.slots.prefix}>
               <Icon icon={props.prefix}></Icon>
-            </Renderer>
+            </Renderer>,
           ])}
         </div>
       )
@@ -458,14 +458,14 @@ export default defineComponent({
             class={[nh.be('icon'), nh.be('suffix')]}
             style={{
               color: props.suffixColor,
-              opacity: showClear.value || props.loading ? '0%' : ''
+              opacity: showClear.value || props.loading ? '0%' : '',
             }}
             onClick={handleSuffixClick}
           >
             {renderSlot(slots, 'suffix', undefined, () => [
               <Renderer renderer={props.slots.suffix}>
                 <Icon icon={props.suffix}></Icon>
-              </Renderer>
+              </Renderer>,
             ])}
           </div>
         )
@@ -531,7 +531,7 @@ export default defineComponent({
               {props.maxLength === Infinity
                 ? currentLength.value
                 : `${currentLength.value}/${props.maxLength}`}
-            </Renderer>
+            </Renderer>,
           ])}
         </div>
       )
@@ -544,14 +544,14 @@ export default defineComponent({
             key={'password'}
             class={[nh.be('icon'), nh.be('password')]}
             style={{
-              color: props.suffixColor
+              color: props.suffixColor,
             }}
             onClick={toggleShowPassword}
           >
             {renderSlot(slots, 'password', { plain: showPassword.value }, () => [
               <Renderer renderer={props.slots.password} data={{ plain: showPassword.value }}>
                 <Icon {...passwordIcon.value}></Icon>
-              </Renderer>
+              </Renderer>,
             ])}
           </div>
         )
@@ -644,6 +644,6 @@ export default defineComponent({
   },
   methods: {
     focus: noop as (options?: FocusOptions) => void,
-    blur: noop as () => void
-  }
+    blur: noop as () => void,
+  },
 })

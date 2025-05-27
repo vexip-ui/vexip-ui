@@ -75,7 +75,7 @@ export function useLocale<T extends LocaleNames>(
 ): ComputedRef<LocaleConfig[T]>
 export function useLocale<T extends LocaleNames>(
   name?: T,
-  customLocale?: MaybeRef<Partial<LocaleConfig[T]>>
+  customLocale?: MaybeRef<Partial<LocaleConfig[T]>>,
 ) {
   const locale = inject<ComputedRef<LocaleConfig>>(PROVIDED_LOCALE, globalLocal)
 

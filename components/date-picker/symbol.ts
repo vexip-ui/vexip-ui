@@ -42,7 +42,7 @@ export const enum DisabledType {
   TRUE,
   AT_MIN_TRUE,
   AT_MAX_TRUE,
-  FALSE
+  FALSE,
 }
 
 export type DatePickerChangeEvent = (value: number | number[] | null) => void
@@ -52,7 +52,7 @@ export const datePickerTypes = Object.freeze<DatePickerType[]>([
   'date',
   'datetime',
   'year',
-  'month'
+  'month',
 ])
 
 export const invalidDate = new Date('')

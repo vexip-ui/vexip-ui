@@ -7,11 +7,11 @@ const options = [
   'This Computer',
   {
     label: 'D:',
-    name: 'Document (D:)'
+    name: 'Document (D:)',
   },
   {
     label: 'vexip-ui',
-    name: () => 'vexip-ui'
-  }
+    name: () => 'vexip-ui',
+  },
 ]
 </script>

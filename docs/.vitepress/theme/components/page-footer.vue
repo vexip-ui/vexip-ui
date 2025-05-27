@@ -20,7 +20,7 @@ const editLink = computed(() => {
 
   return {
     i18n,
-    link: typeof pattern === 'function' ? pattern(path) : pattern.replace(/:path/g, path)
+    link: typeof pattern === 'function' ? pattern(path) : pattern.replace(/:path/g, path),
   }
 })
 const hasEditLink = computed(() => {

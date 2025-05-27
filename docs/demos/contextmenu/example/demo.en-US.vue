@@ -22,12 +22,12 @@ export default defineComponent({
         appear: true,
         configs: [
           {
-            key: 'Option 1'
+            key: 'Option 1',
           },
           {
             key: 'Option 2',
             icon: User,
-            shortcut: 'Ctrl+A'
+            shortcut: 'Ctrl+A',
           },
           {
             key: 'Option 3',
@@ -37,43 +37,43 @@ export default defineComponent({
             children: [
               {
                 key: 'Option 3-1',
-                disabled: true
+                disabled: true,
               },
               {
                 key: 'Option 3-2',
-                divided: true
+                divided: true,
               },
               {
                 key: 'Option 3-3',
                 children: [
                   {
                     key: 'Option 3-3-1',
-                    shortcut: 'Ctrl+L'
+                    shortcut: 'Ctrl+L',
                   },
                   {
-                    key: 'Option 3-3-2'
-                  }
-                ]
-              }
-            ]
+                    key: 'Option 3-3-2',
+                  },
+                ],
+              },
+            ],
           },
           {
             key: 'Option 4',
             shortcut: 'Alt+I',
-            color: 'red'
+            color: 'red',
           },
           {
             key: 'Option 5',
             shortcut: 'Ctrl+Alt+I',
             icon: Fire,
             color: 'blue',
-            iconColor: 'green'
-          }
-        ]
+            iconColor: 'green',
+          },
+        ],
       })
 
       console.info(selectedKeys)
-    }
-  }
+    },
+  },
 })
 </script>

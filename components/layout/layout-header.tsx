@@ -16,7 +16,7 @@ import {
   renderSlot,
   shallowReadonly,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
@@ -40,7 +40,7 @@ export default defineComponent({
       signName: '',
       user: {
         default: () => ({ name: '' }),
-        static: true
+        static: true,
       },
       userDropped: false,
       avatarCircle: false,
@@ -51,10 +51,10 @@ export default defineComponent({
       color: '',
       menus: {
         default: () => [],
-        static: true
+        static: true,
       },
       menuProps: null,
-      darkMode: null
+      darkMode: null,
     })
 
     const nh = useNameHelper('layout')
@@ -84,9 +84,9 @@ export default defineComponent({
           [nh.bs('vars')]: !layoutState.isLayout,
           [nh.bem('header', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('header', 'away')]: !layoutState.affixMatched,
-          [nh.bem('header', 'affixed')]: layoutState.affixed
+          [nh.bem('header', 'affixed')]: layoutState.affixed,
         },
-        layoutState.classes.header
+        layoutState.classes.header,
       ]
     })
     const userActions = computed(() => {
@@ -96,8 +96,8 @@ export default defineComponent({
             label: 'signOut',
             name: locale.value.signOut,
             icon: icons.value.signOut.icon,
-            iconProps: icons.value.signOut
-          }
+            iconProps: icons.value.signOut,
+          },
         ] as LayoutHeaderAction[]
       }
 
@@ -117,8 +117,8 @@ export default defineComponent({
         toggleExpanded,
         toggleReduced,
         handleColorChange,
-        toggleUserDropped
-      })
+        toggleUserDropped,
+      }),
     )
 
     expose({ menu, toggleExpanded, toggleReduced, expandMenuByLabel, toggleUserDropped })
@@ -127,13 +127,13 @@ export default defineComponent({
       () => props.signType,
       value => {
         currentSignType.value = value
-      }
+      },
     )
     watch(
       () => props.userDropped,
       value => {
         currentUserDropped.value = value
-      }
+      },
     )
     watch(currentColor, computeSeriesColors)
     watch(
@@ -141,7 +141,7 @@ export default defineComponent({
       value => {
         isDark.value = value ?? rootEl.value?.classList.contains('dark') ?? false
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     onMounted(() => {
@@ -154,7 +154,7 @@ export default defineComponent({
         value => {
           currentColor.value = value || getBaseColor() || props.colors?.[0]
         },
-        { immediate: true }
+        { immediate: true },
       )
 
       computeSeriesColors(currentColor.value)
@@ -274,7 +274,7 @@ export default defineComponent({
                   <Icon {...icons.value.dark}></Icon>
                 ) : (
                   <Icon {...icons.value.light}></Icon>
-                )
+                ),
             }}
           </Switch>
         </div>
@@ -293,7 +293,7 @@ export default defineComponent({
               key={color}
               class={nh.be('major-color')}
               style={{
-                backgroundColor: color
+                backgroundColor: color,
               }}
               onClick={() => handleColorChange(color)}
             >
@@ -317,7 +317,7 @@ export default defineComponent({
             onClick={() => toggleUserDropped()}
           >
             {{
-              icon: () => <Icon {...icons.value.user}></Icon>
+              icon: () => <Icon {...icons.value.user}></Icon>,
             }}
           </Avatar>
         )
@@ -328,7 +328,7 @@ export default defineComponent({
           {{
             icon: () => (
               <Icon {...icons.value.user} icon={props.user.avatar || icons.value.user.icon}></Icon>
-            )
+            ),
           }}
         </Avatar>
       )
@@ -375,19 +375,19 @@ export default defineComponent({
               <div key={1} class={nh.be('config-label')}>
                 {locale.value.signType}
               </div>,
-              renderLayoutConfig()
+              renderLayoutConfig(),
           ]}
           {props.config.includes('theme') && [
             <div key={2} class={nh.be('config-label')}>
               {locale.value.themeMode}
             </div>,
-            renderThemeConfig()
+            renderThemeConfig(),
           ]}
           {props.config.includes('color') && [
             <div key={3} class={nh.be('config-label')}>
               {locale.value.majorColor}
             </div>,
-            renderColorConfig()
+            renderColorConfig(),
           ]}
         </li>
       )
@@ -446,12 +446,12 @@ export default defineComponent({
             >
               {{
                 default: renderUserAvatar,
-                drop: renderUserDrop
+                drop: renderUserDrop,
               }}
             </Dropdown>
           )}
         </CustomTag>
       )
     }
-  }
+  },
 })

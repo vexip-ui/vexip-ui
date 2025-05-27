@@ -14,29 +14,29 @@ yargs(hideBin(process.argv))
       args
         .positional('temp', {
           type: 'string',
-          choices: ['types']
+          choices: ['types'],
         })
         .option('cwd', {
           default: process.cwd(),
           type: 'string',
-          desc: 'specify the current working directory'
+          desc: 'specify the current working directory',
         })
         .option('force', {
           alias: 'f',
           type: 'boolean',
-          desc: 'force generate even a file exists with same name'
+          desc: 'force generate even a file exists with same name',
         })
         .option('prefix', {
           alias: 'p',
           type: 'string',
-          desc: 'specify component prefix for generating types'
+          desc: 'specify component prefix for generating types',
         })
         .option('output', {
           alias: 'o',
           type: 'string',
-          desc: 'specify component prefix for generating types'
+          desc: 'specify component prefix for generating types',
         }),
-    args => generate(args).catch(error => logger.withBothLn(() => logger.error(error)))
+    args => generate(args).catch(error => logger.withBothLn(() => logger.error(error))),
   )
   .version(version)
   .alias('h', 'help')

@@ -29,7 +29,7 @@ const currentSize = ref<ComponentSize>('default')
 const sizes: Array<{ label: ComponentSize, content: string }> = [
   { label: 'small', content: 'Small' },
   { label: 'default', content: 'Default' },
-  { label: 'large', content: 'Large' }
+  { label: 'large', content: 'Large' },
 ]
 
 const formModel = reactive({})

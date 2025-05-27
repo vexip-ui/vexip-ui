@@ -23,14 +23,14 @@ const className = computed(() => {
   return {
     [nh.b()]: true,
     [nh.bs('vars')]: true,
-    [nh.bm(state.value)]: state.value !== 'default'
+    [nh.bm(state.value)]: state.value !== 'default',
   }
 })
 
 const style = computed(() => {
   return {
     [position.value]: '0',
-    height: `${strokeWidth.value}px`
+    height: `${strokeWidth.value}px`,
   }
 })
 
@@ -38,7 +38,7 @@ const fillerStyle = computed(() => {
   return {
     transform: `translateX(${((isRtl.value ? -1 : 1) * (percent.value - 100)) / 2}%) scaleX(${
       percent.value / 100
-    })`
+    })`,
   }
 })
 

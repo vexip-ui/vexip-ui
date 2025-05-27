@@ -9,7 +9,7 @@ export default defineComponent({
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('blockquote', _props, {
-      type: 'default'
+      type: 'default',
     })
 
     const nh = useNameHelper('blockquote')
@@ -19,10 +19,10 @@ export default defineComponent({
         [nh.b()]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
-        [nh.bm(props.type)]: props.type !== 'default'
+        [nh.bm(props.type)]: props.type !== 'default',
       }
     })
 
     return () => <blockquote class={className.value}>{slots.default?.()}</blockquote>
-  }
+  },
 })

@@ -15,26 +15,26 @@ defineOptions({ name: 'TimeWheel' })
 const props = defineProps({
   noArrow: {
     type: Boolean,
-    default: false
+    default: false,
   },
   hour: {
     type: Number,
     default: 0,
-    validator: (value: number) => value >= 0 && value <= 23
+    validator: (value: number) => value >= 0 && value <= 23,
   },
   minute: {
     type: Number,
     default: 0,
-    validator: (value: number) => value >= 0 && value <= 59
+    validator: (value: number) => value >= 0 && value <= 59,
   },
   second: {
     type: Number,
     default: 0,
-    validator: (value: number) => value >= 0 && value <= 59
+    validator: (value: number) => value >= 0 && value <= 59,
   },
   candidate: {
     default: 2 as 0 | 1 | 2 | 3,
-    validator: (value: number) => [0, 1, 2, 3].includes(value)
+    validator: (value: number) => [0, 1, 2, 3].includes(value),
   },
   steps: {
     type: Array as PropType<number[]>,
@@ -51,20 +51,20 @@ const props = defineProps({
       }
 
       return true
-    }
+    },
   },
   pointer: {
     type: Boolean,
-    default: USE_TOUCH
+    default: USE_TOUCH,
   },
   disabledTime: {
     type: Object as PropType<DisabledTime>,
-    default: () => ({})
+    default: () => ({}),
   },
   noTransition: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['change', 'toggle-col', 'update:hour', 'update:minute', 'update:second'])
@@ -89,19 +89,19 @@ watch(
   () => props.hour,
   value => {
     currentHour.value = value
-  }
+  },
 )
 watch(
   () => props.minute,
   value => {
     currentMinute.value = value
-  }
+  },
 )
 watch(
   () => props.second,
   value => {
     currentSecond.value = value
-  }
+  },
 )
 watch(currentHour, value => {
   emit('update:hour', value)

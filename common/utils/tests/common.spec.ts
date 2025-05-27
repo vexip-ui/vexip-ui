@@ -27,7 +27,7 @@ import {
   isTrue,
   range,
   toFalse,
-  toTrue
+  toTrue,
 } from '../src'
 
 describe('number', () => {
@@ -291,8 +291,8 @@ describe('number', () => {
       await decide([
         [false, fn1],
         [true, fn2],
-        [true, fn3]
-      ])
+        [true, fn3],
+      ]),
     ).toBe(true)
     expect(fn1).toHaveBeenCalledTimes(0)
     expect(fn2).toHaveBeenCalledTimes(1)

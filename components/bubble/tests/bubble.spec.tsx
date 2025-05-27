@@ -25,8 +25,8 @@ describe('Bubble', () => {
     const wrapper = mount(Bubble, {
       props: {
         background: 'cyan',
-        placement: 'right'
-      }
+        placement: 'right',
+      },
     })
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--background')
@@ -38,7 +38,7 @@ describe('Bubble', () => {
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--shadow')
     expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
-      'box-shadow: 0 0 4px cyan;'
+      'box-shadow: 0 0 4px cyan;',
     )
   })
 

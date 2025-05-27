@@ -8,7 +8,7 @@ import {
   renderSlot,
   toRef,
   unref,
-  watch
+  watch,
 } from 'vue'
 
 import { ensureArray, isClient, noop } from '@vexip-ui/utils'
@@ -20,7 +20,7 @@ import type {
   Slots,
   VNode,
   VNodeChild,
-  VNodeNormalizedChildren
+  VNodeNormalizedChildren,
 } from 'vue'
 import type { MaybeElement, MaybeInstance } from './types'
 
@@ -36,7 +36,7 @@ export function createSlotRender(
 export function createSlotRender(
   slots: Slots,
   names: string[],
-  fallback?: (params?: any) => VNodeChild
+  fallback?: (params?: any) => VNodeChild,
 ) {
   for (const name of names) {
     if (slots[name]) {
@@ -86,12 +86,12 @@ export function flatVNodes(children: VNodeNormalizedChildren) {
 }
 
 export function unrefElement<T extends string | MaybeInstance = string | MaybeInstance>(
-  ref: MaybeRef<T>
+  ref: MaybeRef<T>,
 ): T extends string | ComponentPublicInstance ? MaybeElement : T {
   const plain = unref(ref)
 
   if (typeof plain === 'string') {
-    return isClient ? document.querySelector(plain) : (null as any)
+    return (isClient ? document.querySelector(plain) : null) as any
   }
 
   return (plain as ComponentPublicInstance)?.$el ?? plain
@@ -107,7 +107,7 @@ export function proxyExposed<T>(vnode: VNode): T {
         (vnode.component.exposeProxy as any)?.[key] ??
         (vnode.component.exposed as any)?.[key]
       )
-    }
+    },
   }) as T
 }
 
@@ -133,7 +133,7 @@ export function watchPauseable(...args: Parameters<typeof watch>) {
             .catch(reject)
         }
       }),
-    args[2]
+    args[2],
   )
 
   return { active: readonly(active), pause, resume, stop }

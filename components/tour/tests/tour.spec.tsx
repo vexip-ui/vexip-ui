@@ -20,9 +20,9 @@ describe('Tour', () => {
           top: TOP,
           left: LEFT,
           width: WIDTH,
-          height: HEIGHT
+          height: HEIGHT,
         }
-      }
+      },
     }
   }
 
@@ -31,8 +31,8 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => <Tour active steps={steps}></Tour>)
 
@@ -52,13 +52,13 @@ describe('Tour', () => {
       {
         target,
         title: '1',
-        content: '1'
+        content: '1',
       },
       {
         target,
         title: '2',
-        content: '2'
-      }
+        content: '2',
+      },
     ]
     const wrapper = mount(() => <Tour active index={1} steps={steps}></Tour>)
 
@@ -82,17 +82,17 @@ describe('Tour', () => {
       {
         target,
         title: '1',
-        content: '1'
-      }
+        content: '1',
+      },
     ]
     const wrapper = mount(Tour, {
       props: {
         active: true,
-        steps
+        steps,
       },
       slots: {
-        default: () => <TourStep target={target} title={'2'} content={'2'}></TourStep>
-      }
+        default: () => <TourStep target={target} title={'2'} content={'2'}></TourStep>,
+      },
     })
 
     expect(wrapper.find('.vxp-tour__title').text()).toEqual('2')
@@ -108,23 +108,23 @@ describe('Tour', () => {
       {
         target,
         title: '1',
-        content: '1'
+        content: '1',
       },
       {
         target,
         title: '3',
         content: '3',
-        order: -1
-      }
+        order: -1,
+      },
     ]
     const wrapper = mount(Tour, {
       props: {
         active: true,
-        steps
+        steps,
       },
       slots: {
-        default: () => <TourStep target={target} title={'2'} content={'2'}></TourStep>
-      }
+        default: () => <TourStep target={target} title={'2'} content={'2'}></TourStep>,
+      },
     })
 
     expect(wrapper.find('.vxp-tour__title').text()).toEqual('3')
@@ -135,8 +135,8 @@ describe('Tour', () => {
     const steps = [
       {
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => <Tour active steps={steps} padding={20}></Tour>)
 
@@ -148,13 +148,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          title: () => <span class={'title'}></span>
+          title: () => <span class={'title'}></span>,
         }}
       </Tour>
     ))
@@ -168,13 +168,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          close: () => <span class={'close'}></span>
+          close: () => <span class={'close'}></span>,
         }}
       </Tour>
     ))
@@ -188,13 +188,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          header: () => <span class={'header'}></span>
+          header: () => <span class={'header'}></span>,
         }}
       </Tour>
     ))
@@ -208,13 +208,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          title: () => <span class={'body'}></span>
+          title: () => <span class={'body'}></span>,
         }}
       </Tour>
     ))
@@ -228,13 +228,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          footer: () => <span class={'footer'}></span>
+          footer: () => <span class={'footer'}></span>,
         }}
       </Tour>
     ))
@@ -248,13 +248,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          sign: () => <span class={'sign'}></span>
+          sign: () => <span class={'sign'}></span>,
         }}
       </Tour>
     ))
@@ -268,13 +268,13 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => (
       <Tour active steps={steps}>
         {{
-          actions: () => <span class={'actions'}></span>
+          actions: () => <span class={'actions'}></span>,
         }}
       </Tour>
     ))
@@ -288,11 +288,11 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(Tour, {
-      props: { steps }
+      props: { steps },
     })
 
     expect(wrapper.find('.vxp-tour__bubble').exists()).toBe(false)
@@ -306,18 +306,18 @@ describe('Tour', () => {
       {
         target,
         title: '1',
-        content: '1'
+        content: '1',
       },
       {
         target,
         title: '2',
-        content: '2'
+        content: '2',
       },
       {
         target,
         title: '3',
-        content: '3'
-      }
+        content: '3',
+      },
     ]
     const onToggle = vi.fn()
     const onChange = vi.fn()
@@ -326,8 +326,8 @@ describe('Tour', () => {
         active: true,
         steps,
         onToggle,
-        onChange
-      }
+        onChange,
+      },
     })
 
     let prev!: DOMWrapper<any>
@@ -376,8 +376,8 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const onClose = vi.fn()
     const wrapper = mount(Tour, {
@@ -385,8 +385,8 @@ describe('Tour', () => {
         active: true,
         closable: false,
         steps,
-        onClose
-      }
+        onClose,
+      },
     })
 
     expect(wrapper.find('.vxp-tour__close').exists()).toBe(false)
@@ -404,8 +404,8 @@ describe('Tour', () => {
       {
         target,
         title: 'Title',
-        content: 'Content'
-      }
+        content: 'Content',
+      },
     ]
     const wrapper = mount(() => <Tour active steps={steps} padding={20}></Tour>)
     const hollow = wrapper.find('.vxp-tour__hollow')
@@ -422,21 +422,21 @@ describe('Tour', () => {
       {
         target,
         title: '1',
-        content: '1'
+        content: '1',
       },
       {
         target,
         title: '2',
         content: '2',
-        type: 'success'
-      }
+        type: 'success',
+      },
     ]
     const wrapper = mount(Tour, {
       props: {
         active: true,
         steps,
-        type: 'primary'
-      }
+        type: 'primary',
+      },
     })
 
     expect(wrapper.find('.vxp-tour__bubble').classes()).toContain('vxp-tour__bubble--primary')

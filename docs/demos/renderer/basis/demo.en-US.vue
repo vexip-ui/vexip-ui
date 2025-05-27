@@ -16,11 +16,11 @@ function renderMessage({ message }: { message: string }) {
     h(
       'span',
       {
-        style: 'color: red'
+        style: 'color: red',
       },
-      [message]
+      [message],
     ),
-    ' that using render function'
+    ' that using render function',
   ])
 }
 </script>

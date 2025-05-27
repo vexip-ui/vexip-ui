@@ -58,7 +58,7 @@ import { splitProps } from './props'
 export default defineComponent({
   name: 'Split',
   components: {
-    Icon
+    Icon,
   },
   props: splitProps,
   emits: ['update:value'],
@@ -67,14 +67,14 @@ export default defineComponent({
       value: {
         default: 0.5,
         validator: (value: number) => value > 0 && value < 1,
-        static: true
+        static: true,
       },
       min: 0.1,
       max: 0.9,
       vertical: false,
       noTransition: false,
       lazy: false,
-      canFull: false
+      canFull: false,
     })
 
     const nh = useNameHelper('split')
@@ -157,7 +157,7 @@ export default defineComponent({
         }
 
         emitEvent(props.onMoveEnd, currentValue.value)
-      }
+      },
     })
 
     const className = computed(() => {
@@ -178,7 +178,7 @@ export default defineComponent({
         [nh.bm(props.vertical ? 'vertical' : 'horizontal')]: true,
         [nh.bm('moving')]: moving.value,
         [nh.bm(`${fullType}-full`)]: !!fullType,
-        [nh.bm('transition')]: transition.value
+        [nh.bm('transition')]: transition.value,
       }
     })
     const leftPaneStyle = computed(() => {
@@ -188,7 +188,7 @@ export default defineComponent({
             ? '0'
             : currentFull.value > 0
               ? '100%'
-              : `${(1 - currentValue.value) * 100}%`
+              : `${(1 - currentValue.value) * 100}%`,
       }
     })
     const rightPaneStyle = computed(() => {
@@ -198,7 +198,7 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `${currentValue.value * 100}%`
+              : `${currentValue.value * 100}%`,
       }
     })
     const triggerStyle = computed(() => {
@@ -208,7 +208,7 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `calc(${currentValue.value * 100}% - var(${nh.cv('handler-size')}) * 0.5)`
+              : `calc(${currentValue.value * 100}% - var(${nh.cv('handler-size')}) * 0.5)`,
       }
     })
     const fullIcons = computed(() => {
@@ -224,7 +224,7 @@ export default defineComponent({
           currentValue.value = value
           setTransition()
         }
-      }
+      },
     )
     watch(currentValue, value => {
       if (guide.value) {
@@ -294,8 +294,8 @@ export default defineComponent({
       handler,
 
       removeTransition,
-      handleFull
+      handleFull,
     }
-  }
+  },
 })
 </script>

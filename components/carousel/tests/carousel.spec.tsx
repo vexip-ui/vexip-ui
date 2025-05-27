@@ -50,8 +50,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
 
@@ -72,7 +72,7 @@ describe('Carousel', () => {
       props: {
         onChange,
         onPrev,
-        onNext
+        onNext,
       },
       slots: {
         default: () => (
@@ -82,8 +82,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
     const handlers = wrapper.findAll('.vxp-carousel__handler')
@@ -127,8 +127,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
     const handlers = wrapper.findAll('.vxp-carousel__handler')
@@ -155,8 +155,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
 

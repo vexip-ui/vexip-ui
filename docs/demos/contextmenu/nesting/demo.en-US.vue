@@ -21,10 +21,10 @@ async function contextmenu(event: MouseEvent) {
       { key: 'Option 2' },
       {
         key: 'Option 3',
-        children: [{ key: 'Option 3-1' }, { key: 'Option 3-2' }, { key: 'Option 3-3' }]
+        children: [{ key: 'Option 3-1' }, { key: 'Option 3-2' }, { key: 'Option 3-3' }],
       },
-      { key: 'Option 4' }
-    ]
+      { key: 'Option 4' },
+    ],
   })
 
   console.info(selectedKeys)

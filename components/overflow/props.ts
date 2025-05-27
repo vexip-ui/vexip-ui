@@ -10,7 +10,7 @@ export const overflowProps = buildProps({
   static: booleanProp,
   maxCount: Number,
   onRestChange: eventProp<(rest: number) => void>(),
-  onToggle: eventProp<(overflow: boolean) => void>()
+  onToggle: eventProp<(overflow: boolean) => void>(),
 })
 
 export type OverflowProps = ExtractPropTypes<typeof overflowProps>

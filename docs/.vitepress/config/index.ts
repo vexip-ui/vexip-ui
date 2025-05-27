@@ -29,15 +29,15 @@ export default async () => {
       head: getHeadConfig(),
       markdown: {
         highlight,
-        config: markdownItSetup
+        config: markdownItSetup,
       },
       vue: {
         // compiler: compiler as any,
         template: {
           compilerOptions: {
-            isCustomElement: tag => tag === 'iconify-icon'
-          }
-        }
+            isCustomElement: tag => tag === 'iconify-icon',
+          },
+        },
       },
       themeConfig: {
         asideMenus: {},
@@ -47,7 +47,7 @@ export default async () => {
             key: 'components',
             i18n: 'common.components',
             link: '/component/button',
-            activeMatch: '/component/'
+            activeMatch: '/component/',
           },
           { key: 'playground', i18n: 'common.playground', link: 'https://play.vexipui.com' },
           {
@@ -61,19 +61,19 @@ export default async () => {
                   {
                     key: 'create-vexip',
                     text: 'Create Vexip',
-                    link: 'https://github.com/vexip-ui/create-vexip'
+                    link: 'https://github.com/vexip-ui/create-vexip',
                   },
                   {
                     key: 'nuxt-module',
                     text: 'Vexip Nuxt Module',
-                    link: 'https://github.com/vexip-ui/nuxt'
+                    link: 'https://github.com/vexip-ui/nuxt',
                   },
                   {
                     key: 'lint-config',
                     text: 'Vexip Lint Config',
-                    link: 'https://github.com/vexip-ui/lint-config'
-                  }
-                ]
+                    link: 'https://github.com/vexip-ui/lint-config',
+                  },
+                ],
               },
               {
                 key: 'partnership',
@@ -82,26 +82,26 @@ export default async () => {
                   {
                     key: 'fantastic-admin',
                     text: 'Fantastic-admin',
-                    link: 'https://fantastic-admin.gitee.io/'
+                    link: 'https://fantastic-admin.gitee.io/',
                   },
                   {
                     key: 'become-partner',
                     i18n: 'common.becomePartner',
-                    link: 'mailto:544022268@qq.com'
-                  }
-                ]
-              }
-            ]
-          }
+                    link: 'mailto:544022268@qq.com',
+                  },
+                ],
+              },
+            ],
+          },
         ],
         outline: {
           '/guide/': [2, 3],
-          '/component/': [2, 3]
+          '/component/': [2, 3],
         },
         editLink: {
-          pattern: 'https://github.com/vexip-ui/vexip-ui/edit/main/docs/:path'
+          pattern: 'https://github.com/vexip-ui/vexip-ui/edit/main/docs/:path',
         },
-        footerLinks: []
+        footerLinks: [],
       },
       locales: {
         'en-US': {
@@ -110,12 +110,12 @@ export default async () => {
           description: SITE_DESC,
           head: [
             ['meta', { property: 'og:description', content: SITE_DESC }],
-            ['meta', { property: 'og:title', content: SITE_TITLE }]
+            ['meta', { property: 'og:title', content: SITE_TITLE }],
           ],
           themeConfig: {
             asideMenus: getAsideMenus(updated['en-US']),
-            footerLinks: getFooterLinks('en-US')
-          }
+            footerLinks: getFooterLinks('en-US'),
+          },
         },
         'zh-CN': {
           label: '中文',
@@ -123,16 +123,16 @@ export default async () => {
           description: SITE_DESC_ZH,
           head: [
             ['meta', { property: 'og:description', content: SITE_DESC_ZH }],
-            ['meta', { property: 'og:title', content: SITE_TITLE_ZH }]
+            ['meta', { property: 'og:title', content: SITE_TITLE_ZH }],
           ],
           themeConfig: {
             asideMenus: getAsideMenus(updated['zh-CN']),
-            footerLinks: getFooterLinks('zh-CN')
-          }
-        }
+            footerLinks: getFooterLinks('zh-CN'),
+          },
+        },
       },
-      pwa: getPwaConfig
-    })
+      pwa: getPwaConfig,
+    }),
   )
 }
 
@@ -168,14 +168,14 @@ function getAsideMenus(updatedFiles?: Set<string>): ThemeConfig['asideMenus'] {
         return [
           {
             text: 'Coming',
-            type: 'warning' as const
-          }
+            type: 'warning' as const,
+          },
         ]
       }
       const tag = compare(since, minorVersion, '=')
         ? {
             text: 'New',
-            type: 'error' as const
+            type: 'error' as const,
           }
         : null
 
@@ -185,7 +185,7 @@ function getAsideMenus(updatedFiles?: Set<string>): ThemeConfig['asideMenus'] {
     if (updatedFiles?.size && updatedFiles.has(link)) {
       tags.push({
         text: 'Updated',
-        type: 'success' as const
+        type: 'success' as const,
       })
     }
 
@@ -202,9 +202,9 @@ function getAsideMenus(updatedFiles?: Set<string>): ThemeConfig['asideMenus'] {
             key: guide.name,
             link: `/guide/${guide.name}`,
             i18n: `guide.${guide.i18n}`,
-            tags: getTagConfig(`/guide/${guide.name}`)
+            tags: getTagConfig(`/guide/${guide.name}`),
           }
-        })
+        }),
       }
     }),
     '/component/': getComponentConfig().map(group => {
@@ -221,11 +221,11 @@ function getAsideMenus(updatedFiles?: Set<string>): ThemeConfig['asideMenus'] {
             text: component.name,
             subI18n: `component.${component.name}`,
             noSub: ['en-US'],
-            tags: getTagConfig(link, component.since)
+            tags: getTagConfig(link, component.since),
           }
-        })
+        }),
       }
-    })
+    }),
   }
 }
 
@@ -239,83 +239,83 @@ function getFooterLinks(lang: 'zh-CN' | 'en-US'): ThemeConfig['footerLinks'] {
         {
           text: 'Create Vexip',
           subI18n: t('createProject'),
-          link: 'https://github.com/vexip-ui/create-vexip'
+          link: 'https://github.com/vexip-ui/create-vexip',
         },
         {
           text: 'Vexip Nuxt Module',
-          link: 'https://github.com/vexip-ui/nuxt'
+          link: 'https://github.com/vexip-ui/nuxt',
         },
         {
           text: 'Vexip Lint Config',
           subI18n: t('lintConfigSet'),
-          link: 'https://github.com/vexip-ui/lint-config'
+          link: 'https://github.com/vexip-ui/lint-config',
         },
         {
           text: 'Vexip Scripts',
           subI18n: t('releaseScripts'),
-          link: 'https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts'
+          link: 'https://github.com/vexip-ui/vexip-ui/tree/main/common/scripts',
         },
         {
           text: 'Vexip SFC Playground',
-          link: 'https://play.vexipui.com/'
+          link: 'https://play.vexipui.com/',
         },
         {
           text: 'Grid Layout Plus',
           subI18n: t('gridLayout'),
-          link: `https://grid-layout-plus.netlify.app/${lang === 'zh-CN' ? 'zh/' : ''}`
+          link: `https://grid-layout-plus.netlify.app/${lang === 'zh-CN' ? 'zh/' : ''}`,
         },
         {
           text: 'vite-plugin-dts',
-          link: 'https://github.com/qmhc/vite-plugin-dts'
+          link: 'https://github.com/qmhc/vite-plugin-dts',
         },
         {
           text: 'Fantastic-admin',
           subI18n: t('fantasticAdmin'),
-          link: 'https://fantastic-admin.gitee.io/'
+          link: 'https://fantastic-admin.gitee.io/',
         },
         {
           text: 'vue-hooks-plus',
           subI18n: t('hooksLib'),
-          link: `https://inhiblabcore.github.io/docs/hooks/${lang !== 'zh-CN' ? 'en/' : ''}`
+          link: `https://inhiblabcore.github.io/docs/hooks/${lang !== 'zh-CN' ? 'en/' : ''}`,
         },
         {
           text: 'RedBlues-1980',
           subI18n: t('logoDesign'),
-          link: 'https://richuangangban1980.lofter.com/'
-        }
-      ]
+          link: 'https://richuangangban1980.lofter.com/',
+        },
+      ],
     },
     {
       i18n: t('help'),
       items: [
         {
           text: 'GitHub',
-          link: 'https://github.com/vexip-ui/vexip-ui'
+          link: 'https://github.com/vexip-ui/vexip-ui',
         },
         {
           i18n: t('changelog'),
-          link: 'https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md'
+          link: 'https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md',
         },
         {
           i18n: t('issue'),
-          link: 'https://github.com/vexip-ui/vexip-ui/issues'
+          link: 'https://github.com/vexip-ui/vexip-ui/issues',
         },
         {
           i18n: t('contribute'),
-          link: 'https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md'
+          link: 'https://github.com/vexip-ui/vexip-ui/blob/main/CONTRIBUTING.md',
         },
         {
           i18n: t('qqGroup'),
-          link: 'https://jq.qq.com/?_wv=1027&k=5KlA84xG'
+          link: 'https://jq.qq.com/?_wv=1027&k=5KlA84xG',
         },
         {
           i18n: t('sponsor'),
           link:
             lang === 'zh-CN'
               ? '/zh-CN/guide/vexip-ui.html#%E8%B4%A1%E7%8C%AE'
-              : '/en-US/guide/vexip-ui.html#contributing'
-        }
-      ]
-    }
+              : '/en-US/guide/vexip-ui.html#contributing',
+        },
+      ],
+    },
   ]
 }

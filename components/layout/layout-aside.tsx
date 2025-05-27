@@ -10,7 +10,7 @@ import {
   renderSlot,
   shallowReadonly,
   toRef,
-  watch
+  watch,
 } from 'vue'
 
 import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
@@ -30,13 +30,13 @@ export default defineComponent({
       reduced: false,
       menus: {
         default: () => [],
-        static: true
+        static: true,
       },
       menuProps: null,
       logo: '',
       signName: '',
       fixed: 'lg',
-      signType: 'aside'
+      signType: 'aside',
     })
 
     const nh = useNameHelper('layout')
@@ -63,9 +63,9 @@ export default defineComponent({
           [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
           [nh.bem('aside', 'reduced')]: currentReduced.value,
-          [nh.bem('aside', 'no-sign')]: props.signType !== 'aside'
+          [nh.bem('aside', 'no-sign')]: props.signType !== 'aside',
         },
-        layoutState.classes.aside
+        layoutState.classes.aside,
       ]
     })
     const hasTop = computed(() => {
@@ -80,8 +80,8 @@ export default defineComponent({
         expanded: currentExpanded,
         reduced: currentReduced,
         toggleExpanded,
-        toggleReduced
-      })
+        toggleReduced,
+      }),
     )
 
     expose({ menu, toggleExpanded, toggleReduced, expandMenuByLabel })
@@ -90,13 +90,13 @@ export default defineComponent({
       () => props.reduced,
       value => {
         currentReduced.value = value
-      }
+      },
     )
     watch(
       () => props.expanded,
       value => {
         currentExpanded.value = value
-      }
+      },
     )
     watch(
       matched,
@@ -104,7 +104,7 @@ export default defineComponent({
         layoutState.useExpand = !value
         value && toggleExpanded(false)
       },
-      { immediate: true }
+      { immediate: true },
     )
     watch(counter, () => computeScrollHeight)
 
@@ -219,5 +219,5 @@ export default defineComponent({
         </CustomTag>
       )
     }
-  }
+  },
 })

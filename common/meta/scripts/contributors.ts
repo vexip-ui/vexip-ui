@@ -46,9 +46,9 @@ async function graphql<Result>(query: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
     },
-    body: JSON.stringify({ query })
+    body: JSON.stringify({ query }),
   })
 
   const result = await response.json().catch((error: string) => {
@@ -198,8 +198,8 @@ async function main() {
       ...[
         { path: `components/${component}`, component },
         { path: `style/${component}.scss`, component },
-        { path: `docs/demos/${component}`, component }
-      ]
+        { path: `docs/demos/${component}`, component },
+      ],
     )
   }
 

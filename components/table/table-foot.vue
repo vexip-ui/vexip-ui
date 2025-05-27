@@ -14,12 +14,12 @@ defineOptions({ name: 'TableFoot' })
 const props = defineProps({
   fixed: {
     type: String as PropType<'left' | 'right' | undefined>,
-    default: null
+    default: null,
   },
   above: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const { state, getters, mutations } = inject(TABLE_STORE)!
@@ -56,7 +56,7 @@ const style = computed(() => {
   const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
 
   return {
-    minWidth: width && `${width + padLeft + padRight}px`
+    minWidth: width && `${width + padLeft + padRight}px`,
   }
 })
 </script>

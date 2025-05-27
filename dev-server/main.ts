@@ -35,7 +35,7 @@ if (__THEME__) {
     import('../components/loading'),
     import('../components/message'),
     import('../components/notice'),
-    import('../components/toast')
+    import('../components/toast'),
   ]).then(
     ([
       { router },
@@ -45,7 +45,7 @@ if (__THEME__) {
       { Loading },
       { Message },
       { Notice },
-      { Toast }
+      { Toast },
     ]) => {
       createApp(App)
         .use(router)
@@ -56,6 +56,6 @@ if (__THEME__) {
         .use(Notice)
         .use(Toast)
         .mount('#app')
-    }
+    },
   )
 }

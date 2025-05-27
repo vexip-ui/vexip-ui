@@ -6,8 +6,8 @@ import { isClient } from '@vexip-ui/utils'
 const props = defineProps({
   reverse: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const canvas = ref<HTMLCanvasElement | null>(null)
@@ -118,7 +118,7 @@ function refresh() {
 
 <script lang="ts">
 export default {
-  inheritAttrs: false
+  inheritAttrs: false,
 }
 </script>
 

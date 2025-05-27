@@ -19,6 +19,6 @@ export function formatSeconds(seconds: number) {
 export function mergeIconScale(scale: number, icon: IconOptions & { icon: IconValue }) {
   return {
     ...icon,
-    scale: +(icon.scale || 1) * scale
+    scale: +(icon.scale || 1) * scale,
   }
 }

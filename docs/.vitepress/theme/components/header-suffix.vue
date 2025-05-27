@@ -30,7 +30,7 @@ const langOptions = computed(() => {
     return {
       lang,
       name: config.common.language || value.label,
-      link: value.link
+      link: value.link,
     }
   })
 })
@@ -41,7 +41,7 @@ function changeLanguage(lang: string, link?: string) {
       page.value.relativePath === 'index.md'
         ? '/'
         : page.value.relativePath.substring(
-          locale.value === 'root' ? 0 : (locale.value as string).length
+          locale.value === 'root' ? 0 : (locale.value as string).length,
         )
     link = link || (lang === 'root' ? '/' : `/${lang}`)
 
@@ -112,7 +112,7 @@ function syncVitepressDir() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .header-suffix {
   --item-span: 24px;

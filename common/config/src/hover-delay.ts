@@ -33,7 +33,7 @@ export function configHoverDelay(sourceDelay: MaybeRef<number>, app?: App) {
 
       return getOrDefault(
         delay,
-        upstreamDelay ? getOrDefault(upstreamDelay.value, globalDelay.value) : globalDelay.value
+        upstreamDelay ? getOrDefault(upstreamDelay.value, globalDelay.value) : globalDelay.value,
       )
     })
 

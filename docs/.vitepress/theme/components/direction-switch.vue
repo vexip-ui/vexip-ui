@@ -14,7 +14,7 @@ watch(
   () => {
     emit('change', rtl.value)
   },
-  { flush: 'post' }
+  { flush: 'post' },
 )
 
 onMounted(() => {

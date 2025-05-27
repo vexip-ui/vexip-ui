@@ -13,5 +13,5 @@ export type {
   ImageSkeletonProps,
   ImageSlots,
   ImageGroupSlots,
-  ImageViewerSlots
+  ImageViewerSlots,
 } from './symbol'

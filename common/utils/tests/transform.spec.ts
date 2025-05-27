@@ -8,7 +8,7 @@ import {
   normalizePath,
   sortByProps,
   transformTree,
-  walkTree
+  walkTree,
 } from '../src'
 
 describe('transform', () => {
@@ -25,46 +25,215 @@ describe('transform', () => {
   it('transformListToMap', () => {
     expect(listToMap([{ id: '1' }, { id: '2' }], 'id')).toMatchObject({
       1: { id: '1' },
-      2: { id: '2' }
+      2: { id: '2' },
     })
     expect(listToMap([{ id: '1' }, { id: '2' }], i => i.id)).toMatchObject({
       1: { id: '1' },
-      2: { id: '2' }
+      2: { id: '2' },
     })
     expect(listToMap([{ id: '1' }, { id: '2' }], 'id', i => i.id)).toMatchObject({
       1: '1',
-      2: '2'
+      2: '2',
     })
     expect(listToMap([{ id: '1' }, { id: '2' }], 'id', undefined, true)).toMatchObject(
-      new Map().set('1', { id: '1' }).set('2', { id: '2' })
+      new Map().set('1', { id: '1' }).set('2', { id: '2' }),
     )
     expect(
       listToMap(
         [{ id: '1' }, { id: '2' }],
         i => i.id,
         i => i.id,
-        true
-      )
+        true,
+      ),
     ).toMatchObject(new Map().set('1', '1').set('2', '2'))
+    expect(listToMap([{ id: '1' }, { id: '2' }], i => i.id, undefined, true)).toMatchObject(
+      new Map().set('1', { id: '1' }).set('2', { id: '2' }),
+    )
+    expect(
+      listToMap(
+        [{ id: '1' }, { id: '2' }],
+        i => i.id,
+        i => i.id,
+        false,
+      ),
+    ).toMatchObject({
+      1: '1',
+      2: '2',
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => i.name,
+      ),
+    ).toMatchObject({
+      1: 'Alice',
+      2: 'Bob',
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => i.name,
+      ),
+    ).toMatchObject({
+      1: 'Alice',
+      2: 'Bob',
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => i.name,
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', 'Alice').set('2', 'Bob'))
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => i.name,
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', 'Alice').set('2', 'Bob'))
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        undefined,
+        true,
+      ),
+    ).toMatchObject(
+      new Map().set('1', { id: '1', name: 'Alice' }).set('2', { id: '2', name: 'Bob' }),
+    )
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        undefined,
+        true,
+      ),
+    ).toMatchObject(
+      new Map().set('1', { id: '1', name: 'Alice' }).set('2', { id: '2', name: 'Bob' }),
+    )
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => ({ name: i.name }),
+      ),
+    ).toMatchObject({
+      1: { name: 'Alice' },
+      2: { name: 'Bob' },
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => ({ name: i.name }),
+      ),
+    ).toMatchObject({
+      1: { name: 'Alice' },
+      2: { name: 'Bob' },
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        'id',
+        i => ({ name: i.name }),
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', { name: 'Alice' }).set('2', { name: 'Bob' }))
+    expect(
+      listToMap(
+        [
+          { id: '1', name: 'Alice' },
+          { id: '2', name: 'Bob' },
+        ],
+        i => i.id,
+        i => ({ name: i.name }),
+        true,
+      ),
+    ).toMatchObject(new Map().set('1', { name: 'Alice' }).set('2', { name: 'Bob' }))
+    expect(listToMap([], 'id')).toMatchObject({})
+    expect(listToMap([], 'id', undefined, true)).toMatchObject(new Map())
+    expect(listToMap([{ name: 'Alice' }], 'id' as any)).toMatchObject({})
+    expect(listToMap([{ id: '1' }, { id: '1' }], 'id')).toMatchObject({
+      1: { id: '1' },
+    })
+    expect(listToMap([1, 2, 3], i => i)).toMatchObject({
+      1: 1,
+      2: 2,
+      3: 3,
+    })
+    expect(() => listToMap(null as any, 'id')).toThrow()
+    expect(() => listToMap(undefined as any, 'id')).toThrow()
+    expect(() => listToMap('invalid' as any, 'id')).toThrow()
+    expect(
+      listToMap([{ id: '1' }, null as any, { id: '2' }, undefined as any], 'id'),
+    ).toMatchObject({
+      1: { id: '1' },
+      2: { id: '2' },
+    })
+    expect(
+      listToMap(
+        [
+          { id: '1', details: { name: 'Alice' } },
+          { id: '2', details: { name: 'Bob' } },
+        ],
+        'id',
+        i => i.details,
+      ),
+    ).toMatchObject({
+      1: { name: 'Alice' },
+      2: { name: 'Bob' },
+    })
   })
 
   it('sortByProps', () => {
     const data = Array.from({ length: 10 }, (_, i) => ({
       name: `n${Math.floor(i / 2)}`,
-      label: `l${i % 2}`
+      label: `l${i % 2}`,
     })).sort(() => Math.random() - 0.5)
 
     expect(
       sortByProps(data, [
         {
           key: 'name',
-          type: 'asc'
+          type: 'asc',
         },
         {
           key: 'label',
-          type: 'asc'
-        }
-      ])
+          type: 'asc',
+        },
+      ]),
     ).toEqual([
       { name: 'n0', label: 'l0' },
       { name: 'n0', label: 'l1' },
@@ -75,7 +244,7 @@ describe('transform', () => {
       { name: 'n3', label: 'l0' },
       { name: 'n3', label: 'l1' },
       { name: 'n4', label: 'l0' },
-      { name: 'n4', label: 'l1' }
+      { name: 'n4', label: 'l1' },
     ])
   })
 
@@ -88,7 +257,7 @@ describe('transform', () => {
       { name: '5', parent: 4, id: 5 },
       { name: '6', parent: 4, id: 6 },
       { name: '7', parent: 1, id: 7 },
-      { name: '8', parent: null, id: 8 }
+      { name: '8', parent: null, id: 8 },
     ]
 
     expect(transformTree(data)).toMatchObject([
@@ -99,14 +268,14 @@ describe('transform', () => {
           { name: '3' },
           {
             name: '4',
-            children: [{ name: '5' }, { name: '6' }]
+            children: [{ name: '5' }, { name: '6' }],
           },
-          { name: '7' }
-        ]
+          { name: '7' },
+        ],
       },
       {
-        name: '8'
-      }
+        name: '8',
+      },
     ])
   })
 
@@ -119,14 +288,14 @@ describe('transform', () => {
           { name: '3' },
           {
             name: '4',
-            children: [{ name: '5' }, { name: '6' }]
+            children: [{ name: '5' }, { name: '6' }],
           },
-          { name: '7' }
-        ]
+          { name: '7' },
+        ],
       },
       {
-        name: '8'
-      }
+        name: '8',
+      },
     ]
 
     expect(flatTree(getData())).toMatchObject([
@@ -137,7 +306,7 @@ describe('transform', () => {
       { name: '4', parent: 1, id: 5 },
       { name: '7', parent: 1, id: 6 },
       { name: '5', parent: 5, id: 7 },
-      { name: '6', parent: 5, id: 8 }
+      { name: '6', parent: 5, id: 8 },
     ])
 
     expect(flatTree(getData(), { depthFirst: true })).toMatchObject([
@@ -148,7 +317,7 @@ describe('transform', () => {
       { name: '5', parent: 4, id: 5 },
       { name: '6', parent: 4, id: 6 },
       { name: '7', parent: 1, id: 7 },
-      { name: '8', parent: null, id: 8 }
+      { name: '8', parent: null, id: 8 },
     ])
 
     for (const item of flatTree(getData(), { injectId: false })) {
@@ -170,14 +339,14 @@ describe('transform', () => {
           { name: '3' },
           {
             name: '4',
-            children: [{ name: '5' }, { name: '6' }]
+            children: [{ name: '5' }, { name: '6' }],
           },
-          { name: '7' }
-        ]
+          { name: '7' },
+        ],
       },
       {
-        name: '8'
-      }
+        name: '8',
+      },
     ]
 
     let results = [
@@ -188,7 +357,7 @@ describe('transform', () => {
       { name: '4', depth: 1 },
       { name: '7', depth: 1 },
       { name: '5', depth: 2 },
-      { name: '6', depth: 2 }
+      { name: '6', depth: 2 },
     ]
     walkTree(data, (item, depth) => {
       const result = results.shift()!
@@ -206,7 +375,7 @@ describe('transform', () => {
       { name: '5', depth: 2 },
       { name: '6', depth: 2 },
       { name: '7', depth: 1 },
-      { name: '8', depth: 0 }
+      { name: '8', depth: 0 },
     ]
     walkTree(
       data,
@@ -217,7 +386,7 @@ describe('transform', () => {
         expect(item.name).toEqual(result.name)
         expect(depth).toEqual(result.depth)
       },
-      { depthFirst: true }
+      { depthFirst: true },
     )
   })
 
@@ -230,14 +399,14 @@ describe('transform', () => {
           { name: '3' },
           {
             name: '4',
-            children: [{ name: '5' }, { name: '6' }]
+            children: [{ name: '5' }, { name: '6' }],
           },
-          { name: '7' }
-        ]
+          { name: '7' },
+        ],
       },
       {
-        name: '8'
-      }
+        name: '8',
+      },
     ]
     const mapData = [
       {
@@ -247,14 +416,14 @@ describe('transform', () => {
           { label: '3' },
           {
             label: '4',
-            children: [{ label: '5' }, { label: '6' }]
+            children: [{ label: '5' }, { label: '6' }],
           },
-          { label: '7' }
-        ]
+          { label: '7' },
+        ],
       },
       {
-        label: '8'
-      }
+        label: '8',
+      },
     ]
 
     let results = [
@@ -265,7 +434,7 @@ describe('transform', () => {
       { name: '4', depth: 1 },
       { name: '7', depth: 1 },
       { name: '5', depth: 2 },
-      { name: '6', depth: 2 }
+      { name: '6', depth: 2 },
     ]
     expect(
       mapTree(data, (item, depth) => {
@@ -276,7 +445,7 @@ describe('transform', () => {
         expect(depth).toEqual(result.depth)
 
         return { label: item.name }
-      })
+      }),
     ).toMatchObject(mapData)
 
     results = [
@@ -287,7 +456,7 @@ describe('transform', () => {
       { name: '5', depth: 2 },
       { name: '6', depth: 2 },
       { name: '7', depth: 1 },
-      { name: '8', depth: 0 }
+      { name: '8', depth: 0 },
     ]
     expect(
       mapTree(
@@ -301,8 +470,8 @@ describe('transform', () => {
 
           return { label: item.name }
         },
-        { depthFirst: true }
-      )
+        { depthFirst: true },
+      ),
     ).toMatchObject(mapData)
   })
 
@@ -315,14 +484,14 @@ describe('transform', () => {
           { name: '3' },
           {
             name: '4',
-            children: [{ name: '5' }, { name: '6' }]
+            children: [{ name: '5' }, { name: '6' }],
           },
-          { name: '7' }
-        ]
+          { name: '7' },
+        ],
       },
       {
-        name: '8'
-      }
+        name: '8',
+      },
     ]
 
     expect(filterTree(data, item => item.name === '4')).toMatchObject([
@@ -331,10 +500,10 @@ describe('transform', () => {
         children: [
           {
             name: '4',
-            children: [{ name: '5' }, { name: '6' }]
-          }
-        ]
-      }
+            children: [{ name: '5' }, { name: '6' }],
+          },
+        ],
+      },
     ])
     expect(filterTree(data, item => item.name === '4', { leafOnly: true })).toMatchObject([])
   })

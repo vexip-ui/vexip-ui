@@ -17,7 +17,7 @@ export default defineComponent({
       height: null,
       repeat: {
         default: 1,
-        validator: (value: number) => value > 0
+        validator: (value: number) => value > 0,
       },
       tag: 'div',
       activated: null,
@@ -28,7 +28,7 @@ export default defineComponent({
       circle: null,
       block: null,
       spread: 0,
-      loading: null
+      loading: null,
     })
 
     const groupState = inject(GROUP_STATE, {} as any)
@@ -64,7 +64,7 @@ export default defineComponent({
         [nh.bm('image')]: props.image,
         [nh.bm('round')]: round.value && !circle.value,
         [nh.bm('circle')]: circle.value,
-        [nh.bm('activated')]: activated.value
+        [nh.bm('activated')]: activated.value,
       }
     })
     const style = computed(() => {
@@ -130,5 +130,5 @@ export default defineComponent({
 
       return renderSkeleton()
     }
-  }
+  },
 })

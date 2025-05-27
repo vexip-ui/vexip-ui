@@ -18,7 +18,7 @@ const props = useProps('imageGroup', _props, {
   showAll: false,
   preview: false,
   viewerTransfer: null,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const slots = defineSlots<ImageGroupSlots>()
@@ -34,8 +34,8 @@ const className = computed(() => {
     nh.b(),
     nh.ns('image-vars'),
     {
-      [nh.bm('preview')]: props.preview
-    }
+      [nh.bm('preview')]: props.preview,
+    },
   ]
 })
 const srcList = computed(() => Array.from(imageStates).map(state => state.src))
@@ -56,8 +56,8 @@ provide(
     preview: toRef(props, 'preview'),
     increaseItem,
     decreaseItem,
-    handlePreview
-  })
+    handlePreview,
+  }),
 )
 
 defineExpose({ currentActive, currentIndex })

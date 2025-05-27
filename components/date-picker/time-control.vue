@@ -14,69 +14,69 @@ defineOptions({ name: 'TimeControl' })
 const props = defineProps({
   unitType: {
     type: String as PropType<TimeType | ''>,
-    default: ''
+    default: '',
   },
   enabled: {
     type: Object as PropType<Record<TimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   activated: {
     type: Object as PropType<Record<TimeType, boolean>>,
-    default: () => ({})
+    default: () => ({}),
   },
   timeValue: {
     type: Object as PropType<Record<TimeType, number>>,
-    default: () => ({})
+    default: () => ({}),
   },
   separator: {
     type: String,
-    default: ':'
+    default: ':',
   },
   visible: {
     type: Boolean,
-    default: false
+    default: false,
   },
   focused: {
     type: Boolean,
-    default: false
+    default: false,
   },
   filler: {
     type: String,
     default: '-',
-    validator: (value: string) => value.length === 1
+    validator: (value: string) => value.length === 1,
   },
   steps: {
     type: Array as PropType<number[]>,
-    default: () => [1, 1, 1]
+    default: () => [1, 1, 1],
   },
   ctrlSteps: {
     type: Array as PropType<number[]>,
-    default: () => [5, 5, 5]
+    default: () => [5, 5, 5],
   },
   labels: {
     type: Object as PropType<Partial<Record<TimeType, string>>>,
-    default: () => ({})
+    default: () => ({}),
   },
   hasError: {
     type: Boolean,
-    default: false
+    default: false,
   },
   placeholder: {
     type: String,
-    default: ''
+    default: '',
   },
   readonly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   labeledBy: {
     type: String,
-    default: undefined
+    default: undefined,
   },
   locale: {
     type: Object as PropType<LocaleConfig['timePicker']>,
-    default: () => ({})
-  }
+    default: () => ({}),
+  },
 })
 
 const emit = defineEmits([
@@ -89,7 +89,7 @@ const emit = defineEmits([
   'unit-blur',
   'prev-unit',
   'next-unit',
-  'blur'
+  'blur',
 ])
 
 const nh = useNameHelper('time-picker')
@@ -120,7 +120,7 @@ defineExpose({
   },
   blur: () => {
     wrapper.value?.blur()
-  }
+  },
 })
 
 function formatValue(type: TimeType) {

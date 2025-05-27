@@ -11,12 +11,13 @@ import {
   emitEvent,
   getStepByWord,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
-  useProps
+  useProps,
 } from '@vexip-ui/config'
 import { unrefElement, useModifier, usePopper } from '@vexip-ui/hooks'
-import { callIfFunc, decide, getGlobalCount, isClient, isFunction } from '@vexip-ui/utils'
+import { callIfFunc, decide, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE } from './symbol'
 
@@ -26,7 +27,7 @@ import type { TourSlots, TourStepOptions } from './symbol'
 
 defineOptions({
   name: 'Tour',
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const _props = defineProps(tourProps)
@@ -36,11 +37,11 @@ const props = useProps('tour', _props, {
   index: {
     static: true,
     default: 0,
-    validator: value => value >= 0
+    validator: value => value >= 0,
   },
   steps: {
     static: true,
-    default: () => []
+    default: () => [],
   },
   type: 'default',
   hideMask: false,
@@ -49,14 +50,12 @@ const props = useProps('tour', _props, {
   closable: true,
   permeable: false,
   transfer: false,
-  slots: () => ({})
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:active', 'update:index'])
 
 defineSlots<TourSlots>()
-
-const idIndex = `${getGlobalCount()}`
 
 const nh = useNameHelper('tour')
 const locale = useLocale('tour', toRef(props, 'locale'))
@@ -82,17 +81,17 @@ useModifier({
       [
         [() => modifier.left || modifier.up, prev],
         [() => modifier.right || modifier.down, next],
-        [() => modifier.escape, handleClose]
+        [() => modifier.escape, handleClose],
       ],
       {
         beforeMatchAny: () => {
           event.preventDefault()
           event.stopPropagation()
         },
-        afterMatchAny: modifier.resetAll
-      }
+        afterMatchAny: modifier.resetAll,
+      },
     )
-  }
+  },
 })
 
 const allSteps = computed(() => {
@@ -112,8 +111,8 @@ const className = computed(() => {
     nh.bs('vars'),
     {
       [nh.bm('hide-mask')]: props.hideMask,
-      [nh.bm('permeable')]: props.permeable
-    }
+      [nh.bm('permeable')]: props.permeable,
+    },
   ]
 })
 const padding = computed(() => {
@@ -125,7 +124,7 @@ const padding = computed(() => {
     return new Array<number>(4).fill(props.padding)
   }
 })
-const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
+const maskId = useId()
 
 const { reference, placement, updatePopper } = usePopper({
   wrapper,
@@ -133,7 +132,7 @@ const { reference, placement, updatePopper } = usePopper({
   popper: computed(() => bubble.value?.$el),
   arrow: computed(() => bubble.value?.arrow),
   shift: { crossAxis: true },
-  autoUpdate: false
+  autoUpdate: false,
 })
 
 watch(
@@ -144,13 +143,13 @@ watch(
     } else {
       currentActive.value = value
     }
-  }
+  },
 )
 watch(
   () => props.index,
   value => {
     currentIndex.value = Math.max(0, value)
-  }
+  },
 )
 watch(
   [currentActive, currentStep],
@@ -172,7 +171,7 @@ watch(
       left - padding.value[3],
       top - padding.value[0],
       width + padding.value[1] + padding.value[3],
-      height + padding.value[0] + padding.value[2]
+      height + padding.value[0] + padding.value[2],
     ]
 
     if (props.permeable) {
@@ -182,18 +181,18 @@ watch(
         [0, 0, '100%', y],
         [x + w, 0, `calc(100% - ${x + w}px)`, '100%'],
         [0, y + h, '100%', `calc(100% - ${y + h}px)`],
-        [0, 0, x, '100%']
+        [0, 0, x, '100%'],
       ]
     }
 
     updatePopper()
   },
-  { immediate: true, flush: 'post' }
+  { immediate: true, flush: 'post' },
 )
 
 provide(TOUR_STATE, {
   increaseStep,
-  decreaseStep
+  decreaseStep,
 })
 
 defineExpose({
@@ -205,7 +204,7 @@ defineExpose({
   start,
   prev,
   next,
-  close
+  close,
 })
 
 const actions = { start, prev, next, close }
@@ -213,8 +212,8 @@ const slotParams = shallowReadonly(
   reactive({
     ...actions,
     step: currentStep,
-    index: currentIndex
-  })
+    index: currentIndex,
+  }),
 )
 
 function increaseStep(step: TourStepOptions) {

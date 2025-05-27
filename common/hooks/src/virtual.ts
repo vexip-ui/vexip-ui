@@ -56,7 +56,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
     defaultKeyAt,
     bufferSize = ref(5),
     wrapper = ref(null),
-    autoResize = true
+    autoResize = true,
   } = options
 
   const indexMap = computed(() => {
@@ -95,7 +95,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
   const startIndex = computed(() => {
     return Math.max(
       heightTree.value.boundIndex(scrollOffset.value) - Math.max(unref(bufferSize), 0),
-      0
+      0,
     )
   })
   const visibleItems = computed(() => {
@@ -106,7 +106,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
       heightTree.value.boundIndex(scrollOffset.value + visibleHeight.value) +
         1 +
         Math.max(unref(bufferSize), 0),
-      unrefItems.length
+      unrefItems.length,
     )
 
     return unrefItems.slice(startIndex.value, endIndex)
@@ -121,7 +121,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
     return {
       height: fixed ? `${height}px` : undefined,
       minHeight: fixed ? undefined : `${height}px`,
-      boxSizing: 'content-box'
+      boxSizing: 'content-box',
     } as const
   })
   const itemsStyle = computed(() => {
@@ -129,7 +129,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
     treeUpdateDep.value
 
     return {
-      transform: `translate3d(0, ${heightTree.value.sum(startIndex.value)}px, 0)`
+      transform: `translate3d(0, ${heightTree.value.sum(startIndex.value)}px, 0)`,
     }
   })
 
@@ -154,7 +154,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
           scrollToKey(defaultKeyAt)
         }
       },
-      { immediate: true, flush: 'post' }
+      { immediate: true, flush: 'post' },
     )
 
     onScopeDispose(() => {
@@ -239,7 +239,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
       wrapperEl.scrollTo({
         behavior,
         top,
-        left: 0
+        left: 0,
       })
     }
   }
@@ -251,7 +251,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
       wrapperEl.scrollBy({
         behavior,
         top: delta,
-        left: 0
+        left: 0,
       })
     }
   }
@@ -271,7 +271,7 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
       wrapperEl.scrollTo({
         behavior,
         top: heightTree.value.sum(index),
-        left: 0
+        left: 0,
       })
     }
   }
@@ -324,6 +324,6 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
     scrollToKey,
     scrollToIndex,
     ensureIndexInView,
-    ensureKeyInView
+    ensureKeyInView,
   }
 }

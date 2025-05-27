@@ -3,9 +3,8 @@ import { Portal } from '@/components/portal'
 
 import { computed, ref, watch } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useId, useNameHelper, useProps } from '@vexip-ui/config'
 import { useFullScreen } from '@vexip-ui/hooks'
-import { getGlobalCount } from '@vexip-ui/utils'
 import { fullScreenProps } from './props'
 // import { getIndexId } from './symbol'
 
@@ -15,14 +14,14 @@ defineOptions({ name: 'FullScreen' })
 
 const _props = defineProps(fullScreenProps)
 const props = useProps('fullScreen', _props, {
-  tag: 'div'
+  tag: 'div',
 })
 
 defineSlots<{ default: (params: FullScreenSlotParams) => any }>()
 
 const nh = useNameHelper('full-screen')
 
-const placeId = `__vxp-full-screen-id-${getGlobalCount()}`
+const placeId = useId()
 
 const isEntered = ref(false)
 const zIndex = ref<number>()
@@ -36,7 +35,7 @@ const {
   enter: browserEnter,
   exit: browserExit,
   target: wrapper,
-  full: browserFull
+  full: browserFull,
 } = useFullScreen()
 
 watch(browserFull, value => {
@@ -89,7 +88,7 @@ defineExpose({
   wrapper,
   enter,
   exit,
-  toggle
+  toggle,
 })
 </script>
 

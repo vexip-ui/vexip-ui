@@ -8,7 +8,7 @@ import type {
   ComponentObjectPropsOptions,
   ComputedRef,
   MaybeRef,
-  PropType
+  PropType,
 } from 'vue'
 import type { LocaleConfig, LocaleNames } from './locale'
 import type { AnyFunction, EnsureValue, Expand, MaybeFunction, VoidFunction } from './types'
@@ -67,7 +67,7 @@ export function configProps<T>(props: MaybeRef<T>, app?: App) {
   if (app) {
     app.provide(
       PROVIDED_PROPS,
-      computed(() => unref(props))
+      computed(() => unref(props)),
     )
   } else {
     const upstreamProps = inject<ComputedRef<Record<string, any>> | null>(PROVIDED_PROPS, null)
@@ -86,11 +86,11 @@ export function configProps<T>(props: MaybeRef<T>, app?: App) {
 export function useProps<T extends Record<string, any>>(
   name: string,
   sourceProps: T,
-  config: PropsConfigOptions<T> = {}
+  config: PropsConfigOptions<T> = {},
 ) {
   const providedProps = inject<ComputedRef<Record<string, PropsConfigOptions<T>>> | null>(
     PROVIDED_PROPS,
-    null
+    null,
   )
   const commonProps = computed<PropsConfigOptions<T>>(() => {
     return providedProps?.value?.default ?? {}
@@ -134,11 +134,11 @@ export function useProps<T extends Record<string, any>>(
 
           if (result === false) {
             console.warn(
-              `${toWarnPrefix(name)}: an invalid value is set to '${key as string}' prop`
+              `${toWarnPrefix(name)}: an invalid value is set to '${key as string}' prop`,
             )
           }
         },
-        { immediate: true }
+        { immediate: true },
       )
 
     if (propOptions.static) {
@@ -168,7 +168,7 @@ export function useProps<T extends Record<string, any>>(
 
 export function useHookProps<T extends Record<any, any>>(
   props: T,
-  defaults: { [K in keyof T]: T[K] | null }
+  defaults: { [K in keyof T]: T[K] | null },
 ) {
   const propsWithDefault: { [P in keyof T]?: ComputedRef<T[P]> } = {}
 
@@ -187,15 +187,15 @@ function toWarnPrefix(name: string) {
 
 export const booleanProp = {
   type: Boolean,
-  default: null
+  default: null,
 }
 export const booleanStringProp = {
   type: [Boolean, String],
-  default: null
+  default: null,
 }
 export const booleanNumberProp = {
   type: [Boolean, Number],
-  default: null
+  default: null,
 }
 
 type CommonExcludedProps =
@@ -247,7 +247,7 @@ export function wrapProps<T extends ComponentObjectPropsOptions>(props: T) {
 
 export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
   const common = {
-    inherit: booleanProp
+    inherit: booleanProp,
   }
 
   return Object.freeze({ ...common, ...props }) as Expand<VexipProps<typeof common & T>>
@@ -260,12 +260,12 @@ export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof
 export function omitProps<
   T extends ComponentObjectPropsOptions,
   K extends keyof T,
-  E extends ComponentObjectPropsOptions
+  E extends ComponentObjectPropsOptions,
 >(props: T, keys: K[], extra: E): Expand<Omit<T, K> & E>
 export function omitProps<
   T extends ComponentObjectPropsOptions,
   K extends keyof T,
-  E extends ComponentObjectPropsOptions
+  E extends ComponentObjectPropsOptions,
 >(props: T, keys: K[], extra?: E) {
   const omittedKeys = new Set(keys)
 
@@ -278,8 +278,8 @@ export function omitProps<
 
         return prev
       }, {}),
-      extra || {}
-    )
+      extra || {},
+    ),
   )
 }
 
@@ -292,7 +292,7 @@ const sizeValidator = (value: ComponentSize) => validSizeValues.includes(value)
 export function createSizeProp(defaultValue: MaybeRef<ComponentSize> = 'default') {
   return {
     default: () => unref(defaultValue),
-    validator: sizeValidator
+    validator: sizeValidator,
   }
 }
 
@@ -305,7 +305,7 @@ const stateValidator = (value: ComponentState) => validStateValues.includes(valu
 export function createStateProp(defaultValue: MaybeRef<ComponentState> = 'default') {
   return {
     default: () => unref(defaultValue),
-    validator: stateValidator
+    validator: stateValidator,
   }
 }
 
@@ -392,11 +392,11 @@ export function localeProp<N extends LocaleNames>(_name: N) {
 
 export const valueProp = {
   type: [String, Number, Boolean],
-  default: null
+  default: null,
 }
 export const valuesProp = {
   type: [String, Number, Boolean, Array] as PropType<MaybeArray<string | number | boolean>>,
-  default: null
+  default: null,
 }
 
 export const iconProp = [Object, Function]
@@ -404,6 +404,6 @@ export const iconProp = [Object, Function]
 export function createIconProp(defaultValue: Record<any, any> | AnyFunction | null = null) {
   return {
     isFunc: true,
-    default: defaultValue
+    default: defaultValue,
   }
 }

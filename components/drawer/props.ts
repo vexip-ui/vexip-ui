@@ -5,7 +5,7 @@ import {
   classProp,
   eventProp,
   localeProp,
-  sizeProp
+  sizeProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -47,7 +47,7 @@ export const drawerProps = buildProps({
   onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
   onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>(),
   onConfirm: eventProp(),
-  onCancel: eventProp()
+  onCancel: eventProp(),
 })
 
 export type DrawerProps = ExtractPropTypes<typeof drawerProps>

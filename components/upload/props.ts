@@ -5,7 +5,7 @@ import {
   iconProp,
   localeProp,
   stateProp,
-  styleProp
+  styleProp,
 } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
@@ -22,7 +22,7 @@ import type {
   UploadHttpError,
   UploadListSlots,
   UploadListType,
-  UploadSlots
+  UploadSlots,
 } from './symbol'
 
 export const uploadProps = buildProps({
@@ -74,7 +74,7 @@ export const uploadProps = buildProps({
   onPreview: eventProp<(file: UploadFileState) => void>(),
   onProgress: eventProp<(file: UploadFileState, percent: number) => void>(),
   onSuccess: eventProp<(file: UploadFileState, response: any) => void>(),
-  onError: eventProp<(file: UploadFileState, error: UploadHttpError) => void>()
+  onError: eventProp<(file: UploadFileState, error: UploadHttpError) => void>(),
 })
 
 export type UploadProps = ExtractPropTypes<typeof uploadProps>
@@ -95,7 +95,7 @@ export const uploadListProps = buildProps({
   canPreview: Function as PropType<(file: UploadFileState) => boolean>,
   slots: Object as PropType<UploadListSlots>,
   onDelete: eventProp<(file: UploadFileState) => void>(),
-  onPreview: eventProp<(file: UploadFileState) => void>()
+  onPreview: eventProp<(file: UploadFileState) => void>(),
 })
 
 export type UploadListProps = ExtractPropTypes<typeof uploadListProps>
@@ -112,7 +112,7 @@ export const uploadFileProps = buildProps({
   canPreview: Function as PropType<(file: UploadFileState) => boolean>,
   slots: Object as PropType<UploadFileSlots>,
   onDelete: eventProp<(file: UploadFileState) => void>(),
-  onPreview: eventProp<(file: UploadFileState) => void>()
+  onPreview: eventProp<(file: UploadFileState) => void>(),
 })
 
 export type UploadFileProps = ExtractPropTypes<typeof uploadFileProps>

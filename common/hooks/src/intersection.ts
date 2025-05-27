@@ -60,7 +60,7 @@ export function useIntersection(options: UseIntersectionOptions) {
     marginCache.set(margin, {
       ob: new IntersectionObserver(handleIntersect, { ...options, rootMargin: margin }),
       count: 0,
-      handlers: new WeakMap<Element, IntersectionHandler>()
+      handlers: new WeakMap<Element, IntersectionHandler>(),
     })
   }
 
@@ -89,7 +89,7 @@ export function useIntersection(options: UseIntersectionOptions) {
         remove = noop
       }
     },
-    { immediate: true, flush: 'post' }
+    { immediate: true, flush: 'post' },
   )
 
   getCurrentScope() && onScopeDispose(disconnect)

@@ -21,7 +21,7 @@ describe('Dropdown', () => {
               <DropdownItem>{'2'}</DropdownItem>
               <DropdownItem>{'3'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -66,7 +66,7 @@ describe('Dropdown', () => {
             <DropdownList>
               <DropdownItem>{'1'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -103,7 +103,7 @@ describe('Dropdown', () => {
               <DropdownItem label={'2'}>{'2'}</DropdownItem>
               <DropdownItem label={'3'}>{'3'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -129,7 +129,7 @@ describe('Dropdown', () => {
                 {'3'}
               </DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -152,7 +152,7 @@ describe('Dropdown', () => {
             <DropdownList>
               <DropdownItem>{'1'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -194,11 +194,11 @@ describe('Dropdown', () => {
                       <DropdownItem label={'2-1'}>{'2-1'}</DropdownItem>
                       <DropdownItem label={'2-2'}>{'2-2'}</DropdownItem>
                     </DropdownList>
-                  )
+                  ),
                 }}
               </Dropdown>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -228,7 +228,7 @@ describe('Dropdown', () => {
             <DropdownList>
               <DropdownItem divided>{'1'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -255,7 +255,7 @@ describe('Dropdown', () => {
                 {'2'}
               </DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))

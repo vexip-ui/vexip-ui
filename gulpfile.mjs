@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import fs from 'fs-extra'
 import gulp from 'gulp'
 import gulpSass from 'gulp-sass'
-import * as dartSass from 'sass'
+import * as dartSass from 'sass-embedded'
 import autoprefixer from 'gulp-autoprefixer'
 import cleanCSS from 'gulp-clean-css'
 

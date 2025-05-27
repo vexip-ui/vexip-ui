@@ -17,7 +17,7 @@ function handleResize(entries: ResizeObserverEntry[]) {
 }
 
 const resizeObserver = new (isClient ? window.ResizeObserver || ResizeObserver : ResizeObserver)(
-  handleResize
+  handleResize,
 )
 
 export function observeResize(el: Element, handler: ResizeHandler) {
@@ -35,6 +35,6 @@ export function unobserveResize(el: Element) {
 export function useResize() {
   return {
     observeResize,
-    unobserveResize
+    unobserveResize,
   }
 }

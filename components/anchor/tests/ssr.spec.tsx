@@ -19,7 +19,7 @@ describe('SSR for Anchor', () => {
             <AnchorLink>{'1'}</AnchorLink>
             <AnchorLink>{'2'}</AnchorLink>
           </Anchor>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

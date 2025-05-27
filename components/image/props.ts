@@ -8,7 +8,7 @@ import type {
   ImageObjectFit,
   ImageSkeletonProps,
   ImageSlots,
-  ImageViewerSlots
+  ImageViewerSlots,
 } from './symbol'
 
 export const imageProps = buildProps({
@@ -25,7 +25,7 @@ export const imageProps = buildProps({
   preview: booleanProp,
   skeleton: {
     type: [Boolean, Object] as PropType<boolean | ImageSkeletonProps>,
-    default: null
+    default: null,
   },
   placeholder: String,
   errorTip: String,
@@ -37,7 +37,7 @@ export const imageProps = buildProps({
   slots: Object as PropType<ImageSlots>,
   onLoad: eventProp<(event: Event) => void>(),
   onError: eventProp<(event: Event) => void>(),
-  onPreview: eventProp<(src: string) => void>()
+  onPreview: eventProp<(src: string) => void>(),
 })
 
 export type ImageProps = ExtractPropTypes<typeof imageProps>
@@ -48,7 +48,7 @@ export const imageGroupProps = buildProps({
   preview: booleanProp,
   viewerTransfer: booleanStringProp,
   slots: Object as PropType<ImageGroupSlots>,
-  onPreview: eventProp<(src: string, srcList: string[]) => void>()
+  onPreview: eventProp<(src: string, srcList: string[]) => void>(),
 })
 
 export type ImageGroupProps = ExtractPropTypes<typeof imageGroupProps>
@@ -67,7 +67,7 @@ export const imageViewerProps = buildProps({
   onNext: eventProp<(index: number, src: string) => void>(),
   onClose: eventProp(),
   onShow: eventProp(),
-  onHide: eventProp()
+  onHide: eventProp(),
 })
 
 export type ImageViewerProps = ExtractPropTypes<typeof imageViewerProps>

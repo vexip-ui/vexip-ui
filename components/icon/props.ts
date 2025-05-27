@@ -14,7 +14,7 @@ export const iconProps = buildProps({
   size: String,
   color: String,
   rotate: [Number, String],
-  renderer: Function as PropType<IconRenderer>
+  renderer: Function as PropType<IconRenderer>,
 })
 
 export type IconProps = ExtractPropTypes<typeof iconProps>

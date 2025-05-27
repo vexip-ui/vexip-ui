@@ -5,12 +5,12 @@ import type { ExtractPropTypes, PropType } from 'vue'
 export const rendererProps = wrapProps({
   renderer: {
     type: Function,
-    default: null
+    default: null,
   },
   data: {
     type: Object as PropType<Record<string, any>>,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 
 export type RendererProps = ExtractPropTypes<typeof rendererProps>

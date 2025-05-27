@@ -38,12 +38,12 @@ const singleShortcuts = [
   { name: 'Labor Day', value: () => new Date(new Date().getFullYear(), 4, 1) },
   ...Array.from({ length: 9 }).map((_, i) => ({
     name: `${i + 1} Week(s) Later`,
-    value: addWeeks(Date.now(), i + 1)
-  }))
+    value: addWeeks(Date.now(), i + 1),
+  })),
 ]
 
 const multipleShortcuts = [
   { name: 'Three Days', value: [Date.now(), addDays(Date.now(), 3)] },
-  { name: 'One Week', value: () => [Date.now(), addDays(Date.now(), 7)] }
+  { name: 'One Week', value: () => [Date.now(), addDays(Date.now(), 7)] },
 ]
 </script>

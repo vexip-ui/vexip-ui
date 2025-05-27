@@ -19,7 +19,7 @@ describe('SSR for Timeline', () => {
             <TimelineItem>{'item1'}</TimelineItem>
             <TimelineItem>{'item2'}</TimelineItem>
           </Timeline>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

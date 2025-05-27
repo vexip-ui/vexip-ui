@@ -17,7 +17,7 @@ describe('Grid', () => {
     const cells = wrapper.findAll('.vxp-cell')
 
     expect(wrapper.find('.vxp-grid').attributes('style')).toContain(
-      'grid-template-columns: repeat(24, 1fr);'
+      'grid-template-columns: repeat(24, 1fr);',
     )
     expect(cells.length).toEqual(2)
     expect(cells[0].attributes('style')).toContain('grid-column-start: span 16;')
@@ -26,7 +26,7 @@ describe('Grid', () => {
 
   it('gap', async () => {
     const wrapper = mount(Grid, {
-      props: { gap: 16 }
+      props: { gap: 16 },
     })
 
     expect(wrapper.attributes('style')).toContain('gap: 16px;')
@@ -39,15 +39,15 @@ describe('Grid', () => {
     const wrapper = mount(Grid, {
       props: { columns: 10 },
       slots: {
-        default: () => <Cell></Cell>
-      }
+        default: () => <Cell></Cell>,
+      },
     })
 
     expect(wrapper.attributes('style')).toContain('grid-template-columns: repeat(10, 1fr);')
     expect(wrapper.find('.vxp-cell').attributes('style')).toContain('grid-column-start: span 10;')
 
     await wrapper.setProps({
-      columns: ['300px', 'repeat(2, 1fr)']
+      columns: ['300px', 'repeat(2, 1fr)'],
     })
     await nextTick()
     expect(wrapper.attributes('style')).toContain('grid-template-columns: 300px repeat(2, 1fr);')
@@ -61,7 +61,7 @@ describe('Grid', () => {
         const wrapper = mount(() => <Grid justify={justify}></Grid>)
 
         expect(wrapper.find('.vxp-grid').classes()).toContain(`vxp-grid--${justify}`)
-      }
+      },
     )
   })
 
@@ -113,13 +113,13 @@ describe('Grid', () => {
     expect(cells[1].attributes('style')).toContain('grid-column-start: 9; grid-column-end: 17;')
     expect(cells[2].attributes('style')).toContain('grid-row-start: 2; grid-row-end: span 1;')
     expect(cells[2].attributes('style')).toContain(
-      'grid-column-start: span 8; grid-column-end: 17;'
+      'grid-column-start: span 8; grid-column-end: 17;',
     )
     expect(cells[3].attributes('style')).toContain('grid-row-start: 3; grid-row-end: span 1;')
     expect(cells[3].attributes('style')).toContain('grid-column-start: span 8;')
     expect(cells[4].attributes('style')).toContain('grid-row-start: 3; grid-row-end: span 1;')
     expect(cells[4].attributes('style')).toContain(
-      'grid-column-start: span 8; grid-column-end: 17;'
+      'grid-column-start: span 8; grid-column-end: 17;',
     )
   })
 

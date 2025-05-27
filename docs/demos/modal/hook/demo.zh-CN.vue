@@ -19,7 +19,7 @@ function handleClick() {
     width: '30vw',
     renderer: () => {
       return Array.from({ length: 3 }, () => h('p', '一些内容'))
-    }
+    },
   })
 
   setTimeout(close, 3000)

@@ -10,7 +10,7 @@ export const bubbleProps = buildProps({
   type: String as PropType<BubbleType>,
   background: String,
   shadow: booleanStringProp,
-  contentClass: classProp
+  contentClass: classProp,
 })
 
 export type BubbleProps = ExtractPropTypes<typeof bubbleProps>
