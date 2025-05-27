@@ -47,7 +47,7 @@ pnpm run serve [component] -p [port] -l [language]
 We use [VitePress](https://vitepress.dev/) as the documentation framework. You can start it locally with the following command:
 
 ```sh
-pnpm run serve:docs
+pnpm run dev:docs
 ```
 
 ## Create New Component
