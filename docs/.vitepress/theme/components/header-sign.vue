@@ -24,7 +24,7 @@ function toHomepage() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .header-sign {
   display: flex;

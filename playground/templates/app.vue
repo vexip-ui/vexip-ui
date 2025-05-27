@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button type="primary" :icon="MagnifyingGlass">
+    <Button type="primary" :icon="Search">
       {{ msg }}
     </Button>
   </div>
@@ -8,8 +8,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-import { MagnifyingGlass } from '@vexip-ui/icons'
+import { Search } from 'lucide-vue-next'
 
 const msg = ref('Hello World!')
 </script>

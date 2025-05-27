@@ -47,8 +47,8 @@ function togglePadding(value: boolean) {
   background-color: var(--vxp-color-error-opacity-8);
   border: 1px solid var(--vxp-color-error-opacity-6);
   border-radius: var(--vxp-radius-base);
-  transition: var(--vxp-transition-color), var(--vxp-transition-background),
-    var(--vxp-transition-border);
+  transition:
+    var(--vxp-transition-color), var(--vxp-transition-background), var(--vxp-transition-border);
 
   &--active {
     color: var(--vxp-color-success-base);

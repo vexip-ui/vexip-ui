@@ -53,8 +53,8 @@ $radio: map.merge(
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
-    transition: value('transition-background'), value('transition-border'),
-      value('transition-shadow');
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow');
   }
 
   &,
@@ -154,8 +154,8 @@ $radio: map.merge(
       background-color: value('radio-signal-bg-color-checked');
       border-radius: 50%;
       opacity: 0%;
-      transition: value('transition-background'), value('transition-opacity'),
-        value('transition-transform');
+      transition:
+        value('transition-background'), value('transition-opacity'), value('transition-transform');
       transform: translate(-50%, -50%) scale(0);
     }
   }

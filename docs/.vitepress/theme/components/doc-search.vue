@@ -91,7 +91,7 @@ function toComponentDoc(fullName: string) {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .doc-search {
   flex: auto;

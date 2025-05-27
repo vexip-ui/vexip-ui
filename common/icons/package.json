@@ -27,8 +27,7 @@
     "./es/*": "./es/*.mjs",
     "./lib/*.js": "./lib/*.js",
     "./lib/*": "./lib/*.js",
-    "./package.json": "./package.json",
-    "./*": "./*"
+    "./package.json": "./package.json"
   },
   "sideEffects": [
     "dist/*"

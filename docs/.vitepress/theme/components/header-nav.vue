@@ -79,7 +79,7 @@ function selectMenu(_: string, meta: NavMenuItem) {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .navigation {
   display: none;

@@ -10,12 +10,13 @@ import {
   createSizeProp,
   emitEvent,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { getGlobalCount, isPromise, toNumber } from '@vexip-ui/utils'
+import { isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'
 import { drawerPlacements } from './symbol'
 
@@ -80,8 +81,6 @@ const currentWidth = ref(props.width)
 const currentHeight = ref(props.height)
 
 const wrapper = ref<HTMLElement>()
-
-const idIndex = `${getGlobalCount()}`
 
 const { target: resizer, moving: resizing } = useMoving({
   onStart: (state, event) => {
@@ -189,8 +188,8 @@ const wrapperStyle = computed(() => {
 const hasTitle = computed(() => {
   return !!(slots.header || slots.title || props.title || props.slots.header || props.slots.title)
 })
-const titleId = computed(() => `${nh.bs(idIndex)}__title`)
-const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
+const titleId = useId()
+const bodyId = useId()
 
 watch(
   () => props.active,

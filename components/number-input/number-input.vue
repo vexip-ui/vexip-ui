@@ -12,6 +12,7 @@ import {
   createStateProp,
   emitEvent,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
@@ -19,7 +20,6 @@ import {
 import {
   boundRange,
   debounce,
-  getGlobalCount,
   isNull,
   isValidNumber,
   minus,
@@ -157,11 +157,9 @@ useModifier({
   },
 })
 
-const idIndex = `${getGlobalCount()}`
-
 let lastValue: number
 
-const controlId = computed(() => `${nh.bs(idIndex)}__control`)
+const controlId = useId()
 const outOfRange = computed(() => {
   return (
     !isNullOrNaN(currentValue.value) &&

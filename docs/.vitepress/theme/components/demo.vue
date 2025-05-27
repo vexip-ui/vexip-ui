@@ -271,7 +271,7 @@ function editOnPlayground() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .demo {
   margin-bottom: 1.4em;

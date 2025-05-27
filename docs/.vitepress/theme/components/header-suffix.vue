@@ -112,7 +112,7 @@ function syncVitepressDir() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .header-suffix {
   --item-span: 24px;

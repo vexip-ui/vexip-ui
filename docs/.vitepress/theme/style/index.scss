@@ -1,8 +1,8 @@
 @charset 'UTF-8';
-@use './normalize.scss';
+@use './normalize';
 
-@use 'vexip-ui/style/index.scss';
-@use 'vexip-ui/style/dark/preset.scss';
+@use 'vexip-ui/style/index';
+@use 'vexip-ui/style/dark/preset';
 
-@use './highlight.scss';
-@use './common.scss';
+@use './highlight';
+@use './common';

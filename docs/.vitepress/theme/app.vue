@@ -341,7 +341,7 @@ function refreshScroll() {
 </template>
 
 <style lang="scss">
-@use './style/mixins.scss' as *;
+@use './style/mixins' as *;
 
 #transfer-place {
   position: relative;

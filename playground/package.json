@@ -9,21 +9,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vexip-ui/icons": "workspace:*",
-    "@vue/repl": "^3.4.0",
+    "@vue/repl": "^4.5.1",
     "fflate": "^0.8.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
+    "lucide-vue-next": "^0.511.0",
     "vexip-ui": "workspace:*",
-    "vue": "^3.4.38"
+    "vue": "^3.5.14"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
-    "@vitejs/plugin-vue": "^5.1.2",
-    "@vitejs/plugin-vue-jsx": "^4.0.1",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "vite": "^5.4.1",
-    "vue-router": "^4.4.3"
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "vite": "^6.3.5",
+    "vue-router": "^4.5.1"
   }
 }
