@@ -1,7 +1,7 @@
 @use 'sass:map';
 
-@use '../shared/variables.scss' as *;
-@use './variables.scss' as *;
+@use '../shared/variables' as *;
+@use './variables' as *;
 
 :root.dark,
 .#{$namespace}-theme-vars-dark {

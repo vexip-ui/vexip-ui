@@ -91,7 +91,7 @@ function resetMajorColor() {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .major-color {
   display: flex;

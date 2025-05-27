@@ -13,7 +13,7 @@ $tooltip: map.merge(
     s-color-dark: value('bg-color-reverse'),
     shadow: value('shadow-shape') value('tooltip-s-color'),
     shadow-dark: value('tooltip-shadow'),
-    min-width: 60px,
+    min-width: 20px,
     min-height: 30px,
     v-padding: 8px,
     h-padding: 14px,

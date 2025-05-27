@@ -11,12 +11,13 @@ import {
   emitEvent,
   getStepByWord,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
 } from '@vexip-ui/config'
 import { unrefElement, useModifier, usePopper } from '@vexip-ui/hooks'
-import { callIfFunc, decide, getGlobalCount, isClient, isFunction } from '@vexip-ui/utils'
+import { callIfFunc, decide, isClient, isFunction } from '@vexip-ui/utils'
 import { tourProps } from './props'
 import { TOUR_STATE } from './symbol'
 
@@ -55,8 +56,6 @@ const props = useProps('tour', _props, {
 const emit = defineEmits(['update:active', 'update:index'])
 
 defineSlots<TourSlots>()
-
-const idIndex = `${getGlobalCount()}`
 
 const nh = useNameHelper('tour')
 const locale = useLocale('tour', toRef(props, 'locale'))
@@ -125,7 +124,7 @@ const padding = computed(() => {
     return new Array<number>(4).fill(props.padding)
   }
 })
-const maskId = computed(() => `${nh.bs(idIndex)}__mask`)
+const maskId = useId()
 
 const { reference, placement, updatePopper } = usePopper({
   wrapper,

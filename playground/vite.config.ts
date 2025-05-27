@@ -46,6 +46,7 @@ export default defineConfig(({ command }) => {
     },
     server: {
       port: 6012,
+      host: true,
       fs: {
         allow: ['..'],
       },
@@ -62,7 +63,7 @@ export default defineConfig(({ command }) => {
         '@vexip-ui/icons',
         '@vexip-ui/utils',
       ],
-      exclude: ['@vue/repl', 'vue/server-renderer'],
+      exclude: ['@vue/repl'],
     },
     preview: {
       port: 6012,

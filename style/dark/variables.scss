@@ -1,6 +1,6 @@
 @use 'sass:map';
 
-@forward '../design/variables.scss' hide $content-color-map, $bg-color-map, $border-color-map,
+@forward '../design/variables' hide $content-color-map, $bg-color-map, $border-color-map,
   $fill-color-map, $shadow-color-map;
 
 $content-color-map: () !default;

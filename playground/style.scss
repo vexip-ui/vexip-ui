@@ -1,7 +1,7 @@
 @use 'sass:map';
 @use 'sass:meta';
 
-@use 'vexip-ui/style/design/variables.scss' as vars;
+@use 'vexip-ui/style/design/variables' as vars;
 
 $break-point-map: vars.$break-point-map;
 
