@@ -1,3 +1,31 @@
+## [2.3.27](https://github.com/vexip-ui/vexip-ui/compare/v2.3.26...v2.3.27) (2025-05-27)
+
+
+### ✨ Features
+
+* **calendar-panel:** support cell state linkage ([d7a78b9](https://github.com/vexip-ui/vexip-ui/commit/d7a78b9b6ce9201c3a814e8a5cc00dd04e163fe0))
+* **collapse:** support customize header padding css variables ([c5c75ca](https://github.com/vexip-ui/vexip-ui/commit/c5c75ca3d8583ea2588cead2429489341afb7119))
+* **scripts:** add secondConfirmMsg option for relase ([a95a8bc](https://github.com/vexip-ui/vexip-ui/commit/a95a8bc684424bc13063e31fff0d090f1a7a7cf5))
+* **scripts:** add updateVersionByType option for release ([66a40c2](https://github.com/vexip-ui/vexip-ui/commit/66a40c215808f33a42341fe31deaa6705047d03e))
+
+
+### 🐞 Bug Fixes
+
+* **form:** should consider help icon when calculating width ([496da0e](https://github.com/vexip-ui/vexip-ui/commit/496da0ecccb2f4b813bfd71ef7c9c8ec0f695792)), closes [#554](https://github.com/vexip-ui/vexip-ui/issues/554)
+* **layout:** correct main size in different sign types ([8196d54](https://github.com/vexip-ui/vexip-ui/commit/8196d54393f12391e469d3f7daee1ef264ae6e4b))
+* **scripts:** should log package name for process ([9772b87](https://github.com/vexip-ui/vexip-ui/commit/9772b878cfa1ddc25fec094770e541203e8e319f))
+* **tabs:** correct active panel z-index ([90d52bd](https://github.com/vexip-ui/vexip-ui/commit/90d52bd22454f6a80a311b5adde0943f34a72355))
+* **utils:** replace empty object definition with Object.create ([e6d4ba1](https://github.com/vexip-ui/vexip-ui/commit/e6d4ba106ac545fca4b81d923bb147e1f1938d1c))
+* **utils:** use Object.create(null) instead of {} ([846c9d8](https://github.com/vexip-ui/vexip-ui/commit/846c9d838e39f5623af292279218ba9ca8967161))
+
+
+### 👓 Types
+
+* **utils:** fix listToMap reslut types ([ef65636](https://github.com/vexip-ui/vexip-ui/commit/ef65636f18528294eb6be1d7eb384d075ec6f38a))
+* **utils:** improve listToMap reslut types ([51f2140](https://github.com/vexip-ui/vexip-ui/commit/51f21409598fbd91f588b35060643d727d3a060d))
+
+
+
 ## [2.3.26](https://github.com/vexip-ui/vexip-ui/compare/v2.3.25...v2.3.26) (2025-04-17)
 
 
