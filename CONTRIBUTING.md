@@ -31,7 +31,7 @@ We use a Vite project in `dev-server` a development server.
 You can use the following command to start development server for specific component:
 
 ```sh
-pnpm run serve [component]
+pnpm run dev [component]
 ```
 
 After the server is successfully started, the demos of the components specified under `docs/demos` will be used as development cases.
@@ -39,7 +39,7 @@ After the server is successfully started, the demos of the components specified 
 The development server uses `8008` port and Chinese demos by default, you can add `-p` and `-l` parameters to the command to specify the port and language respectively:
 
 ```sh
-pnpm run serve [component] -p [port] -l [language]
+pnpm run dev [component] -p [port] -l [language]
 ```
 
 ## Documentation Development
@@ -47,7 +47,7 @@ pnpm run serve [component] -p [port] -l [language]
 We use [VitePress](https://vitepress.dev/) as the documentation framework. You can start it locally with the following command:
 
 ```sh
-pnpm run serve:docs
+pnpm run dev:docs
 ```
 
 ## Create New Component
