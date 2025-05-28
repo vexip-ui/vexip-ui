@@ -26,7 +26,7 @@ pnpm run build:common
 你可以通过下面的命令为指定的组件启动开发服务：
 
 ```sh
-pnpm run serve [component]
+pnpm run dev [component]
 ```
 
 服务成功开启后，会将 `docs/demos` 下所指定的组件的示例作为开发用例。
@@ -34,7 +34,7 @@ pnpm run serve [component]
 开发服务默认使用 `8008` 端口和中文示例，你可以在命令中添加 `-p` 和 `-l` 参数分别指定端口和语言：
 
 ```sh
-pnpm run serve [component] -p [port] -l [language]
+pnpm run dev [component] -p [port] -l [language]
 ```
 
 ## 文档开发
@@ -42,7 +42,7 @@ pnpm run serve [component] -p [port] -l [language]
 我们使用 [VitePress](https://vitepress.dev/) 作为文档框架，你可以通过下面的命令本地启动它：
 
 ```sh
-pnpm run serve:docs
+pnpm run dev:docs
 ```
 
 ## 创建新组件
