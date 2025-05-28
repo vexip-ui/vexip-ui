@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   overflow: visible;
+  vertical-align: -0.125em;
   transition: value('transition-transform');
   transform-origin: 50% 50%;
 
@@ -18,7 +19,6 @@
     width: 1em;
     height: 1em;
     line-height: 1;
-    vertical-align: -0.125em;
     fill: currentcolor;
 
     &.lucide {
