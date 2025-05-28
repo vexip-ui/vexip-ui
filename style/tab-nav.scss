@@ -166,8 +166,8 @@ $tab-nav: map.merge(
     color: value('tab-nav-card-color');
     background-color: value('tab-nav-card-bg-color');
     border: value('border-shape') value('tab-nav-card-b-color');
-    transition: value('transition-color'), value('transition-background'),
-      value('transition-border');
+    transition:
+      value('transition-color'), value('transition-background'), value('transition-border');
 
     &:hover,
     &:focus {

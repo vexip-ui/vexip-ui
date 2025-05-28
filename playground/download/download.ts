@@ -1,11 +1,11 @@
 import { saveAs } from 'file-saver'
 
-import index from './template/index.html?raw'
-import main from './template/main.ts?raw'
-import pkg from './template/package.json'
-import config from './template/vite.config.js?raw'
-import readme from './template/README.md?raw'
-import vueDts from './template/vue.d.ts?raw'
+import index from './templates/index.html?raw'
+import main from './templates/main.ts?raw'
+import pkg from './templates/package.json'
+import config from './templates/vite.config.js?raw'
+import readme from './templates/README.md?raw'
+import vueDts from './templates/vue.d.ts?raw'
 
 import type { ReplStore } from '../store'
 

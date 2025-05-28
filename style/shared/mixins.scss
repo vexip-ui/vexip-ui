@@ -3,7 +3,7 @@
 @use 'sass:meta';
 @use 'sass:list';
 
-@use './variables.scss' as *;
+@use './variables' as *;
 
 @mixin basis($inherit: true) {
   & {

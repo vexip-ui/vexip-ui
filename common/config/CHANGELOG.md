@@ -1,3 +1,7 @@
+# [1.11.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.10.0...config@1.11.0) (2025-05-27)
+
+
+
 ## 1.10.0 (2025-01-14)
 
 * build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))

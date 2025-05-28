@@ -119,7 +119,7 @@ function handleContentResize(entry: ResizeObserverEntry) {
 </template>
 
 <style lang="scss">
-@use '../style/mixins.scss' as *;
+@use '../style/mixins' as *;
 
 .article {
   position: relative;

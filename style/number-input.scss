@@ -2,7 +2,7 @@
 
 @use './shared' as *;
 @use './design' as *;
-@use './input.scss' as input;
+@use './input' as input;
 
 $number-input: () !default;
 $number-input: map.merge(

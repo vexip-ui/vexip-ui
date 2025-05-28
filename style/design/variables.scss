@@ -5,7 +5,7 @@
 @use 'sass:map';
 @use 'sass:math';
 
-@use '../shared/variables.scss' as *;
+@use '../shared/variables' as *;
 
 $namespace: 'vxp' !default;
 

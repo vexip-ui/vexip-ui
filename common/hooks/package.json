@@ -1,6 +1,6 @@
 {
   "name": "@vexip-ui/hooks",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "type": "module",
   "license": "MIT",
   "private": false,
@@ -31,12 +31,12 @@
   },
   "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/hooks#readme",
   "dependencies": {
-    "@floating-ui/dom": "^1.6.13",
+    "@floating-ui/dom": "^1.7.0",
     "@juggle/resize-observer": "^3.4.0",
     "@vexip-ui/utils": "workspace:*"
   },
   "devDependencies": {
-    "vue": "^3.5.13"
+    "vue": "^3.5.14"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

@@ -91,7 +91,7 @@ export function unrefElement<T extends string | MaybeInstance = string | MaybeIn
   const plain = unref(ref)
 
   if (typeof plain === 'string') {
-    return isClient ? document.querySelector(plain) : (null as any)
+    return (isClient ? document.querySelector(plain) : null) as any
   }
 
   return (plain as ComponentPublicInstance)?.$el ?? plain

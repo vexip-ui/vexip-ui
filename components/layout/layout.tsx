@@ -114,6 +114,7 @@ export default defineComponent({
       changeInLock,
     })
 
+    const isHeaderMain = computed(() => !props.noHeader && currentSignType.value === 'header')
     const className = computed(() => {
       return [
         nh.b(),
@@ -122,7 +123,7 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('no-aside')]: props.noAside,
           [nh.bm('no-header')]: props.noHeader,
-          [nh.bm('header-main')]: currentSignType.value === 'header',
+          [nh.bm('header-main')]: isHeaderMain.value,
           [nh.bm('locked')]: !isMounted.value || locked.value,
           [nh.bm('fit-window')]: props.fitWindow,
         },
@@ -132,7 +133,7 @@ export default defineComponent({
       return isClient && isMounted.value ? document.documentElement : null
     })
     const signInHeader = computed(() => {
-      return props.noAside || currentSignType.value === 'header' || state.useExpand
+      return props.noAside || isHeaderMain.value || state.useExpand
     })
     const menu = computed(() => aside.value?.menu || header.value?.menu)
     const isDark = ref(props.darkMode)
@@ -374,7 +375,7 @@ export default defineComponent({
               v-model:expanded={asideExpanded.value}
               v-model:reduced={asideReduced.value}
               inherit
-              sign-type={currentSignType.value}
+              sign-type={isHeaderMain.value ? 'header' : 'aside'}
               menus={props.menus}
               menu-props={props.menuProps}
               fixed={props.asideFixed}
@@ -462,7 +463,7 @@ export default defineComponent({
             props.innerClasses.wrapper,
           ]}
         >
-          {currentSignType.value === 'header' && renderHeader()}
+          {isHeaderMain.value && renderHeader()}
           {renderAside()}
           <section
             ref={section}
@@ -477,7 +478,7 @@ export default defineComponent({
               props.innerClasses.section,
             ]}
           >
-            {currentSignType.value === 'aside' && renderHeader()}
+            {!isHeaderMain.value && renderHeader()}
             {renderMain()}
             {props.footer && renderFooter()}
           </section>

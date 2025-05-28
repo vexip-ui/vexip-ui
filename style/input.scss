@@ -54,8 +54,8 @@ $input: map.merge(
     border: value('border-shape') value('input-b-color');
     border-radius: value('input-radius');
     outline: 0;
-    transition: value('transition-background'), value('transition-border'),
-      value('transition-shadow');
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow');
 
     &:hover {
       border-color: value('input-b-color-hover');

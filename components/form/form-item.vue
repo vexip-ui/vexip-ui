@@ -8,13 +8,14 @@ import { computed, inject, onBeforeUnmount, onMounted, provide, ref, toRef, watc
 import {
   makeSentence,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
   useWordSpace,
 } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
-import { createEventEmitter, getGlobalCount, isFunction, isNull, isObject } from '@vexip-ui/utils'
+import { createEventEmitter, isFunction, isNull, isObject } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
@@ -90,8 +91,6 @@ const locale = useLocale('form', toRef(props, 'locale'))
 const icons = useIcons()
 const wordSpace = useWordSpace()
 
-const idIndex = `${getGlobalCount()}`
-
 const initValue = ref(props.defaultValue)
 const isError = ref(false)
 const errorTip = ref('')
@@ -105,7 +104,7 @@ const placeholder = useDisplay(() => {
   }
 })
 
-const labelId = computed(() => nh.bs(`${idIndex}__label`))
+const labelId = useId()
 const isRequired = computed(() => formProps.allRequired || props.required)
 const requiredTip = computed(() => {
   return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`, wordSpace.value)

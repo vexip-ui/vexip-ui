@@ -46,8 +46,9 @@ $switch: map.merge(
     user-select: none;
     background-color: value('switch-bg-color');
     border-radius: $height;
-    transition: value('transition-background'), value('transition-border'),
-      value('transition-shadow'), value('transition-opacity');
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow'),
+      value('transition-opacity');
   }
 
   &--small {

@@ -13,7 +13,7 @@ import {
   watch,
 } from 'vue'
 
-import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useId, useNameHelper, useProps } from '@vexip-ui/config'
 import {
   placementWhileList,
   useClickOutside,
@@ -21,7 +21,7 @@ import {
   usePopper,
   useSetTimeout,
 } from '@vexip-ui/hooks'
-import { getGlobalCount, isElement } from '@vexip-ui/utils'
+import { isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -66,8 +66,7 @@ export default defineComponent({
       shift: false,
     })
 
-    const idIndex = `${getGlobalCount()}`
-    const tooltipId = computed(() => nh.bs(idIndex))
+    const tooltipId = useId()
 
     const hoverDelay = useHoverDelay()
     const { timer } = useSetTimeout()

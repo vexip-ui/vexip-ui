@@ -6,9 +6,9 @@
     "serve": "vite"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "unplugin-vue-components": "^0.26.0",
-    "vue": "^3.4.38"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "unplugin-vue-components": "^28.5.0",
+    "vue": "^3.5.14"
   }
 }

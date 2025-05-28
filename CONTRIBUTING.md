@@ -6,7 +6,7 @@ First, thanks for being interested in contributing on this project!
 
 Before starting, ensure your machine is having:
 
-Node >= 18
+Node >= 20
 
 pnpm >= 8
 
