@@ -1,3 +1,12 @@
+## [2.3.28](https://github.com/vexip-ui/vexip-ui/compare/v2.3.27...v2.3.28) (2025-05-28)
+
+
+### ✨ Features
+
+* **menu:** support customize arrow icon ([c26618d](https://github.com/vexip-ui/vexip-ui/commit/c26618db200d734c6ca27c0132c947b6ecb8afd5))
+
+
+
 ## [2.3.27](https://github.com/vexip-ui/vexip-ui/compare/v2.3.26...v2.3.27) (2025-05-27)
 
 

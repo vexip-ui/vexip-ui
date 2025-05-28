@@ -1,6 +1,7 @@
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
+import { Renderer } from '@/components/renderer'
 
 import {
   computed,
@@ -21,19 +22,20 @@ import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 
+import type { VNode } from 'vue'
 import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router'
-import type { MenuItemState, MenuMarkerType, MenuOptions, MenuState } from './symbol'
+import type {
+  MenuArrowSlotParams,
+  MenuItemState,
+  MenuMarkerType,
+  MenuOptions,
+  MenuState,
+} from './symbol'
 
 const menuMarkerTypes = Object.freeze<MenuMarkerType[]>(['top', 'right', 'bottom', 'left', 'none'])
 
 export default defineComponent({
   name: 'Menu',
-  components: {
-    MenuRest,
-    MenuItem,
-    MenuGroup,
-    Overflow,
-  },
   props: menuProps,
   emits: ['update:active'],
   setup(_props, { slots, emit, expose }) {
@@ -63,6 +65,8 @@ export default defineComponent({
       router: null,
       manualRoute: false,
       indent: null,
+      arrow: null,
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('menu')
@@ -135,11 +139,13 @@ export default defineComponent({
         transfer: toRef(props, 'transfer'),
         trigger: toRef(props, 'trigger'),
         markerType,
+        arrow: toRef(props, 'arrow'),
         handleSelect,
         handleExpand,
         increaseItem,
         decreaseItem,
         doForEachItem,
+        renderItemArrow,
       }),
     )
 
@@ -315,6 +321,14 @@ export default defineComponent({
           item.toggleGroupExpanded(true, true)
         }
       }
+    }
+
+    function renderItemArrow(params: MenuArrowSlotParams, renderDefault: () => VNode) {
+      return renderSlot(slots, 'arrow', { ...params }, () => [
+        <Renderer renderer={props.slots.arrow} data={params}>
+          {renderDefault()}
+        </Renderer>,
+      ])
     }
 
     function renderMenuItem(item: MenuOptions) {

@@ -2,6 +2,7 @@ import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
 import { Popper } from '@/components/popper'
 import { Tooltip } from '@/components/tooltip'
+import { Renderer } from '@/components/renderer'
 
 import {
   computed,
@@ -63,6 +64,8 @@ const MenuItem = defineComponent({
         static: true,
       },
       route: null,
+      arrow: null,
+      slots: () => ({}),
     })
 
     const menuState = inject(MENU_STATE, null)
@@ -210,12 +213,6 @@ const MenuItem = defineComponent({
         menuState.increaseItem(itemState)
       }
     }
-
-    // onMounted(() => {
-    //   if (typeof menuState?.increaseItem === 'function') {
-    //     menuState.increaseItem(itemState)
-    //   }
-    // })
 
     onBeforeUnmount(() => {
       if (typeof menuState?.decreaseItem === 'function') {
@@ -394,6 +391,26 @@ const MenuItem = defineComponent({
       })
     }
 
+    function renderArrow() {
+      const params = { groupExpanded: groupExpanded.value, sonSelected: sonSelected.value }
+      const icon = props.arrow || menuState?.arrow || icons.value.angleDown.icon
+      const renderDefault = () => (
+        <Renderer renderer={props.slots.arrow} data={params}>
+          <Icon
+            {...icons.value.angleDown}
+            icon={icon}
+            class={{
+              [nh.be('arrow')]: true,
+              [nh.bem('arrow', 'visible')]: groupExpanded.value,
+              [nh.bem('arrow', 'son-selected')]: sonSelected.value,
+            }}
+          ></Icon>
+        </Renderer>
+      )
+
+      return menuState ? menuState.renderItemArrow(params, renderDefault) : renderDefault()
+    }
+
     function renderLabel() {
       return (
         <Tooltip
@@ -438,16 +455,13 @@ const MenuItem = defineComponent({
                 >
                   {slots.default ? renderSlot(slots, 'default') : props.label}
                 </span>
-                {isGroup.value && (
-                  <Icon
-                    {...icons.value.angleDown}
-                    class={{
-                      [nh.be('arrow')]: true,
-                      [nh.bem('arrow', 'visible')]: groupExpanded.value,
-                      [nh.bem('arrow', '')]: sonSelected.value,
-                    }}
-                  ></Icon>
-                )}
+                {isGroup.value &&
+                  renderSlot(
+                    slots,
+                    'arrow',
+                    { groupExpanded: groupExpanded.value, sonSelected: sonSelected.value },
+                    () => [renderArrow()],
+                  )}
               </div>
             ),
             default: () => (

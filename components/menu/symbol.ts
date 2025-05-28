@@ -1,4 +1,4 @@
-import type { ComponentPublicInstance, InjectionKey } from 'vue'
+import type { ComponentPublicInstance, InjectionKey, VNode } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 
@@ -47,11 +47,42 @@ export interface MenuState {
   transfer: boolean | string,
   trigger: 'hover' | 'click',
   markerType: MenuMarkerType,
+  arrow: Record<string, any> | (() => any),
   handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
   decreaseItem(state: MenuItemState): void,
-  doForEachItem(cb: (item: MenuItemState) => void): void
+  doForEachItem(cb: (item: MenuItemState) => void): void,
+  renderItemArrow: (params: MenuArrowSlotParams, renderDefault: () => VNode) => void
+}
+
+export interface MenuArrowSlotParams {
+  groupExpanded: boolean,
+  sonSelected: boolean
+}
+
+export interface MenuSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  arrow?: (params: MenuArrowSlotParams) => any
+}
+
+export interface MenuItemSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  /**
+   * @internal
+   */
+  icon?: () => any,
+  /**
+   * @internal
+   */
+  group?: () => any,
+  arrow?: (params: MenuArrowSlotParams) => any
 }
 
 export interface MenuExposed extends ComponentPublicInstance {
