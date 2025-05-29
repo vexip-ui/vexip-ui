@@ -270,6 +270,7 @@ interface SelectListSlotParams {
 | popper-alive    | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化        | `null`         | `2.2.3`  |
 | count-limit     | `number`                                         | 多选时限制最大的可选数量，为 `0` 时不限制                                 | `0`            | `2.2.3`  |
 | filter-position | `SelectFilterPosition`                           | 设置过滤器的位置                                                          | `'in-control'` | `2.3.11` |
+| shift           | `boolean`                                        | 是否将气泡限制在可视区域内                                                | `true`         | `2.3.29` |
 
 ### Select 事件
 

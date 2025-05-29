@@ -6,6 +6,7 @@ type SelectHandler = (labels: (string | number)[], metas: Array<Record<string, a
 
 export interface DropdownState {
   alive: boolean,
+  shift: boolean,
   handleSelect: SelectHandler,
   handleTriggerEnter: () => void,
   handleTriggerLeave: () => void

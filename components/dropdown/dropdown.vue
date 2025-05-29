@@ -49,6 +49,7 @@ const props = useProps('dropdown', _props, {
   meta: null,
   alive: false,
   custom: false,
+  shift: true,
 })
 
 const emit = defineEmits(['update:visible'])
@@ -65,10 +66,13 @@ const popperAlive = ref(false)
 
 const transfer = isNested ? ref(false) : toRef(props, 'transfer')
 
+const shift = computed(() => !!(parentState?.shift || props.shift))
+
 const wrapper = useClickOutside(handleClickOutside)
 const popper = ref<PopperExposed>()
 const { reference, transferTo, updatePopper } = usePopper({
   placement,
+  shift,
   transfer,
   wrapper,
   popper: computed(() => popper.value?.wrapper),
@@ -93,6 +97,7 @@ provide(SELECT_HANDLER, null!)
     DROPDOWN_STATE,
     reactive({
       alive: isAlive,
+      shift,
       handleSelect,
       handleTriggerEnter,
       handleTriggerLeave,

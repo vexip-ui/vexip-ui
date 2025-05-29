@@ -154,6 +154,7 @@ const props = useProps('select', _props, {
   countLimit: 0,
   filterPosition: 'in-control',
   slots: () => ({}),
+  shift: true,
 })
 
 const emit = defineEmits(['update:value', 'update:visible', 'update:label'])
@@ -217,6 +218,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   wrapper,
   popper: computed(() => popper.value?.wrapper),
   isDrop: true,
+  shift: toRef(props, 'shift'),
 })
 const { isHover } = useHover(reference)
 

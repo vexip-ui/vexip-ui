@@ -94,6 +94,7 @@ const props = useProps('autoComplete', _props, {
   },
   popperAlive: null,
   slots: () => ({}),
+  shift: true,
 })
 
 const emit = defineEmits(['update:value'])
@@ -468,6 +469,7 @@ function handleCompositionEnd() {
     :filter="props.filter"
     :ignore-case="props.ignoreCase"
     :popper-alive="props.popperAlive"
+    :shift="props.shift"
     @toggle="handleToggle"
     @select="handleSelect"
     @clear="handleClear"

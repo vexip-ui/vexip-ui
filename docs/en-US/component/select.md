@@ -274,6 +274,7 @@ interface SelectListSlotParams {
 | popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                    | `null`         | `2.2.3`  |
 | count-limit     | `number`                                         | Limit the maximum count of options for multiple selection, no limit when it is `0`                                                                            | `0`            | `2.2.3`  |
 | filter-position | `SelectFilterPosition`                           | Set position of the filter input                                                                                                                              | `'in-control'` | `2.3.11` |
+| shift           | `boolean`                                        | Whether to limit tip inside the visible area                                                                                                                  | `true`         | `2.3.29` |
 
 ### Select Events
 

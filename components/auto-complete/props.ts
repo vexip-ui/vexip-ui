@@ -58,6 +58,7 @@ export const autoCompleteProps = buildProps({
   name: String,
   popperAlive: booleanProp,
   slots: Object as PropType<AutoCompleteSlots>,
+  shift: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onSelect: eventProp<EventListener<ChangeEvent>>(),
