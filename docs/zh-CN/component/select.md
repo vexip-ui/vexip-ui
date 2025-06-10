@@ -290,15 +290,17 @@ interface SelectListSlotParams {
 
 ### Select 插槽
 
-| 名称     | 说明                                         | 参数                                                              | 始于    |
-| -------- | -------------------------------------------- | ----------------------------------------------------------------- | ------- |
-| default  | 选项内容的插槽                               | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
-| group    | 组标签的内容插槽                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
-| prefix   | 前置图标内容的插槽                           | -                                                                 | -       |
-| control  | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                                 | -       |
-| suffix   | 后缀图标内容的插槽                           | -                                                                 | -       |
-| empty    | 空选项提示内容的插槽                         | -                                                                 | -       |
-| selected | 已选选项的回显内容的插槽                     | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
-| prepend  | 选项列表上方内容的插槽                       | -                                                                 | `2.2.7` |
-| append   | 选项列表下方内容的插槽                       | -                                                                 | `2.2.7` |
-| list     | 选项列表的内容插槽                           | `SelectListSlotParams`                                            | `2.3.7` |
+| 名称     | 说明                                         | 参数                                                                                     | 始于     |
+| -------- | -------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
+| default  | 选项内容的插槽                               | `{ option: SelectOptionState, index: number, selected: boolean }`                        | -        |
+| group    | 组标签的内容插槽                             | `{ option: SelectOptionState, index: number }`                                           | `2.0.0`  |
+| prefix   | 前置图标内容的插槽                           | -                                                                                        | -        |
+| control  | 选择器主控件内容的插槽，通常情况下不应该使用 | -                                                                                        | -        |
+| suffix   | 后缀图标内容的插槽                           | -                                                                                        | -        |
+| empty    | 空选项提示内容的插槽                         | -                                                                                        | -        |
+| selected | 已选选项的回显内容的插槽                     | `{ option: SelectOptionState, preview: boolean }`                                        | `2.2.5`  |
+| prepend  | 选项列表上方内容的插槽                       | -                                                                                        | `2.2.7`  |
+| append   | 选项列表下方内容的插槽                       | -                                                                                        | `2.2.7`  |
+| list     | 选项列表的内容插槽                           | `SelectListSlotParams`                                                                   | `2.3.7`  |
+| tag      | 控件中标签的插槽                             | `{ value: SelectBaseValue, option: SelectOptionState \| null, handleClose: () => void }` | `2.3.29` |
+| restTag  | 控件中显示冗余数标签的插槽                   | `{ restCount: number }`                                                                  | `2.3.29` |

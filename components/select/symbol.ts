@@ -30,13 +30,26 @@ export interface SelectListSlotParams {
 }
 
 export interface SelectSlots {
-  selected?: (params: { option: SelectOptionState | null, preview?: boolean }) => any,
+  selected?: (params: {
+    value: SelectBaseValue,
+    option: SelectOptionState | null,
+    preview?: boolean
+  }) => any,
   prefix?: () => any,
   suffix?: () => any,
   control?: () => any,
+  tag?: (params: {
+    value: SelectBaseValue,
+    option: SelectOptionState | null,
+    handleClose: () => void
+  }) => any,
+  restTag?: (params: { restCount: number }) => any,
   list?: (params: SelectListSlotParams) => any,
   prepend?: () => any,
   append?: () => any,
+  /**
+   * Option content slot.
+   */
   default?: (params: { option: SelectOptionState, index: number, selected: boolean }) => any,
   group?: (params: { option: SelectOptionState, index: number }) => any,
   empty?: () => any
