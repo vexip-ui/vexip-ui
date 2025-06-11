@@ -83,7 +83,6 @@ export default defineComponent({
     const {
       contentEl,
 
-      syncing,
       content,
       x,
       y,
@@ -424,7 +423,7 @@ export default defineComponent({
     }
 
     function handleScroll(event: UIEvent) {
-      if (!contentEl.value || syncing.value) return
+      if (!contentEl.value) return
 
       event.stopPropagation()
 

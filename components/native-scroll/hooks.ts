@@ -31,7 +31,6 @@ export function useScrollWrapper({
   const { manualRef, triggerUpdate } = useManualRef()
 
   const { isRtl } = useRtl()
-  const syncing = ref(false)
 
   const contentEl = ref<HTMLElement>()
 
@@ -108,8 +107,6 @@ export function useScrollWrapper({
   }
 
   function syncScroll() {
-    syncing.value = true
-
     if (content.el) {
       content.el.scrollTo({
         top: y.value,
@@ -117,10 +114,6 @@ export function useScrollWrapper({
         behavior: 'instant',
       })
     }
-
-    setTimeout(() => {
-      syncing.value = false
-    }, 0)
   }
 
   const { isMounted } = useMounted()
@@ -241,7 +234,6 @@ export function useScrollWrapper({
   return {
     contentEl,
 
-    syncing,
     content,
     x,
     y,
