@@ -87,6 +87,7 @@ export const selectProps = buildProps({
   countLimit: Number,
   filterPosition: String as PropType<SelectFilterPosition>,
   slots: Object as PropType<SelectSlots>,
+  shift: booleanProp,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onToggle: eventProp<(visible: boolean) => void>(),

@@ -513,7 +513,7 @@ function handleClear() {
 
   setValue(NaN, 'change', false)
   emitEvent(props.onClear)
-  clearField()
+  clearField(NaN)
   focus()
 }
 

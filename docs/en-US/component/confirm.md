@@ -88,8 +88,8 @@ type ConfirmAlign = 'left' | 'center' | 'right'
 interface ConfirmState {
   visible: boolean,
   loading: boolean,
-  title: string,
-  content: string,
+  title: string | (() => any),
+  content: string | (() => any),
   icon: Record<string, any> | (() => any) | null | boolean,
   iconProps: IconMinorProps,
   className: string | Record<string, any>,
@@ -127,8 +127,8 @@ interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading
 
 | Name            | Type                                            | Description                                                                                                  | Default          | Since    |
 | --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------- | -------- |
-| title           | `string`                                        | Then title of the confirm                                                                                    | `''`             | `2.0.15` |
-| content         | `string`                                        | The prompt content of the confirm                                                                            | `''`             | -        |
+| title           | `string \| (() => any)`                         | Then title of the confirm, support specify a render function                                                 | `''`             | `2.0.15` |
+| content         | `string \| (() => any)`                         | The prompt content of the confirm, support specify a render function                                         | `''`             | -        |
 | className       | `ClassType`                                     | The custom class name for the confirm                                                                        | `null`           | -        |
 | style           | `StyleType`                                     | Inline style for the confirm                                                                                 | `null`           | -        |
 | confirmType     | `ConfirmButtonType`                             | Confirm button type                                                                                          | `'primary'`      | -        |
@@ -139,7 +139,7 @@ interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading
 | icon            | `boolean \| Record<string, any> \| (() => any)` | The icon of the confirm, rendered as the render function when passed in the function                         | `null`           | -        |
 | iconProps       | `IconProps`                                     | The color of the icon of the confirm                                                                         | `''`             | -        |
 | onBeforeConfirm | `() => unknown`                                 | Set the callback before confirm, supports async function and `Promise`, returns `false` will prevent closing | `null`           | -        |
-| renderer        | `ConfirmRenderFn`                               | Use render function to render custom renderer                                                                | `null`           | -        |
+| renderer        | `ConfirmRenderFn`                               | Use render function to render custom content                                                                 | `null`           | -        |
 | parseHtml       | `boolean`                                       | Whether to parse content as html                                                                             | `false`          | `2.0.14` |
 | closable        | `boolean`                                       | Whether to have a close button                                                                               | `false`          | `2.0.15` |
 | contentAlign    | `ConfirmAlign`                                  | Alignment of content                                                                                         | `'center'`       | `2.0.15` |

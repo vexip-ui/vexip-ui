@@ -1,3 +1,25 @@
+## [2.3.29](https://github.com/vexip-ui/vexip-ui/compare/v2.3.28...v2.3.29) (2025-06-11)
+
+
+### ✨ Features
+
+* add shift prop for auto-complete, dropdown and select ([2c13727](https://github.com/vexip-ui/vexip-ui/commit/2c13727a216096c9fc3bbb308dd5975cd241eb27))
+* **confrim:** title & content options support specify render function ([33ab0a7](https://github.com/vexip-ui/vexip-ui/commit/33ab0a7633ea26369b0c595dd3542525fbd5079e))
+* **hooks:** useResize supports specify a target to observe ([e3cfc69](https://github.com/vexip-ui/vexip-ui/commit/e3cfc690798204700d9310edf228c6ef1ac4b582))
+* **select:** add tag & restTag slots ([6f620ce](https://github.com/vexip-ui/vexip-ui/commit/6f620ce3e00f847ab83f442ecee78368d62c26c4)), closes [#559](https://github.com/vexip-ui/vexip-ui/issues/559)
+
+
+### 🐞 Bug Fixes
+
+* **form:** normalize input & number-input clear behavior in form ([a44a24b](https://github.com/vexip-ui/vexip-ui/commit/a44a24ba735a993511cf65cd52b72588732e9511)), closes [#557](https://github.com/vexip-ui/vexip-ui/issues/557)
+* **icon:** ensure effect vertical align style ([70409fc](https://github.com/vexip-ui/vexip-ui/commit/70409fce4ab01d8ef200721a4963bafe4e67cfa8))
+* **input:** correctly emit compositionend event ([#518](https://github.com/vexip-ui/vexip-ui/issues/518)) ([7569c27](https://github.com/vexip-ui/vexip-ui/commit/7569c27f8c17f50a7e79a2fa1738661172493ccc))
+* **native-scroll:** coherently update scrolling position ([e1d5453](https://github.com/vexip-ui/vexip-ui/commit/e1d54532d7f051918aa54b914986216edc512458))
+* **playground:** correctly import css file of vexip-ui ([5be64d1](https://github.com/vexip-ui/vexip-ui/commit/5be64d1c23ae970f8d4e4f03f5a62182d61f43f9))
+* **table:** correctly calculate table width when resizing ([52140a3](https://github.com/vexip-ui/vexip-ui/commit/52140a3f5c6eba5a3b8acaad120bd0b29f9f0f47)), closes [#558](https://github.com/vexip-ui/vexip-ui/issues/558)
+
+
+
 ## [2.3.28](https://github.com/vexip-ui/vexip-ui/compare/v2.3.27...v2.3.28) (2025-05-28)
 
 

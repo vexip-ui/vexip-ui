@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vue/repl": "^4.5.1",
+    "compare-versions": "^6.1.1",
     "fflate": "^0.8.2",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",

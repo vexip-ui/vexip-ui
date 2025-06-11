@@ -359,7 +359,7 @@ export default defineComponent({
       event.stopPropagation()
       setValue('', 'change', false)
       emitEvent(props.onClear)
-      nextTick(clearField)
+      nextTick(() => clearField(''))
       currentLength.value = 0
       inputControl.value?.focus()
     }
@@ -406,7 +406,7 @@ export default defineComponent({
         }
       }
 
-      emitEvent(props.onCompositionStart, event)
+      emitEvent(props.onCompositionEnd, event)
     }
 
     function copyValue() {

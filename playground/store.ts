@@ -3,6 +3,7 @@ import { File, compileFile, mergeImportMap, useStore } from '@vue/repl'
 
 import { Confirm } from 'vexip-ui'
 import { strFromU8, strToU8, unzlibSync, zlibSync } from 'fflate'
+import { compare } from 'compare-versions'
 import { debounce } from '@vexip-ui/utils'
 import { getCdnUrl } from './cdn'
 import { locale } from './locale'
@@ -21,7 +22,8 @@ type ReplOptions = {
 }
 
 interface PathMeta {
-  pkg: string,
+  name: string,
+  pkg?: string,
   path: string
 }
 
@@ -34,18 +36,28 @@ const appFile = 'src/App.vue'
 const themeFile = 'src/ThemeSwitch.vue'
 const importsFile = 'src/imports.json'
 
-const pkgPathMap: Record<string, string | PathMeta> = {
-  vue: 'dist/vue.runtime.esm-browser.js',
-  '@vue/shared': 'dist/shared.esm-bundler.js',
-  'vexip-ui': 'dist/vexip-ui.mjs',
-  'vexip-ui/style.css': {
-    pkg: 'vexip-ui',
-    path: 'dist/style.css',
+const pkgMetaList: (PathMeta | ((versions: Record<string, string>) => PathMeta))[] = [
+  { name: 'vue', path: 'dist/vue.runtime.esm-browser.js' },
+  { name: '@vue/shared', path: 'dist/shared.esm-bundler.js' },
+  { name: 'vexip-ui', path: 'dist/vexip-ui.mjs' },
+  versions => {
+    const version = versions['vexip-ui']
+    return !version || compare(version, '2.3.21', '>')
+      ? {
+          name: 'vexip-ui/vexip-ui.css',
+          pkg: 'vexip-ui',
+          path: 'dist/vexip-ui.css',
+        }
+      : {
+          name: 'vexip-ui/style.css',
+          pkg: 'vexip-ui',
+          path: 'dist/style.css',
+        }
   },
-  '@vexip-ui/icons': 'dist/index.mjs',
-  '@vexip-ui/utils': 'dist/index.mjs',
-  'lucide-vue-next': 'dist/esm/lucide-vue-next.js',
-}
+  { name: '@vexip-ui/icons', path: 'dist/index.mjs' },
+  { name: '@vexip-ui/utils', path: 'dist/index.mjs' },
+  { name: 'lucide-vue-next', path: 'dist/esm/lucide-vue-next.js' },
+]
 
 const internalFiles: Record<string, string> = {
   [themeFile]: themeCode,
@@ -85,32 +97,15 @@ export function useReplStore(options: ReplOptions = {}) {
   }
 
   const versions = reactive({ ...options.versions })
-  // const compiler = shallowRef<typeof import('vue/compiler-sfc')>()
 
   const files: StoreState['files'] = ref(initFiles())
 
-  // const customImports = computed(() => {
-  //   const code = files.value[importsFile]?.code.trim()
-  //   let map: ImportMap = {}
-
-  //   if (!code) return map
-
-  //   try {
-  //     map = JSON.parse(code)
-  //   } catch (e) {
-  //     console.error(e)
-  //   }
-
-  //   return map
-  // })
   const internalImports = computed(() => buildImports(versions))
   const importMap = computed(() => {
     return <ImportMap>{
       imports: {
         ...internalImports.value,
-        // ...(customImports.value.imports || {}),
       },
-      // scopes: customImports.value.scopes,
     }
   })
 
@@ -151,11 +146,18 @@ export function useReplStore(options: ReplOptions = {}) {
   watch(
     () => versions['vexip-ui'],
     () => {
+      const version = versions['vexip-ui']
+      const isNewStyle = !version || compare(version, '2.3.21', '>')
+
       store.files[mainFile] = new File(
         mainFile,
         mainCode.replace(
           '__VEXIP_UI_STYLE__',
-          getCdnUrl('vexip-ui', 'dist/style.css', versions['vexip-ui']),
+          getCdnUrl(
+            'vexip-ui',
+            isNewStyle ? 'dist/vexip-ui.css' : 'dist/style.css',
+            versions['vexip-ui'],
+          ),
         ),
         true,
       )
@@ -200,10 +202,6 @@ export function useReplStore(options: ReplOptions = {}) {
       files[filename] = new File(filename, internalFiles[name], true)
     }
 
-    // if (!files[IMPORT_MAP]) {
-    //   files[IMPORT_MAP] = new File(IMPORT_MAP, JSON.stringify({ imports: {} }, undefined, 2) + '\n')
-    // }
-
     if (!files[TSCONFIG]) {
       files[TSCONFIG] = new File(TSCONFIG, tsconfigCode)
     }
@@ -214,21 +212,10 @@ export function useReplStore(options: ReplOptions = {}) {
   function buildImports(versions: Record<string, string> = {}) {
     const imports: Record<string, string> = Object.create(null)
 
-    for (const name of Object.keys(pkgPathMap)) {
-      const meta = pkgPathMap[name]
+    for (const meta of pkgMetaList) {
+      const { name, pkg, path } = typeof meta === 'function' ? meta(versions) : meta
 
-      let pkg = ''
-      let path = ''
-
-      if (typeof meta === 'string') {
-        pkg = name
-        path = meta
-      } else {
-        pkg = meta.pkg
-        path = meta.path
-      }
-
-      if (!pkg || !path) continue
+      if (!name || !pkg || !path) continue
 
       imports[name] = getCdnUrl(pkg, path, versions[pkg] || 'latest')
     }

@@ -8,8 +8,8 @@ export type ConfirmAlign = 'left' | 'center' | 'right'
 export interface ConfirmState {
   visible: boolean,
   loading: boolean,
-  title: string,
-  content: string,
+  title: string | (() => any),
+  content: string | (() => any),
   icon: Record<string, any> | (() => any) | null | boolean,
   iconProps: IconMinorProps,
   className: string | Record<string, any>,
@@ -32,6 +32,9 @@ export interface ConfirmState {
   left: number | string,
   xOffset: number | string,
   yOffset: number | string,
+  /**
+   * Record the raw option.
+   */
   raw: Record<any, any>
 }
 

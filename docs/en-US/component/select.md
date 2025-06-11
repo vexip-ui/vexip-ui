@@ -274,6 +274,7 @@ interface SelectListSlotParams {
 | popper-alive    | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                                    | `null`         | `2.2.3`  |
 | count-limit     | `number`                                         | Limit the maximum count of options for multiple selection, no limit when it is `0`                                                                            | `0`            | `2.2.3`  |
 | filter-position | `SelectFilterPosition`                           | Set position of the filter input                                                                                                                              | `'in-control'` | `2.3.11` |
+| shift           | `boolean`                                        | Whether to limit tip inside the visible area                                                                                                                  | `true`         | `2.3.29` |
 
 ### Select Events
 
@@ -293,15 +294,17 @@ interface SelectListSlotParams {
 
 ### Select Slots
 
-| Name     | Description                                                 | Parameters                                                        | Since   |
-| -------- | ----------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
-| default  | Slot for option content                                     | `{ option: SelectOptionState, index: number, selected: boolean }` | -       |
-| group    | Slot for content of group label                             | `{ option: SelectOptionState, index: number }`                    | `2.0.0` |
-| prefix   | Slot for prefix icon content                                | -                                                                 | -       |
-| control  | Slot for selector main control, should not normally be used | -                                                                 | -       |
-| suffix   | Slot for suffix icon content                                | -                                                                 | -       |
-| empty    | Slot for empty option prompt content                        | -                                                                 | -       |
-| selected | Slot for selected label content                             | `{ option: SelectOptionState, preview: boolean }`                 | `2.2.5` |
-| prepend  | Slot for content before the list                            | -                                                                 | `2.2.7` |
-| append   | Slot for content after the list                             | -                                                                 | `2.2.7` |
-| list     | Slot for list content                                       | `SelectListSlotParams`                                            | `2.3.7` |
+| Name     | Description                                                 | Parameters                                                                               | Since    |
+| -------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------- |
+| default  | Slot for option content                                     | `{ option: SelectOptionState, index: number, selected: boolean }`                        | -        |
+| group    | Slot for content of group label                             | `{ option: SelectOptionState, index: number }`                                           | `2.0.0`  |
+| prefix   | Slot for prefix icon content                                | -                                                                                        | -        |
+| control  | Slot for selector main control, should not normally be used | -                                                                                        | -        |
+| suffix   | Slot for suffix icon content                                | -                                                                                        | -        |
+| empty    | Slot for empty option prompt content                        | -                                                                                        | -        |
+| selected | Slot for selected label content                             | `{ value: SelectBaseValue, option: SelectOptionState, preview: boolean }`                | `2.2.5`  |
+| prepend  | Slot for content before the list                            | -                                                                                        | `2.2.7`  |
+| append   | Slot for content after the list                             | -                                                                                        | `2.2.7`  |
+| list     | Slot for list content                                       | `SelectListSlotParams`                                                                   | `2.3.7`  |
+| tag      | Slot for render tag in control                              | `{ value: SelectBaseValue, option: SelectOptionState \| null, handleClose: () => void }` | `2.3.29` |
+| restTag  | Slot for the rest tag in control                            | `{ restCount: number }`                                                                  | `2.3.29` |

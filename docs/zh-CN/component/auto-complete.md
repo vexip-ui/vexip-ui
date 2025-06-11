@@ -149,6 +149,7 @@ interface AutoCompleteListSlotParams {
 | show-empty     | `boolean`                                        | 是否在选项为空时也显示下拉选项列表                                                           | `false`     | `2.2.0`  |
 | name           | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                            | `''`        | `2.2.2`  |
 | popper-alive   | `boolean`                                        | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化                           | `null`      | `2.2.3`  |
+| shift          | `boolean`                                        | 是否将气泡限制在可视区域内                                                                   | `true`      | `2.3.29` |
 
 ### AutoComplete 事件
 

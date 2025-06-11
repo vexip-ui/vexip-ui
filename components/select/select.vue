@@ -154,6 +154,7 @@ const props = useProps('select', _props, {
   countLimit: 0,
   filterPosition: 'in-control',
   slots: () => ({}),
+  shift: true,
 })
 
 const emit = defineEmits(['update:value', 'update:visible', 'update:label'])
@@ -217,6 +218,7 @@ const { reference, transferTo, updatePopper } = usePopper({
   wrapper,
   popper: computed(() => popper.value?.wrapper),
   isDrop: true,
+  shift: toRef(props, 'shift'),
 })
 const { isHover } = useHover(reference)
 
@@ -1080,40 +1082,58 @@ function focus(options?: FocusOptions) {
                   maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
                 }"
                 @rest-change="restTagCount = $event"
+                @click.stop="toggleVisible"
               >
                 <template #default="{ item: value, index }">
-                  <Tag
-                    inherit
-                    :class="nh.be('tag')"
-                    :type="props.tagType"
-                    closable
-                    :disabled="props.disabled"
-                    @click.stop="toggleVisible"
-                    @close="handleTagClose(value)"
+                  <slot
+                    name="tag"
+                    :value="value"
+                    :option="getOptionFromMap(value)"
+                    :handle-close="handleTagClose.bind(null, value)"
                   >
-                    <span :class="nh.be('label')">
-                      <slot name="selected" :option="getOptionFromMap(value)">
-                        <Renderer
-                          :renderer="props.slots.selected"
-                          :data="{ option: getOptionFromMap(value) }"
-                        >
-                          {{ currentLabels[index] }}
-                        </Renderer>
-                      </slot>
-                    </span>
-                  </Tag>
+                    <Renderer
+                      :renderer="props.slots.tag"
+                      :data="{
+                        value,
+                        option: getOptionFromMap(value),
+                        handleClose: handleTagClose.bind(null, value)
+                      }"
+                    >
+                      <Tag
+                        inherit
+                        :class="nh.be('tag')"
+                        :type="props.tagType"
+                        closable
+                        :disabled="props.disabled"
+                        @close="handleTagClose(value)"
+                      >
+                        <span :class="nh.be('label')">
+                          <slot name="selected" :value="value" :option="getOptionFromMap(value)">
+                            <Renderer
+                              :renderer="props.slots.selected"
+                              :data="{ value, option: getOptionFromMap(value) }"
+                            >
+                              {{ currentLabels[index] }}
+                            </Renderer>
+                          </slot>
+                        </span>
+                      </Tag>
+                    </Renderer>
+                  </slot>
                 </template>
                 <template #counter="{ count }">
-                  <Tag
-                    v-if="props.noRestTip"
-                    inherit
-                    :class="[nh.be('tag'), nh.be('counter')]"
-                    :type="props.tagType"
-                    :disabled="props.disabled"
-                    @click.stop="toggleVisible"
-                  >
-                    {{ `+${count}` }}
-                  </Tag>
+                  <slot v-if="props.noRestTip" name="restTag" :rest-count="count">
+                    <Renderer :renderer="props.slots.restTag" :data="{ restCount: count }">
+                      <Tag
+                        inherit
+                        :class="[nh.be('tag'), nh.be('counter')]"
+                        :type="props.tagType"
+                        :disabled="props.disabled"
+                      >
+                        {{ `+${count}` }}
+                      </Tag>
+                    </Renderer>
+                  </slot>
                   <span v-else>
                     <Tooltip
                       ref="restTip"
@@ -1126,37 +1146,61 @@ function focus(options?: FocusOptions) {
                       @click.stop="toggleShowRestTip"
                     >
                       <template #trigger>
-                        <Tag
-                          inherit
-                          :class="[nh.be('tag'), nh.be('counter')]"
-                          :type="props.tagType"
-                          :disabled="props.disabled"
-                        >
-                          {{ `+${count}` }}
-                        </Tag>
+                        <slot name="restTag" :rest-count="count">
+                          <Renderer :renderer="props.slots.restTag" :data="{ restCount: count }">
+                            <Tag
+                              inherit
+                              :class="[nh.be('tag'), nh.be('counter')]"
+                              :type="props.tagType"
+                              :disabled="props.disabled"
+                            >
+                              {{ `+${count}` }}
+                            </Tag>
+                          </Renderer>
+                        </slot>
                       </template>
                       <NativeScroll inherit use-y-bar>
                         <template v-for="(value, index) in currentValues" :key="index">
-                          <Tag
+                          <slot
                             v-if="index >= currentValues.length - restTagCount"
-                            inherit
-                            :class="nh.be('tag')"
-                            closable
-                            :type="props.tagType"
-                            :disabled="props.disabled"
-                            @close="handleRestTagClose(value)"
+                            name="tag"
+                            :value="value"
+                            :option="getOptionFromMap(value)"
+                            :handle-close="handleRestTagClose.bind(null, value)"
                           >
-                            <span :class="nh.be('label')">
-                              <slot name="selected" :option="getOptionFromMap(value)">
-                                <Renderer
-                                  :renderer="props.slots.selected"
-                                  :data="{ option: getOptionFromMap(value) }"
-                                >
-                                  {{ currentLabels[index] }}
-                                </Renderer>
-                              </slot>
-                            </span>
-                          </Tag>
+                            <Renderer
+                              :renderer="props.slots.tag"
+                              :data="{
+                                value,
+                                option: getOptionFromMap(value),
+                                handleClose: handleRestTagClose.bind(null, value)
+                              }"
+                            >
+                              <Tag
+                                inherit
+                                :class="nh.be('tag')"
+                                closable
+                                :type="props.tagType"
+                                :disabled="props.disabled"
+                                @close="handleRestTagClose(value)"
+                              >
+                                <span :class="nh.be('label')">
+                                  <slot
+                                    name="selected"
+                                    :value="value"
+                                    :option="getOptionFromMap(value)"
+                                  >
+                                    <Renderer
+                                      :renderer="props.slots.selected"
+                                      :data="{ value, option: getOptionFromMap(value) }"
+                                    >
+                                      {{ currentLabels[index] }}
+                                    </Renderer>
+                                  </slot>
+                                </span>
+                              </Tag>
+                            </Renderer>
+                          </slot>
                         </template>
                       </NativeScroll>
                     </Tooltip>
@@ -1233,11 +1277,12 @@ function focus(options?: FocusOptions) {
                 <slot
                   v-if="getOptionFromMap(currentValues[0])"
                   name="selected"
+                  :value="currentValues[0]"
                   :option="getOptionFromMap(currentValues[0])"
                 >
                   <Renderer
                     :renderer="props.slots.selected"
-                    :data="{ option: getOptionFromMap(currentValues[0]) }"
+                    :data="{ value: currentValues[0], option: getOptionFromMap(currentValues[0]) }"
                   >
                     {{ currentLabels[0] }}
                   </Renderer>
@@ -1252,11 +1297,12 @@ function focus(options?: FocusOptions) {
                 v-if="previewOption"
                 name="selected"
                 :preview="true"
+                :value="previewOption.value"
                 :option="previewOption"
               >
                 <Renderer
                   :renderer="props.slots.selected"
-                  :data="{ preview: true, option: previewOption }"
+                  :data="{ value: previewOption.value, preview: true, option: previewOption }"
                 >
                   {{ previewOption.label }}
                 </Renderer>
