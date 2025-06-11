@@ -979,8 +979,6 @@ export function useStore(options: StoreOptions) {
   }
 
   function setTableWidth(width: number) {
-    if (state.resized.size) return
-
     width = toNumber(width)
 
     const { columns, widths, resized, sidePadding } = state
