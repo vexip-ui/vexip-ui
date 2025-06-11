@@ -359,7 +359,7 @@ export default defineComponent({
       event.stopPropagation()
       setValue('', 'change', false)
       emitEvent(props.onClear)
-      nextTick(clearField)
+      nextTick(() => clearField(''))
       currentLength.value = 0
       inputControl.value?.focus()
     }
