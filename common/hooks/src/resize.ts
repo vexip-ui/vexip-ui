@@ -3,7 +3,6 @@ import { type MaybeRef, getCurrentScope, onScopeDispose, unref, watch } from 'vu
 import { isClient, noop } from '@vexip-ui/utils'
 import { ResizeObserver } from '@juggle/resize-observer'
 
-
 export interface ResizeInfo extends ResizeObserverEntry {
   offsetWidth: number,
   offsetHeight: number,
@@ -32,13 +31,14 @@ function handleResize(entries: ResizeObserverEntry[]) {
       const { inlineSize, blockSize } = entry.borderBoxSize?.[0]
       const { offsetWidth, offsetHeight } = entry.target as HTMLElement
 
-      handler({
-        ...entry,
-        offsetWidth,
-        offsetHeight,
-        width: inlineSize ?? offsetWidth,
-        height: blockSize ?? offsetHeight,
-      })
+      handler(
+        Object.assign(entry, {
+          offsetWidth,
+          offsetHeight,
+          width: inlineSize ?? offsetWidth,
+          height: blockSize ?? offsetHeight,
+        }),
+      )
     }
   }
 }

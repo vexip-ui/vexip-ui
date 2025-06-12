@@ -1,3 +1,12 @@
+## [2.3.30](https://github.com/vexip-ui/vexip-ui/compare/v2.3.29...v2.3.30) (2025-06-12)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** incorrect handler param of useResize ([667cf39](https://github.com/vexip-ui/vexip-ui/commit/667cf39688fb8f429072e8a52f21f9c9d5a02672)), closes [#560](https://github.com/vexip-ui/vexip-ui/issues/560)
+
+
+
 ## [2.3.29](https://github.com/vexip-ui/vexip-ui/compare/v2.3.28...v2.3.29) (2025-06-11)
 
 
