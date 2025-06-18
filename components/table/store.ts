@@ -630,7 +630,7 @@ export function useStore(options: StoreOptions) {
       }
 
       // 独立属性解析时注意隔断同对象引用
-      widths.set(column.key, column.width || 100)
+      widths.set(column.key, typeof column.width === 'string' ? 100 : column.width || 100)
       sorters.set(column.key, parseSorter(column.sorter))
       filters.set(column.key, parseFilter(column.filter))
 
@@ -991,9 +991,26 @@ export function useStore(options: StoreOptions) {
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = columns[i]
 
-      if (column.width || resized.has(column.key)) {
-        flexWidth -= column.width ?? widths.get(column.key)!
+      if (resized.has(column.key)) {
+        flexWidth -= widths.get(column.key)!
         hasWidthColumns.push(column)
+      } else if (column.width) {
+        if (typeof column.width === 'string') {
+          const percent = boundRange(toNumber(column.width), 0, 100)
+
+          if (percent) {
+            const fixedWidth = (width * percent) / 100
+
+            flexWidth -= fixedWidth
+            widths.set(column.key, fixedWidth)
+            hasWidthColumns.push(column)
+          } else {
+            flexColumns.push(column)
+          }
+        } else {
+          flexWidth -= column.width
+          hasWidthColumns.push(column)
+        }
       } else {
         flexColumns.push(column)
       }

@@ -145,7 +145,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   class?: ClassType,
   style?: StyleType,
   attrs?: Record<string, any>,
-  width?: number,
+  width?: number | `${number}%`,
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,

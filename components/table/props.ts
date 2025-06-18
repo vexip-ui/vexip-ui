@@ -178,7 +178,7 @@ export const tableColumnProps = buildProps({
   style: styleProp,
   attrs: Object,
   type: String as PropType<TableColumnType>,
-  width: Number,
+  width: [Number, String] as PropType<number | `${number}%`>,
   filter: Object as PropType<TableFilterOptions<any, any>>,
   sorter: {
     type: [Boolean, Object] as PropType<boolean | TableSorterOptions<any>>,

@@ -25,6 +25,7 @@ const columns = reactive(
       key: 'job',
       accessor: row => row.job,
       formatter: job => `Good ${job}`,
+      width: '15%',
     },
     {
       name: 'Age',
