@@ -63,7 +63,9 @@ const props = useProps('modal', _props, {
   cancelText: null,
   autoRemove: false,
   confirmType: 'primary',
+  confirmProps: null,
   cancelType: 'default',
+  cancelProps: null,
   actionSize: createSizeProp('small'),
   undivided: false,
   xOffset: 0,
@@ -584,6 +586,7 @@ function handleModalResize(entry: ResizeObserverEntry) {
                     text
                     :type="props.cancelType"
                     :size="props.actionSize"
+                    v-bind="props.cancelProps"
                     @click="handleCancel"
                   >
                     {{ props.cancelText || locale.cancel }}
@@ -594,6 +597,7 @@ function handleModalResize(entry: ResizeObserverEntry) {
                     :type="props.confirmType"
                     :size="props.actionSize"
                     :loading="props.loading"
+                    v-bind="props.confirmProps"
                     @click="handleConfirm"
                   >
                     {{ props.confirmText || locale.confirm }}
