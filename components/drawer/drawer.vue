@@ -58,7 +58,9 @@ const props = useProps('drawer', _props, {
   autoRemove: false,
   footer: false,
   confirmText: null,
+  confirmProps: null,
   cancelText: null,
+  cancelProps: null,
   loading: false,
   confirmType: 'primary',
   cancelType: 'default',
@@ -355,6 +357,7 @@ function handleCancel() {
                 text
                 :type="props.cancelType"
                 :size="props.actionSize"
+                v-bind="props.cancelProps"
                 @click="handleCancel"
               >
                 {{ props.cancelText || locale.cancel }}
@@ -365,6 +368,7 @@ function handleCancel() {
                 :type="props.confirmType"
                 :size="props.actionSize"
                 :loading="props.loading"
+                v-bind="props.confirmProps"
                 @click="handleConfirm"
               >
                 {{ props.confirmText || locale.confirm }}
