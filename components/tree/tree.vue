@@ -422,6 +422,7 @@ provide(
     handleNodeCancel,
     handleNodeExpand,
     handleNodeReduce,
+    handleNodeContextmenu,
     handleAsyncLoad,
     handleNodeDragStart,
     handleNodeDragOver,
@@ -913,6 +914,10 @@ function handleNodeExpand(node: TreeNodeProps) {
 
 function handleNodeReduce(node: TreeNodeProps) {
   emitEvent(props.onNodeReduce, node.data, node)
+}
+
+function handleNodeContextmenu(node: TreeNodeProps) {
+  emitEvent(props.onNodeContextmenu, node.data, node)
 }
 
 async function handleAsyncLoad(node: TreeNodeProps) {

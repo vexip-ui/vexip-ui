@@ -145,6 +145,7 @@ export interface TreeState {
   handleNodeCancel(node: TreeNodeProps): void,
   handleNodeExpand(node: TreeNodeProps): void,
   handleNodeReduce(node: TreeNodeProps): void,
+  handleNodeContextmenu(node: TreeNodeProps): void,
   handleAsyncLoad(node: TreeNodeProps): Promise<boolean>,
   handleNodeDragStart(nodeInstance: TreeNodeInstance): void,
   handleNodeDragOver(nodeInstance: TreeNodeInstance, event: DragEvent): void,

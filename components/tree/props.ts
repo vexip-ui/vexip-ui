@@ -65,6 +65,7 @@ export const treeProps = buildProps({
   onNodeCancel: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeExpand: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onNodeReduce: eventProp<(data: Data, node: TreeNodeProps) => void>(),
+  onNodeContextmenu: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDragStart: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDragOver: eventProp<(data: Data, node: TreeNodeProps) => void>(),
   onDrop: eventProp<(data: Data, node: TreeNodeProps, type: TreeNodeDropType) => void>(),
