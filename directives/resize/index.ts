@@ -1,10 +1,8 @@
-import { useResize } from '@vexip-ui/hooks'
+import { observeResize, unobserveResize, useResize } from '@vexip-ui/hooks'
 import { noop, throttle } from '@vexip-ui/utils'
 
 import type { DirectiveBinding, ObjectDirective } from 'vue'
 import type { ResizeHandler } from '@vexip-ui/hooks'
-
-const { observeResize, unobserveResize } = useResize()
 
 export interface VResizeOptions {
   handler: ResizeHandler,
@@ -23,7 +21,7 @@ function createObserver(
 ) {
   const options: VResizeOptions =
     typeof binding.value === 'function' ? { handler: binding.value } : { ...binding.value }
-  const useThrottle = options.throttle || binding.modifiers.throttle
+  const useThrottle = options.throttle || binding.modifiers.throttle || false
 
   el.__resize = {
     useThrottle,
