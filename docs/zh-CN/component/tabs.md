@@ -95,6 +95,7 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 | placement | `TabNavPlacement`  | 设置标签导航的放置位置                            | `'top'`  | `2.0.13` |
 | show-add  | `boolean`          | 设置是否显示添加按钮                              | `false`  | `2.0.13` |
 | closable  | `boolean`          | 设置是否显示关闭按钮                              | `false`  | `2.0.13` |
+| lazy      | `boolean           | 设置是否所有的面板都是懒加载                      | `false`  | `2.3.31` |
 
 ### Tabs 事件
 
@@ -122,6 +123,7 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 | disabled | `boolean`          | 设置是否禁用该导航   | `false` | -        |
 | icon     | `string`           | 设置导航的前置图标   | `''`    | -        |
 | closable | `boolean`          | 设置是否显示关闭按钮 | `false` | `2.0.13` |
+| lazy     | `boolean           | 设置面板是否懒加载   | `false` | `2.3.31` |
 
 ### TabPanel 事件
 

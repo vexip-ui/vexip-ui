@@ -12,6 +12,7 @@ export interface ItemState {
 
 export interface TabsState {
   currentActive: string | number,
+  lazy: boolean,
   increaseItem: (item: ItemState) => void,
   decreaseItem: (item: ItemState) => void,
   handleActive: (label: string | number) => void,
