@@ -916,8 +916,8 @@ function handleNodeReduce(node: TreeNodeProps) {
   emitEvent(props.onNodeReduce, node.data, node)
 }
 
-function handleNodeContextmenu(node: TreeNodeProps) {
-  emitEvent(props.onNodeContextmenu, node.data, node)
+function handleNodeContextmenu(event: MouseEvent, node: TreeNodeProps) {
+  emitEvent(props.onNodeContextmenu, event, node.data, node)
 }
 
 async function handleAsyncLoad(node: TreeNodeProps) {

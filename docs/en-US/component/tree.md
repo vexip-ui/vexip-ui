@@ -190,6 +190,16 @@ Adding the `block-effect` prop to make the effect apply to the entire block of t
 
 :::
 
+:::demo tree/contextmenu
+
+### Contextmenu
+
+==!s|2.3.31==
+
+You can create a contextmenu for nodes via `node-contextmenu` event.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -319,7 +329,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | drop             | Emitted when a node is dropped by another dragged node                                                            | `(data: Data, node: TreeNodeProps, dropType: NodeDropType)`       | -        |
 | drag-end         | Emitted when the node finishes dragging                                                                           | `(data: Data, node: TreeNodeProps)`                               | -        |
 | label-click      | Emitted when a node label is clicked                                                                              | `(data: Data, node: TreeNodeProps)`                               | -        |
-| node-contextmenu | Emitted when contextmenu on a node                                                                                | `(data: Data, node: TreeNodeProps)`                               | `2.3.31` |
+| node-contextmenu | Emitted when contextmenu on a node                                                                                | `(event: MouseEvent, data: Data, node: TreeNodeProps)`            | `2.3.31` |
 
 ### Tree Slots
 

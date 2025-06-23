@@ -189,8 +189,8 @@ function handleClick() {
   }
 }
 
-function handleContextmenu() {
-  treeState.handleNodeContextmenu(props.node)
+function handleContextmenu(event: MouseEvent) {
+  treeState.handleNodeContextmenu(event, props.node)
 }
 
 function handleToggleCheck(able = !props.node.checked) {

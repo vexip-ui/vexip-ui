@@ -190,6 +190,16 @@
 
 :::
 
+:::demo tree/contextmenu
+
+### 右键菜单
+
+==!s|2.3.31==
+
+你可以通过 `node-contextmenu` 事件来为节点创建右键菜单。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -319,7 +329,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | drop             | 当节点被其他的拖拽节点放入时触发                                 | `(data: Data, node: TreeNodeProps， dropType: NodeDropType)`      | -        |
 | drag-end         | 当节点结束拖拽时触发                                             | `(data: Data, node: TreeNodeProps)`                               | -        |
 | label-click      | 当节点标签被点击时触发                                           | `(data: Data, node: TreeNodeProps)`                               | -        |
-| node-contextmenu | 当在节点唤起右键菜单时触发                                       | `(data: Data, node: TreeNodeProps)`                               | `2.3.31` |
+| node-contextmenu | 当在节点唤起右键菜单时触发                                       | `(event: MouseEvent, data: Data, node: TreeNodeProps)`            | `2.3.31` |
 
 ### Tree 插槽
 
