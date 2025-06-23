@@ -1,13 +1,7 @@
-<template>
-  <div :class="className" role="tabpanel" :aria-hidden="!active">
-    <slot></slot>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, reactive, ref, toRef, watch } from 'vue'
 
-import { emitEvent, useNameHelper } from '@vexip-ui/config'
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { tabPanelProps } from './props'
 import { TABS_STATE } from './symbol'
 
@@ -15,7 +9,10 @@ import type { ItemState } from './symbol'
 
 defineOptions({ name: 'TabPanel' })
 
-const props = defineProps(tabPanelProps)
+const _props = defineProps(tabPanelProps)
+const props = useProps('tabPanel', _props, {
+  lazy: null,
+})
 
 const slots = defineSlots<{
   default?: () => any,
@@ -28,12 +25,14 @@ const nh = useNameHelper('tabs')
 const active = ref(false)
 const currentLabel = ref(props.label)
 
+const lazy = computed(() => props.lazy ?? tabsState?.lazy ?? false)
 const className = computed(() => {
   const baseClass = nh.be('panel')
 
   return {
     [baseClass]: true,
     [`${baseClass}--disabled`]: props.disabled,
+    [`${baseClass}--lazy`]: lazy.value,
     [`${baseClass}--active`]: !props.disabled && active.value,
   }
 })
@@ -84,3 +83,14 @@ if (tabsState) {
   })
 }
 </script>
+
+<template>
+  <div
+    v-if="!lazy || active"
+    :class="className"
+    role="tabpanel"
+    :aria-hidden="!active"
+  >
+    <slot></slot>
+  </div>
+</template>

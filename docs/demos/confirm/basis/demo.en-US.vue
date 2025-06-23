@@ -16,4 +16,7 @@ async function confirm() {
     Message.warning('Submit canceled')
   }
 }
+
+// Close manually.
+// Confirm.close()
 </script>

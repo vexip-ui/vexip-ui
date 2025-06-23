@@ -215,9 +215,9 @@ export function useReplStore(options: ReplOptions = {}) {
     for (const meta of pkgMetaList) {
       const { name, pkg, path } = typeof meta === 'function' ? meta(versions) : meta
 
-      if (!name || !pkg || !path) continue
+      if ((!name && !pkg) || !path) continue
 
-      imports[name] = getCdnUrl(pkg, path, versions[pkg] || 'latest')
+      imports[name] = getCdnUrl(pkg || name, path, versions[pkg || name] || 'latest')
     }
 
     return imports

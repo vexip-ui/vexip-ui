@@ -190,6 +190,16 @@ Adding the `block-effect` prop to make the effect apply to the entire block of t
 
 :::
 
+:::demo tree/contextmenu
+
+### Contextmenu
+
+==!s|2.3.31==
+
+You can create a contextmenu for nodes via `node-contextmenu` event.
+
+:::
+
 ## API
 
 ### Preset Types
@@ -306,19 +316,20 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 
 ### Tree Events
 
-| Name        | Description                                                                                                                                                             | Parameters                                                        | Since |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----- |
-| node-change | Emitted when the state of the node's checkbox changes, returns the current node's data and node object                                                                  | `(data: Data, node: TreeNodeProps, checked: boolean)`             | -     |
-| node-click  | Emitted when a node is clicked, returns the current node data and node object                                                                                           | `(data: Data, node: TreeNodeProps)`                               | -     |
-| node-select | Emitted when a node is selected, returns the data and node object of the current node, if the multi-select mode is enabled, the returned parameter types are all arrays | `(data: Data \| Data[], nodes: TreeNodeProps \| TreeNodeProps[])` | -     |
-| node-cancel | Emitted when a node is deselected, returns the current node's data and node object                                                                                      | `(data: Data, node: TreeNodeProps)`                               | -     |
-| node-expand | Emitted when a node is expanded, returns the current node's data and node object                                                                                        | `(data: Data, node: TreeNodeProps)`                               | -     |
-| node-reduce | Emitted when a node is collapsed, returns the data and node object of the current node                                                                                  | `(data: Data, node: TreeNodeProps)`                               | -     |
-| drag-start  | Emitted when the node is about to start dragging, returns the data and node object of the current node                                                                  | `(data: Data, node: TreeNodeProps)`                               | -     |
-| drag-over   | Emitted when the node is being dragged, returns the current node's data and node object                                                                                 | `(data: Data, node: TreeNodeProps)`                               | -     |
-| drop        | Emitted when a node is dropped by another dragged node, returns the current node's data and node object                                                                 | `(data: Data, node: TreeNodeProps, dropType: NodeDropType)`       | -     |
-| drag-end    | Emitted when the node finishes dragging, returns the data and node object of the current node                                                                           | `(data: Data, node: TreeNodeProps)`                               | -     |
-| label-click | Emitted when a node label is clicked, returns the current node data and node object                                                                                     | `(data: Data, node: TreeNodeProps)`                               | -     |
+| Name             | Description                                                                                                       | Parameters                                                        | Since    |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------- |
+| node-change      | Emitted when the state of the node's checkbox changes                                                             | `(data: Data, node: TreeNodeProps, checked: boolean)`             | -        |
+| node-click       | Emitted when a node is clicked                                                                                    | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-select      | Emitted when a node is selected, if the multi-select mode is enabled, the returned parameter types are all arrays | `(data: Data \| Data[], nodes: TreeNodeProps \| TreeNodeProps[])` | -        |
+| node-cancel      | Emitted when a node is deselected                                                                                 | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-expand      | Emitted when a node is expanded                                                                                   | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-reduce      | Emitted when a node is collapsed                                                                                  | `(data: Data, node: TreeNodeProps)`                               | -        |
+| drag-start       | Emitted when the node is about to start dragging                                                                  | `(data: Data, node: TreeNodeProps)`                               | -        |
+| drag-over        | Emitted when the node is being dragged                                                                            | `(data: Data, node: TreeNodeProps)`                               | -        |
+| drop             | Emitted when a node is dropped by another dragged node                                                            | `(data: Data, node: TreeNodeProps, dropType: NodeDropType)`       | -        |
+| drag-end         | Emitted when the node finishes dragging                                                                           | `(data: Data, node: TreeNodeProps)`                               | -        |
+| label-click      | Emitted when a node label is clicked                                                                              | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-contextmenu | Emitted when contextmenu on a node                                                                                | `(event: MouseEvent, data: Data, node: TreeNodeProps)`            | `2.3.31` |
 
 ### Tree Slots
 

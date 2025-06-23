@@ -85,6 +85,11 @@ export default async () => {
                     link: 'https://fantastic-admin.gitee.io/',
                   },
                   {
+                    key: 'grid-layout-plus',
+                    text: 'Grid Layout Plus',
+                    link: 'https://grid-layout-plus.netlify.app/',
+                  },
+                  {
                     key: 'become-partner',
                     i18n: 'common.becomePartner',
                     link: 'mailto:544022268@qq.com',

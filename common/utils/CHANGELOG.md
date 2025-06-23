@@ -1,3 +1,13 @@
+## [2.16.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.2...utils@2.16.3) (2025-06-23)
+
+
+### 👓 Types
+
+* **utils:** fix listToMap reslut types ([ef65636](https://github.com/vexip-ui/vexip-ui/commit/ef65636f18528294eb6be1d7eb384d075ec6f38a))
+* **utils:** improve listToMap reslut types ([51f2140](https://github.com/vexip-ui/vexip-ui/commit/51f21409598fbd91f588b35060643d727d3a060d))
+
+
+
 ## [2.16.2](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.1...utils@2.16.2) (2025-05-12)
 
 

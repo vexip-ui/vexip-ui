@@ -163,6 +163,8 @@ interface ModalSlotParams {
 | x-offset        | `number`                          | 设置模态框横向的偏移量，与定位属性互不影响                                                                            | `0`              | `2.2.11` |
 | y-offset        | `number`                          | 设置模态框纵向的偏移量，与定位属性互不影响                                                                            | `0`              | `2.2.11` |
 | disable-esc     | `boolean`                         | 是否禁止使用 ESC 键关闭                                                                                               | `false`          | `2.3.11` |
+| confirm-props   | `ButtonProps`                     | 指定确认按钮的属性                                                                                                    | `null`           | `2.3.31` |
+| cancel-props    | `ButtonProps`                     | 指定取消按钮的属性                                                                                                    | `null`           | `2.3.31` |
 
 ### Modal 事件
 

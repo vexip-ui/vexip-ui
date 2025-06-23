@@ -16,4 +16,7 @@ async function confirm() {
     Message.warning('取消提交')
   }
 }
+
+// 手动关闭
+// Confirm.close()
 </script>

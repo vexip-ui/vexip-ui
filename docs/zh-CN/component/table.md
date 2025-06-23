@@ -572,7 +572,7 @@ interface TableFootPayload {
 | columns         | `TableColumnRawOptions[]`                                     | 表格列的配置，参考下方的 TableColumn 属性                     | `[]`           | -        |
 | summaries       | `TableSummaryOptions<any, any>[]`                             | 表格总结行的配置，参考下方 TableSummary 属性                  | `[]`           | `2.1.24` |
 | data            | `Data[]`                                                      | 表格的数据源                                                  | `[]`           | -        |
-| width           | `number`                                                      | 表格的宽度，在有固定列时使用                                  | `null`         | -        |
+| width           | `number \| string`                                            | 表格的宽度，在有固定列时使用                                  | `null`         | -        |
 | height          | `number`                                                      | 表格的高度，超出这个高度时会变成可滚动状态                    | `null`         | -        |
 | row-class       | `ClassType \| TableRowPropFn<ClassType>`                      | 行的自定义类名                                                | `null`         | -        |
 | row-style       | `StyleType \| TableRowPropFn<StyleType>`                      | 行的自定义样式                                                | `null`         | `2.0.1`  |
@@ -696,7 +696,7 @@ interface TableFootPayload {
 | style             | `StyleType`                            | 该列单元格的自定义样式                                             | `null`      | `2.0.1`  |
 | attrs             | `Record<string, any>`                  | 该列单元格的自定义属性                                             | `null`      | `2.0.1`  |
 | type              | `TableColumnType`                      | 设置内置特定类型列                                                 | `null`      | -        |
-| width             | `number`                               | 设置列宽                                                           | `null`      | -        |
+| width             | ``number \| `${number}%` ``            | 设置列宽，仅支持数字或百分比                                       | `null`      | -        |
 | filter            | `TableFilterOptions<any, any>`         | 列的过滤配置器                                                     | `null`      | -        |
 | sorter            | `boolean \| TableSorterOptions<any>`   | 列的排序排序器                                                     | `null`      | -        |
 | order             | `number`                               | 列的渲染顺序                                                       | `0`         | -        |
@@ -718,6 +718,8 @@ interface TableFootPayload {
 | indented          | `boolean`                              | 指定为树形表格的缩进列                                             | `false`     | `2.2.6`  |
 | formatter         | `(value: any) => unknown`              | 设置单元格内容的格式化方法                                         | `null`      | `2.2.13` |
 | single-select     | `boolean`                              | 当 `type` 为 `'selection'` 时设置是否为单选                        | `false`     | `2.3.25` |
+| min-width         | `number`                               | 设置列的最小宽度，通常用于设置了百分比列宽或者列可缩放             | `null`      | `2.3.31` |
+| max-width         | `number`                               | 设置列的最大宽度，通常用于设置了百分比列宽或者列可缩放             | `null`      | `2.3.31` |
 
 ### TableColumn 插槽
 

@@ -163,6 +163,8 @@ interface ModalSlotParams {
 | x-offset        | `number`                          | Set the horizontal offset of the modal, which do not effect the position props                                                                                                                                          | `0`              | `2.2.11` |
 | y-offset        | `number`                          | Set the vertical offset of the modal, which do not effect the position props                                                                                                                                            | `0`              | `2.2.11` |
 | disable-esc     | `boolean`                         | Set whether to disable close via using the ESC key                                                                                                                                                                      | `false`          | `2.3.11` |
+| confirm-props   | `ButtonProps`                     | Specify props for confirm button                                                                                                                                                                                        | `null`           | `2.3.31` |
+| cancel-props    | `ButtonProps`                     | Specify props for cancel button                                                                                                                                                                                         | `null`           | `2.3.31` |
 
 ### Modal Events
 

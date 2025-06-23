@@ -22,7 +22,10 @@ export interface ReleaseOptions {
    * @default true
    */
   updateVersion?: boolean,
-  updateVersionByType?: 'patch' | 'minor' | 'major',
+  /**
+   * You can use the 'release' type to release next pre version.
+   */
+  updateVersionByType?: 'patch' | 'minor' | 'major' | 'release',
   /**
    * @default true
    */
@@ -186,7 +189,7 @@ export async function release(options: ReleaseOptions) {
 function updateVersionByType(
   currentVersion: string,
   options: {
-    type: 'patch' | 'minor' | 'major',
+    type: 'patch' | 'minor' | 'major' | 'release',
     preId?: string
   },
 ) {

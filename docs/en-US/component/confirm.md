@@ -70,6 +70,13 @@ For a advanced usage, you can set a general rendering method via [Props Config](
 
 ## API
 
+### Confirm Methods
+
+The component instance mainly provides two methods to open and close the confirmation dialog:
+
+- `Confirm.open(content[[, title], type] | options)`
+- `Confirm.close()`
+
 In some cases, confirm needs to be displayed on full-screen elements. The rendering position of the component can be moved by:
 
 ```ts

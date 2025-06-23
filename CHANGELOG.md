@@ -1,3 +1,27 @@
+## [2.3.31](https://github.com/vexip-ui/vexip-ui/compare/v2.3.30...v2.3.31) (2025-06-23)
+
+
+### ✨ Features
+
+* **card:** support customize header padding via css variables ([#561](https://github.com/vexip-ui/vexip-ui/issues/561)) ([090233a](https://github.com/vexip-ui/vexip-ui/commit/090233af5eb1785900ea5e765f3798a9b145abf9))
+* **confirm:** add close method ([7f5ab67](https://github.com/vexip-ui/vexip-ui/commit/7f5ab679b2ea01e781a94bf7208865c22f8ed0fe))
+* **drawer:** add confirm-props & cancel-props props ([65ed86b](https://github.com/vexip-ui/vexip-ui/commit/65ed86b74e786e10772869be5b6e35a2e5e1b6a8))
+* **modal:** add confirm-props & cancel-props props ([ceb24ea](https://github.com/vexip-ui/vexip-ui/commit/ceb24ea160b6cb01862c9a79b1509830e657d792))
+* **table:** support percentage value for column width ([b57cb1b](https://github.com/vexip-ui/vexip-ui/commit/b57cb1b15e9949e06b7fd8d43e9daa8decd03308))
+* **table:** support specify min-width and max-width for columns ([00be27b](https://github.com/vexip-ui/vexip-ui/commit/00be27b595db1a11ca1ba5e644c9e93f3a1b342a))
+* **tabs:** support lazy load panels ([b14bf7f](https://github.com/vexip-ui/vexip-ui/commit/b14bf7fe199629c1a8bb98276698e5e6d46fcb04))
+* **tree:** add node-contextmenu event ([14fd2ea](https://github.com/vexip-ui/vexip-ui/commit/14fd2eacda0ff4c6664284139df81f399b4cf37a))
+
+
+### 🐞 Bug Fixes
+
+* **playground:** correctly build import map ([455d1bc](https://github.com/vexip-ui/vexip-ui/commit/455d1bc244f51e359b863be9b1aec6b3f221ebc9))
+* **scripts:** should support update version via type release ([cdca2a2](https://github.com/vexip-ui/vexip-ui/commit/cdca2a28ff452ada1383144296971766dd9dd1b4))
+* **table:** cell content default to wrap ([19da505](https://github.com/vexip-ui/vexip-ui/commit/19da505c79eaf8fa43ced14c3036e67fc55ead95)), closes [#562](https://github.com/vexip-ui/vexip-ui/issues/562)
+* **tree:** improve node-contextmenu event to expose mouse event ([7c4c0b0](https://github.com/vexip-ui/vexip-ui/commit/7c4c0b08701b2d01bbd01ebb1e2d8b353ce542c9))
+
+
+
 ## [2.3.30](https://github.com/vexip-ui/vexip-ui/compare/v2.3.29...v2.3.30) (2025-06-12)
 
 

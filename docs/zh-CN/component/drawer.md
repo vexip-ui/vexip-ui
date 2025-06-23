@@ -135,6 +135,8 @@ interface DrawerSlotParams {
 | action-size     | `'small' \| 'default' \| 'large'`           | 设置确认和取消按钮的大小                                                       | `'small'`        | `2.2.6`  |
 | undivided       | `boolean`                                   | 去除抽屉各部分的分割线                                                         | `false`          | `2.2.6`  |
 | disable-esc     | `boolean`                                   | 是否禁止使用 ESC 键关闭                                                        | `false`          | `2.3.11` |
+| confirm-props   | `ButtonProps`                               | 指定确认按钮的属性                                                             | `null`           | `2.3.31` |
+| cancel-props    | `ButtonProps`                               | 指定取消按钮的属性                                                             | `null`           | `2.3.31` |
 
 ### Drawer 事件
 

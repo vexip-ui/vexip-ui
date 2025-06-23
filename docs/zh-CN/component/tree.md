@@ -190,6 +190,16 @@
 
 :::
 
+:::demo tree/contextmenu
+
+### 右键菜单
+
+==!s|2.3.31==
+
+你可以通过 `node-contextmenu` 事件来为节点创建右键菜单。
+
+:::
+
 ## API
 
 ### 预设类型
@@ -306,19 +316,20 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 
 ### Tree 事件
 
-| 名称        | 说明                                                                                           | 参数                                                              | 始于 |
-| ----------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ---- |
-| node-change | 当节点的复选框状态发生改变时触发，返回当前节点的数据和节点对象                                 | `(data: Data, node: TreeNodeProps, checked: boolean)`             | -    |
-| node-click  | 当节点被点击时触发，返回当前节点数据和节点对象                                                 | `(data: Data, node: TreeNodeProps)`                               | -    |
-| node-select | 当节点被选择时触发，返回当前节点的数据和节点对象，如果开启的多选模式，则返回的参数类型均为数组 | `(data: Data \| Data[], nodes: TreeNodeProps \| TreeNodeProps[])` | -    |
-| node-cancel | 当节点被取消选择时触发，返回当前节点的数据和节点对象                                           | `(data: Data, node: TreeNodeProps)`                               | -    |
-| node-expand | 当节点被展开时触发，返回当前节点的数据和节点对象                                               | `(data: Data, node: TreeNodeProps)`                               | -    |
-| node-reduce | 当节点被收起时触发，返回当前节点的数据和节点对象                                               | `(data: Data, node: TreeNodeProps)`                               | -    |
-| drag-start  | 当节点将要开始拖拽时触发，返回当前节点的数据和节点对象                                         | `(data: Data, node: TreeNodeProps)`                               | -    |
-| drag-over   | 当节点正在拖拽时触发，返回当前节点的数据和节点对象                                             | `(data: Data, node: TreeNodeProps)`                               | -    |
-| drop        | 当节点被其他的拖拽节点放入时触发，返回当前节点的数据和节点对象                                 | `(data: Data, node: TreeNodeProps， dropType: NodeDropType)`      | -    |
-| drag-end    | 当节点结束拖拽时触发，返回当前节点的数据和节点对象                                             | `(data: Data, node: TreeNodeProps)`                               | -    |
-| label-click | 当节点标签被点击时触发，返回当前节点的数据和节点对象                                           | `(data: Data, node: TreeNodeProps)`                               | -    |
+| 名称             | 说明                                                             | 参数                                                              | 始于     |
+| ---------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------- | -------- |
+| node-change      | 当节点的复选框状态发生改变时触发                                 | `(data: Data, node: TreeNodeProps, checked: boolean)`             | -        |
+| node-click       | 当节点被点击时触发                                               | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-select      | 当节点被选择时触发，如果开启的多选模式，则返回的参数类型均为数组 | `(data: Data \| Data[], nodes: TreeNodeProps \| TreeNodeProps[])` | -        |
+| node-cancel      | 当节点被取消选择时触发                                           | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-expand      | 当节点被展开时触发                                               | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-reduce      | 当节点被收起时触发                                               | `(data: Data, node: TreeNodeProps)`                               | -        |
+| drag-start       | 当节点将要开始拖拽时触发                                         | `(data: Data, node: TreeNodeProps)`                               | -        |
+| drag-over        | 当节点正在拖拽时触发                                             | `(data: Data, node: TreeNodeProps)`                               | -        |
+| drop             | 当节点被其他的拖拽节点放入时触发                                 | `(data: Data, node: TreeNodeProps， dropType: NodeDropType)`      | -        |
+| drag-end         | 当节点结束拖拽时触发                                             | `(data: Data, node: TreeNodeProps)`                               | -        |
+| label-click      | 当节点标签被点击时触发                                           | `(data: Data, node: TreeNodeProps)`                               | -        |
+| node-contextmenu | 当在节点唤起右键菜单时触发                                       | `(event: MouseEvent, data: Data, node: TreeNodeProps)`            | `2.3.31` |
 
 ### Tree 插槽
 
