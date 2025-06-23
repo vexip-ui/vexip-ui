@@ -5,6 +5,7 @@
     sync
     clearable
     style="max-width: 300px"
+    @change="handleChange"
   ></Input>
 </template>
 
@@ -12,4 +13,8 @@
 import { ref } from 'vue'
 
 const value = ref('')
+
+function handleChange(value: string) {
+  console.info('Input value changed:', value)
+}
 </script>

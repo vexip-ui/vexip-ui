@@ -246,6 +246,10 @@ export default defineComponent({
       },
     })
 
+    function getLatestValue() {
+      return typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+    }
+
     function handleFocus(event: FocusEvent) {
       if (!focused.value) {
         focused.value = true
@@ -260,7 +264,7 @@ export default defineComponent({
         setTimeout(() => {
           if (!focused.value) {
             emitEvent(props.onBlur, event)
-            emitChangeEvent('change')
+            lastValue !== getLatestValue() && emitChangeEvent('change')
           }
         }, 120)
       }
@@ -291,12 +295,9 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType, sync = props.sync) {
       type = type === 'input' ? 'input' : 'change'
 
-      const value =
-        typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+      const value = getLatestValue()
 
       if (type === 'change') {
-        if (lastValue === value) return
-
         lastValue = value
 
         if (!sync) {
