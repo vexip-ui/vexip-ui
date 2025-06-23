@@ -126,7 +126,7 @@ const mountedPromise = new Promise<void>(resolve => {
   })
 })
 
-defineExpose({ state, openConfirm, handleReset })
+defineExpose({ state, openConfirm, closeConfirm: handleCancel, handleReset })
 
 async function openConfirm(options: ConfirmOptions) {
   await mountedPromise

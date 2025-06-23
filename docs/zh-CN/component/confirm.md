@@ -70,6 +70,13 @@
 
 ## API
 
+### Confirm 方法
+
+组件实例主要提供了一个打开和一个关闭确认框的方法：
+
+- `Confirm.open(content[[, title], type] | options)`
+- `Confirm.close()`
+
 某些场景下，需要在全屏元素上显示确认框，此时可以将组件的渲染位置迁移：
 
 ```ts

@@ -53,5 +53,6 @@ export interface ConfirmOptions
 
 export interface ConfirmInstance extends ComponentPublicInstance {
   openConfirm: (options: ConfirmOptions) => Promise<boolean>,
+  closeConfirm: () => void,
   handleReset: () => void
 }
