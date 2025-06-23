@@ -696,7 +696,7 @@ interface TableFootPayload {
 | style             | `StyleType`                            | Custom style for the cell in this column                                                                          | `null`      | `2.0.1`  |
 | attrs             | `Record<string, any>`                  | Custom attributes for the cell in this column                                                                     | `null`      | `2.0.1`  |
 | type              | `TableColumnType`                      | Set built-in type of the column                                                                                   | `null`      | -        |
-| width             | ``number \| `${number}%` ``            | Set column width                                                                                                  | `null`      | -        |
+| width             | ``number \| `${number}%` ``            | Set width column, only support number or percent value                                                            | `null`      | -        |
 | filter            | `TableFilterOptions<any, any>`         | Configure filter for the column                                                                                   | `null`      | -        |
 | sorter            | `boolean \| TableSorterOptions<any>`   | Configure the sorter for the column                                                                               | `null`      | -        |
 | order             | `number`                               | The rendering order of the column                                                                                 | `0`         | -        |
@@ -718,6 +718,8 @@ interface TableFootPayload {
 | indented          | `boolean`                              | Specified as the indented column of the tree table                                                                | `false`     | `2.2.6`  |
 | formatter         | `(value: any) => unknown`              | Set formatter for content of the cell                                                                             | `null`      | `2.2.13` |
 | single-select     | `boolean`                              | Set whether is single selection when `type` is `'selection'`                                                      | `false`     | `2.3.25` |
+| min-width         | `number`                               | Set min width for column, useful when set a number width or column is resizable                                   | `null`      | `2.3.31` |
+| max-width         | `number`                               | Set max width for column, useful when set a number width or column is resizable                                   | `null`      | `2.3.31` |
 
 ### TableColumn Slots
 

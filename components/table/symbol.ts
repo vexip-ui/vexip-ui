@@ -146,6 +146,8 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   style?: StyleType,
   attrs?: Record<string, any>,
   width?: number | `${number}%`,
+  minWidth?: number,
+  maxWidth?: number,
   filter?: TableFilterOptions<D, Val>,
   sorter?: boolean | TableSorterOptions<D>,
   order?: number,

@@ -210,8 +210,6 @@ $table: map.merge(
   &__content {
     display: flex;
     flex-flow: column wrap;
-    align-items: inherit;
-    justify-content: inherit;
     width: 100%;
     padding: value('table-cell-v-padding') value('table-cell-h-padding');
     color: inherit;

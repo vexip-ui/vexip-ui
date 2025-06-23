@@ -983,13 +983,14 @@ export function useStore(options: StoreOptions) {
 
     const { columns, widths, resized, sidePadding } = state
 
-    const hasWidthColumns = []
-    const flexColumns = []
+    const hasWidthColumns: ColumnWithKey[] = []
+    const flexColumns: ColumnWithKey[] = []
 
     let flexWidth = width - (sidePadding[0] || 0) - (sidePadding[1] || 0)
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = columns[i]
+      const { minWidth = 0, maxWidth = Infinity } = column
 
       if (resized.has(column.key)) {
         flexWidth -= widths.get(column.key)!
@@ -999,7 +1000,7 @@ export function useStore(options: StoreOptions) {
           const percent = boundRange(toNumber(column.width), 0, 100)
 
           if (percent) {
-            const fixedWidth = (width * percent) / 100
+            const fixedWidth = Math.round(boundRange((width * percent) / 100, minWidth, maxWidth))
 
             flexWidth -= fixedWidth
             widths.set(column.key, fixedWidth)
@@ -1008,7 +1009,7 @@ export function useStore(options: StoreOptions) {
             flexColumns.push(column)
           }
         } else {
-          flexWidth -= column.width
+          flexWidth -= boundRange(column.width, minWidth, maxWidth)
           hasWidthColumns.push(column)
         }
       } else {
@@ -1017,20 +1018,22 @@ export function useStore(options: StoreOptions) {
     }
 
     const flexColumnCount = flexColumns.length
+    const flexWidths = distributeWidths(flexColumns, flexWidth)
 
-    let flexUnitWidth = 100
+    // let flexUnitWidth = 100
 
-    // 剩余空间有多时, 均分到弹性列
-    // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
-    if (flexColumnCount) {
-      flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
-    }
+    // // 剩余空间有多时, 均分到弹性列
+    // // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
+    // if (flexColumnCount) {
+    //   flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
+    // }
 
     let usedWidth = 0
 
     for (let i = 0; i < flexColumnCount; ++i) {
       const column = flexColumns[i]
-      const width = Math[i % 2 ? 'ceil' : 'floor'](flexUnitWidth)
+      // const width = Math[i % 2 ? 'ceil' : 'floor'](flexUnitWidth)
+      const width = Math[i % 2 ? 'ceil' : 'floor'](flexWidths[i])
 
       if (i < flexColumnCount - 1) {
         usedWidth += width
@@ -1039,11 +1042,68 @@ export function useStore(options: StoreOptions) {
       widths.set(column.key, width)
     }
 
-    if (flexColumnCount && flexWidth >= flexColumnCount * flexUnitWidth) {
+    if (flexColumnCount && flexWidth >= usedWidth + getLast(flexWidths)!) {
       widths.set(getLast(flexColumns)!.key, flexWidth - usedWidth)
     }
 
     state.width = width
+  }
+
+  function distributeWidths(columns: ColumnWithKey[], totalWidth: number): number[] {
+    const count = columns.length
+    const baseWidth = Math.max(totalWidth / count, 100)
+
+    const widths = columns.map(col => {
+      let w = baseWidth
+      if (col.minWidth != null) w = Math.max(w, col.minWidth)
+      if (col.maxWidth != null) w = Math.min(w, col.maxWidth)
+      return w
+    })
+
+    const currentTotal = widths.reduce((a, b) => a + b, 0)
+    let delta = totalWidth - currentTotal
+
+    const canGrow = (i: number) => columns[i].maxWidth == null || widths[i] < columns[i].maxWidth!
+    const canShrink = (i: number) => columns[i].minWidth == null || widths[i] > columns[i].minWidth!
+
+    const epsilon = 0.1
+    let adjusted = false
+
+    while (Math.abs(delta) > epsilon) {
+      const adjustableIndices = widths
+        .map((_, i) => {
+          if (delta > 0 && canGrow(i)) return i
+          if (delta < 0 && canShrink(i)) return i
+          return -1
+        })
+        .filter(i => i !== -1)
+
+      if (adjustableIndices.length === 0) {
+        adjusted = false
+        break
+      }
+
+      const adjustment = delta / adjustableIndices.length
+      for (const i of adjustableIndices) {
+        const old = widths[i]
+        let next = old + adjustment
+
+        if (columns[i].minWidth != undefined) next = Math.max(next, columns[i].minWidth!)
+        if (columns[i].maxWidth != undefined) next = Math.min(next, columns[i].maxWidth!)
+
+        delta -= next - old
+        widths[i] = next
+      }
+
+      adjusted = true
+    }
+
+    // delta > 0 且无法再调整时，强行补给最后一列
+    if (!adjusted && delta > epsilon) {
+      widths[count - 1] += delta
+    }
+
+    return widths
   }
 
   function setRowHeight(height: number) {
@@ -1637,7 +1697,7 @@ export function useStore(options: StoreOptions) {
   let lastColumnWidth: number | undefined
 
   function handleColumnResize(keys: Key[], newWidth: number) {
-    const { resized, widths, columns, width: tableWidth } = state
+    const { resized, widths, columns, columnMap, width: tableWidth } = state
     const length = keys.length
 
     if (!columns.length || !length) return
@@ -1647,12 +1707,16 @@ export function useStore(options: StoreOptions) {
 
     for (let i = 0; i < length; ++i) {
       const key = keys[i]
+      const column = columnMap.get(key) as ColumnWithKey
+
+      if (!column) continue
+
+      const width =
+        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth)
+      const { minWidth = 0, maxWidth = Infinity } = column
 
       resized.add(key)
-      widths.set(
-        key,
-        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth),
-      )
+      widths.set(key, boundRange(width, minWidth, maxWidth))
     }
 
     let totalWidth = 0

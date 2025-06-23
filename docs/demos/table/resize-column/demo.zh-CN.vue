@@ -12,8 +12,8 @@
     <TableColumn type="selection"></TableColumn>
     <TableColumn name="First Name" id-key="firstName"></TableColumn>
     <TableColumn name="Last Name" id-key="lastName"></TableColumn>
-    <TableColumn name="Job" id-key="job"></TableColumn>
-    <TableColumn name="Desc" id-key="desc"></TableColumn>
+    <TableColumn name="Job" id-key="job" :min-width="100"></TableColumn>
+    <TableColumn name="Desc" id-key="desc" :max-width="280"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
 </template>

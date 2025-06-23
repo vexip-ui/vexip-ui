@@ -15,10 +15,12 @@ const columns = reactive(
     {
       name: 'First Name',
       key: 'firstName',
+      maxWidth: 200,
     },
     {
       name: 'Last Name',
       key: 'lastName',
+      maxWidth: 200,
     },
     {
       name: 'Job',
@@ -31,6 +33,12 @@ const columns = reactive(
       name: 'Age',
       key: 'age',
       formatter: age => `${age} (${currentYear - age})`,
+      width: '10%',
+      minWidth: 120,
+    },
+    {
+      name: 'Email',
+      key: 'email',
     },
   ]),
 )
