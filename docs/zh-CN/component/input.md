@@ -134,10 +134,10 @@
 | delay          | `number`                                                 | 设置 `input` 事件节流或防抖得间隔毫秒，默认节流为 `16` 毫秒，防抖为 `100` 毫秒，非响应式属性 | `null`      | `2.1.25` |
 | clearable      | `boolean`                                                | 设置是否可以清空值                                                                           | `false`     | -        |
 | max-length     | `number`                                                 | 设置输入内容的最大长度，值为 `0` 时不限制                                                    | `0`         | -        |
+| hide-count     | `boolean`                                                | 设置是否隐藏字数统计                                                                         | `false`     | `2.3.32` |
 | before         | `string`                                                 | 设置输入框的前置内容                                                                         | `''`        | -        |
 | after          | `string`                                                 | 设置输入框的后置内容                                                                         | `''`        | -        |
 | plain-password | `boolean`                                                | 设置是否显示查看明文密码的按钮                                                               | `false`     | -        |
-| clearable      | `boolean`                                                | 设置是否可以清空值                                                                           | `false`     | -        |
 | loading        | `boolean`                                                | 设置是否为加载中                                                                             | `false`     | `2.0.0`  |
 | loading-icon   | `VueComponent`                                           | 设置加载中的图标                                                                             | `Spinner`   | `2.0.0`  |
 | loading-lock   | `boolean`                                                | 设置在加载中时是否为只读                                                                     | `false`     | `2.0.0`  |
