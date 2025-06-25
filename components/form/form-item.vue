@@ -61,6 +61,7 @@ const props = useProps('formItem', _props, {
   action: false,
   help: '',
   pure: false,
+  manual: false,
   span: 24,
   offset: null,
   push: null,
@@ -221,7 +222,7 @@ const fieldObject = Object.freeze({
   },
 })
 
-provide(FIELD_OPTIONS, fieldObject)
+provide(FIELD_OPTIONS, props.manual ? null : fieldObject)
 
 watch(
   () => props.defaultValue,

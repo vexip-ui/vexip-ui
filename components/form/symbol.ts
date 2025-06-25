@@ -73,7 +73,7 @@ export const FORM_FIELDS = '__VXP_FORM_FIELDS' as unknown as InjectionKey<Set<Fi
 export const FORM_ACTIONS = '__VXP_FORM_ACTIONS' as unknown as InjectionKey<FormActions>
 
 // form-item
-export const FIELD_OPTIONS = '__VXP_FIELD_OPTIONS' as unknown as InjectionKey<FieldOptions>
+export const FIELD_OPTIONS = '__VXP_FIELD_OPTIONS' as unknown as InjectionKey<FieldOptions | null>
 
 export const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
 export const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])
