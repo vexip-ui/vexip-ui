@@ -131,7 +131,7 @@ export function segmentNumber(number: number | string, segment = 3, separator = 
  * @returns 保留小数后的值
  */
 export function toFixed(number: number, decimal: number) {
-  if (decimal === 0) return Math.round(number)
+  decimal = Math.max(Math.round(decimal), 0)
 
   let snum = number.toFixed(decimalLength(number))
 
