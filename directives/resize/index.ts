@@ -1,4 +1,4 @@
-import { observeResize, unobserveResize, useResize } from '@vexip-ui/hooks'
+import { observeResize, unobserveResize } from '@vexip-ui/hooks'
 import { noop, throttle } from '@vexip-ui/utils'
 
 import type { DirectiveBinding, ObjectDirective } from 'vue'
