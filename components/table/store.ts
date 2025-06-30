@@ -630,7 +630,14 @@ export function useStore(options: StoreOptions) {
       }
 
       // 独立属性解析时注意隔断同对象引用
-      widths.set(column.key, typeof column.width === 'string' ? 100 : column.width || 100)
+      widths.set(
+        column.key,
+        typeof column.width === 'string'
+          ? 100
+          : Math.round(
+            boundRange(column.width || 100, column.minWidth || 0, column.maxWidth || Infinity),
+          ),
+      )
       sorters.set(column.key, parseSorter(column.sorter))
       filters.set(column.key, parseFilter(column.filter))
 
@@ -1009,7 +1016,9 @@ export function useStore(options: StoreOptions) {
             flexColumns.push(column)
           }
         } else {
-          flexWidth -= boundRange(column.width, minWidth, maxWidth)
+          const width = Math.round(boundRange(column.width, minWidth, maxWidth))
+          flexWidth -= width
+          widths.set(column.key, width)
           hasWidthColumns.push(column)
         }
       } else {

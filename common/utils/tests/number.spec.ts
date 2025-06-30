@@ -12,6 +12,7 @@ import {
   leaveNumber,
   minus,
   multipleFixed,
+  ordinalNumber,
   padStartZeros,
   plus,
   round,
@@ -132,6 +133,32 @@ describe('number', () => {
     expect(toFixed(15.555, 2)).toBe(15.56)
     expect(toFixed(1.34e-7, 7)).toBe(1e-7)
     expect(toFixed(1.35e-7, 8)).toBe(1.4e-7)
+
+    expect(toFixed(1.4, 0)).toBe(1)
+    expect(toFixed(1.5, 0)).toBe(2)
+    expect(toFixed(2.499, 0)).toBe(2)
+    expect(toFixed(-1.5, 0)).toBe(-2)
+    expect(toFixed(1.2345, 2)).toBe(1.23)
+    expect(toFixed(1.239, 2)).toBe(1.24)
+    expect(toFixed(1.235, 2)).toBe(1.24)
+    expect(toFixed(0.125, 2)).toBe(0.13)
+    expect(toFixed(0.375, 2)).toBe(0.38)
+    expect(toFixed(0.005, 2)).toBe(0.01)
+    expect(toFixed(0.015, 2)).toBe(0.02)
+    expect(toFixed(0.025, 2)).toBe(0.03)
+    expect(toFixed(0.035, 2)).toBe(0.04)
+    expect(toFixed(1e-8, 8)).toBe(0.00000001)
+    expect(toFixed(5e-7, 6)).toBe(0.000001)
+    expect(toFixed(1.23e2, 1)).toBe(123.0)
+    expect(toFixed(1.2, 1)).toBe(1.2)
+    expect(toFixed(1.25, 2)).toBe(1.25)
+    expect(toFixed(-1.234, 2)).toBe(-1.23)
+    expect(toFixed(-1.236, 2)).toBe(-1.24)
+    expect(toFixed(-1.235, 2)).toBe(-1.24)
+    expect(toFixed(1.2, 5)).toBe(1.2)
+    expect(toFixed(1.00001, 5)).toBe(1.00001)
+    expect(toFixed(1.000001, 5)).toBe(1.0) // truncated
+    expect(toFixed(100, 2)).toBe(100)
   })
 
   it('multipleFixed', () => {
@@ -184,6 +211,43 @@ describe('number', () => {
     expect(formatByteSize(1111, 'AUTO')).toBe(1.08)
     expect(formatByteSize(1111, 'AUTO', 3)).toBe(1.085)
     expect(formatByteSize(1111, 'AUTO', true, 3)).toEqual('1.085KB')
+  })
+
+  it('ordinalNumber', () => {
+    expect(ordinalNumber(0)).toBe('0th')
+    expect(ordinalNumber(-1)).toBe('-1th')
+    expect(ordinalNumber(-100)).toBe('-100th')
+
+    expect(ordinalNumber(1.2)).toBe('1st') // rounded to 1
+    expect(ordinalNumber(2.5)).toBe('3rd') // rounded to 3
+    expect(ordinalNumber(11.6)).toBe('12th') // rounded to 12
+
+    expect(ordinalNumber(1)).toBe('1st')
+    expect(ordinalNumber(21)).toBe('21st')
+    expect(ordinalNumber(101)).toBe('101st')
+
+    expect(ordinalNumber(2)).toBe('2nd')
+    expect(ordinalNumber(22)).toBe('22nd')
+    expect(ordinalNumber(102)).toBe('102nd')
+
+    expect(ordinalNumber(3)).toBe('3rd')
+    expect(ordinalNumber(23)).toBe('23rd')
+    expect(ordinalNumber(103)).toBe('103rd')
+
+    expect(ordinalNumber(11)).toBe('11th')
+    expect(ordinalNumber(12)).toBe('12th')
+    expect(ordinalNumber(13)).toBe('13th')
+    expect(ordinalNumber(111)).toBe('111th')
+    expect(ordinalNumber(112)).toBe('112th')
+    expect(ordinalNumber(113)).toBe('113th')
+
+    expect(ordinalNumber(4)).toBe('4th')
+    expect(ordinalNumber(10)).toBe('10th')
+    expect(ordinalNumber(100)).toBe('100th')
+
+    expect(ordinalNumber(1001)).toBe('1001st')
+    expect(ordinalNumber(1112)).toBe('1112th')
+    expect(ordinalNumber(1233)).toBe('1233rd')
   })
 
   it('toPrecision', () => {

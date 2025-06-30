@@ -228,24 +228,25 @@ interface Rule<T = any> {
 
 > Supported props of Column component include: span, offset, push, pull, order, flex, xs, sm, md, lg, xl, xxl. Only the props specific to the FormItem component are listed below.
 
-| Name             | Type                   | Description                                                                                                                                       | Default      | Since   |
-| ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------- |
-| label            | `string`               | label of the form field                                                                                                                           | `''`         | -       |
-| prop             | `string`               | property of the form field                                                                                                                        | `''`         | -       |
-| rules            | `Rule \| Rule[]`       | Validation specification for form fields                                                                                                          | `[]`         | -       |
-| label-width      | `number`               | width of the form field label                                                                                                                     | `null`       | -       |
-| required         | `boolean`              | Set whether the field is required                                                                                                                 | `false`      | -       |
-| html-for         | `string`               | `for` attribute of native `<label>`                                                                                                               | `null`       | -       |
-| default-value    | `unknown`              | set the default value of the field                                                                                                                | `null`       | -       |
-| hide-error-tip   | `boolean`              | Set whether to hide the error tip                                                                                                                 | `false`      | -       |
-| validate-all     | `boolean`              | Set whether to perform all rule validation when validating, if not set, it will inherit the property value of the same name of the Form component | `null`       | -       |
-| hide-asterisk    | `boolean`              | Set whether to hide the required asterisk, if not set, it will inherit the property value of the same name of the Form component                  | `null`       | -       |
-| hide-label       | `boolean`              | Set whether to hide the form label, if not set, it will inherit the property value of the same name of the Form component                         | `null`       | -       |
-| action           | `boolean`              | Set whether it is a pure action FormItem, if so, the style is centered and the content is centered and has no bottom margin                       | `false`      | -       |
-| error-transition | `string`               | transition effect name for error message                                                                                                          | `'vxp-fade'` | -       |
-| help             | `string`               | Set the help information for field                                                                                                                | `''`         | `2.0.0` |
-| locale           | `LocaleConfig['form']` | Set the locale config                                                                                                                             | `null`       | `2.1.0` |
-| name             | `string`               | The `name` attribute of internally hidden `<input>`, and the value of `prop` is used when it is not set                                           | `''`         | `2.2.2` |
+| Name             | Type                   | Description                                                                                                                                       | Default      | Since    |
+| ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- |
+| label            | `string`               | label of the form field                                                                                                                           | `''`         | -        |
+| prop             | `string`               | property of the form field                                                                                                                        | `''`         | -        |
+| rules            | `Rule \| Rule[]`       | Validation specification for form fields                                                                                                          | `[]`         | -        |
+| label-width      | `number`               | width of the form field label                                                                                                                     | `null`       | -        |
+| required         | `boolean`              | Set whether the field is required                                                                                                                 | `false`      | -        |
+| html-for         | `string`               | `for` attribute of native `<label>`                                                                                                               | `null`       | -        |
+| default-value    | `unknown`              | set the default value of the field                                                                                                                | `null`       | -        |
+| hide-error-tip   | `boolean`              | Set whether to hide the error tip                                                                                                                 | `false`      | -        |
+| validate-all     | `boolean`              | Set whether to perform all rule validation when validating, if not set, it will inherit the property value of the same name of the Form component | `null`       | -        |
+| hide-asterisk    | `boolean`              | Set whether to hide the required asterisk, if not set, it will inherit the property value of the same name of the Form component                  | `null`       | -        |
+| hide-label       | `boolean`              | Set whether to hide the form label, if not set, it will inherit the property value of the same name of the Form component                         | `null`       | -        |
+| action           | `boolean`              | Set whether it is a pure action FormItem, if so, the style is centered and the content is centered and has no bottom margin                       | `false`      | -        |
+| error-transition | `string`               | transition effect name for error message                                                                                                          | `'vxp-fade'` | -        |
+| help             | `string`               | Set the help information for field                                                                                                                | `''`         | `2.0.0`  |
+| locale           | `LocaleConfig['form']` | Set the locale config                                                                                                                             | `null`       | `2.1.0`  |
+| name             | `string`               | The `name` attribute of internally hidden `<input>`, and the value of `prop` is used when it is not set                                           | `''`         | `2.2.2`  |
+| manual           | `boolean`              | Set whether to control the field data manually                                                                                                    | `false`      | `2.3.32` |
 
 ### FormItem Slots
 
