@@ -36,6 +36,7 @@ export const inputProps = buildProps({
   debounce: booleanProp,
   delay: Number,
   maxLength: Number,
+  hideCount: booleanProp,
   before: String,
   after: String,
   /**

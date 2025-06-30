@@ -76,6 +76,7 @@ export default defineComponent({
       debounce: false,
       delay: null,
       maxLength: 0,
+      hideCount: false,
       before: '',
       after: '',
       plainPassword: false,
@@ -596,7 +597,7 @@ export default defineComponent({
             onCompositionend={handleCompositionEnd}
           />
           {renderSuffix()}
-          {props.maxLength > 0 ? renderCount() : null}
+          {props.maxLength > 0 && !props.hideCount ? renderCount() : null}
           {renderPlainPassword()}
         </div>
       )
