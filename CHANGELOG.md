@@ -1,3 +1,28 @@
+## [2.3.32](https://github.com/vexip-ui/vexip-ui/compare/v2.3.31...v2.3.32) (2025-06-30)
+
+
+### ✨ Features
+
+* **form:** add manual prop for item ([e096570](https://github.com/vexip-ui/vexip-ui/commit/e096570a60fc2e0064faa2b084ca4b5e5c995f8d))
+* **input:** add hide-count prop ([#569](https://github.com/vexip-ui/vexip-ui/issues/569)) ([342ef59](https://github.com/vexip-ui/vexip-ui/commit/342ef59e7a904ec8e2220a06e5e651ff02efec2d))
+
+
+### 🐞 Bug Fixes
+
+* **form:** should prevent submit and reset event ([b1cbb20](https://github.com/vexip-ui/vexip-ui/commit/b1cbb20d9b21c53778b6f530d4215cac41bab761))
+* **input:** correctly emit change event when in sync mode ([dc2d85e](https://github.com/vexip-ui/vexip-ui/commit/dc2d85e4f5aef5a848966032c7e9d784132f9ccd))
+* **table:** change content element to block display ([c7a1c86](https://github.com/vexip-ui/vexip-ui/commit/c7a1c86f76aa825ffde8361f18bc833a6050f8ab))
+* **table:** correctly calculate table width with column min width ([f99d882](https://github.com/vexip-ui/vexip-ui/commit/f99d882758b681900f8ffa844e23588aabae66b3)), closes [#571](https://github.com/vexip-ui/vexip-ui/issues/571)
+* **utils:** ordinalNumber correctly process for number ends of 11-12-13 ([4921c3b](https://github.com/vexip-ui/vexip-ui/commit/4921c3b2f51e151635eb76ef9992b790b1847b88))
+* **utils:** toFixed normalize process for negative number ([91afd72](https://github.com/vexip-ui/vexip-ui/commit/91afd72b72f8983e2e4c370e91874a671a1234be))
+
+
+### 👓 Types
+
+* **hooks:** fix internal type error ([ff87604](https://github.com/vexip-ui/vexip-ui/commit/ff87604a936b6820528a85cc2978bf2bcc8b46c0))
+
+
+
 ## [2.3.31](https://github.com/vexip-ui/vexip-ui/compare/v2.3.30...v2.3.31) (2025-06-23)
 
 
