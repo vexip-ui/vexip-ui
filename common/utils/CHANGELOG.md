@@ -1,3 +1,13 @@
+## [2.16.4](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.3...utils@2.16.4) (2025-06-30)
+
+
+### 🐞 Bug Fixes
+
+* **utils:** ordinalNumber correctly process for number ends of 11-12-13 ([4921c3b](https://github.com/vexip-ui/vexip-ui/commit/4921c3b2f51e151635eb76ef9992b790b1847b88))
+* **utils:** toFixed normalize process for negative number ([91afd72](https://github.com/vexip-ui/vexip-ui/commit/91afd72b72f8983e2e4c370e91874a671a1234be))
+
+
+
 ## [2.16.3](https://github.com/vexip-ui/vexip-ui/compare/utils@2.16.2...utils@2.16.3) (2025-06-23)
 
 
