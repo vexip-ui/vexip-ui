@@ -1,3 +1,7 @@
+## [2.9.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.9.1...hooks@2.9.2) (2025-06-30)
+
+
+
 ## [2.9.1](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.9.0...hooks@2.9.1) (2025-06-12)
 
 
