@@ -111,7 +111,8 @@ export interface UploadFileSlots {
 
 export interface UploadSlots extends Omit<UploadListSlots, 'suffix'> {
   default?: (params: { isDragOver: boolean }) => any,
-  tip?: () => any
+  tip?: () => any,
+  cloud?: () => any
 }
 
 export const uploadListTypes = Object.freeze<UploadListType[]>([

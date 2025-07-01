@@ -228,12 +228,13 @@ type UploadFetchMethod = (options: UploadFetchOptions) => () => void
 
 ### Upload 插槽
 
-| 名称    | 说明                                                            | 参数                                                                      | 始于 |
-| ------- | --------------------------------------------------------------- | ------------------------------------------------------------------------- | ---- |
-| default | 选择文件的控件插槽，`isDragOver` 用于标记是否有内容往控件上拖拽 | `{ isDragOver: boolean }`                                                 | -    |
-| tip     | 提示语内容插槽，如果使用了默认插槽，该插槽会失效                | -                                                                         | -    |
-| item    | 文件列表中文件信息的内容插槽                                    | `{ file: UploadFileState, status: UploadStatusType, percentage: number }` | -    |
-| icon    | 文件图标的插槽                                                  | `{ file: UploadFileState }`                                               | -    |
+| 名称    | 说明                                                            | 参数                                                                      | 始于     |
+| ------- | --------------------------------------------------------------- | ------------------------------------------------------------------------- | -------- |
+| default | 选择文件的控件插槽，`isDragOver` 用于标记是否有内容往控件上拖拽 | `{ isDragOver: boolean }`                                                 | -        |
+| tip     | 提示语内容插槽，如果使用了默认插槽，该插槽会失效                | -                                                                         | -        |
+| item    | 文件列表中文件信息的内容插槽                                    | `{ file: UploadFileState, status: UploadStatusType, percentage: number }` | -        |
+| icon    | 文件图标的插槽                                                  | `{ file: UploadFileState }`                                               | -        |
+| cloud   | 云朵图标对应的插槽，如果使用了默认插槽，该插槽会失效            | -                                                                         | `2.3.33` |
 
 ### UploadList 属性
 
