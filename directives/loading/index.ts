@@ -13,9 +13,12 @@ interface LoadingRecord {
   originPosition: string
 }
 
+type LoadingElement = HTMLElement & { __loading?: LoadingRecord }
+
 function createSpin(
-  el: HTMLElement & { __loading?: LoadingRecord },
+  el: LoadingElement,
   binding: DirectiveBinding<boolean | SpinProps>,
+  vnode: VNode<any, LoadingElement>,
 ) {
   const props: SpinProps = isObject(binding.value)
     ? { ...binding.value }
@@ -25,6 +28,8 @@ function createSpin(
 
   const spin = createVNode(Spin, props, null, 0, Object.keys(props))
   const position = getComputedStyle(el).position
+
+  spin.appContext = vnode.appContext
 
   el.__loading = {
     spin,
@@ -39,17 +44,14 @@ function createSpin(
   render(spin, el)
 }
 
-export const vLoading: ObjectDirective<
-  HTMLElement & { __loading?: LoadingRecord },
-  boolean | SpinProps
-> = {
-  mounted(el, binding) {
-    nextTick(() => createSpin(el, binding))
+export const vLoading: ObjectDirective<LoadingElement, boolean | SpinProps> = {
+  mounted(el, binding, vnode) {
+    nextTick(() => createSpin(el, binding, vnode))
   },
-  updated(el, binding) {
+  updated(el, binding, vnode) {
     nextTick(() => {
       if (!el.__loading) {
-        createSpin(el, binding)
+        createSpin(el, binding, vnode)
         return
       }
 
