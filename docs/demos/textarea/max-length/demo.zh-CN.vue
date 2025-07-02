@@ -1,6 +1,7 @@
 <template>
   <Space vertical>
     <Textarea :max-length="10"></Textarea>
+    <Textarea value="隐藏计数" :max-length="5" hide-count></Textarea>
     <Textarea value="只计数" :max-length="Infinity"></Textarea>
     <Textarea value="快要放不下了" :max-length="10">
       <template #count="{ value }">

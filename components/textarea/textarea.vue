@@ -40,6 +40,7 @@ const props = useProps('textarea', _props, {
   debounce: false,
   delay: null,
   maxLength: 0,
+  hideCount: false,
   loading: () => loading.value,
   loadingIcon: createIconProp(),
   loadingLock: false,
@@ -278,7 +279,7 @@ function handleCompositionEnd(event: CompositionEvent) {
           ></Icon>
         </div>
       </Transition>
-      <div v-if="props.maxLength > 0" :class="nh.be('count')">
+      <div v-if="props.maxLength > 0 && !props.hideCount" :class="nh.be('count')">
         <slot name="count" :value="currentValue">
           {{ props.maxLength === Infinity ? currentLength : `${currentLength}/${props.maxLength}` }}
         </slot>
