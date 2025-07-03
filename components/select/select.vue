@@ -1134,7 +1134,7 @@ function focus(options?: FocusOptions) {
                       </Tag>
                     </Renderer>
                   </slot>
-                  <span v-else>
+                  <template v-else>
                     <Tooltip
                       ref="restTip"
                       inherit
@@ -1204,7 +1204,7 @@ function focus(options?: FocusOptions) {
                         </template>
                       </NativeScroll>
                     </Tooltip>
-                  </span>
+                  </template>
                 </template>
               </Overflow>
               <div
