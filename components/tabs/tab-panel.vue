@@ -12,6 +12,7 @@ defineOptions({ name: 'TabPanel' })
 const _props = defineProps(tabPanelProps)
 const props = useProps('tabPanel', _props, {
   lazy: null,
+  lazyLoad: null,
 })
 
 const slots = defineSlots<{
@@ -24,8 +25,10 @@ const tabsState = inject(TABS_STATE, null)
 const nh = useNameHelper('tabs')
 const active = ref(false)
 const currentLabel = ref(props.label)
+const loaded = ref(false)
 
 const lazy = computed(() => props.lazy ?? tabsState?.lazy ?? false)
+const lazyLoad = computed(() => props.lazyLoad ?? tabsState?.lazyLoad ?? false)
 const className = computed(() => {
   const baseClass = nh.be('panel')
 
@@ -72,6 +75,10 @@ if (tabsState) {
     () => tabsState.currentActive,
     value => {
       active.value = currentLabel.value === value
+
+      if (!loaded.value && active.value) {
+        loaded.value = true
+      }
     },
     { immediate: true },
   )
@@ -86,7 +93,7 @@ if (tabsState) {
 
 <template>
   <div
-    v-if="!lazy || active"
+    v-if="!(lazy || (lazyLoad && !loaded)) || active"
     :class="className"
     role="tabpanel"
     :aria-hidden="!active"

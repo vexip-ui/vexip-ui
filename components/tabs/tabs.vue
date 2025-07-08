@@ -28,6 +28,7 @@ const props = useProps('tabs', _props, {
   closable: false,
   showAdd: false,
   lazy: false,
+  lazyLoad: false,
   slots: () => ({}),
 })
 
@@ -68,6 +69,7 @@ provide(
   reactive({
     currentActive,
     lazy: toRef(props, 'lazy'),
+    lazyLoad: toRef(props, 'lazyLoad'),
     handleActive,
     increaseItem,
     decreaseItem,

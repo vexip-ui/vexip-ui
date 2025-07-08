@@ -100,4 +100,53 @@ describe('Tabs', () => {
       expect(wrapper.find('.vxp-tabs').classes()).toContain(`vxp-tabs--${placement}`)
     })
   })
+
+  it('lazy', async () => {
+    const wrapper = mount(() => (
+      <Tabs lazy>
+        <TabPanel label={'1'}>{'1'}</TabPanel>
+        <TabPanel label={'2'}>{'2'}</TabPanel>
+      </Tabs>
+    ))
+
+    await nextTick()
+    await nextTick()
+    const items = wrapper.findAll('.vxp-tab-nav__item')
+
+    let panels = wrapper.findAll('.vxp-tabs__panel')
+    expect(panels.length).toBe(1)
+    expect(panels[0].classes()).toContain('vxp-tabs__panel--active')
+    expect(panels[0].text()).toEqual('1')
+
+    await items[1].find('.vxp-tab-nav__content').trigger('click')
+    panels = wrapper.findAll('.vxp-tabs__panel')
+    expect(panels.length).toBe(1)
+    expect(panels[0].classes()).toContain('vxp-tabs__panel--active')
+    expect(panels[0].text()).toEqual('2')
+  })
+
+  it('lazy load', async () => {
+    const wrapper = mount(() => (
+      <Tabs lazyLoad>
+        <TabPanel label={'1'}>{'1'}</TabPanel>
+        <TabPanel label={'2'}>{'2'}</TabPanel>
+      </Tabs>
+    ))
+
+    await nextTick()
+    await nextTick()
+    const items = wrapper.findAll('.vxp-tab-nav__item')
+
+    let panels = wrapper.findAll('.vxp-tabs__panel')
+    expect(panels.length).toBe(1)
+    expect(panels[0].classes()).toContain('vxp-tabs__panel--active')
+    expect(panels[0].text()).toEqual('1')
+
+    await items[1].find('.vxp-tab-nav__content').trigger('click')
+    panels = wrapper.findAll('.vxp-tabs__panel')
+    expect(panels.length).toBe(2)
+    expect(panels[0].classes()).not.toContain('vxp-tabs__panel--active')
+    expect(panels[1].classes()).toContain('vxp-tabs__panel--active')
+    expect(panels[1].text()).toEqual('2')
+  })
 })
