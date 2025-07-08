@@ -71,6 +71,9 @@ function defaultIndexLabel(index: number) {
   return index + 1
 }
 
+const COLUMN_DEFAULT_WIDTH = 100
+const COLUMN_DEFAULT_MIN_WIDTH = 100
+
 export function useStore(options: StoreOptions) {
   const state = reactive({
     ...options,
@@ -587,7 +590,10 @@ export function useStore(options: StoreOptions) {
               column.orderLabel = defaultIndexLabel
             }
 
-            if (isNull(column.width)) column.width = 60
+            if (isNull(column.width)) {
+              column.width = 60
+              column.minWidth = 60
+            }
 
             break
           }
@@ -598,7 +604,10 @@ export function useStore(options: StoreOptions) {
               column.disableRow = toFalse
             }
 
-            if (isNull(column.width)) column.width = 40
+            if (isNull(column.width)) {
+              column.width = 40
+              column.minWidth = 40
+            }
 
             break
           }
@@ -607,7 +616,10 @@ export function useStore(options: StoreOptions) {
               column.disableRow = toFalse
             }
 
-            if (isNull(column.width)) column.width = 40
+            if (isNull(column.width)) {
+              column.width = 40
+              column.minWidth = 40
+            }
 
             break
           }
@@ -616,7 +628,10 @@ export function useStore(options: StoreOptions) {
               column.disableRow = toFalse
             }
 
-            if (isNull(column.width)) column.width = 40
+            if (isNull(column.width)) {
+              column.width = 40
+              column.minWidth = 40
+            }
 
             break
           }
@@ -633,13 +648,18 @@ export function useStore(options: StoreOptions) {
       widths.set(
         column.key,
         typeof column.width === 'string'
-          ? 100
+          ? COLUMN_DEFAULT_MIN_WIDTH
           : Math.round(
-            boundRange(column.width || 100, column.minWidth || 0, column.maxWidth || Infinity),
+            boundRange(
+              column.width || COLUMN_DEFAULT_WIDTH,
+              column.minWidth || COLUMN_DEFAULT_MIN_WIDTH,
+              column.maxWidth || Infinity,
+            ),
           ),
       )
       sorters.set(column.key, parseSorter(column.sorter))
       filters.set(column.key, parseFilter(column.filter))
+      console.log(column.key, column.width, new Map(widths))
 
       const fixed = column.fixed
 
@@ -988,16 +1008,16 @@ export function useStore(options: StoreOptions) {
   function setTableWidth(width: number) {
     width = toNumber(width)
 
-    const { columns, widths, resized, sidePadding } = state
+    const { columns, widths, resized } = state
 
     const hasWidthColumns: ColumnWithKey[] = []
     const flexColumns: ColumnWithKey[] = []
 
-    let flexWidth = width - (sidePadding[0] || 0) - (sidePadding[1] || 0)
+    let flexWidth = width
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = columns[i]
-      const { minWidth = 0, maxWidth = Infinity } = column
+      const { minWidth, maxWidth } = column
 
       if (resized.has(column.key)) {
         flexWidth -= widths.get(column.key)!
@@ -1007,7 +1027,13 @@ export function useStore(options: StoreOptions) {
           const percent = boundRange(toNumber(column.width), 0, 100)
 
           if (percent) {
-            const fixedWidth = Math.round(boundRange((width * percent) / 100, minWidth, maxWidth))
+            const fixedWidth = Math.round(
+              boundRange(
+                (width * percent) / 100,
+                minWidth || COLUMN_DEFAULT_MIN_WIDTH,
+                maxWidth || Infinity,
+              ),
+            )
 
             flexWidth -= fixedWidth
             widths.set(column.key, fixedWidth)
@@ -1016,7 +1042,14 @@ export function useStore(options: StoreOptions) {
             flexColumns.push(column)
           }
         } else {
-          const width = Math.round(boundRange(column.width, minWidth, maxWidth))
+          const width = Math.round(
+            boundRange(
+              column.width || COLUMN_DEFAULT_WIDTH,
+              minWidth || COLUMN_DEFAULT_MIN_WIDTH,
+              maxWidth || Infinity,
+            ),
+          )
+
           flexWidth -= width
           widths.set(column.key, width)
           hasWidthColumns.push(column)
@@ -1029,19 +1062,10 @@ export function useStore(options: StoreOptions) {
     const flexColumnCount = flexColumns.length
     const flexWidths = distributeWidths(flexColumns, flexWidth)
 
-    // let flexUnitWidth = 100
-
-    // // 剩余空间有多时, 均分到弹性列
-    // // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
-    // if (flexColumnCount) {
-    //   flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
-    // }
-
     let usedWidth = 0
 
     for (let i = 0; i < flexColumnCount; ++i) {
       const column = flexColumns[i]
-      // const width = Math[i % 2 ? 'ceil' : 'floor'](flexUnitWidth)
       const width = Math[i % 2 ? 'ceil' : 'floor'](flexWidths[i])
 
       if (i < flexColumnCount - 1) {
@@ -1060,7 +1084,8 @@ export function useStore(options: StoreOptions) {
 
   function distributeWidths(columns: ColumnWithKey[], totalWidth: number): number[] {
     const count = columns.length
-    const baseWidth = Math.max(totalWidth / count, 100)
+    const baseWidth = Math.max(totalWidth / count, COLUMN_DEFAULT_WIDTH)
+    console.log(baseWidth)
 
     const widths = columns.map(col => {
       let w = baseWidth
@@ -1722,10 +1747,10 @@ export function useStore(options: StoreOptions) {
 
       const width =
         length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth)
-      const { minWidth = 0, maxWidth = Infinity } = column
+      const { minWidth, maxWidth } = column
 
       resized.add(key)
-      widths.set(key, boundRange(width, minWidth, maxWidth))
+      widths.set(key, boundRange(width, minWidth || COLUMN_DEFAULT_MIN_WIDTH, maxWidth || Infinity))
     }
 
     let totalWidth = 0
