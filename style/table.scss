@@ -682,8 +682,12 @@ $table: map.merge(
     }
   }
 
-  &--use-y-bar &__bar--horizontal {
-    inset-inline-end: 6px;
+  &__bar--horizontal {
+    inset-inline: 6px;
+  }
+
+  &__bar--vertical {
+    inset-block: 6px;
   }
 
   &__indicator {
