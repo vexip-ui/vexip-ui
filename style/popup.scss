@@ -21,4 +21,28 @@
       position: relative;
     }
   }
+
+  $item: #{&}__item;
+
+  &--top-right,
+  &--bottom-right {
+    #{$item} {
+      right: 24px;
+    }
+  }
+
+  &--top-left,
+  &--bottom-left {
+    #{$item} {
+      left: 24px;
+    }
+  }
+
+  &--top-center,
+  &--bottom-center {
+    #{$item} {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 }

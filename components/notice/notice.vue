@@ -24,6 +24,8 @@ const predefinedIcons = computed(() => ({
 }))
 
 const placement = ref<NoticePlacement>('top-right')
+const startOffset = ref(30)
+const itemGap = ref(16)
 const popup = ref<InstanceType<typeof Popup>>()
 
 async function add(options: Record<string, any>) {
@@ -42,6 +44,8 @@ function clear() {
 
 function config(config: NoticeConfig) {
   placement.value = config.placement || placement.value
+  startOffset.value = config.startOffset || startOffset.value
+  itemGap.value = config.itemGap || itemGap.value
 }
 
 defineExpose(
@@ -62,6 +66,8 @@ defineExpose(
     :class="nh.b()"
     :transition-name="nh.ns(`popup-${placement.split('-')[1]}`)"
     :placement="placement"
+    :start-offset="startOffset"
+    :item-gap="itemGap"
   >
     <template #item="{ item }: { item: import('./symbol').NoticeOptions }">
       <div
