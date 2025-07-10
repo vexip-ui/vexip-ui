@@ -88,6 +88,16 @@
 
 :::
 
+:::demo message/offset
+
+### 间距配置
+
+==!s|2.3.33==
+
+借助 `config` 方法可以修改消息的起始偏移和两提示间的间隔。
+
+:::
+
 ## API
 
 ### Message 方法
@@ -164,6 +174,7 @@ Message.transferTo(document.body)
 
 ```ts
 type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
+type MessagePlacement = 'top' | 'bottom'
 ```
 
 ### Message 选项
@@ -184,3 +195,11 @@ type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
 | renderer    | `() => any`                          | 使用 Vue 的 render 函数渲染自定义内容              | `null`  | -        |
 | parseHtml   | `boolean`                            | 是否将 `content` 作为 html 解析                    | `false` | `2.0.14` |
 | liveOnEnter | `boolean`                            | 使消息被悬停时不自动关闭                           | `false` | `2.2.11` |
+
+### Message 配置
+
+| 名称        | 类型              | 说明                             | 默认值  | 始于     |
+| ----------- | ----------------- | -------------------------------- | ------- | -------- |
+| placement   | `NoticePlacement` | 消息的位置                       | `'top'` | -        |
+| startOffset | `number`          | 配置消息的起始位置距离页面的间距 | `30`    | `2.3.33` |
+| itemGap     | `number`          | 配置兄弟消息的间距               | `16`    | `2.3.33` |

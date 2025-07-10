@@ -88,6 +88,16 @@ The auto-shutdown timer will restart after the hover is over.
 
 :::
 
+:::demo message/offset
+
+### Offset Config
+
+==!s|2.3.33==
+
+Via using `config` method, you can be able to change the start offset and item gap for message.
+
+:::
+
 ## API
 
 ### Message Methods
@@ -165,6 +175,7 @@ Message.transferTo(document.body)
 
 ```ts
 type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
+type MessagePlacement = 'top' | 'bottom'
 ```
 
 ### Message Options
@@ -185,3 +196,11 @@ type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
 | renderer    | `() => any`                          | Render custom content using Vue's render function                                                          | `null`  | -        |
 | parseHtml   | `boolean`                            | Whether to parse content as html                                                                           | `false` | `2.0.14` |
 | liveOnEnter | `boolean`                            | Make the message not automatically closed when it is hovered                                               | `false` | `2.2.11` |
+
+### Message Config
+
+| Name        | Type              | Description                                                          | Default | Since    |
+| ----------- | ----------------- | -------------------------------------------------------------------- | ------- | -------- |
+| placement   | `NoticePlacement` | The placement of message                                             | `'top'` | -        |
+| startOffset | `number`          | Configure the starting offset distance from the page for the message | `30`    | `2.3.33` |
+| itemGap     | `number`          | Configure offset between sibling message items                       | `16`    | `2.3.33` |

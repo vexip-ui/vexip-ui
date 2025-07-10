@@ -23,7 +23,9 @@ export interface MessageOptions extends Record<string, any> {
 }
 
 export interface MessageConfig {
-  placement?: MessagePlacement
+  placement?: MessagePlacement,
+  startOffset?: number,
+  itemGap?: number
 }
 
 export interface MessageInstance extends ComponentPublicInstance {
