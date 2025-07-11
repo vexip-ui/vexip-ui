@@ -38,6 +38,13 @@ export interface FormItemProps {
   hideAsterisk: boolean
 }
 
+export interface FormItemSlots {
+  default?: (parmas: { isError: boolean }) => any,
+  help?: () => any,
+  label?: () => any,
+  error?: (params: { tip: string }) => any
+}
+
 export interface FieldOptions {
   prop: Ref<string>,
   idFor: Ref<string>,
