@@ -19,7 +19,7 @@
     range
     type="datetime"
     clearable
-    style="max-width: 380px"
+    style="max-width: 342px"
   ></DatePicker>
   <p>Current Datetime Range: {{ datetimeRange }}</p>
 </template>

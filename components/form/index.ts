@@ -10,4 +10,4 @@ export type FormExposed = ComponentPublicInstance & InstanceType<typeof Form>
 export * from './helper'
 export * from './validator'
 export type { FormProps, FormCProps } from './props'
-export type { FormLabelAlign, SubmitMethod } from './symbol'
+export type { FormLabelAlign, SubmitMethod, FormItemSlots } from './symbol'

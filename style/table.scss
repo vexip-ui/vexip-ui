@@ -458,11 +458,17 @@ $table: map.merge(
   }
 
   &__tree-expand {
+    float: left;
     width: value('table-tree-expand-size');
     height: value('table-tree-expand-size');
     margin-inline-end: 6px;
+    margin-top: 1px;
     color: value('table-tree-expand-color');
     transition: value('transition-color');
+
+    @include rtl {
+      float: right;
+    }
 
     &:hover {
       color: value('table-tree-expand-color-hover');
@@ -476,7 +482,13 @@ $table: map.merge(
   }
 
   &__pad {
+    float: left;
     width: calc(#{value('table-row-indent-width')} * #{value('table-row-depth')});
+    height: 1px;
+
+    @include rtl {
+      float: right;
+    }
   }
 
   &__sorter {
@@ -670,8 +682,12 @@ $table: map.merge(
     }
   }
 
-  &--use-y-bar &__bar--horizontal {
-    inset-inline-end: 6px;
+  &__bar--horizontal {
+    inset-inline: 6px;
+  }
+
+  &__bar--vertical {
+    inset-block: 6px;
   }
 
   &__indicator {

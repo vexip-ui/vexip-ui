@@ -707,11 +707,15 @@ export default defineComponent({
           class={[nh.be('drag-panel'), props.disabled && nh.bem('drag-panel', 'disabled')]}
           tabindex={0}
         >
-          <Icon
-            {...icons.value.uploadCloud}
-            class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-            scale={+(icons.value.uploadCloud.scale || 1) * 4}
-          />
+          {renderSlot(slots, 'cloud', undefined, () => [
+            <Renderer renderer={props.slots.cloud}>
+              <Icon
+                {...icons.value.uploadCloud}
+                class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+                scale={+(icons.value.uploadCloud.scale || 1) * 4}
+              />
+            </Renderer>,
+          ])}
           {renderSlot(slots, 'tip', undefined, () => [
             <Renderer renderer={props.slots.tip}>
               <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>

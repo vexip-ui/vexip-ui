@@ -100,6 +100,16 @@ The auto-shutdown timer will restart after the hover is over.
 
 :::
 
+:::demo notice/offset
+
+### Offset Config
+
+==!s|2.3.33==
+
+Via using `config` method, you can be able to change the start offset and item gap for notice.
+
+:::
+
 ## API
 
 ### Notice Methods
@@ -178,6 +188,7 @@ Notice.transferTo(document.body)
 
 ```ts
 type NoticeType = 'primary' | 'info' | 'success' | 'warning' | 'error'
+type NoticePlacement = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 ```
 
 ### Notice Options
@@ -201,3 +212,11 @@ type NoticeType = 'primary' | 'info' | 'success' | 'warning' | 'error'
 | marker      | `boolean`                            | Set whether to show side marker                                                                            | `false` | -        |
 | parseHtml   | `boolean`                            | Whether to parse title and content as html                                                                 | `false` | `2.0.14` |
 | liveOnEnter | `boolean`                            | Make the notice not automatically closed when it is hovered                                                | `false` | `2.2.11` |
+
+### Notice Config
+
+| Name        | Type              | Description                                                         | Default       | Since    |
+| ----------- | ----------------- | ------------------------------------------------------------------- | ------------- | -------- |
+| placement   | `NoticePlacement` | The placement of notice                                             | `'top-right'` | -        |
+| startOffset | `number`          | Configure the starting offset distance from the page for the notice | `30`          | `2.3.33` |
+| itemGap     | `number`          | Configure offset between sibling notice items                       | `16`          | `2.3.33` |

@@ -100,6 +100,16 @@
 
 :::
 
+:::demo notice/offset
+
+### 间距配置
+
+==!s|2.3.33==
+
+借助 `config` 方法可以修改提示的起始偏移和两提示间的间隔。
+
+:::
+
 ## API
 
 ### Notice 方法
@@ -176,6 +186,7 @@ Notice.transferTo(document.body)
 
 ```ts
 type NoticeType = 'primary' | 'info' | 'success' | 'warning' | 'error'
+type NoticePlacement = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 ```
 
 ### Notice 选项
@@ -199,3 +210,11 @@ type NoticeType = 'primary' | 'info' | 'success' | 'warning' | 'error'
 | marker      | `boolean`                            | 是否显示侧边 marker                                | `false` | -        |
 | parseHtml   | `boolean`                            | 是否将 `title` 和 `content` 作为 html 解析         | `false` | `2.0.14` |
 | liveOnEnter | `boolean`                            | 使提示被悬停时不自动关闭                           | `false` | `2.2.11` |
+
+### Notice 配置
+
+| 名称        | 类型              | 说明                             | 默认值        | 始于     |
+| ----------- | ----------------- | -------------------------------- | ------------- | -------- |
+| placement   | `NoticePlacement` | 提示的位置                       | `'top-right'` | -        |
+| startOffset | `number`          | 配置提示的起始位置距离页面的间距 | `30`          | `2.3.33` |
+| itemGap     | `number`          | 配置兄弟提示的间距               | `16`          | `2.3.33` |

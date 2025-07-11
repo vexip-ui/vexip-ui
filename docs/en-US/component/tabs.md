@@ -87,15 +87,16 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 ### Tabs Props
 
-| Name      | Type               | Description                                                         | Default  | Since    |
-| --------- | ------------------ | ------------------------------------------------------------------- | -------- | -------- |
-| card      | `boolean`          | Set whether to enable card mode in the tab bar                      | `false`  | -        |
-| active    | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding | `''`     | -        |
-| align     | `TabNavAlign`      | Set the alignment of the tab items                                  | `'left'` | `2.0.11` |
-| placement | `TabNavPlacement`  | Set the placement of the tab items                                  | `'top'`  | `2.0.13` |
-| show-add  | `boolean`          | Set whether to display the add button                               | `false`  | `2.0.13` |
-| closable  | `boolean`          | Set whether to display the close button                             | `false`  | `2.0.13` |
-| lazy      | `boolean           | Set whether all panels is lazy load                                 | `false`  | `2.3.31` |
+| Name      | Type               | Description                                                             | Default  | Since    |
+| --------- | ------------------ | ----------------------------------------------------------------------- | -------- | -------- |
+| card      | `boolean`          | Set whether to enable card mode in the tab bar                          | `false`  | -        |
+| active    | `string \| number` | Set the currently active tab, you can use `v-model` two-way binding     | `''`     | -        |
+| align     | `TabNavAlign`      | Set the alignment of the tab items                                      | `'left'` | `2.0.11` |
+| placement | `TabNavPlacement`  | Set the placement of the tab items                                      | `'top'`  | `2.0.13` |
+| show-add  | `boolean`          | Set whether to display the add button                                   | `false`  | `2.0.13` |
+| closable  | `boolean`          | Set whether to display the close button                                 | `false`  | `2.0.13` |
+| lazy      | `boolean           | Set whether all panels is lazy rendering                                | `false`  | `2.3.31` |
+| lazy      | `boolean           | Set whether all panels is lazy load (keep rendering after first active) | `false`  | `2.3.33` |
 
 ### Tabs Events
 
@@ -116,14 +117,15 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 ### TabPanel Props
 
-| Name     | Type               | Description                             | Default | Since    |
-| -------- | ------------------ | --------------------------------------- | ------- | -------- |
-| label    | `string \| number` | Unique index of the tab                 | `''`    | -        |
-| name     | `string`           | The name of the tab                     | `''`    | `2.0.13` |
-| disabled | `boolean`          | Set whether to disable the tab          | `false` | -        |
-| icon     | `string`           | Set the front icon for the tab          | `''`    | -        |
-| closable | `boolean`          | Set whether to display the close button | `false` | `2.0.13` |
-| lazy     | `boolean           | Set whether the panel is lazy load      | `null`  | `2.3.31` |
+| Name     | Type               | Description                                                            | Default | Since    |
+| -------- | ------------------ | ---------------------------------------------------------------------- | ------- | -------- |
+| label    | `string \| number` | Unique index of the tab                                                | `''`    | -        |
+| name     | `string`           | The name of the tab                                                    | `''`    | `2.0.13` |
+| disabled | `boolean`          | Set whether to disable the tab                                         | `false` | -        |
+| icon     | `string`           | Set the front icon for the tab                                         | `''`    | -        |
+| closable | `boolean`          | Set whether to display the close button                                | `false` | `2.0.13` |
+| lazy     | `boolean           | Set whether the panel is lazy rendering                                | `null`  | `2.3.31` |
+| lazy     | `boolean           | Set whether the panel is lazy load (keep rendering after first active) | `null`  | `2.3.31` |
 
 ### TabPanel Events
 

@@ -120,11 +120,17 @@ export class MessageManager {
     }
   }
 
-  config({ placement, ...others }: MessageConfig & MessageOptions) {
-    if (placement) {
-      this._getInstance()?.config({
-        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
-      })
+  config({ placement, startOffset, itemGap, ...others }: MessageConfig & MessageOptions) {
+    const instance = this._getInstance()
+
+    if (instance) {
+      if (placement) {
+        instance.config({
+          placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
+        })
+      }
+
+      instance.config({ startOffset, itemGap })
     }
 
     this.defaults = { ...this.defaults, ...others }

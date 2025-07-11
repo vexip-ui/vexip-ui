@@ -24,7 +24,9 @@ export interface NoticeOptions extends Record<string, any> {
 }
 
 export interface NoticeConfig {
-  placement?: NoticePlacement
+  placement?: NoticePlacement,
+  startOffset?: number,
+  itemGap?: number
 }
 
 export interface NoticeInstance extends ComponentPublicInstance {

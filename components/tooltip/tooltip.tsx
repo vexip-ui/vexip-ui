@@ -15,6 +15,7 @@ import {
 
 import { emitEvent, useHoverDelay, useId, useNameHelper, useProps } from '@vexip-ui/config'
 import {
+  flatVNodes,
   placementWhileList,
   useClickOutside,
   useListener,
@@ -309,7 +310,7 @@ export default defineComponent({
       const renderTrigger = () => {
         if (!triggerVNode) return null
 
-        if (triggerVNode.type === TEXT_VNODE) {
+        if (triggerVNode.type === TEXT_VNODE || triggerVNode.type === Fragment) {
           return Wrapper ? <span>{triggerVNode}</span> : <span {...attrs}>{triggerVNode}</span>
         }
 

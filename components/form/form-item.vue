@@ -3,7 +3,18 @@ import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, inject, onBeforeUnmount, onMounted, provide, ref, toRef, watch } from 'vue'
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  shallowReadonly,
+  toRef,
+  watch,
+} from 'vue'
 
 import {
   makeSentence,
@@ -19,7 +30,7 @@ import { createEventEmitter, isFunction, isNull, isObject } from '@vexip-ui/util
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { FIELD_OPTIONS, FORM_ACTIONS, FORM_FIELDS, FORM_PROPS } from './symbol'
+import { FIELD_OPTIONS, FORM_ACTIONS, FORM_FIELDS, FORM_PROPS, type FormItemSlots } from './symbol'
 
 import type { ComponentState } from '@vexip-ui/config'
 import type { Rule } from './validator'
@@ -76,12 +87,7 @@ const props = useProps('formItem', _props, {
   flex: null,
 })
 
-const slots = defineSlots<{
-  default?: () => any,
-  help?: () => any,
-  label?: () => any,
-  error?: (params: { tip: string }) => any
-}>()
+const slots = defineSlots<FormItemSlots>()
 
 const formProps = inject(FORM_PROPS, {})
 const formActions = inject(FORM_ACTIONS, null)
@@ -98,6 +104,12 @@ const errorTip = ref('')
 const validating = ref(false)
 const disabledValidate = ref(false)
 const labelWidth = ref(0)
+
+const defaultSlotParams = shallowReadonly(
+  reactive({
+    isError,
+  }),
+)
 
 const placeholder = useDisplay(() => {
   if (placeholder.value) {
@@ -361,7 +373,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
 </script>
 
 <template>
-  <slot v-if="props.pure"></slot>
+  <slot v-if="props.pure" v-bind="defaultSlotParams"></slot>
   <Column
     v-else
     v-bind="$attrs"
@@ -433,7 +445,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       aria-relevant="all"
       :style="controlStyle"
     >
-      <slot></slot>
+      <slot v-bind="defaultSlotParams"></slot>
       <Transition :name="props.errorTransition">
         <div v-if="!props.hideErrorTip && isError" :class="nh.be('error-tip')">
           <slot name="error" :tip="errorTip">
