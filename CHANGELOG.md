@@ -1,3 +1,27 @@
+## [2.3.33](https://github.com/vexip-ui/vexip-ui/compare/v2.3.32...v2.3.33) (2025-07-11)
+
+
+### ✨ Features
+
+* **form:** add isError params for default slot of item ([#574](https://github.com/vexip-ui/vexip-ui/issues/574)) ([4b06d23](https://github.com/vexip-ui/vexip-ui/commit/4b06d2360f164ee32dac78edfd1acf2d8e0d1cc4))
+* **message:** supports configure start offset & item gap ([53c2234](https://github.com/vexip-ui/vexip-ui/commit/53c22348191b89c0028cdbcad2a371f4bf9f4075))
+* **notice:** supports configure start offset & item gap ([2df6f4f](https://github.com/vexip-ui/vexip-ui/commit/2df6f4f6f94db00a6b56d079b171cc29e44f6eea))
+* **tabs:** support lazy load panels ([51bffb0](https://github.com/vexip-ui/vexip-ui/commit/51bffb047de852f021930a4ff5dd693c79e758fb))
+* **textarea:** add hide-count prop ([#573](https://github.com/vexip-ui/vexip-ui/issues/573)) ([cf99f88](https://github.com/vexip-ui/vexip-ui/commit/cf99f880cb0bac29eba9f26536d331ba736a491a))
+* **upload:** add cloud slot ([b3a0ca9](https://github.com/vexip-ui/vexip-ui/commit/b3a0ca9a7ed61547e96e5af80d8c547a04030068)), closes [#567](https://github.com/vexip-ui/vexip-ui/issues/567)
+
+
+### 🐞 Bug Fixes
+
+* **date-picker:** more compact unit content ([7303d18](https://github.com/vexip-ui/vexip-ui/commit/7303d182b32c4f0c79b414182b1482a8004a0e14))
+* **table:** correct tree column content display ([fbe8148](https://github.com/vexip-ui/vexip-ui/commit/fbe8148d2dc48551c06be988288c555db1f19f54))
+* **table:** improve scrollbar position ([82de57b](https://github.com/vexip-ui/vexip-ui/commit/82de57b9d5645720de6eae2743dab5c9e30b9944))
+* **table:** should specify a default value for column's min-width ([dd515f6](https://github.com/vexip-ui/vexip-ui/commit/dd515f672718e214c17a4473724bc7b686fa433b))
+* **tooltip:** compatibility for deep fragment trigger ([48c0cb0](https://github.com/vexip-ui/vexip-ui/commit/48c0cb01e6ccba144720612e7b880f1f34a89088))
+* **v-loading:** should sync app context from parent node ([d4fdabb](https://github.com/vexip-ui/vexip-ui/commit/d4fdabb01d5f94857cfb33832ead93089c8c2920))
+
+
+
 ## [2.3.32](https://github.com/vexip-ui/vexip-ui/compare/v2.3.31...v2.3.32) (2025-06-30)
 
 
