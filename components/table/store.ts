@@ -659,7 +659,6 @@ export function useStore(options: StoreOptions) {
       )
       sorters.set(column.key, parseSorter(column.sorter))
       filters.set(column.key, parseFilter(column.filter))
-      console.log(column.key, column.width, new Map(widths))
 
       const fixed = column.fixed
 
@@ -1085,7 +1084,6 @@ export function useStore(options: StoreOptions) {
   function distributeWidths(columns: ColumnWithKey[], totalWidth: number): number[] {
     const count = columns.length
     const baseWidth = Math.max(totalWidth / count, COLUMN_DEFAULT_WIDTH)
-    console.log(baseWidth)
 
     const widths = columns.map(col => {
       let w = baseWidth
