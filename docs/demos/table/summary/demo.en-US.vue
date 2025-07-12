@@ -12,7 +12,7 @@
       name="Name"
       fixed
       text-align="center"
-      :width="180"
+      :width="200"
     >
       <template #summary="{ summary }">
         {{ summary.name }}

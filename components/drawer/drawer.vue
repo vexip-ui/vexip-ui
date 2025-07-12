@@ -10,12 +10,13 @@ import {
   createSizeProp,
   emitEvent,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { getGlobalCount, isPromise, toNumber } from '@vexip-ui/utils'
+import { isPromise, toNumber } from '@vexip-ui/utils'
 import { drawerProps } from './props'
 import { drawerPlacements } from './symbol'
 
@@ -57,7 +58,9 @@ const props = useProps('drawer', _props, {
   autoRemove: false,
   footer: false,
   confirmText: null,
+  confirmProps: null,
   cancelText: null,
+  cancelProps: null,
   loading: false,
   confirmType: 'primary',
   cancelType: 'default',
@@ -80,8 +83,6 @@ const currentWidth = ref(props.width)
 const currentHeight = ref(props.height)
 
 const wrapper = ref<HTMLElement>()
-
-const idIndex = `${getGlobalCount()}`
 
 const { target: resizer, moving: resizing } = useMoving({
   onStart: (state, event) => {
@@ -189,8 +190,8 @@ const wrapperStyle = computed(() => {
 const hasTitle = computed(() => {
   return !!(slots.header || slots.title || props.title || props.slots.header || props.slots.title)
 })
-const titleId = computed(() => `${nh.bs(idIndex)}__title`)
-const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
+const titleId = useId()
+const bodyId = useId()
 
 watch(
   () => props.active,
@@ -356,6 +357,7 @@ function handleCancel() {
                 text
                 :type="props.cancelType"
                 :size="props.actionSize"
+                v-bind="props.cancelProps"
                 @click="handleCancel"
               >
                 {{ props.cancelText || locale.cancel }}
@@ -366,6 +368,7 @@ function handleCancel() {
                 :type="props.confirmType"
                 :size="props.actionSize"
                 :loading="props.loading"
+                v-bind="props.confirmProps"
                 @click="handleConfirm"
               >
                 {{ props.confirmText || locale.confirm }}

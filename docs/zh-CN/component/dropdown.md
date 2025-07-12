@@ -43,6 +43,7 @@
 | meta          | `Record<string, any>`            | 设置下拉菜单的元数据，用于嵌套的时候                           | `null`     | `2.0.0`  |
 | alive         | `boolean`                        | 开启后，下拉菜单关闭后后仅隐藏，不会销毁                       | `false`    | `2.1.13` |
 | custom        | `boolean`                        | 标记是否为自定义下拉内容，开启后将不会进行嵌套处理             | `false`    | `2.1.22` |
+| shift         | `boolean`                        | 是否将气泡限制在可视区域内                                     | `true`     | `2.3.29` |
 
 ### Dropdown 事件
 

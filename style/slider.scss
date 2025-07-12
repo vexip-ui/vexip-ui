@@ -225,8 +225,8 @@ $slider: map.merge(
       border-radius: $handler-size;
       outline: 0;
       box-shadow: value('slider-handler-shadow');
-      transition: value('transition-border'), value('transition-shadow'),
-        value('transition-transform');
+      transition:
+        value('transition-border'), value('transition-shadow'), value('transition-transform');
     }
 
     &::before {

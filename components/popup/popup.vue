@@ -30,20 +30,17 @@ const props = defineProps({
     type: classProp,
     default: null,
   },
-  startOffset: {
-    type: Number,
-    default: 30,
-  },
   placement: {
     default: 'top-right' as PopupPlacement,
     validator: (value: PopupPlacement) => popupPlacements.includes(value),
   },
-  itemOffset: {
+  startOffset: {
+    type: Number,
+    default: 30,
+  },
+  itemGap: {
     type: Number,
     default: 16,
-  },
-  itemType: {
-    type: Function,
   },
 })
 
@@ -84,16 +81,8 @@ defineExpose({
 })
 
 function getItemStyle(item: PopupItemState) {
-  const [verticalStyle, horizontalStyle] = placementArray.value
+  const verticalStyle = placementArray.value[0]
   const style: CSSProperties = { [verticalStyle]: `${item.verticalPosition}px` }
-
-  if (horizontalStyle === 'center') {
-    style.left = '50%'
-    style.transform = 'translateX(-50%)'
-  } else {
-    style[horizontalStyle] = '24px'
-  }
-
   const zIndex = parseInt(item.zIndex as string)
 
   if (!Number.isNaN(zIndex)) {
@@ -176,7 +165,7 @@ function renderItem(options: Record<string, any>) {
 
     items.value.forEach(existingItem => {
       if (existingItem.visible) {
-        currentVertical += existingItem.height + props.itemOffset
+        currentVertical += existingItem.height + props.itemGap
       }
     })
 
@@ -217,7 +206,7 @@ function removeItem(key: Key) {
     item.visible = false
 
     for (let i = index + 1, len = items.value.length; i < len; ++i) {
-      items.value[i].verticalPosition -= removeHeight + props.itemOffset
+      items.value[i].verticalPosition -= removeHeight + props.itemGap
     }
 
     // 关闭回调

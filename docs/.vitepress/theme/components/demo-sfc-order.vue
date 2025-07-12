@@ -64,8 +64,8 @@ function handleSavePrefix(value: FirstSfcType) {
     border: var(--vxp-border-base);
     border-radius: var(--vxp-radius-base);
     outline: 0;
-    transition: var(--vxp-transition-color), var(--vxp-transition-background),
-      var(--vxp-transition-border);
+    transition:
+      var(--vxp-transition-color), var(--vxp-transition-background), var(--vxp-transition-border);
 
     &:hover,
     &:focus {

@@ -1,3 +1,144 @@
+## [2.3.33](https://github.com/vexip-ui/vexip-ui/compare/v2.3.32...v2.3.33) (2025-07-11)
+
+
+### ✨ Features
+
+* **form:** add isError params for default slot of item ([#574](https://github.com/vexip-ui/vexip-ui/issues/574)) ([4b06d23](https://github.com/vexip-ui/vexip-ui/commit/4b06d2360f164ee32dac78edfd1acf2d8e0d1cc4))
+* **message:** supports configure start offset & item gap ([53c2234](https://github.com/vexip-ui/vexip-ui/commit/53c22348191b89c0028cdbcad2a371f4bf9f4075))
+* **notice:** supports configure start offset & item gap ([2df6f4f](https://github.com/vexip-ui/vexip-ui/commit/2df6f4f6f94db00a6b56d079b171cc29e44f6eea))
+* **tabs:** support lazy load panels ([51bffb0](https://github.com/vexip-ui/vexip-ui/commit/51bffb047de852f021930a4ff5dd693c79e758fb))
+* **textarea:** add hide-count prop ([#573](https://github.com/vexip-ui/vexip-ui/issues/573)) ([cf99f88](https://github.com/vexip-ui/vexip-ui/commit/cf99f880cb0bac29eba9f26536d331ba736a491a))
+* **upload:** add cloud slot ([b3a0ca9](https://github.com/vexip-ui/vexip-ui/commit/b3a0ca9a7ed61547e96e5af80d8c547a04030068)), closes [#567](https://github.com/vexip-ui/vexip-ui/issues/567)
+
+
+### 🐞 Bug Fixes
+
+* **date-picker:** more compact unit content ([7303d18](https://github.com/vexip-ui/vexip-ui/commit/7303d182b32c4f0c79b414182b1482a8004a0e14))
+* **table:** correct tree column content display ([fbe8148](https://github.com/vexip-ui/vexip-ui/commit/fbe8148d2dc48551c06be988288c555db1f19f54))
+* **table:** improve scrollbar position ([82de57b](https://github.com/vexip-ui/vexip-ui/commit/82de57b9d5645720de6eae2743dab5c9e30b9944))
+* **table:** should specify a default value for column's min-width ([dd515f6](https://github.com/vexip-ui/vexip-ui/commit/dd515f672718e214c17a4473724bc7b686fa433b))
+* **tooltip:** compatibility for deep fragment trigger ([48c0cb0](https://github.com/vexip-ui/vexip-ui/commit/48c0cb01e6ccba144720612e7b880f1f34a89088))
+* **v-loading:** should sync app context from parent node ([d4fdabb](https://github.com/vexip-ui/vexip-ui/commit/d4fdabb01d5f94857cfb33832ead93089c8c2920))
+
+
+
+## [2.3.32](https://github.com/vexip-ui/vexip-ui/compare/v2.3.31...v2.3.32) (2025-06-30)
+
+
+### ✨ Features
+
+* **form:** add manual prop for item ([e096570](https://github.com/vexip-ui/vexip-ui/commit/e096570a60fc2e0064faa2b084ca4b5e5c995f8d))
+* **input:** add hide-count prop ([#569](https://github.com/vexip-ui/vexip-ui/issues/569)) ([342ef59](https://github.com/vexip-ui/vexip-ui/commit/342ef59e7a904ec8e2220a06e5e651ff02efec2d))
+
+
+### 🐞 Bug Fixes
+
+* **form:** should prevent submit and reset event ([b1cbb20](https://github.com/vexip-ui/vexip-ui/commit/b1cbb20d9b21c53778b6f530d4215cac41bab761))
+* **input:** correctly emit change event when in sync mode ([dc2d85e](https://github.com/vexip-ui/vexip-ui/commit/dc2d85e4f5aef5a848966032c7e9d784132f9ccd))
+* **table:** change content element to block display ([c7a1c86](https://github.com/vexip-ui/vexip-ui/commit/c7a1c86f76aa825ffde8361f18bc833a6050f8ab))
+* **table:** correctly calculate table width with column min width ([f99d882](https://github.com/vexip-ui/vexip-ui/commit/f99d882758b681900f8ffa844e23588aabae66b3)), closes [#571](https://github.com/vexip-ui/vexip-ui/issues/571)
+* **utils:** ordinalNumber correctly process for number ends of 11-12-13 ([4921c3b](https://github.com/vexip-ui/vexip-ui/commit/4921c3b2f51e151635eb76ef9992b790b1847b88))
+* **utils:** toFixed normalize process for negative number ([91afd72](https://github.com/vexip-ui/vexip-ui/commit/91afd72b72f8983e2e4c370e91874a671a1234be))
+
+
+### 👓 Types
+
+* **hooks:** fix internal type error ([ff87604](https://github.com/vexip-ui/vexip-ui/commit/ff87604a936b6820528a85cc2978bf2bcc8b46c0))
+
+
+
+## [2.3.31](https://github.com/vexip-ui/vexip-ui/compare/v2.3.30...v2.3.31) (2025-06-23)
+
+
+### ✨ Features
+
+* **card:** support customize header padding via css variables ([#561](https://github.com/vexip-ui/vexip-ui/issues/561)) ([090233a](https://github.com/vexip-ui/vexip-ui/commit/090233af5eb1785900ea5e765f3798a9b145abf9))
+* **confirm:** add close method ([7f5ab67](https://github.com/vexip-ui/vexip-ui/commit/7f5ab679b2ea01e781a94bf7208865c22f8ed0fe))
+* **drawer:** add confirm-props & cancel-props props ([65ed86b](https://github.com/vexip-ui/vexip-ui/commit/65ed86b74e786e10772869be5b6e35a2e5e1b6a8))
+* **modal:** add confirm-props & cancel-props props ([ceb24ea](https://github.com/vexip-ui/vexip-ui/commit/ceb24ea160b6cb01862c9a79b1509830e657d792))
+* **table:** support percentage value for column width ([b57cb1b](https://github.com/vexip-ui/vexip-ui/commit/b57cb1b15e9949e06b7fd8d43e9daa8decd03308))
+* **table:** support specify min-width and max-width for columns ([00be27b](https://github.com/vexip-ui/vexip-ui/commit/00be27b595db1a11ca1ba5e644c9e93f3a1b342a))
+* **tabs:** support lazy load panels ([b14bf7f](https://github.com/vexip-ui/vexip-ui/commit/b14bf7fe199629c1a8bb98276698e5e6d46fcb04))
+* **tree:** add node-contextmenu event ([14fd2ea](https://github.com/vexip-ui/vexip-ui/commit/14fd2eacda0ff4c6664284139df81f399b4cf37a))
+
+
+### 🐞 Bug Fixes
+
+* **playground:** correctly build import map ([455d1bc](https://github.com/vexip-ui/vexip-ui/commit/455d1bc244f51e359b863be9b1aec6b3f221ebc9))
+* **scripts:** should support update version via type release ([cdca2a2](https://github.com/vexip-ui/vexip-ui/commit/cdca2a28ff452ada1383144296971766dd9dd1b4))
+* **table:** cell content default to wrap ([19da505](https://github.com/vexip-ui/vexip-ui/commit/19da505c79eaf8fa43ced14c3036e67fc55ead95)), closes [#562](https://github.com/vexip-ui/vexip-ui/issues/562)
+* **tree:** improve node-contextmenu event to expose mouse event ([7c4c0b0](https://github.com/vexip-ui/vexip-ui/commit/7c4c0b08701b2d01bbd01ebb1e2d8b353ce542c9))
+
+
+
+## [2.3.30](https://github.com/vexip-ui/vexip-ui/compare/v2.3.29...v2.3.30) (2025-06-12)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** incorrect handler param of useResize ([667cf39](https://github.com/vexip-ui/vexip-ui/commit/667cf39688fb8f429072e8a52f21f9c9d5a02672)), closes [#560](https://github.com/vexip-ui/vexip-ui/issues/560)
+
+
+
+## [2.3.29](https://github.com/vexip-ui/vexip-ui/compare/v2.3.28...v2.3.29) (2025-06-11)
+
+
+### ✨ Features
+
+* add shift prop for auto-complete, dropdown and select ([2c13727](https://github.com/vexip-ui/vexip-ui/commit/2c13727a216096c9fc3bbb308dd5975cd241eb27))
+* **confrim:** title & content options support specify render function ([33ab0a7](https://github.com/vexip-ui/vexip-ui/commit/33ab0a7633ea26369b0c595dd3542525fbd5079e))
+* **hooks:** useResize supports specify a target to observe ([e3cfc69](https://github.com/vexip-ui/vexip-ui/commit/e3cfc690798204700d9310edf228c6ef1ac4b582))
+* **select:** add tag & restTag slots ([6f620ce](https://github.com/vexip-ui/vexip-ui/commit/6f620ce3e00f847ab83f442ecee78368d62c26c4)), closes [#559](https://github.com/vexip-ui/vexip-ui/issues/559)
+
+
+### 🐞 Bug Fixes
+
+* **form:** normalize input & number-input clear behavior in form ([a44a24b](https://github.com/vexip-ui/vexip-ui/commit/a44a24ba735a993511cf65cd52b72588732e9511)), closes [#557](https://github.com/vexip-ui/vexip-ui/issues/557)
+* **icon:** ensure effect vertical align style ([70409fc](https://github.com/vexip-ui/vexip-ui/commit/70409fce4ab01d8ef200721a4963bafe4e67cfa8))
+* **input:** correctly emit compositionend event ([#518](https://github.com/vexip-ui/vexip-ui/issues/518)) ([7569c27](https://github.com/vexip-ui/vexip-ui/commit/7569c27f8c17f50a7e79a2fa1738661172493ccc))
+* **native-scroll:** coherently update scrolling position ([e1d5453](https://github.com/vexip-ui/vexip-ui/commit/e1d54532d7f051918aa54b914986216edc512458))
+* **playground:** correctly import css file of vexip-ui ([5be64d1](https://github.com/vexip-ui/vexip-ui/commit/5be64d1c23ae970f8d4e4f03f5a62182d61f43f9))
+* **table:** correctly calculate table width when resizing ([52140a3](https://github.com/vexip-ui/vexip-ui/commit/52140a3f5c6eba5a3b8acaad120bd0b29f9f0f47)), closes [#558](https://github.com/vexip-ui/vexip-ui/issues/558)
+
+
+
+## [2.3.28](https://github.com/vexip-ui/vexip-ui/compare/v2.3.27...v2.3.28) (2025-05-28)
+
+
+### ✨ Features
+
+* **menu:** support customize arrow icon ([c26618d](https://github.com/vexip-ui/vexip-ui/commit/c26618db200d734c6ca27c0132c947b6ecb8afd5))
+
+
+
+## [2.3.27](https://github.com/vexip-ui/vexip-ui/compare/v2.3.26...v2.3.27) (2025-05-27)
+
+
+### ✨ Features
+
+* **calendar-panel:** support cell state linkage ([d7a78b9](https://github.com/vexip-ui/vexip-ui/commit/d7a78b9b6ce9201c3a814e8a5cc00dd04e163fe0))
+* **collapse:** support customize header padding css variables ([c5c75ca](https://github.com/vexip-ui/vexip-ui/commit/c5c75ca3d8583ea2588cead2429489341afb7119))
+* **scripts:** add secondConfirmMsg option for relase ([a95a8bc](https://github.com/vexip-ui/vexip-ui/commit/a95a8bc684424bc13063e31fff0d090f1a7a7cf5))
+* **scripts:** add updateVersionByType option for release ([66a40c2](https://github.com/vexip-ui/vexip-ui/commit/66a40c215808f33a42341fe31deaa6705047d03e))
+
+
+### 🐞 Bug Fixes
+
+* **form:** should consider help icon when calculating width ([496da0e](https://github.com/vexip-ui/vexip-ui/commit/496da0ecccb2f4b813bfd71ef7c9c8ec0f695792)), closes [#554](https://github.com/vexip-ui/vexip-ui/issues/554)
+* **layout:** correct main size in different sign types ([8196d54](https://github.com/vexip-ui/vexip-ui/commit/8196d54393f12391e469d3f7daee1ef264ae6e4b))
+* **scripts:** should log package name for process ([9772b87](https://github.com/vexip-ui/vexip-ui/commit/9772b878cfa1ddc25fec094770e541203e8e319f))
+* **tabs:** correct active panel z-index ([90d52bd](https://github.com/vexip-ui/vexip-ui/commit/90d52bd22454f6a80a311b5adde0943f34a72355))
+* **utils:** replace empty object definition with Object.create ([e6d4ba1](https://github.com/vexip-ui/vexip-ui/commit/e6d4ba106ac545fca4b81d923bb147e1f1938d1c))
+* **utils:** use Object.create(null) instead of {} ([846c9d8](https://github.com/vexip-ui/vexip-ui/commit/846c9d838e39f5623af292279218ba9ca8967161))
+
+
+### 👓 Types
+
+* **utils:** fix listToMap reslut types ([ef65636](https://github.com/vexip-ui/vexip-ui/commit/ef65636f18528294eb6be1d7eb384d075ec6f38a))
+* **utils:** improve listToMap reslut types ([51f2140](https://github.com/vexip-ui/vexip-ui/commit/51f21409598fbd91f588b35060643d727d3a060d))
+
+
+
 ## [2.3.26](https://github.com/vexip-ui/vexip-ui/compare/v2.3.25...v2.3.26) (2025-04-17)
 
 

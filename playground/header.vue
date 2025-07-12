@@ -1,159 +1,20 @@
-<template>
-  <Row tag="header" class="header" :column-flex="{ align: 'middle' }">
-    <Column flex="0">
-      <Linker to="https://www.vexipui.com">
-        <h1 class="index">
-          <img class="index__logo" src="/vexip-ui.svg" alt="vexip-ui.svg" />
-          <span class="index__title"> Vexip SFC Playground </span>
-        </h1>
-        <Tag class="lib-version" size="small">
-          {{ libVersion }}
-        </Tag>
-      </Linker>
-    </Column>
-    <Column flex="auto"></Column>
-    <Column flex="0">
-      <button
-        v-show="transferTo"
-        type="button"
-        class="action"
-        style="margin-inline-end: 0"
-        @click="settingActive = true"
-      >
-        <Icon :scale="1.3">
-          <Gear></Gear>
-        </Icon>
-      </button>
-      <Portal :to="transferTo">
-        <div class="section">
-          <div v-for="(meta, pkg) in repoMeta" :key="pkg" class="action">
-            <span class="repo-name">
-              {{ meta.name }}
-            </span>
-            <Select
-              :value="meta.active"
-              :options="meta.versions"
-              transparent
-              :loading="meta.loading"
-              @toggle="initRepoVersions(meta)"
-              @change="changeVersion(pkg, $event)"
-            ></Select>
-          </div>
-        </div>
-        <div class="section">
-          <button
-            type="button"
-            class="action"
-            :title="locale.theme"
-            @click="toggleDark"
-          >
-            <Icon v-if="dark" :scale="1.3">
-              <Moon></Moon>
-            </Icon>
-            <Icon v-else :scale="1.3">
-              <Sun></Sun>
-            </Icon>
-          </button>
-          <button
-            type="button"
-            class="action"
-            :title="locale.share"
-            @click="copyLink"
-          >
-            <Icon :scale="1.3">
-              <ShareNodes></ShareNodes>
-            </Icon>
-          </button>
-          <button
-            type="button"
-            class="action"
-            :title="locale.download"
-            @click="download"
-          >
-            <Icon :scale="1.3">
-              <Download></Download>
-            </Icon>
-          </button>
-          <button
-            type="button"
-            class="action"
-            :title="locale.format"
-            @click="formatCodes"
-          >
-            <Icon :scale="1.3">
-              <CheckDouble></CheckDouble>
-            </Icon>
-          </button>
-          <Dropdown v-model:visible="cdnPanelVisible" class="action" trigger="click">
-            <button
-              type="button"
-              class="action"
-              :title="locale.cdn"
-              style="margin-inline-end: 0"
-            >
-              <Icon :scale="1.3">
-                <Rocket></Rocket>
-              </Icon>
-            </button>
-            <template #drop>
-              <DropdownList class="cdn-panel">
-                <RadioGroup v-model:value="currentCdn" vertical size="small">
-                  <Radio v-for="cdn in cdnOptions" :key="cdn" :label="cdn"></Radio>
-                </RadioGroup>
-                <Button
-                  type="primary"
-                  size="small"
-                  style="margin-top: 6px"
-                  @click="applyCdn"
-                >
-                  {{ locale.apply }}
-                </Button>
-              </DropdownList>
-            </template>
-          </Dropdown>
-          <button
-            type="button"
-            class="action"
-            :title="locale.reset"
-            @click="reset"
-          >
-            <Icon :scale="1.3">
-              <ArrowRotateLeft></ArrowRotateLeft>
-            </Icon>
-          </button>
-          <Linker
-            class="github-link"
-            title="Github"
-            to="//github.com/vexip-ui/vexip-ui/tree/main/playground"
-          >
-            <Icon :scale="1.4">
-              <GithubB></GithubB>
-            </Icon>
-          </Linker>
-        </div>
-      </Portal>
-    </Column>
-  </Row>
-  <Drawer v-model:active="settingActive" transfer>
-    <div id="setting"></div>
-  </Drawer>
-</template>
-
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, toRef } from 'vue'
 
+import Action from './action.vue'
 import { Confirm, Message } from 'vexip-ui'
 import {
-  ArrowRotateLeft,
-  CheckDouble,
-  Download,
-  Gear,
-  GithubB,
+  ArrowDownToLine,
+  Github,
   Moon,
+  RefreshCcwDot,
   Rocket,
-  ShareNodes,
+  RotateCw,
+  Settings,
+  Share2,
   Sun,
-} from '@vexip-ui/icons'
+  Type,
+} from 'lucide-vue-next'
 import { cdnTemplates, getCdn, setCdn } from './cdn'
 import { locale } from './locale'
 import { downloadProject } from './download/download'
@@ -172,6 +33,25 @@ interface RepoMeta {
   loaded: boolean
 }
 
+type ActionMeta = {
+  label: string,
+  icon: object,
+  scale?: number
+} & (
+  | {
+    action: () => any
+  }
+  | {
+    linkTo: string
+  }
+  | {
+    type: 'dropdown',
+    options: string[],
+    value: string,
+    action: () => any
+  }
+)
+
 const props = defineProps({
   store: {
     type: Object as PropType<ReplStore>,
@@ -183,9 +63,11 @@ const props = defineProps({
   },
 })
 
-const { dark } = props.store
+const emit = defineEmits(['reload'])
 
-dark.value = document.documentElement.classList.contains('dark')
+const store = toRef(props, 'store')
+
+store.value.dark = document.documentElement.classList.contains('dark')
 
 const libVersion = `Repl@${__REPL_VERSION__}`
 
@@ -245,6 +127,27 @@ const cdnOptions = Object.keys(cdnTemplates)
 const cdnPanelVisible = ref(false)
 const currentCdn = ref(getCdn())
 
+const actions = reactive([
+  { label: locale.share, icon: Share2, scale: 1.1, action: copyLink },
+  { label: locale.download, icon: ArrowDownToLine, scale: 1.3, action: download },
+  { label: locale.format, icon: Type, action: formatCodes },
+  { label: locale.reload, icon: RotateCw, action: reload },
+  {
+    label: locale.cdn,
+    icon: Rocket,
+    type: 'dropdown',
+    options: cdnOptions,
+    value: currentCdn,
+    action: applyCdn,
+  },
+  { label: locale.reset, icon: RefreshCcwDot, action: reset },
+  {
+    label: 'GitHub',
+    icon: Github,
+    linkTo: 'https://github.com/vexip-ui/vexip-ui/tree/main/playground',
+  },
+]) satisfies ActionMeta[]
+
 onMounted(() => {
   window.addEventListener('blur', handleWindowBlur)
 
@@ -292,15 +195,15 @@ function handleWindowBlur() {
 function toggleDark() {
   const cls = document.documentElement.classList
   cls.toggle('dark')
-  dark.value = cls.contains('dark')
-  localStorage.setItem('vexip-sfc-playground-prefer-dark', String(dark.value))
+  store.value.dark = cls.contains('dark')
+  localStorage.setItem('vexip-sfc-playground-prefer-dark', String(store.value.dark))
 }
 
 async function copyLink() {
   await navigator.clipboard.writeText(location.href)
   Message.success({
     content: 'Sharable URL has been copied to clipboard.',
-    background: !dark.value,
+    background: !store.value.dark,
   })
 }
 
@@ -321,10 +224,14 @@ function reset() {
   location.href = location.origin
 }
 
+function reload() {
+  emit('reload')
+}
+
 function changeVersion(pkg: string, version: string) {
   repoMeta[pkg].active = version
 
-  props.store.setVersions(versionsMap.value)
+  props.store.setVersion(pkg, version)
   history.replaceState({}, '', `${buildSearch()}${location.hash}`)
 }
 
@@ -344,7 +251,7 @@ function buildSearch() {
 }
 
 async function formatCodes() {
-  const files = props.store.state.files
+  const files = props.store.files
 
   for (const file of Object.values(files)) {
     if (!file.hidden) {
@@ -354,8 +261,76 @@ async function formatCodes() {
 }
 </script>
 
+<template>
+  <Row tag="header" class="header" :column-flex="{ align: 'middle' }">
+    <Column flex="0">
+      <Linker to="https://www.vexipui.com">
+        <h1 class="index">
+          <img class="index__logo" src="/vexip-ui.svg" alt="vexip-ui.svg" />
+          <span class="index__title"> Vexip SFC Playground </span>
+        </h1>
+        <Tag class="lib-version" size="small">
+          {{ libVersion }}
+        </Tag>
+      </Linker>
+    </Column>
+    <Column flex="auto"></Column>
+    <Column flex="0" style="gap: 10px">
+      <button
+        v-show="transferTo"
+        type="button"
+        class="action icon-action"
+        style="margin-inline-end: 0"
+        @click="settingActive = true"
+      >
+        <Icon :scale="1.2">
+          <Settings></Settings>
+        </Icon>
+      </button>
+      <Portal :to="transferTo">
+        <div class="section">
+          <div v-for="(meta, pkg) in repoMeta" :key="pkg" class="select-action">
+            <span class="repo-name">
+              {{ meta.name }}
+            </span>
+            <Select
+              :value="meta.active"
+              :options="meta.versions"
+              :transparent="!transferTo"
+              :loading="meta.loading"
+              @toggle="initRepoVersions(meta)"
+              @change="changeVersion(pkg, $event)"
+            ></Select>
+          </div>
+        </div>
+        <div class="section">
+          <Action :label="locale.theme" :show-label="!!transferTo" @click="toggleDark">
+            <Icon v-if="store.dark" :scale="1.2">
+              <Moon></Moon>
+            </Icon>
+            <Icon v-else :scale="1.25">
+              <Sun></Sun>
+            </Icon>
+          </Action>
+          <template v-for="(action, _index) in actions" :key="_index">
+            <Action
+              v-bind="action"
+              :icon-props="{ scale: action.scale ?? 1.2 }"
+              :show-label="!!transferTo"
+              @click="action.action"
+            ></Action>
+          </template>
+        </div>
+      </Portal>
+    </Column>
+  </Row>
+  <Drawer v-model:active="settingActive" transfer>
+    <div id="setting"></div>
+  </Drawer>
+</template>
+
 <style lang="scss">
-@use '../style.scss' as *;
+@use './style' as *;
 
 .header {
   z-index: 10;
@@ -366,8 +341,8 @@ async function formatCodes() {
   background-color: var(--vxp-bg-color-base);
   border-bottom: 1px solid transparent;
   box-shadow: 0 0 4px rgba(0, 0, 0, 30%);
-  transition: var(--vxp-transition-background), var(--vxp-transition-border),
-    var(--vxp-transition-shadow);
+  transition:
+    var(--vxp-transition-background), var(--vxp-transition-border), var(--vxp-transition-shadow);
 
   .dark & {
     --border: #383838;
@@ -411,28 +386,18 @@ async function formatCodes() {
 
   .section {
     display: flex;
+    gap: 10px;
   }
 
   .ssr-switch {
     margin-inline-end: 20px;
   }
 
-  .action,
-  .github-link {
-    color: var(--vxp-content-color-secondary);
-
-    &:hover,
-    &:focus {
-      color: var(--vxp-content-color-base);
-    }
-  }
-
-  .action {
+  .select-action {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin-inline-end: 10px;
     cursor: pointer;
     background-color: transparent;
     border: 0;
@@ -450,24 +415,13 @@ async function formatCodes() {
   }
 }
 
-.cdn-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 5px 16px 12px;
-
-  .vxp-radio {
-    width: 100%;
-    padding: 6px 0;
-    margin: 0;
-  }
-}
-
 #setting {
   display: flex;
   flex-direction: column;
 
   .section {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     padding: 6px;
   }
@@ -476,34 +430,15 @@ async function formatCodes() {
     margin-inline-end: 20px;
   }
 
-  .action,
-  .github-link {
-    color: var(--vxp-content-color-secondary);
-
-    &:hover,
-    &:focus {
-      color: var(--vxp-content-color-base);
-    }
-  }
-
-  .action {
+  .select-action {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    margin-inline-end: 10px;
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
-    outline: 0;
-
-    &:last-child {
-      margin-inline-end: 0;
-    }
+    flex-direction: column;
   }
 
   .repo-name {
-    margin-inline-end: 6px;
+    margin-inline-end: 0;
+    margin-top: 8px;
+    margin-bottom: 4px;
     color: var(--vxp-color-success-base);
     white-space: nowrap;
   }

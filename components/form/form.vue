@@ -178,6 +178,14 @@ function clearFieldsError(props: string | string[]) {
     }
   })
 }
+
+function handleSubmit(event: Event) {
+  event.stopPropagation()
+
+  if (!props.action) {
+    event.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -192,6 +200,8 @@ function clearFieldsError(props: string | string[]) {
     :justify="props.justify"
     :align="props.align"
     :column-flex="undefined"
+    @submit="handleSubmit"
+    @reset.prevent.stop
   >
     <slot></slot>
   </Row>

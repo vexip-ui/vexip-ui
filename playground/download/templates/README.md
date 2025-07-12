@@ -6,9 +6,9 @@ To start:
 
 ```sh
 pnpm install
-pnpm run serve
+pnpm run dev
 
 # if using yarn:
 yarn
-yarn run serve
+yarn run dev
 ```

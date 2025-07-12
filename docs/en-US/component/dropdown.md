@@ -43,6 +43,7 @@ In addition to using the built-in components, you can customize the content of t
 | meta          | `Record<string, any>`            | The meta data for dropdown, used when nesting                                                            | `null`     | `2.0.0`  |
 | alive         | `boolean`                        | When enabled, the dropdown menu will only be hidden when is closed                                       | `false`    | `2.1.13` |
 | custom        | `boolean`                        | Whether custom dropdown content, it will disable nested process after it is enabled                      | `false`    | `2.1.22` |
+| shift         | `boolean`                        | Whether to limit tip inside the visible area                                                             | `true`     | `2.3.29` |
 
 ### Dropdown Events
 

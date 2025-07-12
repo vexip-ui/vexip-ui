@@ -1,4 +1,4 @@
-import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'
@@ -38,14 +38,21 @@ export interface FormItemProps {
   hideAsterisk: boolean
 }
 
+export interface FormItemSlots {
+  default?: (parmas: { isError: boolean }) => any,
+  help?: () => any,
+  label?: () => any,
+  error?: (params: { tip: string }) => any
+}
+
 export interface FieldOptions {
-  prop: ComputedRef<string>,
-  idFor: ComputedRef<string>,
-  labelId: ComputedRef<string>,
-  state: ComputedRef<ComponentState>,
-  disabled: ComputedRef<boolean>,
-  loading: ComputedRef<boolean>,
-  size: ComputedRef<ComponentSize>,
+  prop: Ref<string>,
+  idFor: Ref<string>,
+  labelId: Ref<string>,
+  state: Ref<ComponentState>,
+  disabled: Ref<boolean>,
+  loading: Ref<boolean>,
+  size: Ref<ComponentSize>,
   emitter: EventEmitter,
   labelWidth: Ref<number>,
   validate: () => Promise<string[] | null>,
@@ -73,7 +80,7 @@ export const FORM_FIELDS = '__VXP_FORM_FIELDS' as unknown as InjectionKey<Set<Fi
 export const FORM_ACTIONS = '__VXP_FORM_ACTIONS' as unknown as InjectionKey<FormActions>
 
 // form-item
-export const FIELD_OPTIONS = '__VXP_FIELD_OPTIONS' as unknown as InjectionKey<FieldOptions>
+export const FIELD_OPTIONS = '__VXP_FIELD_OPTIONS' as unknown as InjectionKey<FieldOptions | null>
 
 export const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
 export const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])

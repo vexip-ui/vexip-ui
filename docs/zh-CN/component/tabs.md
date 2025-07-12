@@ -95,6 +95,8 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 | placement | `TabNavPlacement`  | 设置标签导航的放置位置                            | `'top'`  | `2.0.13` |
 | show-add  | `boolean`          | 设置是否显示添加按钮                              | `false`  | `2.0.13` |
 | closable  | `boolean`          | 设置是否显示关闭按钮                              | `false`  | `2.0.13` |
+| lazy      | `boolean           | 设置是否所有的面板都在非激活时不渲染              | `false`  | `2.3.31` |
+| lazy      | `boolean           | 设置是否所有的面板都为懒加载（第一次激活后渲染）  | `false`  | `2.3.33` |
 
 ### Tabs 事件
 
@@ -115,13 +117,15 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 
 ### TabPanel 属性
 
-| 名称     | 类型               | 说明                 | 默认值  | 始于     |
-| -------- | ------------------ | -------------------- | ------- | -------- |
-| label    | `string \| number` | 标签页的唯一索引     | `''`    | -        |
-| name     | `string`           | 标签页的名称         | `''`    | `2.0.13` |
-| disabled | `boolean`          | 设置是否禁用该导航   | `false` | -        |
-| icon     | `string`           | 设置导航的前置图标   | `''`    | -        |
-| closable | `boolean`          | 设置是否显示关闭按钮 | `false` | `2.0.13` |
+| 名称     | 类型               | 说明                       | 默认值  | 始于     |
+| -------- | ------------------ | -------------------------- | ------- | -------- |
+| label    | `string \| number` | 标签页的唯一索引           | `''`    | -        |
+| name     | `string`           | 标签页的名称               | `''`    | `2.0.13` |
+| disabled | `boolean`          | 设置是否禁用该导航         | `false` | -        |
+| icon     | `string`           | 设置导航的前置图标         | `''`    | -        |
+| closable | `boolean`          | 设置是否显示关闭按钮       | `false` | `2.0.13` |
+| lazy     | `boolean           | 设置面板是否非激活时不渲染 | `false` | `2.3.31` |
+| lazy     | `boolean           | 设置面板是否懒加载         | `false` | `2.3.33` |
 
 ### TabPanel 事件
 

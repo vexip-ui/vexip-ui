@@ -11,12 +11,13 @@ import {
   createSizeProp,
   emitEvent,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
 } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { getGlobalCount, isNull, isPromise, isValidNumber, toNumber } from '@vexip-ui/utils'
+import { isNull, isPromise, isValidNumber, toNumber } from '@vexip-ui/utils'
 import { modalProps, positionProp } from './props'
 
 import type { MaskerExposed } from '@/components/masker'
@@ -62,7 +63,9 @@ const props = useProps('modal', _props, {
   cancelText: null,
   autoRemove: false,
   confirmType: 'primary',
+  confirmProps: null,
   cancelType: 'default',
+  cancelProps: null,
   actionSize: createSizeProp('small'),
   undivided: false,
   xOffset: 0,
@@ -102,7 +105,6 @@ const rect = reactive({
 const maskerRect = reactive({ width: 0, height: 0 })
 const modalRect = reactive({ width: 0, height: 0 })
 
-const idIndex = `${getGlobalCount()}`
 const transformed = ref(false)
 
 const masker = ref<MaskerExposed>()
@@ -295,8 +297,8 @@ const transformOrigin = computed(() => {
 const hasHeader = computed(() => {
   return !!(slots.header || slots.title || props.title || props.slots.header || props.slots.title)
 })
-const titleId = computed(() => `${nh.bs(idIndex)}__title`)
-const bodyId = computed(() => `${nh.bs(idIndex)}__body`)
+const titleId = useId()
+const bodyId = useId()
 
 for (const style of Object.keys(rect) as Array<keyof typeof rect>) {
   watch(
@@ -584,6 +586,7 @@ function handleModalResize(entry: ResizeObserverEntry) {
                     text
                     :type="props.cancelType"
                     :size="props.actionSize"
+                    v-bind="props.cancelProps"
                     @click="handleCancel"
                   >
                     {{ props.cancelText || locale.cancel }}
@@ -594,6 +597,7 @@ function handleModalResize(entry: ResizeObserverEntry) {
                     :type="props.confirmType"
                     :size="props.actionSize"
                     :loading="props.loading"
+                    v-bind="props.confirmProps"
                     @click="handleConfirm"
                   >
                     {{ props.confirmText || locale.confirm }}

@@ -10,7 +10,7 @@ import {
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ButtonType } from '@/components/button'
+import type { ButtonProps, ButtonType } from '@/components/button'
 import type { DrawerPlacement, DrawerSlots } from './symbol'
 
 export const drawerProps = buildProps({
@@ -34,7 +34,9 @@ export const drawerProps = buildProps({
   cancelText: String,
   loading: booleanProp,
   confirmType: String as PropType<ButtonType>,
+  confirmProps: Object as PropType<ButtonProps>,
   cancelType: String as PropType<ButtonType>,
+  cancelProps: Object as PropType<ButtonProps>,
   actionSize: sizeProp,
   undivided: booleanProp,
   disableEsc: booleanProp,

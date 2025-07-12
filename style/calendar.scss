@@ -31,7 +31,7 @@ $calendar: map.merge(
   $calendar
 );
 
-@use './calendar-panel.scss' with (
+@use './calendar-panel' with (
   $calendar-panel: $calendar
 );
 
@@ -93,8 +93,8 @@ $calendar: map.merge(
     background-color: value('calendar-date-bg-color');
     border-top: value('calendar-date-border');
     outline: 0;
-    transition: value('transition-color'), value('transition-background'),
-      value('transition-border');
+    transition:
+      value('transition-color'), value('transition-background'), value('transition-border');
 
     &:hover,
     &:focus {

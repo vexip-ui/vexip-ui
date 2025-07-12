@@ -135,6 +135,8 @@ interface DrawerSlotParams {
 | action-size     | `'small' \| 'default' \| 'large'`           | Set size of the confirm and cancel buttons                                                                                                                           | `'small'`        | `2.2.6`  |
 | undivided       | `boolean`                                   | Remove the dividing lines between parts of the drawer                                                                                                                | `false`          | `2.2.6`  |
 | disable-esc     | `boolean`                                   | Set whether to disable close via using the ESC key                                                                                                                   | `false`          | `2.3.11` |
+| confirm-props   | `ButtonProps`                               | Specify props for confirm button                                                                                                                                     | `null`           | `2.3.31` |
+| cancel-props    | `ButtonProps`                               | Specify props for cancel button                                                                                                                                      | `null`           | `2.3.31` |
 
 ### Drawer Events
 

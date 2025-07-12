@@ -49,8 +49,8 @@ $checkbox: map.merge(
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
-    transition: value('transition-background'), value('transition-border'),
-      value('transition-shadow');
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow');
   }
 
   &--border {
@@ -79,8 +79,8 @@ $checkbox: map.merge(
     background-color: value('checkbox-signal-bg-color');
     border: value('border-shape') value('checkbox-b-color');
     border-radius: value('checkbox-signal-radius');
-    transition: value('transition-background'), value('transition-border'),
-      value('transition-shadow');
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow');
 
     &::before {
       position: absolute;

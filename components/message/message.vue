@@ -24,6 +24,8 @@ const predefinedIcons = computed(() => ({
 }))
 
 const placement = ref<MessagePlacement>('top')
+const startOffset = ref(30)
+const itemGap = ref(16)
 const popup = ref<InstanceType<typeof Popup>>()
 
 const placementCenter = computed(() => `${placement.value}-center` as const)
@@ -40,6 +42,8 @@ async function remove(key: Key) {
 
 function config(config: MessageConfig) {
   placement.value = config.placement || placement.value
+  startOffset.value = config.startOffset || startOffset.value
+  itemGap.value = config.itemGap || itemGap.value
 }
 
 function clear() {
@@ -64,6 +68,8 @@ defineExpose(
     :class="nh.b()"
     :transition-name="nh.ns(`popup-${placement}`)"
     :placement="placementCenter"
+    :start-offset="startOffset"
+    :item-gap="itemGap"
   >
     <template #item="{ item }: { item: import('./symbol').MessageOptions }">
       <div

@@ -15,7 +15,7 @@ import type {
   NoticeType,
 } from './symbol'
 
-export type { NoticeType, NoticePlacement, NoticeOptions }
+export type { NoticeConfig, NoticeType, NoticePlacement, NoticeOptions }
 
 type FuzzyOptions = string | NoticeOptions
 type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticePlacement } & Record<
@@ -130,11 +130,17 @@ export class NoticeManager {
     }
   }
 
-  config({ placement, ...others }: NoticeConfig & NoticeOptions) {
-    if (placement) {
-      this._getInstance()?.config({
-        placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
-      })
+  config({ placement, startOffset, itemGap, ...others }: NoticeConfig & NoticeOptions) {
+    const instance = this._getInstance()
+
+    if (instance) {
+      if (placement) {
+        instance.config({
+          placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
+        })
+      }
+
+      instance.config({ startOffset, itemGap })
     }
 
     this.defaults = { ...this.defaults, ...others }

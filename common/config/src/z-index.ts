@@ -6,7 +6,6 @@ import type { App, ComputedRef, MaybeRef } from 'vue'
 
 export const PROVIDED_Z_INDEX = '___vxp-provided-z-index'
 
-let counter = 0
 let initZIndex = 2000
 
 if (isClient) {
@@ -16,6 +15,10 @@ if (isClient) {
   if (!Number.isNaN(cssZIndex)) {
     initZIndex = cssZIndex
   }
+}
+
+const counter = {
+  current: 0,
 }
 
 export const globalZIndex = computed(() => initZIndex)
@@ -60,5 +63,5 @@ export function useZIndex() {
     : globalZIndex
 
   // return computed(() => zIndex.value + counter++)
-  return () => zIndex.value + counter++
+  return () => zIndex.value + counter.current++
 }

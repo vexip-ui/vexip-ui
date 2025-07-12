@@ -1,3 +1,12 @@
+## [1.4.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.4.0...scripts@1.4.1) (2025-06-13)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** should support update version via type release ([cdca2a2](https://github.com/vexip-ui/vexip-ui/commit/cdca2a28ff452ada1383144296971766dd9dd1b4))
+
+
+
 # [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.3.1...scripts@1.4.0) (2025-05-14)
 
 

@@ -76,6 +76,7 @@ export default defineComponent({
       debounce: false,
       delay: null,
       maxLength: 0,
+      hideCount: false,
       before: '',
       after: '',
       plainPassword: false,
@@ -246,6 +247,10 @@ export default defineComponent({
       },
     })
 
+    function getLatestValue() {
+      return typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+    }
+
     function handleFocus(event: FocusEvent) {
       if (!focused.value) {
         focused.value = true
@@ -260,7 +265,7 @@ export default defineComponent({
         setTimeout(() => {
           if (!focused.value) {
             emitEvent(props.onBlur, event)
-            emitChangeEvent('change')
+            lastValue !== getLatestValue() && emitChangeEvent('change')
           }
         }, 120)
       }
@@ -291,12 +296,9 @@ export default defineComponent({
     function emitChangeEvent(type: InputEventType, sync = props.sync) {
       type = type === 'input' ? 'input' : 'change'
 
-      const value =
-        typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+      const value = getLatestValue()
 
       if (type === 'change') {
-        if (lastValue === value) return
-
         lastValue = value
 
         if (!sync) {
@@ -359,7 +361,7 @@ export default defineComponent({
       event.stopPropagation()
       setValue('', 'change', false)
       emitEvent(props.onClear)
-      nextTick(clearField)
+      nextTick(() => clearField(''))
       currentLength.value = 0
       inputControl.value?.focus()
     }
@@ -406,7 +408,7 @@ export default defineComponent({
         }
       }
 
-      emitEvent(props.onCompositionStart, event)
+      emitEvent(props.onCompositionEnd, event)
     }
 
     function copyValue() {
@@ -595,7 +597,7 @@ export default defineComponent({
             onCompositionend={handleCompositionEnd}
           />
           {renderSuffix()}
-          {props.maxLength > 0 ? renderCount() : null}
+          {props.maxLength > 0 && !props.hideCount ? renderCount() : null}
           {renderPlainPassword()}
         </div>
       )

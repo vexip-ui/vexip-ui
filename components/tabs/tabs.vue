@@ -3,7 +3,7 @@ import { Renderer } from '@/components/renderer'
 import { TabNav } from '@/components/tab-nav'
 import { TabNavItem } from '@/components/tab-nav-item'
 
-import { computed, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, onMounted, provide, reactive, ref, toRef, watch } from 'vue'
 
 import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { debounceMinor, isFunction, isNull } from '@vexip-ui/utils'
@@ -27,6 +27,8 @@ const props = useProps('tabs', _props, {
   placement: 'top',
   closable: false,
   showAdd: false,
+  lazy: false,
+  lazyLoad: false,
   slots: () => ({}),
 })
 
@@ -66,6 +68,8 @@ provide(
   TABS_STATE,
   reactive({
     currentActive,
+    lazy: toRef(props, 'lazy'),
+    lazyLoad: toRef(props, 'lazyLoad'),
     handleActive,
     increaseItem,
     decreaseItem,

@@ -84,8 +84,9 @@ $pagination: map.merge(
     border: value('pagination-border');
     border-radius: value('pagination-radius');
     outline: 0;
-    transition: value('transition-color'), value('transition-background'),
-      value('transition-border'), value('transition-shadow');
+    transition:
+      value('transition-color'), value('transition-background'), value('transition-border'),
+      value('transition-shadow');
 
     &:last-of-type {
       margin-inline-start: 0;

@@ -178,6 +178,12 @@ const attrs = computed(() => {
 const formatter = computed(() => {
   return isFunction(props.column.formatter) ? props.column.formatter : noopFormatter
 })
+const isTreeColumn = computed(() => {
+  return (
+    getters.usingTree &&
+    (getters.indentedColumn ? props.column.key === getters.indentedColumn.key : props.column.first)
+  )
+})
 
 watchEffect(() => {
   if (isTypeColumn(props.column)) return
@@ -362,12 +368,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
     </div>
     <ResizeObserver v-else :on-resize="handleCellResize">
       <span :class="nh.be('content')">
-        <template
-          v-if="
-            getters.usingTree &&
-              (getters.indentedColumn ? column.key === getters.indentedColumn.key : column.first)
-          "
-        >
+        <div v-if="isTreeColumn" :class="nh.be('tree-append')">
           <span
             :class="nh.be('pad')"
             :style="{
@@ -385,7 +386,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             <TableIcon v-if="row.treeExpanded" name="minus" :origin="icons.minusSquare"></TableIcon>
             <TableIcon v-else name="plus" :origin="icons.plusSquare"></TableIcon>
           </button>
-        </template>
+        </div>
         <Ellipsis
           v-if="column.ellipsis ?? state.ellipsis"
           inherit

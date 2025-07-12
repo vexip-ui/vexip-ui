@@ -131,7 +131,7 @@ export function segmentNumber(number: number | string, segment = 3, separator = 
  * @returns 保留小数后的值
  */
 export function toFixed(number: number, decimal: number) {
-  if (decimal === 0) return Math.round(number)
+  decimal = Math.max(Math.round(decimal), 0)
 
   let snum = number.toFixed(decimalLength(number))
 
@@ -232,22 +232,26 @@ export function leaveNumber(number: number, divideBy: number, limit = 0) {
   return remainders.reverse()
 }
 
+const ordinalSuffixes = ['th', 'st', 'nd', 'rd']
+
 /**
  * 将给定的数字转换为序数词
  *
- * @param number 需要转换的数字
+ * @param value 需要转换的数字
  *
  * @returns 转换后的序数词
  */
-export function ordinalNumber(number: number) {
-  if (number < 0) {
-    return `${number}th`
-  }
+export function ordinalNumber(value: number) {
+  value = Math.round(value)
 
-  const suffixes = ['th', 'st', 'nd', 'rd']
-  const rest = number % 100
+  if (value <= 0) return `${value}th`
 
-  return `${number}${suffixes[rest] || suffixes[number % 10] || suffixes[0]}`
+  const suffix =
+    value % 100 > 10 && value % 100 < 14
+      ? ordinalSuffixes[0]
+      : ordinalSuffixes[value % 10] || ordinalSuffixes[0]
+
+  return `${value}${suffix}`
 }
 
 export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>

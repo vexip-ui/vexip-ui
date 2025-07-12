@@ -71,6 +71,9 @@ function defaultIndexLabel(index: number) {
   return index + 1
 }
 
+const COLUMN_DEFAULT_WIDTH = 100
+const COLUMN_DEFAULT_MIN_WIDTH = 100
+
 export function useStore(options: StoreOptions) {
   const state = reactive({
     ...options,
@@ -587,7 +590,10 @@ export function useStore(options: StoreOptions) {
               column.orderLabel = defaultIndexLabel
             }
 
-            if (isNull(column.width)) column.width = 60
+            if (isNull(column.width)) {
+              column.width = 60
+              column.minWidth = 60
+            }
 
             break
           }
@@ -598,7 +604,10 @@ export function useStore(options: StoreOptions) {
               column.disableRow = toFalse
             }
 
-            if (isNull(column.width)) column.width = 40
+            if (isNull(column.width)) {
+              column.width = 40
+              column.minWidth = 40
+            }
 
             break
           }
@@ -607,7 +616,10 @@ export function useStore(options: StoreOptions) {
               column.disableRow = toFalse
             }
 
-            if (isNull(column.width)) column.width = 40
+            if (isNull(column.width)) {
+              column.width = 40
+              column.minWidth = 40
+            }
 
             break
           }
@@ -616,7 +628,10 @@ export function useStore(options: StoreOptions) {
               column.disableRow = toFalse
             }
 
-            if (isNull(column.width)) column.width = 40
+            if (isNull(column.width)) {
+              column.width = 40
+              column.minWidth = 40
+            }
 
             break
           }
@@ -630,7 +645,18 @@ export function useStore(options: StoreOptions) {
       }
 
       // 独立属性解析时注意隔断同对象引用
-      widths.set(column.key, column.width || 100)
+      widths.set(
+        column.key,
+        typeof column.width === 'string'
+          ? COLUMN_DEFAULT_MIN_WIDTH
+          : Math.round(
+            boundRange(
+              column.width || COLUMN_DEFAULT_WIDTH,
+              column.minWidth || COLUMN_DEFAULT_MIN_WIDTH,
+              column.maxWidth || Infinity,
+            ),
+          ),
+      )
       sorters.set(column.key, parseSorter(column.sorter))
       filters.set(column.key, parseFilter(column.filter))
 
@@ -979,43 +1005,67 @@ export function useStore(options: StoreOptions) {
   }
 
   function setTableWidth(width: number) {
-    if (state.resized.size) return
-
     width = toNumber(width)
 
-    const { columns, widths, resized, sidePadding } = state
+    const { columns, widths, resized } = state
 
-    const hasWidthColumns = []
-    const flexColumns = []
+    const hasWidthColumns: ColumnWithKey[] = []
+    const flexColumns: ColumnWithKey[] = []
 
-    let flexWidth = width - (sidePadding[0] || 0) - (sidePadding[1] || 0)
+    let flexWidth = width
 
     for (let i = 0, len = columns.length; i < len; ++i) {
       const column = columns[i]
+      const { minWidth, maxWidth } = column
 
-      if (column.width || resized.has(column.key)) {
-        flexWidth -= column.width ?? widths.get(column.key)!
+      if (resized.has(column.key)) {
+        flexWidth -= widths.get(column.key)!
         hasWidthColumns.push(column)
+      } else if (column.width) {
+        if (typeof column.width === 'string') {
+          const percent = boundRange(toNumber(column.width), 0, 100)
+
+          if (percent) {
+            const fixedWidth = Math.round(
+              boundRange(
+                (width * percent) / 100,
+                minWidth || COLUMN_DEFAULT_MIN_WIDTH,
+                maxWidth || Infinity,
+              ),
+            )
+
+            flexWidth -= fixedWidth
+            widths.set(column.key, fixedWidth)
+            hasWidthColumns.push(column)
+          } else {
+            flexColumns.push(column)
+          }
+        } else {
+          const width = Math.round(
+            boundRange(
+              column.width || COLUMN_DEFAULT_WIDTH,
+              minWidth || COLUMN_DEFAULT_MIN_WIDTH,
+              maxWidth || Infinity,
+            ),
+          )
+
+          flexWidth -= width
+          widths.set(column.key, width)
+          hasWidthColumns.push(column)
+        }
       } else {
         flexColumns.push(column)
       }
     }
 
     const flexColumnCount = flexColumns.length
-
-    let flexUnitWidth = 100
-
-    // 剩余空间有多时, 均分到弹性列
-    // if (flexColumnCount && flexWidth > flexColumnCount * flexUnitWidth) {
-    if (flexColumnCount) {
-      flexUnitWidth = Math.max(flexWidth / flexColumnCount, 100)
-    }
+    const flexWidths = distributeWidths(flexColumns, flexWidth)
 
     let usedWidth = 0
 
     for (let i = 0; i < flexColumnCount; ++i) {
       const column = flexColumns[i]
-      const width = Math[i % 2 ? 'ceil' : 'floor'](flexUnitWidth)
+      const width = Math[i % 2 ? 'ceil' : 'floor'](flexWidths[i])
 
       if (i < flexColumnCount - 1) {
         usedWidth += width
@@ -1024,11 +1074,68 @@ export function useStore(options: StoreOptions) {
       widths.set(column.key, width)
     }
 
-    if (flexColumnCount && flexWidth >= flexColumnCount * flexUnitWidth) {
+    if (flexColumnCount && flexWidth >= usedWidth + getLast(flexWidths)!) {
       widths.set(getLast(flexColumns)!.key, flexWidth - usedWidth)
     }
 
     state.width = width
+  }
+
+  function distributeWidths(columns: ColumnWithKey[], totalWidth: number): number[] {
+    const count = columns.length
+    const baseWidth = Math.max(totalWidth / count, COLUMN_DEFAULT_WIDTH)
+
+    const widths = columns.map(col => {
+      let w = baseWidth
+      if (col.minWidth != null) w = Math.max(w, col.minWidth)
+      if (col.maxWidth != null) w = Math.min(w, col.maxWidth)
+      return w
+    })
+
+    const currentTotal = widths.reduce((a, b) => a + b, 0)
+    let delta = totalWidth - currentTotal
+
+    const canGrow = (i: number) => columns[i].maxWidth == null || widths[i] < columns[i].maxWidth!
+    const canShrink = (i: number) => columns[i].minWidth == null || widths[i] > columns[i].minWidth!
+
+    const epsilon = 0.1
+    let adjusted = false
+
+    while (Math.abs(delta) > epsilon) {
+      const adjustableIndices = widths
+        .map((_, i) => {
+          if (delta > 0 && canGrow(i)) return i
+          if (delta < 0 && canShrink(i)) return i
+          return -1
+        })
+        .filter(i => i !== -1)
+
+      if (adjustableIndices.length === 0) {
+        adjusted = false
+        break
+      }
+
+      const adjustment = delta / adjustableIndices.length
+      for (const i of adjustableIndices) {
+        const old = widths[i]
+        let next = old + adjustment
+
+        if (columns[i].minWidth != undefined) next = Math.max(next, columns[i].minWidth!)
+        if (columns[i].maxWidth != undefined) next = Math.min(next, columns[i].maxWidth!)
+
+        delta -= next - old
+        widths[i] = next
+      }
+
+      adjusted = true
+    }
+
+    // delta > 0 且无法再调整时，强行补给最后一列
+    if (!adjusted && delta > epsilon) {
+      widths[count - 1] += delta
+    }
+
+    return widths
   }
 
   function setRowHeight(height: number) {
@@ -1622,7 +1729,7 @@ export function useStore(options: StoreOptions) {
   let lastColumnWidth: number | undefined
 
   function handleColumnResize(keys: Key[], newWidth: number) {
-    const { resized, widths, columns, width: tableWidth } = state
+    const { resized, widths, columns, columnMap, width: tableWidth } = state
     const length = keys.length
 
     if (!columns.length || !length) return
@@ -1632,12 +1739,16 @@ export function useStore(options: StoreOptions) {
 
     for (let i = 0; i < length; ++i) {
       const key = keys[i]
+      const column = columnMap.get(key) as ColumnWithKey
+
+      if (!column) continue
+
+      const width =
+        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth)
+      const { minWidth, maxWidth } = column
 
       resized.add(key)
-      widths.set(
-        key,
-        length === 1 ? Math.round(deltaWidth) : Math[i % 2 ? 'ceil' : 'floor'](deltaWidth),
-      )
+      widths.set(key, boundRange(width, minWidth || COLUMN_DEFAULT_MIN_WIDTH, maxWidth || Infinity))
     }
 
     let totalWidth = 0

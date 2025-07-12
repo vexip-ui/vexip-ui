@@ -126,7 +126,7 @@ const mountedPromise = new Promise<void>(resolve => {
   })
 })
 
-defineExpose({ state, openConfirm, handleReset })
+defineExpose({ state, openConfirm, closeConfirm: handleCancel, handleReset })
 
 async function openConfirm(options: ConfirmOptions) {
   await mountedPromise
@@ -239,7 +239,10 @@ function handleReset() {
       <template v-else>
         <div v-if="state.title" :class="nh.be('header')">
           <div :class="nh.be('title')">
-            {{ state.title }}
+            <Renderer v-if="typeof state.title === 'function'" :renderer="state.title"></Renderer>
+            <template v-else>
+              {{ state.title }}
+            </template>
           </div>
           <button
             v-if="state.closable"
@@ -280,10 +283,13 @@ function handleReset() {
               :icon="(state.cancelable ? icons.question : icons.warning).icon"
             ></Icon>
           </div>
-          <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
-          <div v-else :class="nh.be('content')">
-            {{ state.content }}
-          </div>
+          <Renderer v-if="typeof state.content === 'function'" :renderer="state.content"></Renderer>
+          <template v-else>
+            <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
+            <div v-else :class="nh.be('content')">
+              {{ state.content }}
+            </div>
+          </template>
         </div>
         <div :class="[nh.be('footer'), nh.bem('footer', state.actionsAlign)]">
           <Button

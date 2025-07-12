@@ -3,22 +3,34 @@ import { Column } from '@/components/column'
 import { Icon } from '@/components/icon'
 import { Tooltip } from '@/components/tooltip'
 
-import { computed, inject, onBeforeUnmount, onMounted, provide, ref, toRef, watch } from 'vue'
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  shallowReadonly,
+  toRef,
+  watch,
+} from 'vue'
 
 import {
   makeSentence,
   useIcons,
+  useId,
   useLocale,
   useNameHelper,
   useProps,
   useWordSpace,
 } from '@vexip-ui/config'
 import { useDisplay } from '@vexip-ui/hooks'
-import { createEventEmitter, getGlobalCount, isFunction, isNull, isObject } from '@vexip-ui/utils'
+import { createEventEmitter, isFunction, isNull, isObject } from '@vexip-ui/utils'
 import { formItemProps } from './props'
 import { validate as asyncValidate } from './validator'
 import { getValueByPath, setValueByPath } from './helper'
-import { FIELD_OPTIONS, FORM_ACTIONS, FORM_FIELDS, FORM_PROPS } from './symbol'
+import { FIELD_OPTIONS, FORM_ACTIONS, FORM_FIELDS, FORM_PROPS, type FormItemSlots } from './symbol'
 
 import type { ComponentState } from '@vexip-ui/config'
 import type { Rule } from './validator'
@@ -60,6 +72,7 @@ const props = useProps('formItem', _props, {
   action: false,
   help: '',
   pure: false,
+  manual: false,
   span: 24,
   offset: null,
   push: null,
@@ -74,12 +87,7 @@ const props = useProps('formItem', _props, {
   flex: null,
 })
 
-const slots = defineSlots<{
-  default?: () => any,
-  help?: () => any,
-  label?: () => any,
-  error?: (params: { tip: string }) => any
-}>()
+const slots = defineSlots<FormItemSlots>()
 
 const formProps = inject(FORM_PROPS, {})
 const formActions = inject(FORM_ACTIONS, null)
@@ -90,8 +98,6 @@ const locale = useLocale('form', toRef(props, 'locale'))
 const icons = useIcons()
 const wordSpace = useWordSpace()
 
-const idIndex = `${getGlobalCount()}`
-
 const initValue = ref(props.defaultValue)
 const isError = ref(false)
 const errorTip = ref('')
@@ -99,13 +105,19 @@ const validating = ref(false)
 const disabledValidate = ref(false)
 const labelWidth = ref(0)
 
+const defaultSlotParams = shallowReadonly(
+  reactive({
+    isError,
+  }),
+)
+
 const placeholder = useDisplay(() => {
   if (placeholder.value) {
     labelWidth.value = placeholder.value.offsetWidth
   }
 })
 
-const labelId = computed(() => nh.bs(`${idIndex}__label`))
+const labelId = useId()
 const isRequired = computed(() => formProps.allRequired || props.required)
 const requiredTip = computed(() => {
   return makeSentence(`${props.label || props.prop} ${locale.value.notNullable}`, wordSpace.value)
@@ -222,7 +234,7 @@ const fieldObject = Object.freeze({
   },
 })
 
-provide(FIELD_OPTIONS, fieldObject)
+provide(FIELD_OPTIONS, props.manual ? null : fieldObject)
 
 watch(
   () => props.defaultValue,
@@ -361,7 +373,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
 </script>
 
 <template>
-  <slot v-if="props.pure"></slot>
+  <slot v-if="props.pure" v-bind="defaultSlotParams"></slot>
   <Column
     v-else
     v-bind="$attrs"
@@ -433,7 +445,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       aria-relevant="all"
       :style="controlStyle"
     >
-      <slot></slot>
+      <slot v-bind="defaultSlotParams"></slot>
       <Transition :name="props.errorTransition">
         <div v-if="!props.hideErrorTip && isError" :class="nh.be('error-tip')">
           <slot name="error" :tip="errorTip">

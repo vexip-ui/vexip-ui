@@ -4,7 +4,7 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import type { RouteLocationRaw, Router } from 'vue-router'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { IconMinorProps } from '@/components/icon'
-import type { MenuGroupType, MenuMarkerType, MenuOptions } from './symbol'
+import type { MenuGroupType, MenuItemSlots, MenuMarkerType, MenuOptions, MenuSlots } from './symbol'
 
 export const menuProps = buildProps({
   active: String,
@@ -20,6 +20,8 @@ export const menuProps = buildProps({
   router: Object as PropType<Router>,
   manualRoute: booleanProp,
   indent: [String, Number],
+  arrow: iconProp,
+  slots: Object as PropType<MenuSlots>,
   onSelect: eventProp<(label: string, meta: any) => void>(),
   onExpand: eventProp<(label: string, meta: any) => void>(),
   onReduce: eventProp<(label: string, meta: any) => void>(),
@@ -39,6 +41,8 @@ export const menuItemProps = buildProps({
   meta: Object,
   children: Array as PropType<MenuOptions[]>,
   route: [String, Object] as PropType<RouteLocationRaw>,
+  arrow: iconProp,
+  slots: Object as PropType<MenuItemSlots>,
   onSelect: eventProp(),
 })
 

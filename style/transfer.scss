@@ -71,8 +71,8 @@ $transfer: map.merge(
     border: value('border-shape') value('transfer-panel-b-color');
     border-radius: $radius;
     outline: 0;
-    transition: value('transition-background'), value('transition-border'),
-      value('transition-shadow');
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow');
 
     &:hover {
       border-color: value('transfer-panel-b-color-hover');

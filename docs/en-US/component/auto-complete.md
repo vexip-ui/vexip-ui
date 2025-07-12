@@ -149,6 +149,7 @@ interface AutoCompleteListSlotParams {
 | show-empty     | `boolean`                                        | Whether show option list when empty                                                                                        | `false`     | `2.2.0`  |
 | name           | `string`                                         | set `name` attribute of internal `<input>`                                                                                 | `''`        | `2.2.2`  |
 | popper-alive   | `boolean`                                        | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                 | `null`      | `2.2.3`  |
+| shift          | `boolean`                                        | Whether to limit tip inside the visible area                                                                               | `true`      | `2.3.29` |
 
 ### AutoComplete Events
 

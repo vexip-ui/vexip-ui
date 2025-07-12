@@ -1289,7 +1289,10 @@ function renderTableSlot({ name }: { name: string }) {
       :fade="props.barFade"
       :disabled="!yScrollEnabled"
       :bar-length="yBarLength"
-      :style="{ top: `${headHeight}px`, bottom: `${footHeight}px` }"
+      :style="{
+        top: headHeight ? `${headHeight}px` : undefined,
+        bottom: footHeight ? `${footHeight}px` : undefined
+      }"
       @scroll-start="setBarScrolling(true)"
       @scroll="handleYBarScroll"
       @scroll-end="setBarScrolling(false)"

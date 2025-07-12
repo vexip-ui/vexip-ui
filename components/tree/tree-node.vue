@@ -189,6 +189,10 @@ function handleClick() {
   }
 }
 
+function handleContextmenu(event: MouseEvent) {
+  treeState.handleNodeContextmenu(event, props.node)
+}
+
 function handleToggleCheck(able = !props.node.checked) {
   if (isDisabled.value || props.node.checkDisabled) return
 
@@ -338,6 +342,7 @@ function handleDragEnd(event: DragEvent) {
     :aria-grabbed="treeState.draggable && dragging ? 'true' : undefined"
     :style="{ [nh.cv('depth')]: node.depth }"
     @click.left="handleClick"
+    @contextmenu="handleContextmenu"
     @focus="focused = true"
     @blur="focused = false"
     @dragstart.stop="handleDragStart"

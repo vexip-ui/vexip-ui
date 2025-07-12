@@ -66,6 +66,10 @@ export class ConfirmManager {
     return this._getInstance()?.openConfirm(item)
   }
 
+  close() {
+    this._getInstance()?.closeConfirm()
+  }
+
   config(options: Record<string, unknown>) {
     this.defaults = { ...this.defaults, ...options }
   }

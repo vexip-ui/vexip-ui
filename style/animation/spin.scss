@@ -1,5 +1,5 @@
-@use '../design/variables.scss' as *;
-@use '../shared/variables.scss' as *;
+@use '../design/variables' as *;
+@use '../shared/variables' as *;
 
 $-name: '#{$namespace}-spin';
 

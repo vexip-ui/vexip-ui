@@ -228,12 +228,13 @@ type UploadFetchMethod = (options: UploadFetchOptions) => () => void
 
 ### Upload Slots
 
-| Name    | Description                                                                                                             | Parameters                                                                | Since |
-| ------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | ----- |
-| default | Select the control slot of the file, `isDragOver` is used to mark whether there is content to be dragged on the control | `{ isDragOver: boolean }`                                                 | -     |
-| tip     | Tip content slot, if the default slot is used, the slot will be invalid                                                 | -                                                                         | -     |
-| item    | Content slot for file info in file list                                                                                 | `{ file: UploadFileState, status: UploadStatusType, percentage: number }` | -     |
-| icon    | Slot for file icon                                                                                                      | `{ file: UploadFileState }`                                               | -     |
+| Name    | Description                                                                                                             | Parameters                                                                | Since    |
+| ------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------- |
+| default | Select the control slot of the file, `isDragOver` is used to mark whether there is content to be dragged on the control | `{ isDragOver: boolean }`                                                 | -        |
+| tip     | Slot for the tip content, if the default slot is used, the slot will be invalid                                         | -                                                                         | -        |
+| item    | Content slot for file info in file list                                                                                 | `{ file: UploadFileState, status: UploadStatusType, percentage: number }` | -        |
+| icon    | Slot for the icon of each file in list                                                                                  | `{ file: UploadFileState }`                                               | -        |
+| cloud   | Slot for the cloud icon, if the default slot is used, the slot will be invalid                                          | -                                                                         | `2.3.33` |
 
 ### UploadList Props
 

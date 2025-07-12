@@ -13,15 +13,16 @@ import {
   watch,
 } from 'vue'
 
-import { emitEvent, useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
+import { emitEvent, useHoverDelay, useId, useNameHelper, useProps } from '@vexip-ui/config'
 import {
+  flatVNodes,
   placementWhileList,
   useClickOutside,
   useListener,
   usePopper,
   useSetTimeout,
 } from '@vexip-ui/hooks'
-import { getGlobalCount, isElement } from '@vexip-ui/utils'
+import { isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
 
 import type { PopperExposed } from '@/components/popper'
@@ -66,8 +67,7 @@ export default defineComponent({
       shift: false,
     })
 
-    const idIndex = `${getGlobalCount()}`
-    const tooltipId = computed(() => nh.bs(idIndex))
+    const tooltipId = useId()
 
     const hoverDelay = useHoverDelay()
     const { timer } = useSetTimeout()
@@ -310,7 +310,7 @@ export default defineComponent({
       const renderTrigger = () => {
         if (!triggerVNode) return null
 
-        if (triggerVNode.type === TEXT_VNODE) {
+        if (triggerVNode.type === TEXT_VNODE || triggerVNode.type === Fragment) {
           return Wrapper ? <span>{triggerVNode}</span> : <span {...attrs}>{triggerVNode}</span>
         }
 

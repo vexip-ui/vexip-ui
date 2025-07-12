@@ -63,6 +63,7 @@ export const formItemProps = buildProps({
   action: booleanProp,
   help: String,
   pure: booleanProp,
+  manual: booleanProp,
   span: Number,
   offset: Number,
   push: Number,

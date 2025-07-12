@@ -2,7 +2,7 @@
 
 @use './shared' as *;
 @use './design' as *;
-@use './input.scss' as input;
+@use './input' as input;
 
 $select: () !default;
 $select: map.merge(
@@ -67,7 +67,6 @@ $select: map.merge(
   &--multiple &__control {
     flex-wrap: wrap;
     min-height: 0;
-    margin: -1px 0;
   }
 
   &--responsive &__control {
@@ -79,6 +78,7 @@ $select: map.merge(
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
+    margin: -1px 0;
   }
 
   &__tag {
@@ -88,15 +88,6 @@ $select: map.merge(
     margin-inline-start: 0;
     pointer-events: auto;
     cursor: pointer;
-
-    // &--preview {
-    //   pointer-events: none;
-    //   opacity: 50%;
-    // }
-
-    // &--deleted {
-    //   text-decoration: line-through;
-    // }
   }
 
   &--disabled &__tag {

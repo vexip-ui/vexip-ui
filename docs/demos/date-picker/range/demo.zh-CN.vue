@@ -27,7 +27,7 @@
     range
     type="datetime"
     clearable
-    style="max-width: 380px"
+    style="max-width: 342px"
   ></DatePicker>
   <p>当前日期时间范围: {{ datetimeRange }}</p>
 </template>

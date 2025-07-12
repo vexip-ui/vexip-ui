@@ -34,6 +34,7 @@
 
   $header: #{&}__header;
   $main: #{&}__main;
+  $panel: #{&}__panel;
 
   &--top {
     #{$main} {
@@ -75,6 +76,15 @@
       position: relative;
       z-index: 1;
       opacity: 100%;
+    }
+
+    &--lazy {
+      display: none;
+      opacity: 100%;
+
+      &#{$panel}--active {
+        display: block;
+      }
     }
   }
 }

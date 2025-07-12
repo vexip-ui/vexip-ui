@@ -70,6 +70,13 @@
 
 ## API
 
+### Confirm 方法
+
+组件实例主要提供了一个打开和一个关闭确认框的方法：
+
+- `Confirm.open(content[[, title], type] | options)`
+- `Confirm.close()`
+
 某些场景下，需要在全屏元素上显示确认框，此时可以将组件的渲染位置迁移：
 
 ```ts
@@ -88,8 +95,8 @@ type ConfirmAlign = 'left' | 'center' | 'right'
 interface ConfirmState {
   visible: boolean,
   loading: boolean,
-  title: string,
-  content: string,
+  title: string | (() => any),
+  content: string | (() => any),
   icon: Record<string, any> | (() => any) | null | boolean,
   iconProps: IconMinorProps,
   className: string | Record<string, any>,
@@ -127,8 +134,8 @@ interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading
 
 | 名称            | 类型                                            | 说明                                                                          | 默认值           | 始于     |
 | --------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- | ---------------- | -------- |
-| title           | `string`                                        | 确认框的标题                                                                  | `''`             | `2.0.15` |
-| content         | `string`                                        | 确认框的提示内容                                                              | `''`             | -        |
+| title           | `string \| (() => any)`                         | 确认框的标题，支持指定渲染函数                                                | `''`             | `2.0.15` |
+| content         | `string \| (() => any)`                         | 确认框的提示内容，支持指定渲染函数                                            | `''`             | -        |
 | className       | `ClassType`                                     | 提示的自定义类名                                                              | `null`           | -        |
 | style           | `StyleType`                                     | 确认框的内联样式                                                              | `null`           | -        |
 | confirmType     | `ConfirmButtonType`                             | 确认按钮的类型                                                                | `'primary'`      | -        |
@@ -139,7 +146,7 @@ interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading
 | icon            | `boolean \| Record<string, any> \| (() => any)` | 确认框的图标，传入函数时作为 render 函数渲染                                  | `null`           | -        |
 | iconProps       | `IconProps`                                     | 确认框的图标的颜色                                                            | `''`             | -        |
 | onBeforeConfirm | `() =>  unknown`                                | 设置确认框的确认前回调，支持异步函数和 `Promise`，返回值为 `false` 会阻止关闭 | `null`           | -        |
-| renderer        | `ConfirmRenderFn`                               | 使用 render 函数渲染自定义渲染                                                | `null`           | -        |
+| renderer        | `ConfirmRenderFn`                               | 使用 render 函数渲染自定义渲染内容                                            | `null`           | -        |
 | parseHtml       | `boolean`                                       | 是否将 `content` 作为 html 解析                                               | `false`          | `2.0.14` |
 | closable        | `boolean`                                       | 是否具有关闭按钮                                                              | `false`          | `2.0.15` |
 | contentAlign    | `ConfirmAlign`                                  | 内容的对齐                                                                    | `'center'`       | `2.0.15` |

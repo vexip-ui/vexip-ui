@@ -2,7 +2,7 @@
 
 @use './shared' as *;
 @use './design' as *;
-@use './input.scss' as input;
+@use './input' as input;
 
 $date-picker: () !default;
 $date-picker: map.merge(
@@ -15,7 +15,7 @@ $date-picker: map.merge(
     unit-color-disabled: value('input-control-color-disabled'),
     unit-bg-color-focus: value('color-primary-opacity-1'),
     unit-bg-color-error: value('color-error-opacity-1'),
-    unit-h-padding: 1px,
+    unit-h-padding: 0px,
     separator-color: value('content-color-disabled'),
     exchange-color: value('content-color-third'),
     panel-bg-color: value('bg-color-base'),

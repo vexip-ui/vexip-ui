@@ -1,3 +1,16 @@
+## [1.11.1](https://github.com/vexip-ui/vexip-ui/compare/config@1.11.0...config@1.11.1) (2025-06-23)
+
+
+### ✨ Features
+
+* **menu:** support customize arrow icon ([c26618d](https://github.com/vexip-ui/vexip-ui/commit/c26618db200d734c6ca27c0132c947b6ecb8afd5))
+
+
+
+# [1.11.0](https://github.com/vexip-ui/vexip-ui/compare/config@1.10.0...config@1.11.0) (2025-05-27)
+
+
+
 ## 1.10.0 (2025-01-14)
 
 * build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))

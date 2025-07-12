@@ -3,7 +3,7 @@ import { computed, getCurrentInstance, inject, onBeforeUnmount, provide } from '
 import { isNull, noop, toFalse } from '@vexip-ui/utils'
 import { FIELD_OPTIONS } from './symbol'
 
-import type { ComputedRef } from 'vue'
+import type { Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 
 /**
@@ -120,12 +120,12 @@ export function setValueByPath(
 
 export interface FormFieldStore<V = unknown> {
   isField: boolean,
-  idFor: ComputedRef<string | undefined>,
-  labelId: ComputedRef<string | undefined>,
-  state: ComputedRef<ComponentState>,
-  disabled: ComputedRef<boolean>,
-  loading: ComputedRef<boolean>,
-  size: ComputedRef<ComponentSize>,
+  idFor: Ref<string | undefined>,
+  labelId: Ref<string | undefined>,
+  state: Ref<ComponentState>,
+  disabled: Ref<boolean>,
+  loading: Ref<boolean>,
+  size: Ref<ComponentSize>,
   validateField: () => Promise<string[] | null>,
   clearField: (defaultValue?: V) => void,
   resetField: () => boolean,
@@ -173,7 +173,7 @@ export function useFieldStore<V = unknown>(onFocus?: () => void): FormFieldStore
 
   // Block the provided if there are dependencies between control components.
   // e.g. AutoComplete -> Select, ColorPicker -> Input
-  provide(FIELD_OPTIONS, null!)
+  provide(FIELD_OPTIONS, null)
   fieldOptions.sync(instance)
   onFocus && fieldOptions.emitter.on('focus', onFocus)
 
