@@ -329,6 +329,10 @@ $date-picker: map.merge(
           line-height: 1;
         }
       }
+
+      &__panel--select-row .#{$namespace}-calendar__index {
+        width: 32px;
+      }
     }
   }
 

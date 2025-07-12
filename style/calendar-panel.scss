@@ -147,6 +147,10 @@ $calendar-panel: map.merge(
   }
 
   &__panel--select-row &__index {
+    &::before {
+      inset-inline: 0;
+    }
+
     &,
     &-inner {
       border-radius: 0;
