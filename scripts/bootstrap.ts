@@ -167,9 +167,8 @@ async function main() {
   })
 
   const componentsStyle =
-    (await topologicalStyle()).map(component => `@use './${component}.scss';`).join('\n') + '\n'
-  const styleIndex =
-    "@forward './design/variables.scss';\n\n@use './preset.scss';\n\n" + componentsStyle
+    (await topologicalStyle()).map(component => `@use './${component}';`).join('\n') + '\n'
+  const styleIndex = "@forward './design/variables';\n\n@use './preset';\n\n" + componentsStyle
 
   await writeFile(
     resolve(rootDir, 'style/components.scss'),
