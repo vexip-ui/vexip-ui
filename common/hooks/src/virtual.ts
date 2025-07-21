@@ -133,12 +133,26 @@ export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {
     }
   })
 
+  watch(
+    () => unref(wrapper),
+    el => {
+      if (el && isDefined(defaultKeyAt)) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollToKey(defaultKeyAt)
+          })
+        })
+      }
+    },
+    { immediate: true, flush: 'post' },
+  )
+
   if (autoResize) {
     let unobserve = noop
 
     const stopWatch = watch(
-      () => unref(wrapper),
-      el => {
+      () => [unref(wrapper), autoResize] as const,
+      ([el]) => {
         unobserve()
 
         if (!el) return

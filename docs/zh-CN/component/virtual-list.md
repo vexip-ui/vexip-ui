@@ -20,6 +20,14 @@
 
 :::
 
+:::demo virtual-list/default-key-at
+
+### 默认定位
+
+通过 `default-key-at` 属性可以指定初始滚动到的元素。
+
+:::
+
 ## API
 
 ### VirtualList 属性
