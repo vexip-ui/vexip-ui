@@ -47,8 +47,8 @@ function createLink(item: false | string | AsideMenuItem, fallback?: AsideMenuIt
   return item === false
     ? undefined
     : {
-        text: (typeof item === 'object' ? item.text : undefined) ?? fallback?.text,
-        i18n:
+      text: (typeof item === 'object' ? item.text : undefined) ?? fallback?.text,
+      i18n:
           (typeof item === 'string'
             ? item
             : typeof item === 'object'
@@ -56,11 +56,11 @@ function createLink(item: false | string | AsideMenuItem, fallback?: AsideMenuIt
               : undefined) ??
           fallback?.i18n ??
           fallback?.key,
-        link: (typeof item === 'object' ? item.link : undefined) ?? fallback?.link,
-        subtext: (typeof item === 'object' ? item.subtext : undefined) ?? fallback?.subtext,
-        subI18n: (typeof item === 'object' ? item.subI18n : undefined) ?? fallback?.subI18n,
-        noSub: (typeof item === 'object' ? item.noSub : undefined) ?? fallback?.noSub ?? [],
-      }
+      link: (typeof item === 'object' ? item.link : undefined) ?? fallback?.link,
+      subtext: (typeof item === 'object' ? item.subtext : undefined) ?? fallback?.subtext,
+      subI18n: (typeof item === 'object' ? item.subI18n : undefined) ?? fallback?.subI18n,
+      noSub: (typeof item === 'object' ? item.noSub : undefined) ?? fallback?.noSub ?? [],
+    }
 }
 </script>
 

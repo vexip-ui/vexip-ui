@@ -15,7 +15,6 @@ import {
 
 import { emitEvent, useHoverDelay, useId, useNameHelper, useProps } from '@vexip-ui/config'
 import {
-  flatVNodes,
   placementWhileList,
   useClickOutside,
   useListener,

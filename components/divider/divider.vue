@@ -45,13 +45,13 @@ const style = computed(() => {
 
   return props.vertical
     ? {
-        marginRight: margin.value,
-        marginLeft: margin.value,
-      }
+      marginRight: margin.value,
+      marginLeft: margin.value,
+    }
     : {
-        marginTop: margin.value,
-        marginBottom: margin.value,
-      }
+      marginTop: margin.value,
+      marginBottom: margin.value,
+    }
 })
 </script>
 

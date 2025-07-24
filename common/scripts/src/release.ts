@@ -237,12 +237,12 @@ export async function selectNextVersion(
   const version =
     release === 'custom'
       ? (
-          await prompts({
-            type: 'text',
-            name: 'version',
-            message: options.inputMessage || 'Input custom version:',
-          })
-        ).version
+        await prompts({
+          type: 'text',
+          name: 'version',
+          message: options.inputMessage || 'Input custom version:',
+        })
+      ).version
       : release.match(/\((.*)\)/)![1]
 
   if (!semver.valid(version)) {

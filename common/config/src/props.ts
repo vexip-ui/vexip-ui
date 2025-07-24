@@ -48,10 +48,10 @@ interface PropsConfig<T = any> {
 
 type PropsConfigOptions<T> = {
   [K in keyof T]?:
-  | PropsConfig<EnsureValue<T[K]>>
-  | EnsureValue<T[K]>
-  | (() => EnsureValue<T[K]>)
-  | null
+    | PropsConfig<EnsureValue<T[K]>>
+    | EnsureValue<T[K]>
+    | (() => EnsureValue<T[K]>)
+    | null
 }
 
 export const PROVIDED_PROPS = '__vxp-provided-props'
@@ -231,7 +231,6 @@ export type ConfigurableProps<T, E extends string = never, I extends string = ne
   ExcludeProps<keyof T, E, I>
 >
 
-/* eslint-disable @typescript-eslint/ban-types */
 type VexipProps<T> = {
   [P in keyof T]: T[P] extends PropType<infer I>
     ? PropType<I & {}>
@@ -239,7 +238,6 @@ type VexipProps<T> = {
       ? PropType<I & {}>
       : T[P]
 }
-/* eslint-enable */
 
 export function wrapProps<T extends ComponentObjectPropsOptions>(props: T) {
   return Object.freeze(props) as Expand<T>
@@ -326,12 +324,12 @@ type ForceBoolean<T> = true extends T
 type ForceBooleanDeep<T> = T extends unknown ? { [K in keyof T]: ForceBoolean<T[K]> } : never
 type SplitAndCombo<T, O = T> = T extends unknown
   ?
-    | [T]
-    | (SplitAndCombo<Exclude<O, T>> extends infer U extends any[]
-      ? U extends U
-        ? [ForceBoolean<T | U[number]>]
-        : never
-      : never)
+      | [T]
+      | (SplitAndCombo<Exclude<O, T>> extends infer U extends any[]
+        ? U extends U
+          ? [ForceBoolean<T | U[number]>]
+          : never
+        : never)
   : never
 type GenerateEvent<T extends any[], Others extends any[], R = any> = T extends unknown
   ? Others extends never

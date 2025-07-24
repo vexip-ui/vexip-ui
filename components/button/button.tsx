@@ -175,12 +175,12 @@ export default defineComponent({
         return cvm({
           ...(props.dashed
             ? {
-                'b-color': base,
-                'b-color-hover': light2,
-                'b-color-focus': light2,
-                'b-color-active': dark1,
-                'pulse-s-color': dark1,
-              }
+              'b-color': base,
+              'b-color-hover': light2,
+              'b-color-focus': light2,
+              'b-color-active': dark1,
+              'pulse-s-color': dark1,
+            }
             : {}),
           color: base,
           'color-hover': light2,

@@ -746,14 +746,14 @@ function emitChange() {
         ? valueFormat
         : valueFormat
           ? (timestamp, type) =>
-              format(
-                timestamp,
-                !Array.isArray(valueFormat)
-                  ? valueFormat
-                  : type === 'start'
-                    ? valueFormat[0]
-                    : valueFormat[1],
-              )
+            format(
+              timestamp,
+              !Array.isArray(valueFormat)
+                ? valueFormat
+                : type === 'start'
+                  ? valueFormat[0]
+                  : valueFormat[1],
+            )
           : timestamp => timestamp
 
     for (let i = 0; i < 2; ++i) {

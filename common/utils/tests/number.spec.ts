@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-loss-of-precision */
+/* eslint-disable no-loss-of-precision */
 
 import { describe, expect, it } from 'vitest'
 

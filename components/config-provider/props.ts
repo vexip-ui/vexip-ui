@@ -22,7 +22,6 @@ export const configProviderProps = wrapProps({
     default: null,
   },
   theme: {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     type: String as PropType<'base' | 'dark' | (string & {})>,
     default: null,
   },

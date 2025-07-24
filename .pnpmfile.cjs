@@ -19,6 +19,6 @@ function readPackage(pkg) {
 
 module.exports = {
   hooks: {
-    readPackage
-  }
+    readPackage,
+  },
 }

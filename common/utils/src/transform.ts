@@ -590,10 +590,10 @@ export function sortByProps<T = any>(
       value =>
         (typeof value === 'string'
           ? {
-              key: value,
-              method: defaultSortMethod,
-              type: 'asc',
-            }
+            key: value,
+            method: defaultSortMethod,
+            type: 'asc',
+          }
           : value) as SortOptions<keyof T>,
     )
     .map(value => {

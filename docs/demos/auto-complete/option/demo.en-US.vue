@@ -20,12 +20,12 @@ const options = ref<string[]>([])
 function setOptions(value: string) {
   options.value = value
     ? [
-        `${value}@qq.com`,
-        `${value}@gmail.com`,
-        `${value}@163.com`,
-        `${value}@126.com`,
-        `${value}@sina.com`,
-      ]
+      `${value}@qq.com`,
+      `${value}@gmail.com`,
+      `${value}@163.com`,
+      `${value}@126.com`,
+      `${value}@sina.com`,
+    ]
     : []
 }
 </script>

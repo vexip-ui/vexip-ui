@@ -196,10 +196,10 @@ function resolveDirective(
     from: 'vexip-ui',
     sideEffects: relatedComponents.length
       ? [
-          ...new Set(
-            relatedComponents.map(component => getSideEffects(component, options) || []).flat(),
-          ),
-        ]
+        ...new Set(
+          relatedComponents.map(component => getSideEffects(component, options) || []).flat(),
+        ),
+      ]
       : undefined,
   }
 }

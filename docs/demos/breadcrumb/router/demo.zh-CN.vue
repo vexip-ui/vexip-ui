@@ -47,7 +47,7 @@ const router = createRouter({
 })
 
 // 模拟 push 方法
-router.push = async (to: /* RouteLocationRaw */ any) => {
+router.push = async (_to: /* RouteLocationRaw */ any) => {
   router.currentRoute.value = {
     matched: [
       {

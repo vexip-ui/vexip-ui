@@ -22,10 +22,10 @@ const options = ref<{ myValue: string, myLabel: string }[]>([])
 function setOptions(value: string) {
   options.value = value
     ? [
-        { myValue: value, myLabel: value },
-        { myValue: value + value, myLabel: value + value },
-        { myValue: value + value + value, myLabel: value + value + value },
-      ]
+      { myValue: value, myLabel: value },
+      { myValue: value + value, myLabel: value + value },
+      { myValue: value + value + value, myLabel: value + value + value },
+    ]
     : []
 }
 </script>

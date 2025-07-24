@@ -372,10 +372,10 @@ export default defineComponent({
         <li class={nh.be('config')}>
           {props.config.includes('nav') &&
             layoutState.navConfig && [
-              <div key={1} class={nh.be('config-label')}>
-                {locale.value.signType}
-              </div>,
-              renderLayoutConfig(),
+            <div key={1} class={nh.be('config-label')}>
+              {locale.value.signType}
+            </div>,
+            renderLayoutConfig(),
           ]}
           {props.config.includes('theme') && [
             <div key={2} class={nh.be('config-label')}>

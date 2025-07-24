@@ -47,7 +47,7 @@ const router = createRouter({
 })
 
 // mock the push method
-router.push = async (to: /* RouteLocationRaw */ any) => {
+router.push = async (_to: /* RouteLocationRaw */ any) => {
   router.currentRoute.value = {
     matched: [
       {
