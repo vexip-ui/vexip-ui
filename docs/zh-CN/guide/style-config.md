@@ -224,3 +224,119 @@ export default defineConfig({
   }
 })
 ```
+
+## 主题切换
+
+Vexip UI 提供了 `useTheme` 函数，用于切换主题。这个函数来自 `@vexip-ui/hooks` 包，可以帮助你实现动态主题切换功能。
+
+### 基本用法
+
+```ts
+import { useTheme } from '@vexip-ui/hooks'
+
+// 在组件中使用
+const { theme } = useTheme()
+
+// theme 是一个响应式引用，表示当前激活的主题名称
+console.log(theme.value)
+```
+
+### 主题注册
+
+在使用主题切换功能前，需要先注册可用的主题：
+
+```ts
+import { addActiveThemes, setActiveThemes } from '@vexip-ui/hooks'
+
+// 添加主题
+addActiveThemes(['light', 'dark'])
+
+// 或者使用更详细的配置
+addActiveThemes([
+  {
+    name: 'light',
+    rootClass: 'theme-light',
+    varsClass: 'vxp-theme-vars-light',
+  },
+  {
+    name: 'dark',
+    rootClass: 'theme-dark',
+    varsClass: 'vxp-theme-vars-dark',
+  },
+])
+
+// 重置并设置主题
+setActiveThemes(['light', 'dark'])
+```
+
+### 主题配置选项
+
+每个主题可以配置以下选项：
+
+- `name`: 主题的唯一名称
+- `rootClass`: 应用于 HTML 根元素的类名，默认与 name 相同
+- `varsClass`: 包含主题变量的类名，默认为 `vxp-theme-vars-${rootClass}`
+
+### 实现主题切换
+
+结合 Vue 的响应式系统，你可以轻松实现主题切换功能：
+
+```vue
+<template>
+  <div>
+    <p>当前主题: {{ theme }}</p>
+    <button @click="toggleTheme">
+      切换主题
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { useTheme } from '@vexip-ui/hooks'
+import { watch } from 'vue'
+
+// 注册主题
+addActiveThemes(['light', 'dark'])
+
+const { theme } = useTheme()
+
+// 监听主题变化
+watch(theme, (newTheme) => {
+  console.log(`主题已切换为: ${newTheme}`)
+
+  // 可以在这里执行其他操作，如更新本地存储
+  localStorage.setItem('preferred-theme', newTheme)
+})
+
+// 切换主题函数
+function toggleTheme() {
+  // 根据当前主题切换
+  const html = document.documentElement
+
+  if (theme.value === 'light') {
+    html.classList.remove('light')
+    html.classList.add('dark')
+  } else {
+    html.classList.remove('dark')
+    html.classList.add('light')
+  }
+}
+</script>
+```
+
+通过这种方式，你可以轻松实现多主题切换功能，并与其他系统（如操作系统的暗黑模式）集成。
+
+### 暗黑模式
+
+首先你可以创建一个开关来控制 暗黑模式 的 class 类名。
+
+> 如果您只需要暗色模式，只需在 html 上添加一个名为 dark 的类 。
+
+```html
+  <html class="dark">
+    <head></head>
+    <body></body>
+  </html>
+```
+
+> 如果您想动态切换暗色模式，也可以使用 [useDark | VueUse](https://vueuse.org/core/useDark/) 实现。
