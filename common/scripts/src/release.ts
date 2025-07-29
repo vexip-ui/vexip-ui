@@ -46,6 +46,10 @@ export interface ReleaseOptions {
    */
   publish?: boolean,
   successMessage?: string,
+  /**
+   * Whether to run test after build.
+   */
+  testAfterBuild?: boolean,
   runTest?: false | (() => Promise<unknown>),
   runBuild?: false | (() => Promise<unknown>),
   runChangelog?: false | (() => Promise<unknown>)
@@ -95,12 +99,18 @@ export async function release(options: ReleaseOptions) {
     logger.withBothLn(() => logger.infoText(`Releasing ${pkgName}@${version}...`))
   }
 
-  logStep('Running test...')
+  const runTest = async () => {
+    logStep('Running test...')
 
-  if (!isDryRun && options.runTest) {
-    await options.runTest()
-  } else {
-    logSkipped()
+    if (!isDryRun && options.runTest) {
+      await options.runTest()
+    } else {
+      logSkipped()
+    }
+  }
+
+  if (!options.testAfterBuild) {
+    await runTest()
   }
 
   logStep('Updating version...')
@@ -118,6 +128,10 @@ export async function release(options: ReleaseOptions) {
     await options.runBuild()
   } else {
     logSkipped()
+  }
+
+  if (options.testAfterBuild) {
+    await runTest()
   }
 
   logStep('Updating changelog...')
@@ -237,12 +251,12 @@ export async function selectNextVersion(
   const version =
     release === 'custom'
       ? (
-          await prompts({
-            type: 'text',
-            name: 'version',
-            message: options.inputMessage || 'Input custom version:',
-          })
-        ).version
+        await prompts({
+          type: 'text',
+          name: 'version',
+          message: options.inputMessage || 'Input custom version:',
+        })
+      ).version
       : release.match(/\((.*)\)/)![1]
 
   if (!semver.valid(version)) {

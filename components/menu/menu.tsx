@@ -373,7 +373,7 @@ export default defineComponent({
                     ),
                   }}
                 </Overflow>,
-                ]
+              ]
               : renderMenus()
           })}
         </ul>

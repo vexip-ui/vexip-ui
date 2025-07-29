@@ -52,7 +52,7 @@ $table: map.merge(
     empty-color: value('content-color-placeholder'),
     resizer-color: value('color-primary-opacity-6'),
     expanded-padding: 14px,
-    expanded-bg-color: value('bg-color-base')
+    expanded-bg-color: value('bg-color-base'),
   ),
   $table
 );
@@ -208,12 +208,19 @@ $table: map.merge(
   }
 
   &__content {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: inherit;
+    justify-content: inherit;
     width: 100%;
     padding: value('table-cell-v-padding') value('table-cell-h-padding');
     color: inherit;
     word-break: break-all;
     white-space: normal;
+
+    & > * {
+      flex-shrink: 0;
+    }
   }
 
   &__side-pad {
@@ -239,7 +246,7 @@ $table: map.merge(
     @include define-preset-values(
       'table',
       (
-        cell-bg-color: value('table-row-bg-color')
+        cell-bg-color: value('table-row-bg-color'),
       )
     );
   }
@@ -248,7 +255,7 @@ $table: map.merge(
     @include define-preset-values(
       'table',
       (
-        cell-bg-color: value('table-row-bg-color-stripe')
+        cell-bg-color: value('table-row-bg-color-stripe'),
       )
     );
   }
@@ -257,7 +264,7 @@ $table: map.merge(
     @include define-preset-values(
       'table',
       (
-        cell-bg-color: value('table-row-bg-color-hover')
+        cell-bg-color: value('table-row-bg-color-hover'),
       )
     );
   }
@@ -355,7 +362,7 @@ $table: map.merge(
         row-bg-color: transparent,
         row-bg-color-stripe: transparent,
         row-b-color-bottom: transparent,
-        cell-b-color-right: transparent
+        cell-b-color-right: transparent,
       )
     );
   }
@@ -458,17 +465,11 @@ $table: map.merge(
   }
 
   &__tree-expand {
-    float: left;
     width: value('table-tree-expand-size');
     height: value('table-tree-expand-size');
     margin-inline-end: 6px;
-    margin-top: 1px;
     color: value('table-tree-expand-color');
     transition: value('transition-color');
-
-    @include rtl {
-      float: right;
-    }
 
     &:hover {
       color: value('table-tree-expand-color-hover');

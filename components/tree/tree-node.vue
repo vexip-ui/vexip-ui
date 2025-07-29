@@ -240,11 +240,16 @@ async function handleToggleSelect(able = !props.node.selected) {
     return
   }
 
-  setValue('selected', !isReadonly.value && able)
+  const selected = !isReadonly.value && able
 
+  if (selected || !treeState.keepSelected) {
+    setValue('selected', selected)
+  }
+
+  // 只读时也派发 select 事件
   if (isReadonly.value || able) {
     treeState.handleNodeSelect(props.node)
-  } else {
+  } else if (treeState.multiple || !treeState.keepSelected) {
     treeState.handleNodeCancel(props.node)
   }
 }

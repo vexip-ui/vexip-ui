@@ -2,5 +2,5 @@
  * @type {import('@commitlint/types').UserConfig}
  */
 export default {
-  extends: ['@vexip-ui/commitlint-config']
+  extends: ['@vexip-ui/commitlint-config'],
 }

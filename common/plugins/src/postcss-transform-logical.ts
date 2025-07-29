@@ -76,13 +76,13 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
   }
   const inlineBaseProp = rtl
     ? {
-        start: 'right',
-        end: 'left',
-      }
+      start: 'right',
+      end: 'left',
+    }
     : {
-        start: 'left',
-        end: 'right',
-      }
+      start: 'left',
+      end: 'right',
+    }
   const blockBaseProp = {
     start: 'top',
     end: 'bottom',
@@ -156,17 +156,17 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
 
   const radiusProp = rtl
     ? {
-        'start-start': 'top-right',
-        'start-end': 'top-left',
-        'end-end': 'bottom-left',
-        'end-start': 'bottom-right',
-      }
+      'start-start': 'top-right',
+      'start-end': 'top-left',
+      'end-end': 'bottom-left',
+      'end-start': 'bottom-right',
+    }
     : {
-        'start-start': 'top-left',
-        'start-end': 'top-right',
-        'end-end': 'bottom-right',
-        'end-start': 'bottom-left',
-      }
+      'start-start': 'top-left',
+      'start-end': 'top-right',
+      'end-end': 'bottom-right',
+      'end-start': 'bottom-left',
+    }
 
   const processRadius = createProcess(radiusRE, (matched, decl) => {
     const type = matched[1] as 'start-start' | 'start-end' | 'end-end' | 'end-start'
@@ -177,13 +177,13 @@ function transformLogical(options: TransformLogicalOptions = {}): import('postcs
   const logicalValue = {
     ...(rtl
       ? {
-          'inline-start': 'right',
-          'inline-end': 'left',
-        }
+        'inline-start': 'right',
+        'inline-end': 'left',
+      }
       : {
-          'inline-start': 'left',
-          'inline-end': 'right',
-        }),
+        'inline-start': 'left',
+        'inline-end': 'right',
+      }),
     'block-start': 'top',
     'block-end': 'bottom',
   }

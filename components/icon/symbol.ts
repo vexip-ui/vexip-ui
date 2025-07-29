@@ -1,7 +1,6 @@
 import type { ClassType, StyleType } from '@vexip-ui/config'
 
 export type IconPresetEffect = 'spin-in' | 'spin-out' | 'pulse-in' | 'pulse-out'
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type IconEffect = IconPresetEffect | (string & {})
 
 export interface IconBaseProps {

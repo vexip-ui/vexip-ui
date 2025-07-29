@@ -44,15 +44,15 @@ const pkgMetaList: (PathMeta | ((versions: Record<string, string>) => PathMeta))
     const version = versions['vexip-ui']
     return !version || compare(version, '2.3.21', '>')
       ? {
-          name: 'vexip-ui/vexip-ui.css',
-          pkg: 'vexip-ui',
-          path: 'dist/vexip-ui.css',
-        }
+        name: 'vexip-ui/vexip-ui.css',
+        pkg: 'vexip-ui',
+        path: 'dist/vexip-ui.css',
+      }
       : {
-          name: 'vexip-ui/style.css',
-          pkg: 'vexip-ui',
-          path: 'dist/style.css',
-        }
+        name: 'vexip-ui/style.css',
+        pkg: 'vexip-ui',
+        path: 'dist/style.css',
+      }
   },
   { name: '@vexip-ui/icons', path: 'dist/index.mjs' },
   { name: '@vexip-ui/utils', path: 'dist/index.mjs' },

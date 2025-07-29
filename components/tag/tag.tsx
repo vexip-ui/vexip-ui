@@ -89,14 +89,14 @@ export default defineComponent({
         'd-color': mixColor(white, baseColor, 0.3).toString(),
         ...(props.simple || props.border
           ? {
-              color: base,
-              'close-color': base,
-            }
+            color: base,
+            'close-color': base,
+          }
           : {}),
         ...(props.simple
           ? {
-              'bg-color': adjustAlpha(baseColor, 0.2).toString(),
-            }
+            'bg-color': adjustAlpha(baseColor, 0.2).toString(),
+          }
           : {}),
       })
     })

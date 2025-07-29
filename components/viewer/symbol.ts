@@ -23,7 +23,6 @@ export type ViewerPresetAction =
   | 'full-screen'
   | 'full-screen-exit'
   | 'reset'
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type ViewerActionName = ViewerPresetAction | (string & {})
 export type ViewerActionLayout = ViewerActionName[][]
 

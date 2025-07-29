@@ -1,3 +1,20 @@
+## [2.3.34](https://github.com/vexip-ui/vexip-ui/compare/v2.3.33...v2.3.34) (2025-07-29)
+
+
+### ✨ Features
+
+* **scripts:** add testAfterBuild option for relase ([7615091](https://github.com/vexip-ui/vexip-ui/commit/7615091e47364943f0167dfe93586bb8b10e298d))
+* **tree:** add keep-selected prop ([85016e5](https://github.com/vexip-ui/vexip-ui/commit/85016e554a07c83faef5b5387c4055c93c0a6355))
+
+
+### 🐞 Bug Fixes
+
+* correctly construct for Message & Notice ([935f44d](https://github.com/vexip-ui/vexip-ui/commit/935f44d97c4bc88e0d0e6f4d7ec7cc16de6eed04))
+* **hooks:** ensure default-key-at is effective for useVirtual ([1a24dd7](https://github.com/vexip-ui/vexip-ui/commit/1a24dd7f5ed496ba36ebd11500cae66161a60af1))
+* **table:** revert content display to flex ([7fa5e45](https://github.com/vexip-ui/vexip-ui/commit/7fa5e45dfc8f282f7cf3ee9b4ca18e7f97ce1a8a)), closes [#578](https://github.com/vexip-ui/vexip-ui/issues/578)
+
+
+
 ## [2.3.33](https://github.com/vexip-ui/vexip-ui/compare/v2.3.32...v2.3.33) (2025-07-11)
 
 

@@ -28,7 +28,7 @@ function handleResize(entries: ResizeObserverEntry[]) {
     const handler = handlerMap.get(entry.target)
 
     if (typeof handler === 'function') {
-      const { inlineSize, blockSize } = entry.borderBoxSize?.[0]
+      const { inlineSize, blockSize } = entry.borderBoxSize?.[0] ?? {}
       const { offsetWidth, offsetHeight } = entry.target as HTMLElement
 
       handler(

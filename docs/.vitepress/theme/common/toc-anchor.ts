@@ -19,11 +19,9 @@ export function ussTocAnchor(initLevel: 2 | 3 | (2 | 3)[] = 2, wrapper = ref<HTM
     if (!wrapper.value) return
 
     const map = new Map<string, AnchorMeta>()
-    const root = { level: 1, children: anchors.value } as AnchorMeta
+    const root = { id: '__ROOT__', level: 1, children: anchors.value } as AnchorMeta
 
-    let prev = root
-
-    Array.from(
+    const els = Array.from(
       wrapper.value.querySelectorAll<HTMLElement>(
         [
           '.demo',
@@ -32,7 +30,11 @@ export function ussTocAnchor(initLevel: 2 | 3 | (2 | 3)[] = 2, wrapper = ref<HTM
           ),
         ].join(),
       ),
-    ).forEach(el => {
+    )
+
+    let prev = root
+
+    els.forEach(el => {
       let id: string
       let label: string
       let level: number
@@ -88,6 +90,10 @@ export function ussTocAnchor(initLevel: 2 | 3 | (2 | 3)[] = 2, wrapper = ref<HTM
         }
 
         parent?.children.push(anchor)
+
+        if (parent) {
+          map.set(id, parent)
+        }
       }
 
       prev = anchor

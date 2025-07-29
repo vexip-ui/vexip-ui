@@ -843,16 +843,16 @@ export default defineComponent({
             item:
               slots.item || props.slots.item
                 ? (params: any) =>
-                    renderSlot(slots, 'item', params, () => [
-                      <Renderer renderer={props.slots.item} data={params}></Renderer>,
-                    ])
+                  renderSlot(slots, 'item', params, () => [
+                    <Renderer renderer={props.slots.item} data={params}></Renderer>,
+                  ])
                 : null,
             icon:
               slots.icon || props.slots.icon
                 ? (params: any) =>
-                    renderSlot(slots, 'icon', params, () => [
-                      <Renderer renderer={props.slots.icon} data={params}></Renderer>,
-                    ])
+                  renderSlot(slots, 'icon', params, () => [
+                    <Renderer renderer={props.slots.icon} data={params}></Renderer>,
+                  ])
                 : null,
             suffix: () =>
               props.image && (!props.countLimit || renderFiles.value.length < props.countLimit)

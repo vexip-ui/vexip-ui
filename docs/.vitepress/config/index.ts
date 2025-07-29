@@ -179,9 +179,9 @@ function getAsideMenus(updatedFiles?: Set<string>): ThemeConfig['asideMenus'] {
       }
       const tag = compare(since, minorVersion, '=')
         ? {
-            text: 'New',
-            type: 'error' as const,
-          }
+          text: 'New',
+          type: 'error' as const,
+        }
         : null
 
       tag && tags.push(tag)

@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.4.1...scripts@1.5.0) (2025-07-29)
+
+
+### ✨ Features
+
+* **scripts:** add testAfterBuild option for relase ([7615091](https://github.com/vexip-ui/vexip-ui/commit/7615091e47364943f0167dfe93586bb8b10e298d))
+
+
+
 ## [1.4.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.4.0...scripts@1.4.1) (2025-06-13)
 
 
