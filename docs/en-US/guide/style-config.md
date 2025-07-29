@@ -225,3 +225,119 @@ export default defineConfig({
   }
 })
 ```
+
+## Theme Switching
+
+Vexip UI provides the `useTheme` function for theme switching. This function comes from the `@vexip-ui/hooks` package and helps you implement dynamic theme switching functionality.
+
+### Basic Usage
+
+```ts
+import { useTheme } from '@vexip-ui/hooks'
+
+// Usage in components
+const { theme } = useTheme()
+
+// theme is a reactive reference representing the currently active theme name
+console.log(theme.value)
+```
+
+### Theme Registration
+
+Before using the theme switching functionality, you need to register available themes:
+
+```ts
+import { addActiveThemes, setActiveThemes } from '@vexip-ui/hooks'
+
+// Add themes
+addActiveThemes(['light', 'dark'])
+
+// Or use more detailed configuration
+addActiveThemes([
+  {
+    name: 'light',
+    rootClass: 'theme-light',
+    varsClass: 'vxp-theme-vars-light',
+  },
+  {
+    name: 'dark',
+    rootClass: 'theme-dark',
+    varsClass: 'vxp-theme-vars-dark',
+  },
+])
+
+// Reset and set themes
+setActiveThemes(['light', 'dark'])
+```
+
+### Theme Configuration Options
+
+Each theme can be configured with the following options:
+
+- `name`: Unique name of the theme
+- `rootClass`: Class name applied to the HTML root element, defaults to the same as name
+- `varsClass`: Class name containing theme variables, defaults to `vxp-theme-vars-${rootClass}`
+
+### Implementing Theme Switching
+
+With Vue's reactivity system, you can easily implement theme switching functionality:
+
+```vue
+<template>
+  <div>
+    <p>Current theme: {{ theme }}</p>
+    <button @click="toggleTheme">
+      Toggle Theme
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { useTheme } from '@vexip-ui/hooks'
+import { watch } from 'vue'
+
+// Register themes
+addActiveThemes(['light', 'dark'])
+
+const { theme } = useTheme()
+
+// Watch for theme changes
+watch(theme, (newTheme) => {
+  console.log(`Theme changed to: ${newTheme}`)
+
+  // You can perform other operations here, such as updating local storage
+  localStorage.setItem('preferred-theme', newTheme)
+})
+
+// Theme toggle function
+function toggleTheme() {
+  // Toggle based on current theme
+  const html = document.documentElement
+
+  if (theme.value === 'light') {
+    html.classList.remove('light')
+    html.classList.add('dark')
+  } else {
+    html.classList.remove('dark')
+    html.classList.add('light')
+  }
+}
+</script>
+```
+
+This approach allows you to easily implement multi-theme switching functionality and integrate with other systems (such as the operating system's dark mode).
+
+### Dark Mode
+
+First, you can create a toggle to control the dark mode class name.
+
+> If you only need dark mode, simply add a class named 'dark' to the html element.
+
+```html
+  <html class="dark">
+    <head></head>
+    <body></body>
+  </html>
+```
+
+> If you want to dynamically toggle dark mode, you can also use [useDark | VueUse](https://vueuse.org/core/useDark/) to implement it.
