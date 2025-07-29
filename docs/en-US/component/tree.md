@@ -313,6 +313,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | arrow-icon      | `VueComponent`                                                         | Set the icon at the arrow position                                                                                                                                                                                                               | `null`         | `2.2.5`  |
 | block-effect    | `boolean`                                                              | Whether the node is block effect                                                                                                                                                                                                                 | `false`        | `2.2.5`  |
 | filter-leaf     | `boolean`                                                              | Whether only filter the leaf nodes                                                                                                                                                                                                               | `false`        | `2.2.14` |
+| keep-selected   | `boolean`                                                              | Whether to keep the node selected, only effective in single selection mode                                                                                                                                                                       | `false`        | `2.3.34` |
 
 ### Tree Events
 

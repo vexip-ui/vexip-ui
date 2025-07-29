@@ -1,5 +1,5 @@
 <template>
-  <Tree :data="data"></Tree>
+  <Tree :data="data" keep-selected></Tree>
 </template>
 
 <script setup lang="ts">
