@@ -52,15 +52,15 @@ createApp(App)
       //   size: 'large'
       // },
       input: {
-        size: 'large'
+        size: 'large',
       },
       select: {
-        size: 'large'
+        size: 'large',
       },
       checkbox: {
-        size: 'large'
-      }
-    }
+        size: 'large',
+      },
+    },
   })
   .mount('#app')
 ```
@@ -123,7 +123,7 @@ Vexip UI 的默认语言为 `'zh-CN'`，在调用 `app.use` 时通过在第二�
 import { enUSLocale, install } from 'vexip-ui'
 
 app.use(install, {
-  locale: enUSLocale()
+  locale: enUSLocale(),
 })
 ```
 
@@ -136,11 +136,11 @@ import { enUSLocale, install, registerLocale } from 'vexip-ui'
 registerLocale(enUSLocale())
 
 const vexipuiLocale = ref({
-  locale: 'zh-CN'
+  locale: 'zh-CN',
 })
 
 app.use(install, {
-  locale: vexipuiLocale
+  locale: vexipuiLocale,
 })
 
 // 切换时
@@ -154,9 +154,9 @@ app.use(install, {
   locale: {
     locale: 'zh-CN',
     input: {
-      placeholder: '来写点东西'
-    }
-  }
+      placeholder: '来写点东西',
+    },
+  },
 })
 ```
 
@@ -186,9 +186,9 @@ app.use(install, {
     // 可以传入一个数组，并在第二个参数配置自定义参数
     loading: [
       Spinner,
-      { effect: 'pulse-in' }
-    ]
-  }
+      { effect: 'pulse-in' },
+    ],
+  },
 })
 ```
 
@@ -212,5 +212,5 @@ app.use(install, {
 | locale     | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts) | 国际化配置                                                                                       | `zhCNLocale()` | -        |
 | icons      | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts)          | 内部图标配置                                                                                     | `globalIcons`  | `2.1.9`  |
 | zIndex     | `number`                                                                                             | 基础层级数                                                                                       | `2000`         | `2.1.17` |
-| theme      | `'base' \| 'dark'`                                                                                   | 主题名称，用于全局配置样式                                                                       | `null`         | `2.2.11` |
+| theme      | `'base' \| 'dark'`                                                                                   | 主题名称，用于全局配置样式                                                                       | `null`         | -        |
 | hoverDelay | `number`                                                                                             | 悬停延迟毫秒数                                                                                   | `100`          | `2.2.11` |
