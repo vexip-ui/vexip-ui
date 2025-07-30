@@ -1,3 +1,12 @@
+## [2.9.3](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.9.2...hooks@2.9.3) (2025-07-30)
+
+
+### 🐞 Bug Fixes
+
+* **hooks:** ensure default-key-at is effective for useVirtual ([1a24dd7](https://github.com/vexip-ui/vexip-ui/commit/1a24dd7f5ed496ba36ebd11500cae66161a60af1))
+
+
+
 ## [2.9.2](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.9.1...hooks@2.9.2) (2025-06-30)
 
 
