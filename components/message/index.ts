@@ -147,6 +147,8 @@ export class MessageManager {
     const manager = new MessageManager(this.defaults)
 
     manager._mountedApp = this._mountedApp
+    manager._configRecord = this._configRecord
+    manager._installed = this._installed
 
     return manager
   }

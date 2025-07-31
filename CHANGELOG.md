@@ -1,3 +1,12 @@
+## [2.3.35](https://github.com/vexip-ui/vexip-ui/compare/v2.3.34...v2.3.35) (2025-07-31)
+
+
+### 🐞 Bug Fixes
+
+* correctly clone manager for Message & Notice ([5d80cda](https://github.com/vexip-ui/vexip-ui/commit/5d80cda6e6b6756bcf578f59953ea92d36278192))
+
+
+
 ## [2.3.34](https://github.com/vexip-ui/vexip-ui/compare/v2.3.33...v2.3.34) (2025-07-29)
 
 

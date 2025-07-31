@@ -19,7 +19,7 @@ export type { NoticeConfig, NoticeType, NoticePlacement, NoticeOptions }
 
 type FuzzyOptions = string | NoticeOptions
 type ManagerOptions = { marker?: boolean, duration?: number } & NoticeConfig &
-Record<string, unknown>
+  Record<string, unknown>
 
 interface AipMethod {
   (options: NoticeOptions): () => void,
@@ -155,6 +155,8 @@ export class NoticeManager {
     const manager = new NoticeManager(this.defaults)
 
     manager._mountedApp = this._mountedApp
+    manager._configRecord = this._configRecord
+    manager._installed = this._installed
 
     return manager
   }
