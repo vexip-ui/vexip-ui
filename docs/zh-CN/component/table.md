@@ -718,7 +718,7 @@ interface TableFootPayload {
 | indented          | `boolean`                              | 指定为树形表格的缩进列                                             | `false`     | `2.2.6`  |
 | formatter         | `(value: any) => unknown`              | 设置单元格内容的格式化方法                                         | `null`      | `2.2.13` |
 | single-select     | `boolean`                              | 当 `type` 为 `'selection'` 时设置是否为单选                        | `false`     | `2.3.25` |
-| min-width         | `number`                               | 设置列的最小宽度，通常用于设置了百分比列宽或者列可缩放             | `null`      | `2.3.31` |
+| min-width         | `number`                               | 设置列的最小宽度，通常用于设置了百分比列宽或者列可缩放             | `100`       | `2.3.31` |
 | max-width         | `number`                               | 设置列的最大宽度，通常用于设置了百分比列宽或者列可缩放             | `null`      | `2.3.31` |
 
 ### TableColumn 插槽

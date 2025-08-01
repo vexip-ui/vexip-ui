@@ -718,7 +718,7 @@ interface TableFootPayload {
 | indented          | `boolean`                              | Specified as the indented column of the tree table                                                                | `false`     | `2.2.6`  |
 | formatter         | `(value: any) => unknown`              | Set formatter for content of the cell                                                                             | `null`      | `2.2.13` |
 | single-select     | `boolean`                              | Set whether is single selection when `type` is `'selection'`                                                      | `false`     | `2.3.25` |
-| min-width         | `number`                               | Set min width for column, useful when set a number width or column is resizable                                   | `null`      | `2.3.31` |
+| min-width         | `number`                               | Set min width for column, useful when set a number width or column is resizable                                   | `100`       | `2.3.31` |
 | max-width         | `number`                               | Set max width for column, useful when set a number width or column is resizable                                   | `null`      | `2.3.31` |
 
 ### TableColumn Slots
