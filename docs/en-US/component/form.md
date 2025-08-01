@@ -207,6 +207,12 @@ interface Rule<T = any> {
 | justify       | `RowGridJustify`                       | Horizontal arrangement, refer to the prop of the same name of the Row component                                                               | `'start'`   | `2.0.0` |
 | align         | `RowGridAlign`                         | Vertical alignment, refer to the prop of the same name of the Row component                                                                   | `'top'`     | `2.0.0` |
 
+### Form Events
+
+| Name   | Description                     | Parameters             | Since    |
+| ------ | ------------------------------- | ---------------------- | -------- |
+| submit | The native submit event of form | `(event: SubmitEvent)` | `2.3.36` |
+
 ### Form Methods
 
 | Name             | Description                                                                                | Signature                                          | Since |
