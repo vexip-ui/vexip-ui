@@ -17,6 +17,18 @@ export interface CollapseState {
   refreshLabels: () => void
 }
 
+export interface CollapsePanelSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  /**
+   * @internal
+   */
+  title?: () => any,
+  arrow?: (params: { expanded: boolean }) => any
+}
+
 export const COLLAPSE_STATE = '__VXP_COLLAPSE_STATE' as unknown as InjectionKey<CollapseState>
 
 let idCount = 0

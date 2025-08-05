@@ -22,7 +22,7 @@ With `text-position` you can change the position of the text.
 
 :::demo divider/vertical
 
-### Veritcal Divider
+### Vertical Divider
 
 Add `vertical` prop to make it vertical.
 

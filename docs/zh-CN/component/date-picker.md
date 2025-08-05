@@ -200,7 +200,6 @@ interface DateShortcut {
 | value-format        | `string \| string[] \| DatePickerFormatFn`              | 指定如何格式化值                                                        | `null`           | `2.2.0`  |
 | popper-alive        | `boolean`                                               | 设置 Popper 元素是否持久化，默认会在未设置 `transfer` 属性时持久化      | `null`           | `2.2.3`  |
 | shortcuts-placement | `DateShortcutsPlacement`                                | 设置快捷选择的位置                                                      | `'left'`         | `2.2.18` |
-| slots               | `DatePickerSlots`                                       | 设置与插槽对于的渲染函数                                                | `{}`             | `2.3.15` |
 
 ### DatePicker 事件
 

@@ -200,7 +200,6 @@ interface DateShortcut {
 | value-format        | `string \| string[] \| DatePickerFormatFn`              | Specify how to format the value                                                                                                               | `null`           | `2.2.0`  |
 | popper-alive        | `boolean`                                               | Set whether the Popper is persistent, by default it will be persistent when the `transfer` prop is not set                                    | `null`           | `2.2.3`  |
 | shortcuts-placement | `DateShortcutsPlacement`                                | Set the placement of shortcuts                                                                                                                | `'left'`         | `2.2.18` |
-| slots               | `DatePickerSlots`                                       | Set rendering functions for slots                                                                                                             | `{}`             | `2.3.15` |
 
 ### DatePicker Events
 
