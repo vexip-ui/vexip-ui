@@ -119,6 +119,7 @@ export function useStore(options: StoreOptions) {
     locked: false,
     barScrolling: false,
     heightTrigger: 0,
+    hoveredRowKey: null as Key | null,
   }) as StoreState
 
   setColumns(options.columns)
@@ -367,6 +368,7 @@ export function useStore(options: StoreOptions) {
     setEllipsis,
     setLocked,
     setBarScrolling,
+    setHoveredRowKey,
 
     handleSort,
     clearSort,
@@ -1274,6 +1276,23 @@ export function useStore(options: StoreOptions) {
 
   function setBarScrolling(scrolling: boolean) {
     state.barScrolling = scrolling
+  }
+
+  function setHoveredRowKey(key: Key | null) {
+    if (state.hoveredRowKey !== key) {
+      const prevHoveredRow = state.hoveredRowKey && state.rowMap.get(state.hoveredRowKey)
+      const newHoveredRow = key && state.rowMap.get(key)
+
+      if (prevHoveredRow) {
+        prevHoveredRow.hover = false
+      }
+
+      if (newHoveredRow) {
+        newHoveredRow.hover = true
+      }
+    }
+
+    state.hoveredRowKey = key
   }
 
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {

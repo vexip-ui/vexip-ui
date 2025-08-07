@@ -73,7 +73,8 @@ const className = computed(() => {
     nh.be('row'),
     {
       [nh.bem('row', 'fixed')]: state.rowHeight && state.rowHeight > 0,
-      [nh.bem('row', 'hover')]: !rowType.value && state.highlight && props.row.hover,
+      [nh.bem('row', 'hover')]:
+        !rowType.value && state.highlight && rowKey.value === state.hoveredRowKey,
       [nh.bem('row', 'stripe')]: state.stripe && props.index % 2 === 1,
       [nh.bem('row', 'checked')]: props.row.checked,
       [nh.bem('row', 'dragging')]: dragging.value,
@@ -207,7 +208,7 @@ function buildEventPayload(event: Event) {
 }
 
 function handleMouseEnter(event: MouseEvent) {
-  mutations.setRowProp(rowKey.value, 'hover', true)
+  mutations.setHoveredRowKey(rowKey.value)
 
   if (!rowType.value && tableAction) {
     tableAction.emitRowEvent('Enter', buildEventPayload(event))
@@ -215,7 +216,7 @@ function handleMouseEnter(event: MouseEvent) {
 }
 
 function handleMouseLeave(event: MouseEvent) {
-  mutations.setRowProp(rowKey.value, 'hover', false)
+  mutations.setHoveredRowKey(null)
 
   if (!rowType.value && tableAction) {
     tableAction.emitRowEvent('Leave', buildEventPayload(event))
@@ -309,7 +310,7 @@ function afterExpand() {
     :class="{
       [nh.be('group')]: true,
       [nh.bem('group', 'checked')]: row.checked,
-      [nh.bem('group', 'last')]: row.last
+      [nh.bem('group', 'last')]: row.last,
     }"
     role="row"
     :draggable="rowDraggable || row.dragging"

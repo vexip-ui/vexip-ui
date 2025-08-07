@@ -49,7 +49,7 @@ export interface TableSlots {
 
 export type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
-  index: number
+  index: number,
 ) => Val
 export type ExpandRenderFn<D = Data> = (data: {
   /** @deprecated */
@@ -433,7 +433,8 @@ export interface StoreState extends StoreOptions {
   collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>,
   locked: boolean,
   barScrolling: boolean,
-  heightTrigger: number
+  heightTrigger: number,
+  hoveredRowKey: Key | null
 }
 
 export interface TableRowInstance {
