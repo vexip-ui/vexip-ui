@@ -27,7 +27,7 @@ interface Option {
   depth: number,
   hasChild: boolean,
   index: number,
-  children: Option[] | null
+  children: Option[] | null,
 }
 
 const mergeTags = ref(false)

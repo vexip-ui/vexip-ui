@@ -39,7 +39,7 @@ const props = useProps('avatar', _props, {
 
 const slots = defineSlots<{
   default?: () => any,
-  icon?: () => any
+  icon?: () => any,
 }>()
 
 const groupState = inject(GROUP_STATE, null)

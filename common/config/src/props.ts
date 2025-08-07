@@ -43,7 +43,7 @@ interface PropsConfig<T = any> {
    *
    * @param value the value of the prop
    */
-  validator?: (value: T) => any
+  validator?: (value: T) => any,
 }
 
 type PropsConfigOptions<T> = {
@@ -253,7 +253,7 @@ export function buildProps<T extends ComponentObjectPropsOptions>(props: T) {
 
 export function omitProps<T extends ComponentObjectPropsOptions, K extends keyof T>(
   props: T,
-  keys: K[]
+  keys: K[],
 ): Expand<Omit<T, K>>
 export function omitProps<
   T extends ComponentObjectPropsOptions,

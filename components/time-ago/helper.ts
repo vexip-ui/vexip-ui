@@ -14,7 +14,7 @@ export interface TimeAgoRecord {
   locale: Ref<Record<string, string>>,
   wordSpace: Ref<boolean>,
   interval: false | number,
-  updated: number
+  updated: number,
 }
 
 let id = 1

@@ -21,7 +21,7 @@ export interface InstallOptions {
   locale?: MaybeRef<LocaleOptions>,
   zIndex?: MaybeRef<number>,
   icons?: MaybeRef<IconsOptions>,
-  hoverDelay?: MaybeRef<number>
+  hoverDelay?: MaybeRef<number>,
 }
 
 export function buildInstall(components: any[] = [], defaultLocale?: LocaleConfig) {

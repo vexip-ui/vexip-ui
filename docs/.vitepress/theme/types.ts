@@ -6,12 +6,12 @@ export interface NavMenuItem extends Record<string, any> {
   text?: string,
   i18n?: string,
   activeMatch?: string,
-  items?: NavMenuItem[]
+  items?: NavMenuItem[],
 }
 
 export interface AsideMenuTag {
   text: string,
-  type?: TagType
+  type?: TagType,
 }
 
 export interface AsideMenuItem {
@@ -24,12 +24,12 @@ export interface AsideMenuItem {
   subI18n?: string,
   noSub?: string[],
   count?: boolean,
-  items?: Omit<AsideMenuItem, 'items'>[]
+  items?: Omit<AsideMenuItem, 'items'>[],
 }
 
 export interface EditLink {
   i18n?: string,
-  pattern?: string | ((path: string) => string)
+  pattern?: string | ((path: string) => string),
 }
 
 export interface FooterLink {
@@ -37,13 +37,13 @@ export interface FooterLink {
   text?: string,
   subtext?: string,
   i18n?: string,
-  subI18n?: string
+  subI18n?: string,
 }
 
 export interface FooterLinkGroup {
   text?: string,
   i18n?: string,
-  items: FooterLink[]
+  items: FooterLink[],
 }
 
 export interface ThemeConfig {
@@ -51,5 +51,5 @@ export interface ThemeConfig {
   asideMenus?: Record<string, AsideMenuItem[]>,
   outline?: Record<string, number | number[]>,
   editLink?: EditLink,
-  footerLinks?: FooterLinkGroup[]
+  footerLinks?: FooterLinkGroup[],
 }

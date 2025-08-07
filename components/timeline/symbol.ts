@@ -6,7 +6,7 @@ export interface ItemState {
   label: string | number,
   index: number,
   total: number,
-  height: number
+  height: number,
 }
 
 export interface TimelineState {
@@ -17,7 +17,7 @@ export interface TimelineState {
   horizontal: boolean,
   increaseItem: (item: ItemState) => void,
   decreaseItem: (item: ItemState) => void,
-  handleSignalClick: (label: string | number) => void
+  handleSignalClick: (label: string | number) => void,
 }
 
 export const TIMELINE_STATE = '__VXP_TIMELINE_STATE' as unknown as InjectionKey<TimelineState>

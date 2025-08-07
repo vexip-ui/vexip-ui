@@ -1,6 +1,6 @@
 interface ScrollElement {
   scrollTo(x: number, y: number): void,
-  [prop: string]: any
+  [prop: string]: any,
 }
 
 export function animateScrollTo(options: {
@@ -10,7 +10,7 @@ export function animateScrollTo(options: {
   yFrom?: number,
   yTo?: number,
   duration?: number,
-  callback?: null | (() => any)
+  callback?: null | (() => any),
 }): void {
   const { el, xFrom = 0, xTo = 0, yFrom = 0, yTo = 0, duration = 500, callback = null } = options
 

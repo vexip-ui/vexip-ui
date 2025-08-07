@@ -41,12 +41,12 @@ export interface I18nConfig {
     openSettings: string,
     adjustSettings: string,
     changeOrder: string,
-    orderChanged: string
+    orderChanged: string,
   },
   alert: {
     info: string,
     warning: string,
-    error: string
+    error: string,
   },
   guide: {
     introduction: string,
@@ -61,7 +61,7 @@ export interface I18nConfig {
     ssr: string,
     customFormControl: string,
     developmentGuide: string,
-    changeIcons: string
+    changeIcons: string,
   },
   group: {
     basis: string,
@@ -70,7 +70,7 @@ export interface I18nConfig {
     form: string,
     data: string,
     effect: string,
-    else: string
+    else: string,
   },
   footer: {
     resources: string,
@@ -86,7 +86,7 @@ export interface I18nConfig {
     contribute: string,
     qqGroup?: string,
     sponsor: string,
-    releaseScripts: string
+    releaseScripts: string,
   },
   component: {
     // Basis
@@ -179,8 +179,8 @@ export interface I18nConfig {
     Renderer: string,
     ResizeObserver: string,
     Scrollbar: string,
-    VirtualList: string
-  }
+    VirtualList: string,
+  },
 }
 
 export function defineI18n(config: I18nConfig) {

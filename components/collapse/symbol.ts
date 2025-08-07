@@ -6,7 +6,7 @@ export interface PanelState {
   tab?: HTMLElement | null,
   label: string | number,
   expanded: boolean,
-  setExpanded: (expanded: boolean) => void
+  setExpanded: (expanded: boolean) => void,
 }
 
 export interface CollapseState {
@@ -14,7 +14,7 @@ export interface CollapseState {
   registerPanel(panel: PanelState): void,
   unregisterPanel(panel: PanelState): void,
   expandPanel(label: string | number, expanded: boolean): void,
-  refreshLabels: () => void
+  refreshLabels: () => void,
 }
 
 export interface CollapsePanelSlots {
@@ -26,7 +26,7 @@ export interface CollapsePanelSlots {
    * @internal
    */
   title?: () => any,
-  arrow?: (params: { expanded: boolean }) => any
+  arrow?: (params: { expanded: boolean }) => any,
 }
 
 export const COLLAPSE_STATE = '__VXP_COLLAPSE_STATE' as unknown as InjectionKey<CollapseState>

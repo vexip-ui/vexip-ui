@@ -5,7 +5,7 @@ const args = minimist<{
   d?: boolean,
   dev?: boolean,
   s?: boolean,
-  sourcemap?: boolean
+  sourcemap?: boolean,
 }>(process.argv.slice(2))
 
 const devOnly = args.dev || args.d

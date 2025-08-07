@@ -7,7 +7,7 @@
           <div
             :class="{
               separator: true,
-              'is-active': record.visible
+              'is-active': record.visible,
             }"
           >
             <Icon><CaretRight></CaretRight></Icon>
@@ -32,7 +32,7 @@ import { CaretRight } from '@vexip-ui/icons'
 
 interface Record {
   visible: boolean,
-  children: string[]
+  children: string[],
 }
 
 const recordMap = ref(new Map<string, Record>())

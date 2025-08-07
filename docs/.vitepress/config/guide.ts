@@ -1,11 +1,11 @@
 export interface GuideConfig {
   name: string,
-  i18n: string
+  i18n: string,
 }
 
 export interface GuideGroup {
   name: string,
-  guides: GuideConfig[]
+  guides: GuideConfig[],
 }
 
 export function getGuideConfig(): GuideGroup[] {

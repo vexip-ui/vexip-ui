@@ -8,13 +8,13 @@ export type ImageSkeletonProps = Pick<
   'tag' | 'activated' | 'iconScale' | 'imageIcon'
 > & {
   class?: ClassType,
-  StyleType?: StyleType
+  StyleType?: StyleType,
 }
 
 export interface ImageState {
   src: string,
   index: number,
-  total: number
+  total: number,
 }
 
 export interface GroupState {
@@ -22,13 +22,13 @@ export interface GroupState {
   preview: boolean,
   increaseItem: (item: ImageState) => void,
   decreaseItem: (item: ImageState) => void,
-  handlePreview: (item: ImageState) => void
+  handlePreview: (item: ImageState) => void,
 }
 
 export interface ImageSlots {
   placeholder?: () => any,
   error?: () => any,
-  preview?: (params: { src: string }) => any
+  preview?: (params: { src: string }) => any,
 }
 
 export interface ImageGroupSlots {
@@ -36,14 +36,14 @@ export interface ImageGroupSlots {
    * @internal
    */
   default?: () => any,
-  preview?: (params: { src: string }) => any
+  preview?: (params: { src: string }) => any,
 }
 
 export interface ImageViewerSlots {
   default?: (params: { src: string }) => any,
   prev?: (params: { disabled: boolean }) => any,
   next?: (params: { disabled: boolean }) => any,
-  close?: () => any
+  close?: () => any,
 }
 
 export const GROUP_STATE = '__VXP_IMAGE_GROUP_STATE' as unknown as InjectionKey<GroupState>

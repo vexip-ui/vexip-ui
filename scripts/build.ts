@@ -3,7 +3,7 @@ import { logger, run } from '@vexip-ui/scripts'
 
 const args = minimist<{
   d?: boolean,
-  dev?: boolean
+  dev?: boolean,
 }>(process.argv.slice(2))
 
 const devOnly = args.dev || args.d

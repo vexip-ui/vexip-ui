@@ -30,7 +30,7 @@ export function useTrack({
   onDown?: (scroll: number) => void,
   onMove?: (scroll: number) => void,
   onUp?: (scroll: number) => void,
-  onScroll?: (scroll: number) => void
+  onScroll?: (scroll: number) => void,
 }) {
   let length: number
   let startAt: number

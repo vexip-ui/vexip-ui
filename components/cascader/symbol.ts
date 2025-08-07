@@ -6,7 +6,7 @@ export interface CascaderKeyConfig {
   label?: string,
   children?: string,
   disabled?: string,
-  hasChild?: string
+  hasChild?: string,
 }
 
 export interface CascaderOptionState {
@@ -25,7 +25,7 @@ export interface CascaderOptionState {
   loaded: boolean,
   error: boolean,
   childrenLoaded: boolean,
-  data: Data
+  data: Data,
 }
 
 export interface CascaderPanelSlots {
@@ -34,7 +34,7 @@ export interface CascaderPanelSlots {
     index: number,
     selected: boolean,
     canCheck: boolean,
-    hasChild: boolean
+    hasChild: boolean,
   }) => any,
   label?: (params: {
     option: CascaderOptionState,
@@ -42,13 +42,13 @@ export interface CascaderPanelSlots {
     selected: boolean,
     canCheck: boolean,
     hasChild: boolean,
-    handleSelect: () => void
-  }) => any
+    handleSelect: () => void,
+  }) => any,
 }
 
 export interface CascaderSlots extends CascaderPanelSlots {
   prefix?: () => any,
   suffix?: () => any,
   control?: () => any,
-  empty?: () => any
+  empty?: () => any,
 }

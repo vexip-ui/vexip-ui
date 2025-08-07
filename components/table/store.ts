@@ -1563,7 +1563,7 @@ export function useStore(options: StoreOptions) {
     key: Key,
     value: number | string | null,
     active?: boolean,
-    disableOthers?: boolean
+    disableOthers?: boolean,
   }) {
     const { key, value, active = false, disableOthers = false } = options
 
@@ -2002,7 +2002,7 @@ export function useStore(options: StoreOptions) {
   type Store = Readonly<{
     state: Readonly<typeof state>,
     getters: Readonly<typeof getters>,
-    mutations: Readonly<typeof mutations>
+    mutations: Readonly<typeof mutations>,
   }>
 
   return { state, getters, mutations } as Store

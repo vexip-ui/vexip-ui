@@ -39,7 +39,7 @@ const props = useProps('form-submit', _props, {
 const slots = defineSlots<{
   default?: () => any,
   icon?: () => any,
-  loading?: () => any
+  loading?: () => any,
 }>()
 
 const fieldActions = inject(FIELD_OPTIONS, null)

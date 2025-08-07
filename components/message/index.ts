@@ -24,7 +24,7 @@ interface AipMethod {
   (options: MessageOptions): () => void,
   (content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const placementWhiteList: MessagePlacement[] = ['top', 'bottom']

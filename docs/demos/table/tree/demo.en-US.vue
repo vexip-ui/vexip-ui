@@ -24,7 +24,7 @@ interface RowData {
   found: string,
   progress: number,
   treeExpanded?: boolean,
-  children?: RowData[]
+  children?: RowData[],
 }
 
 let idStart = 0

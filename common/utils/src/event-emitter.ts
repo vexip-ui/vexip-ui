@@ -34,7 +34,7 @@ export interface EventEmitter {
    * @param type 事件类型
    * @param payload 传入事件回调方法的参数
    */
-  emit: (type: EventType, ...payload: any[]) => void
+  emit: (type: EventType, ...payload: any[]) => void,
 }
 
 /**

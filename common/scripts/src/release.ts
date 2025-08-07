@@ -52,7 +52,7 @@ export interface ReleaseOptions {
   testAfterBuild?: boolean,
   runTest?: false | (() => Promise<unknown>),
   runBuild?: false | (() => Promise<unknown>),
-  runChangelog?: false | (() => Promise<unknown>)
+  runChangelog?: false | (() => Promise<unknown>),
 }
 
 const logStep = (msg: string) => logger.withStartLn(() => logger.infoText(msg))
@@ -204,7 +204,7 @@ function updateVersionByType(
   currentVersion: string,
   options: {
     type: 'patch' | 'minor' | 'major' | 'release',
-    preId?: string
+    preId?: string,
   },
 ) {
   const preId = String(options.preId || (semver.prerelease(currentVersion)?.[0] ?? ''))
@@ -220,7 +220,7 @@ function updateVersionByType(
 export interface ChooseVersionOptions {
   preId?: string,
   selectMessage?: string,
-  inputMessage?: string
+  inputMessage?: string,
 }
 
 export async function selectNextVersion(

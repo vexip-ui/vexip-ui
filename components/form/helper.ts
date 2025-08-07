@@ -130,7 +130,7 @@ export interface FormFieldStore<V = unknown> {
   clearField: (defaultValue?: V) => void,
   resetField: () => boolean,
   getFieldValue: (defaultValue?: V) => V,
-  setFieldValue: (value: V, strict?: boolean) => void
+  setFieldValue: (value: V, strict?: boolean) => void,
 }
 
 const defaultId = computed(() => undefined as string | undefined)

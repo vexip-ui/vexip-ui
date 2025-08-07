@@ -13,12 +13,12 @@ export type GridAlign = 'top' | 'middle' | 'bottom' | 'stretch'
 
 export interface CellFlex {
   justify: 'start' | 'end' | 'center' | 'space-around' | 'space-between' | 'space-evenly',
-  align: 'top' | 'middle' | 'bottom' | 'stretch'
+  align: 'top' | 'middle' | 'bottom' | 'stretch',
 }
 
 export interface GridState {
   cellFlex: CellFlex | false,
-  columns: LayoutProp
+  columns: LayoutProp,
 }
 
 export interface CellOptions {
@@ -27,7 +27,7 @@ export interface CellOptions {
   width?: number,
   height?: number,
   right?: number | string,
-  bottom?: number | string
+  bottom?: number | string,
 }
 
 export const GRID_STATE = '__VXP_GRID_STATE' as unknown as InjectionKey<GridState>

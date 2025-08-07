@@ -4,12 +4,12 @@ export interface CascadedNode {
   checked: boolean,
   partial: boolean,
   parent?: string | number | symbol,
-  children: CascadedNode[]
+  children: CascadedNode[],
 }
 
 export function useCascadedChecked<T extends CascadedNode>(options: {
   getNode: (key: string | number | symbol) => T | null | undefined | void,
-  disableNode?: (node: T) => boolean
+  disableNode?: (node: T) => boolean,
 }) {
   function updateCheckedUpward(key: string | number | symbol) {
     let node = options.getNode(key)

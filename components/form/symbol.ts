@@ -21,7 +21,7 @@ export interface FormProps {
   disabled: boolean,
   loading: boolean,
   size: ComponentSize,
-  inline: boolean
+  inline: boolean,
 }
 
 export interface FormItemProps {
@@ -35,14 +35,14 @@ export interface FormItemProps {
   defaultValue: unknown,
   hideErrorTip: boolean,
   validateAll: boolean,
-  hideAsterisk: boolean
+  hideAsterisk: boolean,
 }
 
 export interface FormItemSlots {
   default?: (parmas: { isError: boolean }) => any,
   help?: () => any,
   label?: () => any,
-  error?: (params: { tip: string }) => any
+  error?: (params: { tip: string }) => any,
 }
 
 export interface FieldOptions {
@@ -61,7 +61,7 @@ export interface FieldOptions {
   getValue: (defaultValue?: unknown) => unknown,
   setValue: (value: unknown, strict?: boolean) => void,
   sync: (instance: any) => void,
-  unSync: (instance: any) => void
+  unSync: (instance: any) => void,
 }
 
 export interface FormActions {
@@ -71,7 +71,7 @@ export interface FormActions {
   reset: () => void,
   resetFields: (props: string | string[]) => void,
   clearError: () => void,
-  clearFieldsError: (props: string | string[]) => void
+  clearFieldsError: (props: string | string[]) => void,
 }
 
 // form

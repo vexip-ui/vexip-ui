@@ -939,7 +939,7 @@ let dragState: {
   draggingNode: TreeNodeProps,
   treeRect: DOMRect,
   willDropNode: TreeNodeProps | null,
-  dropType: DropType
+  dropType: DropType,
 } | null = null
 
 function handleNodeDragStart(nodeInstance: TreeNodeInstance) {

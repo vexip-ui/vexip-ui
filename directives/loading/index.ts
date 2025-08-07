@@ -10,7 +10,7 @@ import type { DirectiveBinding, ObjectDirective, VNode } from 'vue'
 interface LoadingRecord {
   spin: VNode,
   props: SpinProps,
-  originPosition: string
+  originPosition: string,
 }
 
 type LoadingElement = HTMLElement & { __loading?: LoadingRecord }

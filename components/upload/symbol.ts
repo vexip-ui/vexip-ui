@@ -9,7 +9,7 @@ export type UploadHttpError = Error & {
   response: any,
   url: string,
   status: number,
-  method: string
+  method: string,
 }
 
 export const enum StatusType {
@@ -37,7 +37,7 @@ export interface UploadFileState {
   xhr: XMLHttpRequest | null,
   response: any,
   error: UploadHttpError | null,
-  abort: () => void
+  abort: () => void,
 }
 
 export type UploadFileOptions = Partial<Omit<UploadFileState, 'response' | 'error' | 'abort'>>
@@ -46,11 +46,11 @@ type MaybePromise<T> = T | Promise<T>
 
 export type BeforeUpload = (
   file: UploadFileState,
-  files: UploadFileState[]
+  files: UploadFileState[],
 ) => MaybePromise<boolean | Blob | UploadSourceFile | void>
 export type BeforeSelect = (
   file: UploadFileState,
-  files: UploadFileState[]
+  files: UploadFileState[],
 ) => MaybePromise<boolean | void>
 export type RenderFn = (data: { file: UploadFileState }) => any
 
@@ -65,7 +65,7 @@ export interface UploadFetchOptions {
   onProgress?: (percent: number) => void,
   onSuccess?: (response: any) => void,
   onError?: (error: UploadHttpError) => void,
-  onAbort?: () => void
+  onAbort?: () => void,
 }
 
 /**
@@ -80,14 +80,14 @@ export interface DirectoryEntity {
   isDirectory: boolean,
   file: (callback: (file: UploadSourceFile) => void) => void,
 
-  createReader: () => DirectoryReader
+  createReader: () => DirectoryReader,
 }
 
 export interface DirectoryReader {
   readEntries: (
     onSuccess: (entities: DirectoryEntity[]) => void,
-    onError?: (errors: any) => void
-  ) => void
+    onError?: (errors: any) => void,
+  ) => void,
 }
 
 export interface UploadExposed extends ComponentPublicInstance {
@@ -95,24 +95,24 @@ export interface UploadExposed extends ComponentPublicInstance {
   execute: () => Promise<false | any[]>,
   handleDelete: (file: UploadFileState) => void,
   focus: (options?: FocusOptions) => void,
-  blur: () => void
+  blur: () => void,
 }
 
 export interface UploadListSlots {
   item?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
   icon?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
-  suffix?: () => any
+  suffix?: () => any,
 }
 
 export interface UploadFileSlots {
   default?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
-  icon?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any
+  icon?: (params: { file: UploadFileState, status: UploadStatus, percentage: number }) => any,
 }
 
 export interface UploadSlots extends Omit<UploadListSlots, 'suffix'> {
   default?: (params: { isDragOver: boolean }) => any,
   tip?: () => any,
-  cloud?: () => any
+  cloud?: () => any,
 }
 
 export const uploadListTypes = Object.freeze<UploadListType[]>([

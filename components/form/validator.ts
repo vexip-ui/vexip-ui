@@ -26,7 +26,7 @@ export interface Rule<T = any> {
   strict?: boolean,
   enums?: T[],
   message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorResult
+  validator?(value: T, model: Record<string, any>): ValidatorResult,
 }
 
 type TypeOptions = Pick<Rule, 'length' | 'range' | 'strict'>

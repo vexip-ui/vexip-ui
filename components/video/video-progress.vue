@@ -20,7 +20,7 @@ interface PointState {
   endPercent: number,
   duration: number,
   durationPercent: number,
-  width: number
+  width: number,
 }
 
 defineOptions({ name: 'VideoProgress' })
@@ -246,8 +246,8 @@ function onSlideEnd() {
                     (Math.max(state.percent[1] - point.startPercent, 0) / point.durationPercent) *
                       100 -
                       100,
-                    0
-                  )}%) translateZ(0)`
+                    0,
+                  )}%) translateZ(0)`,
                 }"
               ></div>
             </div>
@@ -263,7 +263,7 @@ function onSlideEnd() {
     <div
       :class="{
         [nh.be('progress-indicator')]: true,
-        [nh.bem('progress-indicator', 'active')]: hovered && !sliding
+        [nh.bem('progress-indicator', 'active')]: hovered && !sliding,
       }"
       :style="{ transform: `translateX(${indicatorLeft}px) translateZ(0)` }"
     ></div>
@@ -273,7 +273,7 @@ function onSlideEnd() {
         :class="{
           [nh.be('preview')]: true,
           [nh.bem('preview', 'has-image')]: previewSrc,
-          [nh.bem('preview', 'active')]: hovered || sliding
+          [nh.bem('preview', 'active')]: hovered || sliding,
         }"
         :style="{ transform: `translateX(${previewLeft}px) translateZ(0)` }"
       >

@@ -6,20 +6,20 @@ export type TooltipShift = 'horizontal' | 'vertical' | 'both'
 
 export type TooltipVirtual =
   | {
-    getBoundingClientRect: () => DOMRect
+    getBoundingClientRect: () => DOMRect,
   }
   | {
     $el: {
-      getBoundingClientRect: () => DOMRect
-    }
+      getBoundingClientRect: () => DOMRect,
+    },
   }
   | {
     x: number,
-    y: number
+    y: number,
   }
 export interface TooltipExposed extends ComponentPublicInstance {
   rendering: boolean,
   trigger: HTMLElement | undefined | null,
   toggleVisible: (visible: boolean) => void,
-  updatePopper: () => void
+  updatePopper: () => void,
 }

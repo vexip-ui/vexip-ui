@@ -9,7 +9,7 @@ interface Data {
   id: number,
   label: string,
   parent: number,
-  expanded?: boolean
+  expanded?: boolean,
 }
 
 const data = [

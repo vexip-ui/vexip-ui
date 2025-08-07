@@ -4,5 +4,5 @@ export interface CardSlots {
   default?: () => any,
   header?: () => any,
   title?: () => any,
-  extra?: () => any
+  extra?: () => any,
 }

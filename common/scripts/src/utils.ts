@@ -80,7 +80,7 @@ export function fuzzyMatch(partials: string[], total: string[], includeAll = fal
 export interface SpecifyOptions {
   required?: boolean,
   message?: string,
-  errorMessage?: string
+  errorMessage?: string,
 }
 
 export async function specifyFromList(

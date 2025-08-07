@@ -124,7 +124,7 @@ interface SuggestedDefault {
   transfer?: boolean | string,
   disabled?: boolean,
   loading?: boolean,
-  clearable?: boolean
+  clearable?: boolean,
 }
 
 export interface PropsOptions {
@@ -241,5 +241,5 @@ export interface PropsOptions {
   h5?: H5CProps,
   h6?: H6CProps,
   p?: PCProps,
-  strong?: StrongCProps
+  strong?: StrongCProps,
 }

@@ -99,7 +99,7 @@ async function create(name: string) {
   const generatedFiles: Array<{
     filePath: string,
     source: string,
-    convert?: boolean
+    convert?: boolean,
   }> = [
     {
       filePath: path.resolve(rootDir, 'components', kebabCaseName, 'index.ts'),

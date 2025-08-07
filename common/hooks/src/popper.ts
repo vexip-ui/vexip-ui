@@ -72,7 +72,7 @@ export interface UsePopperOptions {
    *
    * @default false
    */
-  autoUpdate?: boolean
+  autoUpdate?: boolean,
 }
 
 export type { Placement, VirtualElement }

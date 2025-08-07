@@ -7,7 +7,7 @@ export interface AnchorMeta {
   to: string,
   label: string,
   level: number,
-  children: AnchorMeta[]
+  children: AnchorMeta[],
 }
 
 export function ussTocAnchor(initLevel: 2 | 3 | (2 | 3)[] = 2, wrapper = ref<HTMLElement>()) {

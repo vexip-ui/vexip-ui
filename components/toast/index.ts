@@ -19,7 +19,7 @@ interface AipMethod {
   (options: ToastOptions): () => void,
   (content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const conveniences: Record<ToastType, Record<string, any>> = {

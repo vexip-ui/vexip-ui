@@ -14,17 +14,17 @@ export interface IconBaseProps {
   effect?: IconEffect,
   size?: string,
   color?: string,
-  rotate?: number | string
+  rotate?: number | string,
 }
 
 export type IconRenderer = (
   props: IconBaseProps,
   attrs: Record<string, any>,
-  renderDefault: () => any
+  renderDefault: () => any,
 ) => any
 
 export interface IconProps extends IconBaseProps {
-  renderer?: IconRenderer
+  renderer?: IconRenderer,
 }
 
 export type IconMinorProps = Omit<IconProps, 'icon'>

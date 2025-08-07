@@ -6,7 +6,7 @@ export type ButtonAttrType = 'button' | 'submit' | 'reset'
 
 export interface ButtonState {
   index: number,
-  isLast: boolean
+  isLast: boolean,
 }
 
 export interface ButtonGroupState {
@@ -14,13 +14,13 @@ export interface ButtonGroupState {
   size: ComponentSize,
   increaseItem: (item: ButtonState) => void,
   decreaseItem: (item: ButtonState) => void,
-  refreshIndexes: () => void
+  refreshIndexes: () => void,
 }
 
 export interface ButtonSlots {
   default?: () => any,
   icon?: () => any,
-  loading?: () => any
+  loading?: () => any,
 }
 
 export const GROUP_STATE = '__VXP_BUTTON_GROUP_STATE' as unknown as InjectionKey<ButtonGroupState>

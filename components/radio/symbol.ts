@@ -10,7 +10,7 @@ export type RadioRawOption =
   | {
     label: string | number | boolean,
     content?: string,
-    disabled?: boolean
+    disabled?: boolean,
   }
 
 export interface GroupState {
@@ -25,7 +25,7 @@ export interface GroupState {
   shape: RadioGroupShape,
   updateValue(value: string | number | boolean): void,
   registerInput(input: Ref<HTMLElement | null | undefined>): void,
-  unregisterInput(input: Ref<HTMLElement | null | undefined>): void
+  unregisterInput(input: Ref<HTMLElement | null | undefined>): void,
 }
 
 export type ChangeEvent = (value: string | number | boolean) => void

@@ -25,7 +25,7 @@ export function useScrollWrapper({
   scrollY: Ref<number>,
   onResize?: (entry: ResizeObserverEntry) => void,
   onBeforeRefresh?: () => void,
-  onAfterRefresh?: () => void
+  onAfterRefresh?: () => void,
 }) {
   const { manualRef, triggerUpdate } = useManualRef()
 

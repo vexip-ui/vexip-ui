@@ -9,7 +9,7 @@ export interface DropdownState {
   shift: boolean,
   handleSelect: SelectHandler,
   handleTriggerEnter: () => void,
-  handleTriggerLeave: () => void
+  handleTriggerLeave: () => void,
 }
 
 export const SELECT_HANDLER = '__VXP_SELECT_HANDLER' as unknown as InjectionKey<SelectHandler>

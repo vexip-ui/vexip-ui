@@ -35,7 +35,7 @@ export type ModalOptions = Omit<ModalProps, 'active' | 'transfer' | 'loading' | 
   /**
    * Another way to use footer slot
    */
-  footerRenderer: ModalCommonSlot
+  footerRenderer: ModalCommonSlot,
 }
 
 export function useModal(options: Partial<ModalOptions> = {}): () => Promise<void> {

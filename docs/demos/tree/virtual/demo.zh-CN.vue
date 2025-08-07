@@ -36,7 +36,7 @@ import type { TreeExposed } from 'vexip-ui'
 
 interface Node {
   label: string,
-  children: Node[]
+  children: Node[],
 }
 
 const tree = ref<TreeExposed>()
