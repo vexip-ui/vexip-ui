@@ -1,6 +1,6 @@
 {
   "name": "vexip-ui",
-  "version": "2.3.35",
+  "version": "2.3.36",
   "type": "module",
   "packageManager": "pnpm@10.11.0",
   "license": "MIT",
