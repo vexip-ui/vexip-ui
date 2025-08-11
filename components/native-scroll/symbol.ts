@@ -9,7 +9,7 @@ export interface NativeScrollPayload {
   clientX: number,
   clientY: number,
   percentX: number,
-  percentY: number
+  percentY: number,
 }
 
 // export interface BarScrollPayload {
@@ -26,7 +26,7 @@ export interface NativeScrollState {
   percentX: number,
   percentY: number,
   enableXScroll: Readonly<boolean>,
-  enableYScroll: Readonly<boolean>
+  enableYScroll: Readonly<boolean>,
 }
 
 export interface NativeScrollSlotParams {
@@ -35,7 +35,7 @@ export interface NativeScrollSlotParams {
   scrollTo: (clientX: number, clientY: number, duration?: number) => Promise<void>,
   scrollBy: (deltaX: number, deltaY: number, duration?: number) => Promise<void>,
   scrollToElement: (el: string | Element, duration?: number, offset?: number) => Promise<void>,
-  ensureInView: (el: string | Element, duration?: number, offset?: number) => void
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => void,
 }
 
 export interface NativeScrollExposed extends ComponentPublicInstance {
@@ -58,5 +58,5 @@ export interface NativeScrollExposed extends ComponentPublicInstance {
   getXScrollLimit: () => number[],
   getYScrollLimit: () => number[],
   addScrollListener: (listener: EventHandler) => void,
-  removeScrollListener: (listener: EventHandler) => void
+  removeScrollListener: (listener: EventHandler) => void,
 }

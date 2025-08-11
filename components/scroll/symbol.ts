@@ -7,7 +7,7 @@ export interface ScrollPayload {
   clientX: number,
   clientY: number,
   percentX: number,
-  percentY: number
+  percentY: number,
 }
 
 export interface BarScrollPayload {
@@ -15,7 +15,7 @@ export interface BarScrollPayload {
   clientX: number,
   clientY: number,
   percentX: number,
-  percentY: number
+  percentY: number,
 }
 
 export interface ScrollState {
@@ -24,7 +24,7 @@ export interface ScrollState {
   percentX: number,
   percentY: number,
   enableXScroll: number,
-  enableYScroll: number
+  enableYScroll: number,
 }
 
 export interface ScrollSlotParams {
@@ -33,7 +33,7 @@ export interface ScrollSlotParams {
   scrollTo: (clientX: number, clientY: number, duration?: number) => void,
   scrollBy: (deltaX: number, deltaY: number, duration?: number) => void,
   scrollToElement: (el: string | Element, duration?: number, offset?: number) => void,
-  ensureInView: (el: string | Element, duration?: number, offset?: number) => void
+  ensureInView: (el: string | Element, duration?: number, offset?: number) => void,
 }
 
 export const scrollModes = Object.freeze<ScrollMode[]>([

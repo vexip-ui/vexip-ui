@@ -14,12 +14,12 @@ export type DatePickerFormatFn = (timestamp: number, type: 'start' | 'end') => u
 
 export interface DateShortcut {
   name: string,
-  value: Dateable | Dateable[] | (() => Dateable | Dateable[])
+  value: Dateable | Dateable[] | (() => Dateable | Dateable[]),
 }
 
 export interface TimeShortcut {
   name: string,
-  value: string | string[] | (() => string | string[])
+  value: string | string[] | (() => string | string[]),
 }
 
 export interface DatePickerState {
@@ -28,13 +28,13 @@ export interface DatePickerState {
   enabled: Record<DateTimeType, boolean>,
   activated: Record<DateTimeType, boolean>,
   dateValue: Record<DateTimeType, number>,
-  enterColumn(type: 'prev' | 'next'): void
+  enterColumn(type: 'prev' | 'next'): void,
 }
 
 export interface DisabledTime {
   hour?(hour: number): boolean,
   minute?(hour: number, minute: number): boolean,
-  second?(hour: number, minute: number, second: number): boolean
+  second?(hour: number, minute: number, second: number): boolean,
 }
 
 export const enum DisabledType {
@@ -63,7 +63,7 @@ export const TIME_REG = /^((?:\d{1,2}))((?::\d{1,2}))?((?::\d{1,2}))?$/
 export interface TimeWheelSlots {
   hour?: WheelSlots['default'],
   minute?: WheelSlots['default'],
-  second?: WheelSlots['default']
+  second?: WheelSlots['default'],
 }
 
 export interface DatePanelSlots {
@@ -72,24 +72,24 @@ export interface DatePanelSlots {
     yearStart: number,
     year: number,
     month: number,
-    togglePanel: (panel: DateType) => void
+    togglePanel: (panel: DateType) => void,
   }) => any,
   year?: (params: {
     year: number,
     selected: boolean,
     isNext: boolean,
     disabled: boolean,
-    inRange: boolean
+    inRange: boolean,
   }) => any,
   month?: (params: {
     year: number,
     month: number,
     selected: boolean,
     disabled: boolean,
-    inRange: boolean
+    inRange: boolean,
   }) => any,
   week?: CalendarPanelSlots['week'],
-  date?: CalendarPanelSlots['item']
+  date?: CalendarPanelSlots['item'],
 }
 
 export interface DatePickerSlots {
@@ -100,11 +100,11 @@ export interface DatePickerSlots {
   panelYear?: DatePanelSlots['year'],
   panelMonth?: DatePanelSlots['month'],
   panelWeek?: DatePanelSlots['week'],
-  panelDate?: DatePanelSlots['date']
+  panelDate?: DatePanelSlots['date'],
 }
 
 export interface TimePickerSlots {
   prefix?: () => any,
   exchange?: () => any,
-  suffix?: () => any
+  suffix?: () => any,
 }

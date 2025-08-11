@@ -63,46 +63,46 @@ const defaultAccessor = (v: unknown) => v
 export function listToMap<T = any, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
-  useMap?: false
+  useMap?: false,
 ): Record<T[K] extends RecordKey ? T[K] : RecordKey, T>
 export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
   accessor?: (item: T) => O,
-  useMap?: false
+  useMap?: false,
 ): Record<T[K] extends RecordKey ? T[K] : RecordKey, O>
 export function listToMap<T = any, K = RecordKey>(
   list: T[],
   prop: (item: T) => K,
-  useMap?: false
+  useMap?: false,
 ): Record<K extends RecordKey ? K : RecordKey, T>
 export function listToMap<T = any, O = T, K = RecordKey>(
   list: T[],
   prop: (item: T) => K,
   accessor?: (item: T) => O,
-  useMap?: false
+  useMap?: false,
 ): Record<K extends RecordKey ? K : RecordKey, O>
 export function listToMap<T = any, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
-  useMap?: true
+  useMap?: true,
 ): Map<T[K], T>
 export function listToMap<T = any, O = T, K extends keyof T = keyof T>(
   list: T[],
   prop: K,
   accessor?: (item: T) => O,
-  useMap?: true
+  useMap?: true,
 ): Map<T[K], O>
 export function listToMap<T = any, K = any>(
   list: T[],
   prop: (item: T) => K,
-  useMap?: true
+  useMap?: true,
 ): Map<K, T>
 export function listToMap<T = any, O = T, K = any>(
   list: T[],
   prop: (item: T) => K,
   accessor?: (item: T) => O,
-  useMap?: true
+  useMap?: true,
 ): Map<K, O>
 /**
  * 根据数组元素中某个或多个属性的值转换为映射对象
@@ -238,7 +238,7 @@ export interface TreeOptions<T = string> {
   childField?: T,
   parentField?: T,
   /** 若指定，`parent` 值等于 `rootId` 的节点被认为是顶级节点 */
-  rootId?: any
+  rootId?: any,
 }
 
 /**
@@ -320,7 +320,7 @@ export function flatTree<T = any>(
     /** 过滤的结果是否会影响其子级 */
     cascaded?: boolean,
     /** 是否强制为节点插入 ID 值 */
-    forceInject?: boolean
+    forceInject?: boolean,
   } = {},
 ) {
   const {
@@ -399,7 +399,7 @@ export function walkTree<T = any>(
   options: {
     /** 是否为深度优先遍历 */
     depthFirst?: boolean,
-    childField?: keyof T
+    childField?: keyof T,
   } = {},
 ) {
   const { childField = 'children' as keyof T, depthFirst = false } = options
@@ -436,7 +436,7 @@ export function mapTree<T = any, R = any>(
     depthFirst?: boolean,
     childField?: keyof T,
     /** 是否强制重置 `children` 字段 */
-    clearChildren?: boolean
+    clearChildren?: boolean,
   } = {},
 ) {
   const { childField = 'children' as keyof T, depthFirst = false, clearChildren = true } = options
@@ -491,7 +491,7 @@ export function filterTree<T = any>(
     isLeaf?: (item: T) => boolean,
     /** 是否只对叶子节点进行过滤 */
     leafOnly?: boolean,
-    childField?: keyof T
+    childField?: keyof T,
   } = {},
 ) {
   const {
@@ -548,7 +548,7 @@ export interface SortOptions<T = string> {
   /** 升降序 */
   type?: 'asc' | 'desc',
   /** 传入读取器的额外参数 */
-  params?: any[]
+  params?: any[],
 }
 
 const defaultSortMethod = (prev: any, next: any) => {
@@ -647,7 +647,7 @@ export function mergeObjects<T extends Record<string, any>, U extends Record<str
 
   const loop: Array<{
     source: Record<string, any>,
-    target: Record<string, any>
+    target: Record<string, any>,
   }> = [
     {
       source: sourceObj,

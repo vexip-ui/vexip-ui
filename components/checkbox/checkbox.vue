@@ -60,7 +60,7 @@ const props = useProps('checkbox', _props, {
 const emit = defineEmits(['update:checked'])
 
 const slots = defineSlots<{
-  default?: () => any
+  default?: () => any,
 }>()
 
 const groupState = inject(GROUP_STATE, null)

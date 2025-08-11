@@ -27,7 +27,7 @@ import { debounce } from '@vexip-ui/utils'
 
 interface Option {
   label: string,
-  value: number
+  value: number,
 }
 
 const remoteOptions: Option[] = [

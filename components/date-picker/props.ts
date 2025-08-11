@@ -32,7 +32,7 @@ import type {
 export interface DatePickerShortcutEvent {
   (name: string, value: Dateable | Dateable[]): void,
   (name: string, value: Dateable): void,
-  (name: string, value: Dateable[]): void
+  (name: string, value: Dateable[]): void,
 }
 
 export const datePickerProps = buildProps({
@@ -103,7 +103,7 @@ export type DatePickerCProps = ConfigurableProps<DatePickerProps>
 export interface TimePickerShortcutEvent {
   (name: string, value: string | string[]): void,
   (name: string, value: string): void,
-  (name: string, value: string[]): void
+  (name: string, value: string[]): void,
 }
 
 export const timePickerProps = buildProps({

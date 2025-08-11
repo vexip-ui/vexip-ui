@@ -12,7 +12,7 @@ export interface UseFullScreenResult {
   full: ComputedRef<boolean>,
   enter: (force?: boolean) => Promise<boolean>,
   exit: (force?: boolean) => Promise<boolean>,
-  toggle: (force?: boolean) => Promise<boolean>
+  toggle: (force?: boolean) => Promise<boolean>,
 }
 
 type PropertiesMap = [

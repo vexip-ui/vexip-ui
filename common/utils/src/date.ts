@@ -40,7 +40,7 @@ export const YEAR_ON_MONTHS = YEAR_ON_QUARTERS * QUARTER_ON_MONTHS
 type Formatter = (date: Date, match: string) => string | number
 
 interface Formatters {
-  [prop: string]: Formatter
+  [prop: string]: Formatter,
 }
 
 const formatters: Formatters = {

@@ -4,7 +4,7 @@ export interface DrawerSlotParams {
   resizing: boolean,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm?: boolean) => Promise<unknown>
+  handleClose: (isConfirm?: boolean) => Promise<unknown>,
 }
 
 export type DrawerCommonSlot = (params: DrawerSlotParams) => any
@@ -15,7 +15,7 @@ export interface DrawerSlots {
   close?: DrawerCommonSlot,
   default?: DrawerCommonSlot,
   footer?: DrawerCommonSlot,
-  handler?: DrawerCommonSlot
+  handler?: DrawerCommonSlot,
 }
 
 export const drawerPlacements = Object.freeze<DrawerPlacement[]>(['top', 'right', 'bottom', 'left'])

@@ -35,24 +35,24 @@ export interface ConfirmState {
   /**
    * Record the raw option.
    */
-  raw: Record<any, any>
+  raw: Record<any, any>,
 }
 
 export type ConfirmRenderFn = (
   options: ConfirmState,
   handleConfirm: () => Promise<void>,
-  handleCancel: () => void
+  handleCancel: () => void,
 ) => any
 
 export interface ConfirmOptions
   extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>,
   Record<any, any> {
   renderer?: ConfirmRenderFn,
-  onBeforeConfirm?: () => unknown
+  onBeforeConfirm?: () => unknown,
 }
 
 export interface ConfirmInstance extends ComponentPublicInstance {
   openConfirm: (options: ConfirmOptions) => Promise<boolean>,
   closeConfirm: () => void,
-  handleReset: () => void
+  handleReset: () => void,
 }

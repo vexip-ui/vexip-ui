@@ -38,7 +38,7 @@ const props = useProps('formReset', _props, {
 const slots = defineSlots<{
   default?: () => any,
   icon?: () => any,
-  loading?: () => any
+  loading?: () => any,
 }>()
 
 const actions = inject(FORM_ACTIONS, null)

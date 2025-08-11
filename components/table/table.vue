@@ -776,7 +776,7 @@ let dragState: {
   tableRect: DOMRect,
   willDropRow: TableRowState | null,
   dropType: DropType,
-  dropped: boolean
+  dropped: boolean,
 } | null
 
 function handleRowDragStart(rowInstance: TableRowInstance, event: DragEvent) {
@@ -1102,7 +1102,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive
+            [nh.bem('fixed', 'active')]: leftFixedActive,
           }"
         >
           <TableHead fixed="left"></TableHead>
@@ -1112,7 +1112,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive
+            [nh.bem('fixed', 'active')]: rightFixedActive,
           }"
         >
           <TableHead fixed="right"></TableHead>
@@ -1137,7 +1137,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive
+            [nh.bem('fixed', 'active')]: leftFixedActive,
           }"
         >
           <TableFoot fixed="left" above></TableFoot>
@@ -1147,7 +1147,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive
+            [nh.bem('fixed', 'active')]: rightFixedActive,
           }"
         >
           <TableFoot fixed="right" above></TableFoot>
@@ -1157,7 +1157,7 @@ function renderTableSlot({ name }: { name: string }) {
     <div
       :class="[
         nh.be('body-wrapper'),
-        state.totalHeight >= bodyMinHeight && nh.bem('body-wrapper', 'scrolled')
+        state.totalHeight >= bodyMinHeight && nh.bem('body-wrapper', 'scrolled'),
       ]"
       :style="{
         ...(!bodyScrollHeight && state.totalHeight
@@ -1166,10 +1166,10 @@ function renderTableSlot({ name }: { name: string }) {
             transition:
               props.noTransition || state.locked
                 ? undefined
-                : `height ${nh.gnv('transition-base')}`
+                : `height ${nh.gnv('transition-base')}`,
           }
           : undefined),
-        minHeight: `${bodyMinHeight}px`
+        minHeight: `${bodyMinHeight}px`,
       }"
     >
       <NativeScroll
@@ -1192,7 +1192,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive
+            [nh.bem('fixed', 'active')]: leftFixedActive,
           }"
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
@@ -1215,7 +1215,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive
+            [nh.bem('fixed', 'active')]: rightFixedActive,
           }"
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
@@ -1249,7 +1249,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.leftFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'left')]: true,
-            [nh.bem('fixed', 'active')]: leftFixedActive
+            [nh.bem('fixed', 'active')]: leftFixedActive,
           }"
         >
           <TableFoot fixed="left"></TableFoot>
@@ -1259,7 +1259,7 @@ function renderTableSlot({ name }: { name: string }) {
           v-if="state.rightFixedColumns.length"
           :class="{
             [nh.bem('fixed', 'right')]: true,
-            [nh.bem('fixed', 'active')]: rightFixedActive
+            [nh.bem('fixed', 'active')]: rightFixedActive,
           }"
         >
           <TableFoot fixed="right"></TableFoot>
@@ -1291,7 +1291,7 @@ function renderTableSlot({ name }: { name: string }) {
       :bar-length="yBarLength"
       :style="{
         top: headHeight ? `${headHeight}px` : undefined,
-        bottom: footHeight ? `${footHeight}px` : undefined
+        bottom: footHeight ? `${footHeight}px` : undefined,
       }"
       @scroll-start="setBarScrolling(true)"
       @scroll="handleYBarScroll"
@@ -1304,7 +1304,7 @@ function renderTableSlot({ name }: { name: string }) {
       :class="[
         nh.be('indicator'),
         indicatorType === 'before' && nh.bem('indicator', 'before'),
-        indicatorType === 'after' && nh.bem('indicator', 'after')
+        indicatorType === 'after' && nh.bem('indicator', 'after'),
       ]"
     ></div>
     <div

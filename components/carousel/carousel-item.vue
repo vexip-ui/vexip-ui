@@ -9,7 +9,7 @@ import type { ItemState } from './symbol'
 defineOptions({ name: 'CarouselItem' })
 
 defineSlots<{
-  default: (params: { active: boolean }) => any
+  default: (params: { active: boolean }) => any,
 }>()
 
 const carouselState = inject(CAROUSEL_STATE, null)

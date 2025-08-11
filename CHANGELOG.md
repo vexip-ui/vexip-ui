@@ -1,3 +1,19 @@
+## [2.3.36](https://github.com/vexip-ui/vexip-ui/compare/v2.3.35...v2.3.36) (2025-08-11)
+
+
+### ✨ Features
+
+* **collapse:** add arrow slot for panel ([b321985](https://github.com/vexip-ui/vexip-ui/commit/b3219851be432b6aa071eafe039959cf58c4dd54))
+* **form:** emit native submit event ([ea4dd58](https://github.com/vexip-ui/vexip-ui/commit/ea4dd5861ac4e91b831a8ff7c68181afb065b68b))
+
+
+### 🐞 Bug Fixes
+
+* **table:** correct hover state for rows when using virtual ([8b49e23](https://github.com/vexip-ui/vexip-ui/commit/8b49e23ad37cdc8d7f245ed51abce9e25fe2c345))
+* **v-loading:** correctly sync app context from parent node ([a90069d](https://github.com/vexip-ui/vexip-ui/commit/a90069de250e25406af4440faf0e7bc0aaf7ec29))
+
+
+
 ## [2.3.35](https://github.com/vexip-ui/vexip-ui/compare/v2.3.34...v2.3.35) (2025-07-31)
 
 

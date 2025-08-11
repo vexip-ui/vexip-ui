@@ -62,6 +62,14 @@ This component can be used independently to add collapsing transition effects to
 
 ## API
 
+### Preset Types
+
+```ts
+interface CollapsePanelSlots {
+  arrow?: (params: { expanded: boolean }) => any
+}
+```
+
 ### Collapse Props
 
 | Name       | Type                                       | Description                                                                                     | Default   | Since |
@@ -100,10 +108,11 @@ This component can be used independently to add collapsing transition effects to
 
 ### CollapsePanel Slots
 
-| Name    | Description                | Parameters | Since |
-| ------- | -------------------------- | ---------- | ----- |
-| default | Content slot for the panel | -          | -     |
-| title   | Title slot for the panel   | -          | -     |
+| Name    | Description                   | Parameters              | Since    |
+| ------- | ----------------------------- | ----------------------- | -------- |
+| default | Content slot for the panel    | -                       | -        |
+| title   | Title slot for the panel      | -                       | -        |
+| arrow   | Arrow icon slot for the panel | `{ expanded: boolean }` | `2.3.36` |
 
 ### CollapseTransition Props
 

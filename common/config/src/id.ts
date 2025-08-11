@@ -7,7 +7,7 @@ import type { App, MaybeRef } from 'vue'
 export const PROVIDED_ID_CONTER = '__vxp-provided-id-counter'
 
 export interface IDCounter {
-  getNext: () => number | string
+  getNext: () => number | string,
 }
 
 class VxpIDCounter implements IDCounter {

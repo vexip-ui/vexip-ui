@@ -1,10 +1,10 @@
 declare module 'vue' {
   interface InputHTMLAttributes {
-    webkitdirectory?: boolean
+    webkitdirectory?: boolean,
   }
 
   interface ComponentCustomProps {
-    [attrName: string]: any
+    [attrName: string]: any,
   }
 }
 

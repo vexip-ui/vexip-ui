@@ -119,6 +119,7 @@ export function useStore(options: StoreOptions) {
     locked: false,
     barScrolling: false,
     heightTrigger: 0,
+    hoveredRowKey: null as Key | null,
   }) as StoreState
 
   setColumns(options.columns)
@@ -367,6 +368,7 @@ export function useStore(options: StoreOptions) {
     setEllipsis,
     setLocked,
     setBarScrolling,
+    setHoveredRowKey,
 
     handleSort,
     clearSort,
@@ -1276,6 +1278,23 @@ export function useStore(options: StoreOptions) {
     state.barScrolling = scrolling
   }
 
+  function setHoveredRowKey(key: Key | null) {
+    if (state.hoveredRowKey !== key) {
+      const prevHoveredRow = state.hoveredRowKey && state.rowMap.get(state.hoveredRowKey)
+      const newHoveredRow = key && state.rowMap.get(key)
+
+      if (prevHoveredRow) {
+        prevHoveredRow.hover = false
+      }
+
+      if (newHoveredRow) {
+        newHoveredRow.hover = true
+      }
+    }
+
+    state.hoveredRowKey = key
+  }
+
   function handleSort(key: Key, type: ParsedTableSorterOptions['type']) {
     if (state.sorters.has(key)) {
       if (state.singleSorter && type) {
@@ -1544,7 +1563,7 @@ export function useStore(options: StoreOptions) {
     key: Key,
     value: number | string | null,
     active?: boolean,
-    disableOthers?: boolean
+    disableOthers?: boolean,
   }) {
     const { key, value, active = false, disableOthers = false } = options
 
@@ -1983,7 +2002,7 @@ export function useStore(options: StoreOptions) {
   type Store = Readonly<{
     state: Readonly<typeof state>,
     getters: Readonly<typeof getters>,
-    mutations: Readonly<typeof mutations>
+    mutations: Readonly<typeof mutations>,
   }>
 
   return { state, getters, mutations } as Store

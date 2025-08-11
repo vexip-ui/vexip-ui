@@ -1,11 +1,11 @@
 export interface ComponentConfig {
   name: string,
-  since?: string
+  since?: string,
 }
 
 export interface ComponentGroup {
   name: string,
-  components: ComponentConfig[]
+  components: ComponentConfig[],
 }
 
 export function getComponentConfig(): ComponentGroup[] {

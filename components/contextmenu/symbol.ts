@@ -13,7 +13,7 @@ export interface ContextmenuConfig {
   divided?: boolean,
   disabled?: boolean,
   children?: ContextmenuConfig[],
-  renderer?: () => any
+  renderer?: () => any,
 }
 
 export interface ContextmenuOptions {
@@ -21,10 +21,10 @@ export interface ContextmenuOptions {
   clientY: number,
   configs: ContextmenuConfig[],
   target?: MaybeRef<string | MaybeInstance>,
-  appear?: boolean
+  appear?: boolean,
 }
 
 export interface ContextmenuInstance extends ComponentPublicInstance {
   openContextmenu: (options: ContextmenuOptions) => Promise<Key[] | null>,
-  handleCancel: () => void
+  handleCancel: () => void,
 }

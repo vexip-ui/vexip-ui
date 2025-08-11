@@ -35,6 +35,7 @@ export const formProps = buildProps({
   gap: [Number, Array] as PropType<number | number[]>,
   justify: String as PropType<RowGridJustify>,
   align: String as PropType<RowGridAlign>,
+  onSubmit: eventProp<(e: SubmitEvent) => void>(),
 })
 
 export type FormProps = ExtractPropTypes<typeof formProps>

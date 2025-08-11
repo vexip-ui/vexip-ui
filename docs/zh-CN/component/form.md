@@ -207,6 +207,12 @@ interface Rule<T = any> {
 | justify       | `RowGridJustify`                       | 水平排列方式，参考 Row 组件同名属性                                     | `'start'`   | `2.0.0` |
 | align         | `RowGridAlign`                         | 垂直对齐方式，参考 Row 组件同名属性                                     | `'top'`     | `2.0.0` |
 
+### Form Events
+
+| 名称   | 说明               | 参数                   | 始于     |
+| ------ | ------------------ | ---------------------- | -------- |
+| submit | 表单原生的提交事件 | `(event: SubmitEvent)` | `2.3.36` |
+
 ### Form 方法
 
 | 名称             | 说明                                 | 签名                                               | 始于 |

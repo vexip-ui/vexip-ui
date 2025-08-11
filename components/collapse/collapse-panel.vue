@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 
 import { computed, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
@@ -8,7 +9,7 @@ import { createIconProp, emitEvent, useIcons, useNameHelper, useProps } from '@v
 import { collapsePanelProps } from './props'
 import { COLLAPSE_STATE, getIndexId } from './symbol'
 
-import type { CollapseArrowType, PanelState } from './symbol'
+import type { CollapseArrowType, CollapsePanelSlots, PanelState } from './symbol'
 
 defineOptions({ name: 'CollapsePanel' })
 
@@ -29,9 +30,12 @@ const props = useProps('collapsePanel', _props, {
   },
   icon: createIconProp(),
   ghost: false,
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:expanded'])
+
+defineSlots<CollapsePanelSlots>()
 
 const collapseState = inject(COLLAPSE_STATE, null)
 
@@ -153,7 +157,11 @@ defineExpose({
       @click="handleToggle()"
     >
       <div :class="nh.be('arrow')">
-        <Icon v-bind="icons.angleRight"></Icon>
+        <slot name="arrow" :expanded="currentExpanded">
+          <Renderer :renderer="props.slots.arrow" :data="{ expanded: currentExpanded }">
+            <Icon v-bind="icons.angleRight"></Icon>
+          </Renderer>
+        </slot>
       </div>
       <slot name="title">
         <div v-if="props.icon" :class="nh.be('icon')">

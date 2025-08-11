@@ -48,7 +48,7 @@ export interface VexipUIResolverOptions {
    *
    * @default undefined
    */
-  iconPrefix?: string
+  iconPrefix?: string,
 }
 
 function throwLoadError() {

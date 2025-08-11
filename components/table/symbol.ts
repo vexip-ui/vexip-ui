@@ -27,7 +27,7 @@ export const enum DropType {
 
 export interface CellSpanResult {
   colSpan?: number,
-  rowSpan?: number
+  rowSpan?: number,
 }
 
 export interface TableKeyConfig {
@@ -36,7 +36,7 @@ export interface TableKeyConfig {
   checked?: string,
   height?: string,
   expanded?: string,
-  treeExpanded?: string
+  treeExpanded?: string,
 }
 
 export interface TableSlots {
@@ -44,12 +44,12 @@ export interface TableSlots {
    * @internal
    */
   default?: () => any,
-  empty?: (params: { isFixed: boolean }) => any
+  empty?: (params: { isFixed: boolean }) => any,
 }
 
 export type Accessor<D = Data, Val extends string | number = string | number> = (
   data: D,
-  index: number
+  index: number,
 ) => Val
 export type ExpandRenderFn<D = Data> = (data: {
   /** @deprecated */
@@ -57,17 +57,17 @@ export type ExpandRenderFn<D = Data> = (data: {
   /** @deprecated */
   rightFixed: number,
   row: D,
-  rowIndex: number
+  rowIndex: number,
 }) => any
 export type ColumnCellSpanFn<D = Data> = (data: {
   row: D,
   index: number,
-  fixed?: 'left' | 'right'
+  fixed?: 'left' | 'right',
 }) => CellSpanResult | void
 export type SummaryCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
   column: TableColumnOptions<D, Val>,
   index: number,
-  fixed?: 'left' | 'right'
+  fixed?: 'left' | 'right',
 }) => CellSpanResult | void
 
 export type TableFilterOptions<D = Data, Val extends string | number = string | number> =
@@ -78,7 +78,7 @@ export type TableFilterOptions<D = Data, Val extends string | number = string | 
     multiple?: false,
     active?: null | Val,
     method?: null | ((active: Val, data: D) => boolean),
-    meta?: any
+    meta?: any,
   }
   | {
     able?: boolean,
@@ -87,7 +87,7 @@ export type TableFilterOptions<D = Data, Val extends string | number = string | 
     multiple: true,
     active?: null | Val[],
     method?: null | ((active: Val[], data: D) => boolean),
-    meta?: any
+    meta?: any,
   }
   | {
     able?: boolean,
@@ -96,18 +96,18 @@ export type TableFilterOptions<D = Data, Val extends string | number = string | 
     multiple?: false,
     active?: null | Val | Val[],
     method?: null | ((active: any, data: D) => boolean),
-    meta?: any
+    meta?: any,
   }
 
 export interface ParsedFilterOptions extends Omit<Required<TableFilterOptions>, 'options'> {
-  options: { value: string | number, label: string, active: boolean }[]
+  options: { value: string | number, label: string, active: boolean }[],
 }
 
 export interface TableSorterOptions<D = Data> {
   able?: boolean,
   type?: null | 'asc' | 'desc',
   order?: number, // 优先级
-  method?: null | ((prev: D, next: D) => number)
+  method?: null | ((prev: D, next: D) => number),
 }
 
 export type ParsedTableSorterOptions = Required<TableSorterOptions>
@@ -115,14 +115,14 @@ export type ParsedTableSorterOptions = Required<TableSorterOptions>
 export interface TableSummaryData {
   sum: number,
   min: number,
-  max: number
+  max: number,
 }
 
 export type SummaryRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   column: TableColumnOptions<D, Val>,
   index: number,
   rows: D[],
-  meta: TableSummaryData
+  meta: TableSummaryData,
 }) => any
 
 export type ColumnSummaryRenderFn<
@@ -133,7 +133,7 @@ export type ColumnSummaryRenderFn<
   index: number,
   rows: D[],
   meta: TableSummaryData,
-  summary: TableSummaryOptions<D, Val>
+  summary: TableSummaryOptions<D, Val>,
 }) => any
 
 export interface TableBaseColumn<D = Data, Val extends string | number = string | number> {
@@ -162,7 +162,7 @@ export interface TableBaseColumn<D = Data, Val extends string | number = string 
   renderer?: ColumnRenderFn<D, Val>,
   headRenderer?: HeadRenderFn,
   filterRenderer?: FilterRenderFn,
-  summaryRenderer?: ColumnSummaryRenderFn<D, Val>
+  summaryRenderer?: ColumnSummaryRenderFn<D, Val>,
 }
 
 export interface TableOrderColumn<D = Data, Val extends string | number = string | number>
@@ -170,7 +170,7 @@ export interface TableOrderColumn<D = Data, Val extends string | number = string
   key?: keyof D,
   type: 'order',
   truthIndex?: boolean,
-  orderLabel?: (index: number) => string | number
+  orderLabel?: (index: number) => string | number,
 }
 
 export interface TableSelectionColumn<D = Data, Val extends string | number = string | number>
@@ -183,7 +183,7 @@ export interface TableSelectionColumn<D = Data, Val extends string | number = st
   checkboxSize?: ComponentSize,
   selectionSize?: ComponentSize,
   singleSelect?: boolean,
-  disableRow?: (data: Data) => boolean
+  disableRow?: (data: Data) => boolean,
 }
 
 export interface TableExpandColumn<D = Data, Val extends string | number = string | number>
@@ -191,14 +191,14 @@ export interface TableExpandColumn<D = Data, Val extends string | number = strin
   key?: keyof D,
   type: 'expand',
   disableRow?: (data: Data) => boolean,
-  renderer?: ExpandRenderFn<D>
+  renderer?: ExpandRenderFn<D>,
 }
 
 export interface TableDragColumn<D = Data, Val extends string | number = string | number>
   extends Omit<TableBaseColumn<D, Val>, 'key' | 'type' | 'renderer'> {
   key?: keyof D,
   type: 'drag',
-  disableRow?: (data: Data) => boolean
+  disableRow?: (data: Data) => boolean,
 }
 
 export type TableTypeColumn<D = Data, Val extends string | number = string | number> =
@@ -223,7 +223,7 @@ export type ColumnWithKey<
   /** @internal */
   first?: boolean,
   /** @internal */
-  last?: boolean
+  last?: boolean,
 }
 
 export interface TableColumnGroupOptions {
@@ -233,7 +233,7 @@ export interface TableColumnGroupOptions {
   ellipsis?: boolean,
   textAlign?: TableTextAlign,
   renderer?: () => any,
-  children: TableColumnOptions<any, any>[]
+  children: TableColumnOptions<any, any>[],
 }
 export interface ColumnGroupWithKey extends TableColumnGroupOptions {
   key: Key,
@@ -242,24 +242,24 @@ export interface ColumnGroupWithKey extends TableColumnGroupOptions {
   /** @internal */
   colIndex: number,
   /** @internal */
-  last?: boolean
+  last?: boolean,
 }
 
 export type ColumnRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   row: D,
   rowIndex: number,
   column: TableBaseColumn<D, Val>,
-  columnIndex: number
+  columnIndex: number,
 }) => any
 export type HeadRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   column: TableColumnOptions<D, Val>,
-  index: number
+  index: number,
 }) => any
 export type FilterRenderFn<D = Data, Val extends string | number = string | number> = (data: {
   column: TableColumnOptions<D, Val>,
   index: number,
   filter: Required<TableFilterOptions<D, Val>>,
-  handleFilter: (active: any) => void
+  handleFilter: (active: any) => void,
 }) => any
 
 export type TableCellSpanFn<D = Data, Val extends string | number = string | number> = (data: {
@@ -267,25 +267,25 @@ export type TableCellSpanFn<D = Data, Val extends string | number = string | num
   rowIndex: number,
   column: TableColumnOptions<D, Val>,
   columnIndex: number,
-  fixed?: 'left' | 'right'
+  fixed?: 'left' | 'right',
 }) => CellSpanResult | undefined
 
 export type TableCellPropFn<D = Data, P = any> = (data: {
   row: D,
   rowIndex: number,
   column: ColumnWithKey,
-  columnIndex: number
+  columnIndex: number,
 }) => P
 export type TableHeadPropFn<P = any> = (data: {
   column: ColumnWithKey,
   index: number,
-  rowIndex: number
+  rowIndex: number,
 }) => P
 export type TableFootPropFn<P = any> = (data: {
   column: ColumnWithKey,
   columnIndex: number,
   summary: SummaryWithKey,
-  summaryIndex: number
+  summaryIndex: number,
 }) => P
 
 export type ColumnProfile<D = Data, Val extends string | number = string | number> = Pick<
@@ -296,14 +296,14 @@ export type TableFilterProfile<
   D = Data,
   Val extends string | number = string | number,
 > = ColumnProfile<D, Val> & {
-  active: Val | Val[]
+  active: Val | Val[],
 }
 export type TableSorterProfile<
   D = Data,
   Val extends string | number = string | number,
 > = ColumnProfile<D, Val> & {
   type: 'asc' | 'desc',
-  order: number
+  order: number,
 }
 
 export interface TableSummaryOptions<D = Data, Val extends string | number = string | number> {
@@ -316,7 +316,7 @@ export interface TableSummaryOptions<D = Data, Val extends string | number = str
   above?: boolean,
   meta?: Record<any, any>,
   cellSpan?: SummaryCellSpanFn<D, Val>,
-  renderer?: SummaryRenderFn<D, Val>
+  renderer?: SummaryRenderFn<D, Val>,
 }
 
 export type SummaryWithKey<
@@ -345,7 +345,7 @@ export interface TableRowState {
   cellHeights: Record<Key, number>,
   last: boolean,
   expandAnimate: boolean,
-  data: Data
+  data: Data,
 }
 
 export interface StoreOptions {
@@ -390,7 +390,7 @@ export interface StoreOptions {
   sidePadding: number[],
   borderWidth: number,
   dataFilter: (data: Data) => boolean,
-  ellipsis: boolean
+  ellipsis: boolean,
 }
 
 export type TableColumnRawOptions = TableColumnOptions<any, any> | TableColumnGroupOptions
@@ -433,12 +433,13 @@ export interface StoreState extends StoreOptions {
   collapseMap: Map<'left' | 'default' | 'right', Map<string, Set<string>>>,
   locked: boolean,
   barScrolling: boolean,
-  heightTrigger: number
+  heightTrigger: number,
+  hoveredRowKey: Key | null,
 }
 
 export interface TableRowInstance {
   el?: HTMLElement | null,
-  row: TableRowState
+  row: TableRowState,
 }
 
 export interface TableRowPayload {
@@ -447,7 +448,7 @@ export interface TableRowPayload {
   index: number,
   event: Event,
   checked?: boolean,
-  expanded?: boolean
+  expanded?: boolean,
 }
 
 export interface TableCellPayload {
@@ -456,17 +457,17 @@ export interface TableCellPayload {
   rowIndex: number,
   column: TableColumnOptions,
   columnIndex: number,
-  event: Event
+  event: Event,
 }
 
 export interface TableHeadPayload {
   column: TableColumnOptions,
   index: number,
-  event: Event
+  event: Event,
 }
 
 export interface TableColResizePayload extends TableHeadPayload {
-  width: number
+  width: number,
 }
 
 export interface TableFootPayload {
@@ -474,7 +475,7 @@ export interface TableFootPayload {
   columnIndex: number,
   summary: TableSummaryOptions,
   summaryIndex: number,
-  event: Event
+  event: Event,
 }
 
 export interface TableActions {
@@ -506,12 +507,12 @@ export interface TableActions {
   updateColumns(): void,
   setColumnProp(key: Key, prop: string, value: any): void,
   updateSummaries(): void,
-  setSummaryProp(key: Key, prop: string, value: any): void
+  setSummaryProp(key: Key, prop: string, value: any): void,
 }
 
 export interface ColumnGroupActions {
   increaseColumn(column: TableColumnRawOptions): void,
-  decreaseColumn(column: TableColumnRawOptions): void
+  decreaseColumn(column: TableColumnRawOptions): void,
 }
 
 export const DEFAULT_KEY_FIELD = 'id'

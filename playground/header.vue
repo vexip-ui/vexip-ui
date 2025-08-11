@@ -30,25 +30,25 @@ interface RepoMeta {
   versions: string[],
   active: string,
   loading: boolean,
-  loaded: boolean
+  loaded: boolean,
 }
 
 type ActionMeta = {
   label: string,
   icon: object,
-  scale?: number
+  scale?: number,
 } & (
   | {
-    action: () => any
+    action: () => any,
   }
   | {
-    linkTo: string
+    linkTo: string,
   }
   | {
     type: 'dropdown',
     options: string[],
     value: string,
-    action: () => any
+    action: () => any,
   }
 )
 

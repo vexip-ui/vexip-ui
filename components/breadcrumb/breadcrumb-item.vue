@@ -16,7 +16,7 @@ const props = defineProps(breadcrumbItemProps)
 
 defineSlots<{
   default: () => any,
-  separator: () => any
+  separator: () => any,
 }>()
 
 const nh = useNameHelper('breadcrumb')

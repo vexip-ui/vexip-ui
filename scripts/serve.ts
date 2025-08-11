@@ -16,7 +16,7 @@ const args = minimist<{
   l?: string,
   lang?: string,
   t?: boolean,
-  theme?: boolean
+  theme?: boolean,
 }>(process.argv.slice(2))
 
 const sourceMap = args.sourcemap || args.s

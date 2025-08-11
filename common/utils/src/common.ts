@@ -395,7 +395,7 @@ export async function decide(
     /**
      * 当匹配任意一个条件时，会在该条件对应的回调函数执行完后执行
      */
-    afterMatchAny?: () => void | Promise<void>
+    afterMatchAny?: () => void | Promise<void>,
   } = {},
 ) {
   if (conditions.length) {

@@ -3,7 +3,7 @@ import { Row } from '@/components/row'
 
 import { computed, provide, reactive } from 'vue'
 
-import { createSizeProp, useNameHelper, useProps } from '@vexip-ui/config'
+import { createSizeProp, emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { formProps } from './props'
 import { FORM_ACTIONS, FORM_FIELDS, FORM_PROPS, labelAligns, submitMethods } from './symbol'
 
@@ -179,12 +179,14 @@ function clearFieldsError(props: string | string[]) {
   })
 }
 
-function handleSubmit(event: Event) {
+function handleSubmit(event: SubmitEvent) {
   event.stopPropagation()
 
   if (!props.action) {
     event.preventDefault()
   }
+
+  emitEvent(props.onSubmit, event)
 }
 </script>
 

@@ -7,7 +7,7 @@ export interface ResizeInfo extends ResizeObserverEntry {
   offsetWidth: number,
   offsetHeight: number,
   width: number,
-  height: number
+  height: number,
 }
 
 export type ResizeHandler = (entry: ResizeInfo) => any
@@ -17,7 +17,7 @@ export interface UseResizeOptions {
    * 作用的目标元素的 Ref
    */
   target?: MaybeRef<HTMLElement | null | undefined>,
-  onResize?: ResizeHandler
+  onResize?: ResizeHandler,
 }
 
 const handlerMap = new WeakMap<Element, ResizeHandler>()

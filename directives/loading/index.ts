@@ -10,7 +10,7 @@ import type { DirectiveBinding, ObjectDirective, VNode } from 'vue'
 interface LoadingRecord {
   spin: VNode,
   props: SpinProps,
-  originPosition: string
+  originPosition: string,
 }
 
 type LoadingElement = HTMLElement & { __loading?: LoadingRecord }
@@ -29,7 +29,7 @@ function createSpin(
   const spin = createVNode(Spin, props, null, 0, Object.keys(props))
   const position = getComputedStyle(el).position
 
-  spin.appContext = vnode.appContext
+  spin.appContext = vnode.appContext ?? (vnode as any).ctx?.appContext
 
   el.__loading = {
     spin,

@@ -24,7 +24,7 @@ export interface PopupItemState extends Record<string, unknown> {
   onOpen: (key: Key) => void,
   onClose: (result: boolean) => void,
   onEnter: () => void,
-  onLeave: () => void
+  onLeave: () => void,
 }
 
 export const DELETE_HANDLER = '__VXP_POPUP_DELETE_HANDLER' as unknown as InjectionKey<

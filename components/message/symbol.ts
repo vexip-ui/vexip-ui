@@ -19,20 +19,20 @@ export interface MessageOptions extends Record<string, any> {
   closable?: boolean,
   parseHtml?: boolean,
   liveOnEnter?: boolean,
-  renderer?: () => any
+  renderer?: () => any,
 }
 
 export interface MessageConfig {
   placement?: MessagePlacement,
   startOffset?: number,
-  itemGap?: number
+  itemGap?: number,
 }
 
 export interface MessageInstance extends ComponentPublicInstance {
   add: (options: MessageOptions) => void,
   remove: (key: string | number) => void,
   clear: () => void,
-  config: (config: MessageConfig) => void
+  config: (config: MessageConfig) => void,
 }
 
 export const effectiveTypes = Object.freeze(['primary', 'info', 'success', 'warning', 'error'])

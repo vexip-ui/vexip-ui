@@ -11,7 +11,7 @@ interface NodeData {
   parent: number,
   expanded?: boolean,
   isLeaf?: boolean,
-  loaded?: boolean
+  loaded?: boolean,
 }
 
 const nodeData = reactive<NodeData[]>([

@@ -18,13 +18,13 @@ type ReplOptions = {
   serializedState?: string,
   versions?: Record<string, string>,
   showOutput?: boolean,
-  outputMode?: OutputModes
+  outputMode?: OutputModes,
 }
 
 interface PathMeta {
   name: string,
   pkg?: string,
-  path: string
+  path: string,
 }
 
 // repl internal files

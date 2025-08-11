@@ -30,7 +30,7 @@ export interface BITree {
    *
    * @returns 最接近的元素的索引值
    */
-  boundIndex(target: number): number
+  boundIndex(target: number): number,
 }
 
 function lowBit(num: number) {

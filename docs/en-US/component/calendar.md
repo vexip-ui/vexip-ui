@@ -34,17 +34,16 @@ If you think the native scroll bar is not cool, you can add a scroll component b
 
 ### Calendar Props
 
-| Name          | Type                       | Description                                                                                                                             | Default                     | Since    |
-| ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- | -------- |
-| value         | `number \| string \| Date` | The date currently selected, can use `v-model` two-way binding                                                                          | `null`                      | -        |
-| year          | `number`                   | Current year of calendar, can use `v-model` two-way binding                                                                             | `new Date().getFullYear()`  | -        |
-| month         | `number`                   | Current month of calendar, the optional value is 1 ~ 12, can use `v-model` two-way binding                                              | `new Date().getMonth() + 1` | -        |
-| week-days     | `string[]`                 | The label of the week number displayed in the calendar header, an array of size 7 needs to be passed in                                 | `null`                      | -        |
-| week-start    | `number`                   | Set the first day of the week in the calendar, the optional value is 0 ~ 7, where 0 is Sunday                                           | `0`                         | -        |
-| today         | `number \| string \| Date` | Set today's date in the calendar                                                                                                        | `new Date()`                | -        |
-| disabled-date | `(data: Date) => boolean`  | whether is the disabled date of the calendar, receives the current date that needs to be judged as a parameter, returns true to disable | `() => false`               | -        |
-| locale        | `LocaleConfig['calendar']` | Set the locale config                                                                                                                   | `null`                      | `2.1.0`  |
-| slots         | `CalendarSlots`            | Set rendering functions for slots                                                                                                       | `{}`                        | `2.3.15` |
+| Name          | Type                       | Description                                                                                                                             | Default                     | Since   |
+| ------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ------- |
+| value         | `number \| string \| Date` | The date currently selected, can use `v-model` two-way binding                                                                          | `null`                      | -       |
+| year          | `number`                   | Current year of calendar, can use `v-model` two-way binding                                                                             | `new Date().getFullYear()`  | -       |
+| month         | `number`                   | Current month of calendar, the optional value is 1 ~ 12, can use `v-model` two-way binding                                              | `new Date().getMonth() + 1` | -       |
+| week-days     | `string[]`                 | The label of the week number displayed in the calendar header, an array of size 7 needs to be passed in                                 | `null`                      | -       |
+| week-start    | `number`                   | Set the first day of the week in the calendar, the optional value is 0 ~ 7, where 0 is Sunday                                           | `0`                         | -       |
+| today         | `number \| string \| Date` | Set today's date in the calendar                                                                                                        | `new Date()`                | -       |
+| disabled-date | `(data: Date) => boolean`  | whether is the disabled date of the calendar, receives the current date that needs to be judged as a parameter, returns true to disable | `() => false`               | -       |
+| locale        | `LocaleConfig['calendar']` | Set the locale config                                                                                                                   | `null`                      | `2.1.0` |
 
 ### Calendar Events
 

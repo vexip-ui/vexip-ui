@@ -40,7 +40,7 @@ export interface LayoutMenuProps {
   router?: Router,
   manualRoute?: boolean,
   onExpand?: (label: string, meta: Record<string, any>) => void,
-  onReduce?: (label: string, meta: Record<string, any>) => void
+  onReduce?: (label: string, meta: Record<string, any>) => void,
 }
 
 export interface LayoutHeaderAction {
@@ -51,13 +51,13 @@ export interface LayoutHeaderAction {
   disabled?: boolean,
   divided?: boolean,
   hidden?: boolean,
-  meta?: Record<string, any>
+  meta?: Record<string, any>,
 }
 
 export interface LayoutUser {
   name: string,
   email?: string,
-  avatar?: string | Record<string, any>
+  avatar?: string | Record<string, any>,
 }
 
 export interface LayoutFooterLink {
@@ -67,7 +67,7 @@ export interface LayoutFooterLink {
   iconProps?: IconMinorProps,
   to?: string,
   target?: string,
-  children?: Array<Omit<LayoutFooterLink, 'children'>>
+  children?: Array<Omit<LayoutFooterLink, 'children'>>,
 }
 
 export interface LayoutState {
@@ -82,19 +82,19 @@ export interface LayoutState {
   reduced: boolean,
   navConfig: boolean,
   classes: LayoutInnerClass,
-  changeInLock: (doChange: () => void) => void
+  changeInLock: (doChange: () => void) => void,
 }
 
 export interface LayoutSlotParams {
   expanded: boolean,
   reduced: boolean,
   toggleExpanded: (expanded?: boolean) => void,
-  toggleReduced: (reduced: boolean) => void
+  toggleReduced: (reduced: boolean) => void,
 }
 
 export interface LayoutHeaderSlotParams extends LayoutSlotParams {
   handleColorChange: (color: string) => void,
-  toggleUserDropped: (dropped?: boolean) => void
+  toggleUserDropped: (dropped?: boolean) => void,
 }
 
 export interface LayoutExposed extends ComponentPublicInstance {
@@ -102,7 +102,7 @@ export interface LayoutExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
   toggleExpanded: (expanded?: boolean) => void,
   toggleReduced: (reduced?: boolean) => void,
-  expandMenuByLabel: (label: string) => void
+  expandMenuByLabel: (label: string) => void,
 }
 
 export interface LayoutHeaderExposed extends ComponentPublicInstance {
@@ -110,7 +110,7 @@ export interface LayoutHeaderExposed extends ComponentPublicInstance {
   toggleExpanded: (expanded?: boolean) => void,
   toggleReduced: (reduced?: boolean) => void,
   expandMenuByLabel: (label: string) => void,
-  toggleUserDropped: (dropped: boolean) => void
+  toggleUserDropped: (dropped: boolean) => void,
 }
 
 export interface LayoutMainExposed extends ComponentPublicInstance {}
@@ -119,7 +119,7 @@ export interface LayoutAsideExposed extends ComponentPublicInstance {
   menu?: MenuExposed,
   toggleExpanded: (expanded?: boolean) => void,
   toggleReduced: (reduced?: boolean) => void,
-  expandMenuByLabel: (label: string) => void
+  expandMenuByLabel: (label: string) => void,
 }
 
 export const LAYOUT_STATE = '___VXP_LAYOUT_STATE' as unknown as InjectionKey<LayoutState>

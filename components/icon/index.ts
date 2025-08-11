@@ -14,5 +14,5 @@ export type { IconEffect, IconBaseProps, IconRenderer } from './symbol'
 
 export type IconMinorProps = Omit<Partial<IconProps>, 'icon'> & {
   class?: ClassType,
-  style?: StyleType
+  style?: StyleType,
 }

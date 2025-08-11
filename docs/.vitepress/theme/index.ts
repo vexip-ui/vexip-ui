@@ -19,7 +19,7 @@ import type { Router } from 'vitepress'
 
 declare global {
   interface Window {
-    vueVersion: string
+    vueVersion: string,
   }
 }
 

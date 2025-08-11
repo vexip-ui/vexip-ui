@@ -44,7 +44,7 @@ export interface VirtualOptions<T extends Data> {
    *
    * @default true
    */
-  autoResize?: boolean
+  autoResize?: boolean,
 }
 
 export function useVirtual<T extends Data = Data>(options: VirtualOptions<T>) {

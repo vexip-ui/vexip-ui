@@ -3,7 +3,7 @@ export interface OptionKeyConfig {
   label?: string,
   disabled?: string,
   divided?: string,
-  title?: string
+  title?: string,
 }
 
 export type RawOption = string | Record<string, any>
@@ -16,5 +16,5 @@ export interface OptionState {
   title: string,
   hidden: boolean,
   hitting: boolean,
-  data: RawOption
+  data: RawOption,
 }

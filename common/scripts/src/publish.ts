@@ -5,7 +5,7 @@ import { getPkgInfo, logger, run } from './utils'
 export interface PublishOptions {
   pkgDir: string,
   isDryRun?: boolean,
-  releaseTag?: string
+  releaseTag?: string,
 }
 
 export async function publish(options: PublishOptions) {

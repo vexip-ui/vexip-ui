@@ -4,7 +4,7 @@ import { isClient, isDefined } from './common'
  * 专用的类型，用于适配 Vexip UI 中 `transfer` 属性的处理
  */
 export interface TransferNode extends Element {
-  __transferElement?: Element | null
+  __transferElement?: Element | null,
 }
 
 export interface EventPayload extends EventInit {
@@ -12,7 +12,7 @@ export interface EventPayload extends EventInit {
    * 事件的类型
    */
   type: string,
-  [prop: string]: any
+  [prop: string]: any,
 }
 
 /**

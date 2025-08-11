@@ -6,7 +6,7 @@ export type TourType = BubbleType
 export type TourSignType = 'dot' | 'bar' | 'count'
 
 export interface TourVirtual {
-  getBoundingClientRect(): { top: number, left: number, width: number, height: number }
+  getBoundingClientRect(): { top: number, left: number, width: number, height: number },
 }
 
 export type TourTarget =
@@ -17,7 +17,7 @@ export interface TourPayload {
   start(): void,
   prev(): void,
   next(autoClose?: boolean): void,
-  close(): void
+  close(): void,
 }
 
 export type TourStepRenderFn = (payload: TourPayload) => any
@@ -29,7 +29,7 @@ export interface TourStepOptions {
   content?: string,
   order?: number,
   type?: TourType,
-  renderer?: TourStepRenderFn
+  renderer?: TourStepRenderFn,
 }
 
 export type TourSlotParams = TourPayload & { step: TourStepOptions, index: number }
@@ -37,7 +37,7 @@ export type TourCommonSLot = (params: TourSlotParams) => any
 
 export interface TourState {
   increaseStep(step: TourStepOptions): void,
-  decreaseStep(step: TourStepOptions): void
+  decreaseStep(step: TourStepOptions): void,
 }
 
 export interface TourSlots {
@@ -51,7 +51,7 @@ export interface TourSlots {
   body?: TourCommonSLot,
   footer?: TourCommonSLot,
   sign?: TourCommonSLot,
-  actions?: TourCommonSLot
+  actions?: TourCommonSLot,
 }
 
 export const TOUR_STATE = '___VXP_TOUR_STATE' as unknown as InjectionKey<TourState>

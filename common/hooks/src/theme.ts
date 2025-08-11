@@ -9,7 +9,7 @@ import type { MaybeElement } from './shared/types'
 export interface InitThemeOptions {
   name: string,
   rootClass?: string,
-  varsClass?: string
+  varsClass?: string,
 }
 
 const styleId = '__theme_style__'

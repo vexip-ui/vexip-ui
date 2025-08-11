@@ -11,7 +11,7 @@ export interface GenerateOptions {
   force?: boolean,
   temp?: string,
   prefix?: string,
-  output?: string
+  output?: string,
 }
 
 const validTemps = ['types']

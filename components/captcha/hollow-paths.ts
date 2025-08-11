@@ -15,7 +15,7 @@ export interface CaptchaHollowOptions {
   /**
    * Current canvas height
    */
-  height: number
+  height: number,
 }
 
 /**

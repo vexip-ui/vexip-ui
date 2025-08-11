@@ -4,7 +4,7 @@ export interface ResultSlots {
   icon?: () => any,
   title?: () => any,
   description?: () => any,
-  extra?: () => any
+  extra?: () => any,
 }
 
 export const resultTypes = Object.freeze<ResultType[]>([

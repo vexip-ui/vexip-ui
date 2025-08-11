@@ -8,7 +8,7 @@ export interface ColorPrickerSlots {
   control?: (params: { color: RGBColor, alpha: number, empty: boolean }) => any,
   prefix?: () => any,
   suffix?: () => any,
-  label?: (params: { color: RGBColor, alpha: number, empty: boolean, label: string }) => any
+  label?: (params: { color: RGBColor, alpha: number, empty: boolean, label: string }) => any,
 }
 
 export const defaultShortcuts = Object.freeze([

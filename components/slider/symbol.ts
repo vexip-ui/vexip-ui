@@ -5,7 +5,7 @@ export interface SliderMarker {
   label?: string,
   class?: ClassType,
   style?: StyleType,
-  attrs?: Record<string, any>
+  attrs?: Record<string, any>,
 }
 
 export type SliderRawMarkers =
@@ -22,13 +22,13 @@ export interface SliderSlotParams {
   sliding: boolean[],
   percent: number[],
   disabled: boolean,
-  loading: boolean
+  loading: boolean,
 }
 
 export interface SliderMarkerSlotParams extends SliderSlotParams {
   markerValue: number,
   marker: SliderMarker,
-  inRange: boolean
+  inRange: boolean,
 }
 
 export interface SliderTriggerParams {
@@ -37,7 +37,7 @@ export interface SliderTriggerParams {
   sliding: boolean,
   percent: number,
   disabled: boolean,
-  loading: boolean
+  loading: boolean,
 }
 
 export type SliderCommonSlot = (params: SliderSlotParams) => any
@@ -49,5 +49,5 @@ export interface SliderSlots {
   point?: SliderMarkerSlot,
   marker?: SliderMarkerSlot,
   trigger?: SliderTriggerSlot,
-  tip?: SliderTriggerSlot
+  tip?: SliderTriggerSlot,
 }

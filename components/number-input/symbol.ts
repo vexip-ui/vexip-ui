@@ -3,5 +3,5 @@ export type NumberInputEmptyType = 'NaN' | 'undefined' | 'null'
 
 export interface NumberInputSlots {
   prefix?: () => any,
-  suffix?: () => any
+  suffix?: () => any,
 }

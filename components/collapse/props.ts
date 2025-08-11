@@ -2,7 +2,7 @@ import { booleanProp, buildProps, eventProp, iconProp, styleProp } from '@vexip-
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { CollapseArrowType } from './symbol'
+import type { CollapseArrowType, CollapsePanelSlots } from './symbol'
 
 export const collapseProps = buildProps({
   expanded: [String, Number, Array] as PropType<string | number | (string | number)[]>,
@@ -26,6 +26,7 @@ export const collapsePanelProps = buildProps({
   arrowType: String as PropType<CollapseArrowType>,
   icon: iconProp,
   ghost: booleanProp,
+  slots: Object as PropType<CollapsePanelSlots>,
   onToggle: eventProp<(expanded: boolean) => void>(),
 })
 

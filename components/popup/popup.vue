@@ -12,11 +12,11 @@ import type { Key, PopupItemState, PopupPlacement } from './symbol'
 type QueueState =
   | {
     type: 'add',
-    param: Record<string, unknown>
+    param: Record<string, unknown>,
   }
   | {
     type: 'clear',
-    param: Key
+    param: Key,
   }
 
 defineOptions({ name: 'Popup' })

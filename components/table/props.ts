@@ -74,7 +74,7 @@ export const tableProps = buildProps({
     horizontal?: ClassType,
     major?: ClassType,
     left?: ClassType,
-    right?: ClassType
+    right?: ClassType,
   }>,
   expandRenderer: Function as PropType<ExpandRenderFn>,
   currentPage: Number,

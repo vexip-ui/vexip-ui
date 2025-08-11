@@ -12,7 +12,7 @@ export interface TransformLogicalOptions {
    *
    * @default false
    */
-  replace?: boolean
+  replace?: boolean,
 }
 
 const FLOW_BASE = '((?:inline|block))(-((?:start|end)))?'

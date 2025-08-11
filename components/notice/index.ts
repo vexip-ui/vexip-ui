@@ -26,7 +26,7 @@ interface AipMethod {
   (title: string, duration?: number): () => void,
   (title: string, content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const placementWhiteList: NoticePlacement[] = [

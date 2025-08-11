@@ -8,7 +8,7 @@ export interface UseListenerOptions extends AddEventListenerOptions {
   /**
    * 是否禁用整个 hook 的事件处理
    */
-  disabled?: MaybeRef<boolean>
+  disabled?: MaybeRef<boolean>,
 }
 
 export function useListener<E = Event>(

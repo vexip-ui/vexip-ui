@@ -2,7 +2,7 @@ import type { OptionKeyConfig, OptionState, RawOption } from '@/components/optio
 
 export interface SelectKeyConfig extends OptionKeyConfig {
   group?: string,
-  children?: string
+  children?: string,
 }
 
 export type SelectRawOption = RawOption
@@ -13,7 +13,7 @@ export interface SelectOptionState extends OptionState {
   group: boolean,
   depth: number,
   parent: SelectOptionState | null,
-  data: SelectRawOption
+  data: SelectRawOption,
 }
 
 export type SelectFilter = (value: string, option: SelectOptionState) => boolean
@@ -26,14 +26,14 @@ export type ChangeEvent = (value: SelectValue, data: any | any[]) => void
 export interface SelectListSlotParams {
   options: SelectOptionState[],
   isSelected: (option: SelectOptionState) => boolean,
-  handleSelect: (option?: SelectOptionState | null) => void
+  handleSelect: (option?: SelectOptionState | null) => void,
 }
 
 export interface SelectSlots {
   selected?: (params: {
     value: SelectBaseValue,
     option: SelectOptionState | null,
-    preview?: boolean
+    preview?: boolean,
   }) => any,
   prefix?: () => any,
   suffix?: () => any,
@@ -41,7 +41,7 @@ export interface SelectSlots {
   tag?: (params: {
     value: SelectBaseValue,
     option: SelectOptionState | null,
-    handleClose: () => void
+    handleClose: () => void,
   }) => any,
   restTag?: (params: { restCount: number }) => any,
   list?: (params: SelectListSlotParams) => any,
@@ -52,7 +52,7 @@ export interface SelectSlots {
    */
   default?: (params: { option: SelectOptionState, index: number, selected: boolean }) => any,
   group?: (params: { option: SelectOptionState, index: number }) => any,
-  empty?: () => any
+  empty?: () => any,
 }
 
 export const defaultKeyConfig: Required<SelectKeyConfig> = Object.freeze({

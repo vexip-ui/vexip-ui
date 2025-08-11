@@ -7,12 +7,12 @@ import type { ResizeHandler } from '@vexip-ui/hooks'
 export interface VResizeOptions {
   handler: ResizeHandler,
   throttle?: boolean | number,
-  disabled?: boolean
+  disabled?: boolean,
 }
 
 interface ResizeRecord {
   useThrottle: boolean | number,
-  observed: boolean
+  observed: boolean,
 }
 
 function createObserver(

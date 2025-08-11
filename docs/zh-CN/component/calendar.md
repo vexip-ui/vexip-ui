@@ -34,17 +34,16 @@
 
 ### Calendar 属性
 
-| 名称          | 类型                       | 说明                                                               | 默认值                      | 始于     |
-| ------------- | -------------------------- | ------------------------------------------------------------------ | --------------------------- | -------- |
-| value         | `number \| string \| Date` | 日历当前选中的日期，可以使用 `v-model` 双向绑定                    | `null`                      | -        |
-| year          | `number`                   | 日历当前所在的年份，可以使用 `v-model` 双向绑定                    | `new Date().getFullYear()`  | -        |
-| month         | `number`                   | 日历当前所在的月份，可选值为 1 ~ 12，可以使用 `v-model` 双向绑定   | `new Date().getMonth() + 1` | -        |
-| week-days     | `string[]`                 | 日历头部的星期数显示的标签，需传入一个大小为 7 的数组              | `null`                      | -        |
-| week-start    | `number`                   | 设置日历每星期的第一天，可选值为 0 ~ 7，其中 0 为星期天            | `0`                         | -        |
-| today         | `number \| string \| Date` | 设置日历的今天日期                                                 | `new Date()`                | -        |
-| disabled-date | `(data: Date) => boolean`  | 是日历的禁用日期，接收当前需要判断的日期作为参数，返回 true 则禁用 | `() => false`               | -        |
-| locale        | `LocaleConfig['calendar']` | 设置多语言配置                                                     | `null`                      | `2.1.0`  |
-| slots         | `CalendarSlots`            | 设置与插槽对于的渲染函数                                           | `{}`                        | `2.3.15` |
+| 名称          | 类型                       | 说明                                                               | 默认值                      | 始于    |
+| ------------- | -------------------------- | ------------------------------------------------------------------ | --------------------------- | ------- |
+| value         | `number \| string \| Date` | 日历当前选中的日期，可以使用 `v-model` 双向绑定                    | `null`                      | -       |
+| year          | `number`                   | 日历当前所在的年份，可以使用 `v-model` 双向绑定                    | `new Date().getFullYear()`  | -       |
+| month         | `number`                   | 日历当前所在的月份，可选值为 1 ~ 12，可以使用 `v-model` 双向绑定   | `new Date().getMonth() + 1` | -       |
+| week-days     | `string[]`                 | 日历头部的星期数显示的标签，需传入一个大小为 7 的数组              | `null`                      | -       |
+| week-start    | `number`                   | 设置日历每星期的第一天，可选值为 0 ~ 7，其中 0 为星期天            | `0`                         | -       |
+| today         | `number \| string \| Date` | 设置日历的今天日期                                                 | `new Date()`                | -       |
+| disabled-date | `(data: Date) => boolean`  | 是日历的禁用日期，接收当前需要判断的日期作为参数，返回 true 则禁用 | `() => false`               | -       |
+| locale        | `LocaleConfig['calendar']` | 设置多语言配置                                                     | `null`                      | `2.1.0` |
 
 ### Calendar 事件
 

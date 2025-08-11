@@ -20,20 +20,20 @@ export interface NoticeOptions extends Record<string, any> {
   closable?: boolean,
   parseHtml?: boolean,
   liveOnEnter?: boolean,
-  renderer?: () => any
+  renderer?: () => any,
 }
 
 export interface NoticeConfig {
   placement?: NoticePlacement,
   startOffset?: number,
-  itemGap?: number
+  itemGap?: number,
 }
 
 export interface NoticeInstance extends ComponentPublicInstance {
   add: (options: NoticeOptions) => void,
   remove: (key: string | number) => void,
   clear: () => void,
-  config: (config: NoticeConfig) => void
+  config: (config: NoticeConfig) => void,
 }
 
 export const effectiveTypes = Object.freeze(['primary', 'info', 'success', 'warning', 'error'])
