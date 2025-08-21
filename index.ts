@@ -6,6 +6,8 @@ export {
   configNamespace,
   configProps,
   configZIndex,
+  defineLocale,
+  defineLocaleConfig,
   registerLocale,
   arEGLocale,
   deDELocale,
