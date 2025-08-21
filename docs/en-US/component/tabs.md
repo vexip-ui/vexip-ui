@@ -95,8 +95,8 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 | placement | `TabNavPlacement`  | Set the placement of the tab items                                      | `'top'`  | `2.0.13` |
 | show-add  | `boolean`          | Set whether to display the add button                                   | `false`  | `2.0.13` |
 | closable  | `boolean`          | Set whether to display the close button                                 | `false`  | `2.0.13` |
-| lazy      | `boolean           | Set whether all panels is lazy rendering                                | `false`  | `2.3.31` |
-| lazy      | `boolean           | Set whether all panels is lazy load (keep rendering after first active) | `false`  | `2.3.33` |
+| lazy      | `boolean`          | Set whether all panels is lazy rendering                                | `false`  | `2.3.31` |
+| lazy-load | `boolean`          | Set whether all panels is lazy load (keep rendering after first active) | `false`  | `2.3.33` |
 
 ### Tabs Events
 
