@@ -42,6 +42,20 @@ Adding the value of the `arrow-type` prop can change the position of the panel a
 
 :::
 
+:::demo collapse/alive
+
+### Conditional Rendering
+
+The `alive` prop can change the conditional rendering directive of the panel content.
+
+`true` or `'always'` – Renders the panel content with `v-show`
+
+`false` – Renders the panel content with `v-if`
+
+``'after-loading'` – Skips rendering until the panel is activated, then renders the panel content with `v-show`
+
+:::
+
 :::demo collapse/single
 
 ### Use Alone
@@ -72,13 +86,14 @@ interface CollapsePanelSlots {
 
 ### Collapse Props
 
-| Name       | Type                                       | Description                                                                                     | Default   | Since |
-| ---------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------- | --------- | ----- |
-| expanded   | `string \| number \| (string \| number)[]` | Set the label value of the expanded panel, can be passed in an array when not in accordion mode | `null`    | -     |
-| card       | `boolean`                                  | Set whether to be in card mode                                                                  | `false`   | -     |
-| accordion  | `boolean`                                  | Set whether to accordion mode                                                                   | `false`   | -     |
-| arrow-type | `'right' \| 'left' \| 'none'`              | Set the type of the panel's indicator arrow                                                     | `'right'` | -     |
-| ghost      | `boolean`                                  | Set whether to set borderless mode                                                              | `false`   | -     |
+| Name       | Type                                       | Description                                                                                                                                                                                                                                                   | Default   | Since  |
+| ---------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------ |
+| expanded   | `string \| number \| (string \| number)[]` | Set the label value of the expanded panel, can be passed in an array when not in accordion mode                                                                                                                                                               | `null`    | -      |
+| card       | `boolean`                                  | Set whether to be in card mode                                                                                                                                                                                                                                | `false`   | -      |
+| accordion  | `boolean`                                  | Set whether to accordion mode                                                                                                                                                                                                                                 | `false`   | -      |
+| arrow-type | `'right' \| 'left' \| 'none'`              | Set the type of the panel's indicator arrow                                                                                                                                                                                                                   | `'right'` | -      |
+| ghost      | `boolean`                                  | Set whether to set borderless mode                                                                                                                                                                                                                            | `false`   | -      |
+| alive      | `boolean \| 'always' \| 'after-loading'`   | The directive to use in conditionally rendering the panel content. `false` will use `v-if` , `true` or `'always'` will use `v-show`. When use `after-loading`, the display effect is the same as `true` or `'always'`, but the content will be lazily loaded. | `false`   | 2.3.37 |
 
 ### Collapse Events
 
@@ -88,17 +103,18 @@ interface CollapsePanelSlots {
 
 ### CollapsePanel Props
 
-| Name          | Type                          | Description                                            | Default   | Since |
-| ------------- | ----------------------------- | ------------------------------------------------------ | --------- | ----- |
-| label         | `string \| number`            | The label value of panel, unique within the same group | `null`    | -     |
-| title         | `string`                      | The title of the panel                                 | `''`      | -     |
-| disabled      | `boolean`                     | Set whether the panel is disabled                      | `false`   | -     |
-| content-style | `Record<string, any>`         | The styles the content of the panel                    | `null`    | -     |
-| expanded      | `boolean`                     | Set whether the panel is expanded                      | `false`   | -     |
-| card          | `boolean`                     | Set whether to be in card mode                         | `false`   | -     |
-| arrow-type    | `'right' \| 'left' \| 'none'` | Set the type of the panel's indicator arrow            | `'right'` | -     |
-| icon          | `string`                      | Set the subordinate icon for the panel title           | `''`      | -     |
-| ghost         | `boolean`                     | Set whether to be in borderless mode                   | `false`   | -     |
+| Name          | Type                                     | Description                                                                                                                                                                                                                                                   | Default   | Since  |
+| ------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------ |
+| label         | `string \| number`                       | The label value of panel, unique within the same group                                                                                                                                                                                                        | `null`    | -      |
+| title         | `string`                                 | The title of the panel                                                                                                                                                                                                                                        | `''`      | -      |
+| disabled      | `boolean`                                | Set whether the panel is disabled                                                                                                                                                                                                                             | `false`   | -      |
+| content-style | `Record<string, any>`                    | The styles the content of the panel                                                                                                                                                                                                                           | `null`    | -      |
+| expanded      | `boolean`                                | Set whether the panel is expanded                                                                                                                                                                                                                             | `false`   | -      |
+| card          | `boolean`                                | Set whether to be in card mode                                                                                                                                                                                                                                | `false`   | -      |
+| arrow-type    | `'right' \| 'left' \| 'none'`            | Set the type of the panel's indicator arrow                                                                                                                                                                                                                   | `'right'` | -      |
+| icon          | `string`                                 | Set the subordinate icon for the panel title                                                                                                                                                                                                                  | `''`      | -      |
+| ghost         | `boolean`                                | Set whether to be in borderless mode                                                                                                                                                                                                                          | `false`   | -      |
+| alive         | `boolean \| 'always' \| 'after-loading'` | The directive to use in conditionally rendering the panel content. `false` will use `v-if` , `true` or `'always'` will use `v-show`. When use `after-loading`, the display effect is the same as `true` or `'always'`, but the content will be lazily loaded. | `false`   | 2.3.37 |
 
 ### CollapsePanel Events
 

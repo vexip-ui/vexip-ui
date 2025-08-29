@@ -34,6 +34,7 @@ const props = useProps('collapse', _props, {
     validator: (value: CollapseArrowType) => ['right', 'left', 'none'].includes(value),
   },
   ghost: false,
+  alive: false,
 })
 
 const emit = defineEmits(['update:expanded'])
@@ -108,6 +109,7 @@ provide(
   COLLAPSE_STATE,
   reactive({
     arrowType: toRef(props, 'arrowType'),
+    alive: toRef(props, 'alive'),
     registerPanel,
     unregisterPanel,
     expandPanel,
