@@ -221,6 +221,15 @@ $table: map.merge(
     & > * {
       flex-shrink: 0;
     }
+
+    &--ellipsis {
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__ellipsis {
+    flex-shrink: 1;
+    width: auto;
   }
 
   &__side-pad {

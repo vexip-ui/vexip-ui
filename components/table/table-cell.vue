@@ -348,7 +348,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
           type="button"
           :class="{
             [nh.be('expand')]: true,
-            [nh.bem('expand', 'active')]: row.expanded
+            [nh.bem('expand', 'active')]: row.expanded,
           }"
           @click.stop="handleExpandRow(row, $event)"
         >
@@ -367,19 +367,24 @@ function handleCellResize(entry: ResizeObserverEntry) {
       </template>
     </div>
     <ResizeObserver v-else :on-resize="handleCellResize">
-      <span :class="nh.be('content')">
+      <span
+        :class="{
+          [nh.be('content')]: true,
+          [nh.bem('content', 'ellipsis')]: column.ellipsis ?? state.ellipsis,
+        }"
+      >
         <div v-if="isTreeColumn" :class="nh.be('tree-append')">
           <span
             :class="nh.be('pad')"
             :style="{
-              [nh.cv('row-depth')]: row.depth
+              [nh.cv('row-depth')]: row.depth,
             }"
           ></span>
           <button
             type="button"
             :class="[
               nh.be('tree-expand'),
-              !row.children?.length && nh.bem('tree-expand', 'hidden')
+              !row.children?.length && nh.bem('tree-expand', 'hidden'),
             ]"
             @click="handleExpandTree(row, $event)"
           >
