@@ -15,7 +15,6 @@
   </p>
   <Collapse v-model:expanded="expanded" :alive="alive">
     <CollapsePanel title="Panel 1">
-      <Input></Input>
       <p>Some content to fill</p>
       <p>Some content to fill</p>
     </CollapsePanel>
