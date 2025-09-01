@@ -92,7 +92,7 @@ interface CollapsePanelSlots {
 | accordion  | `boolean`                                  | Set whether to accordion mode                                                                                                             | `false`   | -        |
 | arrow-type | `'right' \| 'left' \| 'none'`              | Set the type of the panel's indicator arrow                                                                                               | `'right'` | -        |
 | ghost      | `boolean`                                  | Set whether to set borderless mode                                                                                                        | `false`   | -        |
-| alive      | `boolean \| 'always' \| 'after-loading'`   | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `false`   | `2.3.37` |
+| alive      | `boolean \| CollapseAliveType`             | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `false`   | `2.3.37` |
 
 ### Collapse Events
 
@@ -102,18 +102,18 @@ interface CollapsePanelSlots {
 
 ### CollapsePanel Props
 
-| Name          | Type                                     | Description                                                                                                                               | Default   | Since    |
-| ------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- |
-| label         | `string \| number`                       | The label value of panel, unique within the same group                                                                                    | `null`    | -        |
-| title         | `string`                                 | The title of the panel                                                                                                                    | `''`      | -        |
-| disabled      | `boolean`                                | Set whether the panel is disabled                                                                                                         | `false`   | -        |
-| content-style | `Record<string, any>`                    | The styles the content of the panel                                                                                                       | `null`    | -        |
-| expanded      | `boolean`                                | Set whether the panel is expanded                                                                                                         | `false`   | -        |
-| card          | `boolean`                                | Set whether to be in card mode                                                                                                            | `false`   | -        |
-| arrow-type    | `'right' \| 'left' \| 'none'`            | Set the type of the panel's indicator arrow                                                                                               | `'right'` | -        |
-| icon          | `string`                                 | Set the subordinate icon for the panel title                                                                                              | `''`      | -        |
-| ghost         | `boolean`                                | Set whether to be in borderless mode                                                                                                      | `false`   | -        |
-| alive         | `boolean \| 'always' \| 'after-loading'` | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `null`    | `2.3.37` |
+| Name          | Type                           | Description                                                                                                                               | Default   | Since    |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- |
+| label         | `string \| number`             | The label value of panel, unique within the same group                                                                                    | `null`    | -        |
+| title         | `string`                       | The title of the panel                                                                                                                    | `''`      | -        |
+| disabled      | `boolean`                      | Set whether the panel is disabled                                                                                                         | `false`   | -        |
+| content-style | `Record<string, any>`          | The styles the content of the panel                                                                                                       | `null`    | -        |
+| expanded      | `boolean`                      | Set whether the panel is expanded                                                                                                         | `false`   | -        |
+| card          | `boolean`                      | Set whether to be in card mode                                                                                                            | `false`   | -        |
+| arrow-type    | `'right' \| 'left' \| 'none'`  | Set the type of the panel's indicator arrow                                                                                               | `'right'` | -        |
+| icon          | `string`                       | Set the subordinate icon for the panel title                                                                                              | `''`      | -        |
+| ghost         | `boolean`                      | Set whether to be in borderless mode                                                                                                      | `false`   | -        |
+| alive         | `boolean \| CollapseAliveType` | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `null`    | `2.3.37` |
 
 ### CollapsePanel Events
 
