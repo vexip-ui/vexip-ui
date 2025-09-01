@@ -30,6 +30,7 @@ const props = useProps('collapsePanel', _props, {
   },
   icon: createIconProp(),
   ghost: false,
+  alive: null,
   slots: () => ({}),
 })
 
@@ -126,7 +127,7 @@ const ifDirectiveValue = computed(() => {
     case true:
     case 'always':
       return true
-    case 'after-loading':
+    case 'mounted':
       return loaded.value
     default:
       return currentExpanded.value

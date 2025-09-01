@@ -11,7 +11,7 @@ export const collapseProps = buildProps({
   arrowType: String as PropType<CollapseArrowType>,
   ghost: booleanProp,
   alive: {
-    type: [Boolean, String] as PropType<CollapseAliveType>,
+    type: [Boolean, String] as PropType<boolean | CollapseAliveType>,
     default: null,
   },
   onChange: eventProp<(expanded: (string | number)[]) => void>(),
@@ -31,7 +31,7 @@ export const collapsePanelProps = buildProps({
   icon: iconProp,
   ghost: booleanProp,
   alive: {
-    type: [Boolean, String] as PropType<CollapseAliveType>,
+    type: [Boolean, String] as PropType<boolean | CollapseAliveType>,
     default: null,
   },
   slots: Object as PropType<CollapsePanelSlots>,

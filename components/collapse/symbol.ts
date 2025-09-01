@@ -1,7 +1,7 @@
 import type { InjectionKey } from 'vue'
 
 export type CollapseArrowType = 'right' | 'left' | 'none'
-export type CollapseAliveType = boolean | 'always' | 'after-loading'
+export type CollapseAliveType = 'always' | 'mounted' | 'never'
 
 export interface PanelState {
   tab?: HTMLElement | null,
@@ -12,7 +12,7 @@ export interface PanelState {
 
 export interface CollapseState {
   arrowType: CollapseArrowType,
-  alive: CollapseAliveType,
+  alive: boolean | CollapseAliveType,
   registerPanel(panel: PanelState): void,
   unregisterPanel(panel: PanelState): void,
   expandPanel(label: string | number, expanded: boolean): void,

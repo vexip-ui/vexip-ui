@@ -44,15 +44,11 @@
 
 :::demo collapse/alive
 
-### 条件渲染
+### 持续挂载
 
-添加 `alive` 属性可以决定面板内容使用的条件渲染指令
+通过 `alive` 属性控制面板的内容挂载行为。
 
-`true` 或者 `'always'` 表示使用 `v-show` 渲染
-
-`false` 表示使用 `v-if` 渲染
-
-`'after-loading'` 表示面板未激活时不渲染，激活后使用 `v-show` 渲染
+其中 `'mounted'` 表示当面板内容首次挂载后将维持其挂载状态，不再销毁。
 
 :::
 
@@ -76,16 +72,27 @@
 
 ## API
 
+### 预设类型
+
+```ts
+type CollapseArrowType = 'right' | 'left' | 'none'
+type CollapseAliveType = 'always' | 'mounted' | 'never'
+
+interface CollapsePanelSlots {
+  arrow?: (params: { expanded: boolean }) => any,
+}
+```
+
 ### Collapse 属性
 
-| 名称       | 类型                                       | 说明                                                                                                                                                                | 默认值    | 始于   |
-| ---------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------ |
-| expanded   | `string \| number \| (string \| number)[]` | 设置展开的面板的 label 值，非手风琴模式时可传入数组                                                                                                                 | `null`    | -      |
-| card       | `boolean`                                  | 设置是否为卡片模式                                                                                                                                                  | `false`   | -      |
-| accordion  | `boolean`                                  | 设置是否为手风琴模式                                                                                                                                                | `false`   | -      |
-| arrow-type | `'right' \| 'left' \| 'none'`              | 设置面板的指示箭头的类型                                                                                                                                            | `'right'` | -      |
-| ghost      | `boolean`                                  | 设置是否为无边框模式                                                                                                                                                | `false`   | -      |
-| alive      | `boolean \| 'always' \| 'after-loading'`   | 面板内容条件渲染使用的指令，`false` 对应 `v-if`，`true` 或 `'always'` 对应 `v-show`，`'after-loading'` 显示效果跟 `true` 或 `'always'` 一致，不过内容会进行延迟加载 | `false`   | 2.3.37 |
+| 名称       | 类型                                       | 说明                                                                       | 默认值    | 始于     |
+| ---------- | ------------------------------------------ | -------------------------------------------------------------------------- | --------- | -------- |
+| expanded   | `string \| number \| (string \| number)[]` | 设置展开的面板的 label 值，非手风琴模式时可传入数组                        | `null`    | -        |
+| card       | `boolean`                                  | 设置是否为卡片模式                                                         | `false`   | -        |
+| accordion  | `boolean`                                  | 设置是否为手风琴模式                                                       | `false`   | -        |
+| arrow-type | `CollapseArrowType`                        | 设置面板的指示箭头的类型                                                   | `'right'` | -        |
+| ghost      | `boolean`                                  | 设置是否为无边框模式                                                       | `false`   | -        |
+| alive      | `boolean \| CollapseAliveType`             | 设置面板内容是否持续渲染，`true` 等同于 `'always'`，`false` 等同于 `never` | `false`   | `2.3.37` |
 
 ### Collapse 事件
 
@@ -95,18 +102,18 @@
 
 ### CollapsePanel 属性
 
-| 名称          | 类型                                     | 说明                                                                                                                                                                | 默认值    | 始于   |
-| ------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------ |
-| label         | `string \| number`                       | 面板的 label 值，同一组内唯一                                                                                                                                       | `null`    | -      |
-| title         | `string`                                 | 面板的标题                                                                                                                                                          | `''`      | -      |
-| disabled      | `boolean`                                | 设置面板是否为禁用状态                                                                                                                                              | `false`   | -      |
-| content-style | `Record<string, any>`                    | 设置面板的内容的样式                                                                                                                                                | `null`    | -      |
-| expanded      | `boolean`                                | 设置面板是否展开                                                                                                                                                    | `false`   | -      |
-| card          | `boolean`                                | 设置是否为卡片模式                                                                                                                                                  | `false`   | -      |
-| arrow-type    | `'right' \| 'left' \| 'none'`            | 设置面板的指示箭头的类型                                                                                                                                            | `'right'` | -      |
-| icon          | `VueComponent`                           | 设置面板标题的附属图标                                                                                                                                              | `''`      | -      |
-| ghost         | `boolean`                                | 设置是否为无边框模式                                                                                                                                                | `false`   | -      |
-| alive         | `boolean \| 'always' \| 'after-loading'` | 面板内容条件渲染使用的指令，`false` 对应 `v-if`，`true` 或 `'always'` 对应 `v-show`，`'after-loading'` 显示效果跟 `true` 或 `'always'` 一致，不过内容会进行延迟加载 | `false`   | 2.3.37 |
+| 名称          | 类型                                     | 说明                                                                       | 默认值    | 始于     |
+| ------------- | ---------------------------------------- | -------------------------------------------------------------------------- | --------- | -------- |
+| label         | `string \| number`                       | 面板的 label 值，同一组内唯一                                              | `null`    | -        |
+| title         | `string`                                 | 面板的标题                                                                 | `''`      | -        |
+| disabled      | `boolean`                                | 设置面板是否为禁用状态                                                     | `false`   | -        |
+| content-style | `Record<string, any>`                    | 设置面板的内容的样式                                                       | `null`    | -        |
+| expanded      | `boolean`                                | 设置面板是否展开                                                           | `false`   | -        |
+| card          | `boolean`                                | 设置是否为卡片模式                                                         | `false`   | -        |
+| arrow-type    | `'right' \| 'left' \| 'none'`            | 设置面板的指示箭头的类型                                                   | `'right'` | -        |
+| icon          | `VueComponent`                           | 设置面板标题的附属图标                                                     | `''`      | -        |
+| ghost         | `boolean`                                | 设置是否为无边框模式                                                       | `false`   | -        |
+| alive         | `boolean \| 'always' \| 'after-loading'` | 设置面板内容是否持续渲染，`true` 等同于 `'always'`，`false` 等同于 `never` | `false`   | `2.3.37` |
 
 ### CollapsePanel 事件
 
