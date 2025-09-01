@@ -2,14 +2,8 @@
   <p style="display: flex; align-items: center">
     <span style="margin-right: 10px">alive:</span>
     <RadioGroup v-model:value="alive">
-      <Radio label="always">
-        always
-      </Radio>
-      <Radio label="mounted">
-        mounted
-      </Radio>
-      <Radio label="never">
-        never
+      <Radio v-for="aliveType in aliveTypes" :key="aliveType" :label="aliveType">
+        {{ aliveType }}
       </Radio>
     </RadioGroup>
   </p>
@@ -34,8 +28,10 @@ import { ref } from 'vue'
 
 import type { CollapseAliveType } from 'vexip-ui'
 
+const aliveTypes: CollapseAliveType[] = ['always', 'mounted', 'never']
+
 const expanded = ref(1)
-const alive = ref<CollapseAliveType>('always')
+const alive = ref<CollapseAliveType>('mounted')
 </script>
 
 <style scoped>

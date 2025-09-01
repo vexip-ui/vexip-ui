@@ -113,7 +113,7 @@ interface CollapsePanelSlots {
 | arrow-type    | `'right' \| 'left' \| 'none'`            | Set the type of the panel's indicator arrow                                                                                               | `'right'` | -        |
 | icon          | `string`                                 | Set the subordinate icon for the panel title                                                                                              | `''`      | -        |
 | ghost         | `boolean`                                | Set whether to be in borderless mode                                                                                                      | `false`   | -        |
-| alive         | `boolean \| 'always' \| 'after-loading'` | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `false`   | `2.3.37` |
+| alive         | `boolean \| 'always' \| 'after-loading'` | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `null`    | `2.3.37` |
 
 ### CollapsePanel Events
 
