@@ -42,6 +42,16 @@
 
 :::
 
+:::demo collapse/alive
+
+### 持续挂载
+
+通过 `alive` 属性控制面板的内容挂载行为。
+
+其中 `'mounted'` 表示当面板内容首次挂载后将维持其挂载状态，不再销毁。
+
+:::
+
 :::demo collapse/single
 
 ### 单独使用
@@ -62,15 +72,27 @@
 
 ## API
 
+### 预设类型
+
+```ts
+type CollapseArrowType = 'right' | 'left' | 'none'
+type CollapseAliveType = 'always' | 'mounted' | 'never'
+
+interface CollapsePanelSlots {
+  arrow?: (params: { expanded: boolean }) => any,
+}
+```
+
 ### Collapse 属性
 
-| 名称       | 类型                                       | 说明                                                | 默认值    | 始于 |
-| ---------- | ------------------------------------------ | --------------------------------------------------- | --------- | ---- |
-| expanded   | `string \| number \| (string \| number)[]` | 设置展开的面板的 label 值，非手风琴模式时可传入数组 | `null`    | -    |
-| card       | `boolean`                                  | 设置是否为卡片模式                                  | `false`   | -    |
-| accordion  | `boolean`                                  | 设置是否为手风琴模式                                | `false`   | -    |
-| arrow-type | `'right' \| 'left' \| 'none'`              | 设置面板的指示箭头的类型                            | `'right'` | -    |
-| ghost      | `boolean`                                  | 设置是否为无边框模式                                | `false`   | -    |
+| 名称       | 类型                                       | 说明                                                                         | 默认值    | 始于     |
+| ---------- | ------------------------------------------ | ---------------------------------------------------------------------------- | --------- | -------- |
+| expanded   | `string \| number \| (string \| number)[]` | 设置展开的面板的 label 值，非手风琴模式时可传入数组                          | `null`    | -        |
+| card       | `boolean`                                  | 设置是否为卡片模式                                                           | `false`   | -        |
+| accordion  | `boolean`                                  | 设置是否为手风琴模式                                                         | `false`   | -        |
+| arrow-type | `CollapseArrowType`                        | 设置面板的指示箭头的类型                                                     | `'right'` | -        |
+| ghost      | `boolean`                                  | 设置是否为无边框模式                                                         | `false`   | -        |
+| alive      | `boolean \| CollapseAliveType`             | 设置面板内容是否持续渲染，`true` 等同于 `'always'`，`false` 等同于 `'never'` | `false`   | `2.3.37` |
 
 ### Collapse 事件
 
@@ -80,17 +102,18 @@
 
 ### CollapsePanel 属性
 
-| 名称          | 类型                          | 说明                          | 默认值    | 始于 |
-| ------------- | ----------------------------- | ----------------------------- | --------- | ---- |
-| label         | `string \| number`            | 面板的 label 值，同一组内唯一 | `null`    | -    |
-| title         | `string`                      | 面板的标题                    | `''`      | -    |
-| disabled      | `boolean`                     | 设置面板是否为禁用状态        | `false`   | -    |
-| content-style | `Record<string, any>`         | 设置面板的内容的样式          | `null`    | -    |
-| expanded      | `boolean`                     | 设置面板是否展开              | `false`   | -    |
-| card          | `boolean`                     | 设置是否为卡片模式            | `false`   | -    |
-| arrow-type    | `'right' \| 'left' \| 'none'` | 设置面板的指示箭头的类型      | `'right'` | -    |
-| icon          | `VueComponent`                | 设置面板标题的附属图标        | `''`      | -    |
-| ghost         | `boolean`                     | 设置是否为无边框模式          | `false`   | -    |
+| 名称          | 类型                                     | 说明                                                                         | 默认值    | 始于     |
+| ------------- | ---------------------------------------- | ---------------------------------------------------------------------------- | --------- | -------- |
+| label         | `string \| number`                       | 面板的 label 值，同一组内唯一                                                | `null`    | -        |
+| title         | `string`                                 | 面板的标题                                                                   | `''`      | -        |
+| disabled      | `boolean`                                | 设置面板是否为禁用状态                                                       | `false`   | -        |
+| content-style | `Record<string, any>`                    | 设置面板的内容的样式                                                         | `null`    | -        |
+| expanded      | `boolean`                                | 设置面板是否展开                                                             | `false`   | -        |
+| card          | `boolean`                                | 设置是否为卡片模式                                                           | `false`   | -        |
+| arrow-type    | `'right' \| 'left' \| 'none'`            | 设置面板的指示箭头的类型                                                     | `'right'` | -        |
+| icon          | `VueComponent`                           | 设置面板标题的附属图标                                                       | `''`      | -        |
+| ghost         | `boolean`                                | 设置是否为无边框模式                                                         | `false`   | -        |
+| alive         | `boolean \| 'always' \| 'after-loading'` | 设置面板内容是否持续渲染，`true` 等同于 `'always'`，`false` 等同于 `'never'` | `null`    | `2.3.37` |
 
 ### CollapsePanel 事件
 

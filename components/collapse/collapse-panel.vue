@@ -30,6 +30,7 @@ const props = useProps('collapsePanel', _props, {
   },
   icon: createIconProp(),
   ghost: false,
+  alive: null,
   slots: () => ({}),
 })
 
@@ -41,6 +42,7 @@ const collapseState = inject(COLLAPSE_STATE, null)
 
 const nh = useNameHelper('collapse')
 const icons = useIcons()
+const loaded = ref(false)
 const currentExpanded = ref(props.expanded)
 const currentLabel = ref(props.label)
 
@@ -70,6 +72,10 @@ const useArrowType = computed(() => {
   }
 
   return props.arrowType
+})
+const alive = computed(() => {
+  // 以 CollapsePanel 自身的 alive 属性优先
+  return props.alive ?? collapseState?.alive ?? false
 })
 const className = computed(() => {
   return [
@@ -115,6 +121,33 @@ if (collapseState) {
     },
   )
 }
+
+const ifDirectiveValue = computed(() => {
+  switch (alive.value) {
+    case true:
+    case 'always':
+      return true
+    case 'mounted':
+      return loaded.value
+    default:
+      return currentExpanded.value
+  }
+})
+
+const showDirectiveValue = computed(() => {
+  return !alive.value || currentExpanded.value
+})
+
+const { stop: stopWatchCurrentExpanded } = watch(
+  currentExpanded,
+  value => {
+    if (value) {
+      stopWatchCurrentExpanded()
+      loaded.value = true
+    }
+  },
+  { immediate: true },
+)
 
 function setExpanded(expanded: boolean) {
   currentExpanded.value = expanded
@@ -172,7 +205,8 @@ defineExpose({
     </button>
     <CollapseTransition>
       <div
-        v-if="currentExpanded"
+        v-if="ifDirectiveValue"
+        v-show="showDirectiveValue"
         :id="bodyId"
         :class="nh.be('body')"
         role="tabpanel"
