@@ -1,3 +1,18 @@
+## [2.3.37](https://github.com/vexip-ui/vexip-ui/compare/v2.3.36...v2.3.37) (2025-09-01)
+
+
+### ✨ Features
+
+* **collapsel:** add alive prop ([#583](https://github.com/vexip-ui/vexip-ui/issues/583)) ([31d5d46](https://github.com/vexip-ui/vexip-ui/commit/31d5d46b9b5b23a4490456342d9572ad9ddbec35))
+
+
+### 🐞 Bug Fixes
+
+* **config:** exports defineLocale & defineLocaleConfig ([7682370](https://github.com/vexip-ui/vexip-ui/commit/7682370da134d9bdad579975c5b5dd9cf3b92364))
+* **table:** abnormal display of sorter and filter icons when ellipsis is enabled ([#585](https://github.com/vexip-ui/vexip-ui/issues/585)) ([a0ae0a1](https://github.com/vexip-ui/vexip-ui/commit/a0ae0a109aa9ab56a81a8431ee6c291e922d5b54))
+
+
+
 ## [2.3.36](https://github.com/vexip-ui/vexip-ui/compare/v2.3.35...v2.3.36) (2025-08-11)
 
 
