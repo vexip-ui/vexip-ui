@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Tooltip } from '@/components/tooltip'
+import { Renderer } from '@/components/renderer'
 
 import { computed, ref } from 'vue'
 
@@ -7,6 +8,8 @@ import { useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
 import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { getRangeWidth } from '@vexip-ui/utils'
 import { ellipsisProps } from './props'
+
+import type { EllipsisSlots } from './symbol'
 
 defineOptions({ name: 'Ellipsis' })
 
@@ -30,7 +33,10 @@ const props = useProps('ellipsis', _props, {
   tipMaxWidth: 500,
   tipDisabled: false,
   tipShift: false,
+  slots: () => ({}),
 })
+
+defineSlots<EllipsisSlots>()
 
 const hoverDelay = useHoverDelay()
 const visible = ref(false)
@@ -126,9 +132,15 @@ function handleTriggerLeave() {
         @mouseenter="handleTriggerEnter"
         @mouseleave="handleTriggerLeave"
       >
-        <slot></slot>
+        <slot>
+          <Renderer :renderer="props.slots.default"></Renderer>
+        </slot>
       </div>
     </template>
-    {{ content }}
+    <slot name="content" :content="content">
+      <Renderer :renderer="props.slots.content" :data="{ content }">
+        {{ content }}
+      </Renderer>
+    </slot>
   </Tooltip>
 </template>
