@@ -4,6 +4,7 @@ import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { TooltipShift, TooltipTheme } from '@/components/tooltip'
+import type { EllipsisSlots } from './symbol'
 
 export const ellipsisProps = buildProps({
   placement: String as PropType<Placement>,
@@ -19,6 +20,7 @@ export const ellipsisProps = buildProps({
     type: [Boolean, String] as PropType<boolean | TooltipShift>,
     default: null,
   },
+  slots: Object as PropType<EllipsisSlots>,
 })
 
 export type EllipsisProps = ExtractPropTypes<typeof ellipsisProps>

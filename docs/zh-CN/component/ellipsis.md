@@ -38,3 +38,10 @@
 | tip-max-width   | `number \| string`  | 设置提示气泡的最大宽度                                                                 | `500`        | `2.0.13` |
 | tip-disabled    | `boolean`           | 是否禁用气泡提示                                                                       | `false`      | `2.1.18` |
 | shift           | `TooltipShift`      | 是否将气泡限制在可视区域内                                                             | `false`      | `2.2.12` |
+
+### Ellipsis 插槽
+
+| 名称    | 说明               | 参数                  | 始于     |
+| ------- | ------------------ | --------------------- | -------- |
+| default | 触发提示内容的插槽 | -                     | -        |
+| content | 提示内容的插槽     | `{ content: string }` | `2.3.38` |

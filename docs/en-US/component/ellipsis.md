@@ -38,3 +38,10 @@ The max lines to be displayed can be set via the `max-lines` prop. The multi-lin
 | tip-max-width   | `number \| string`  | Set the maximum width of the tooltip                                                                                                             | `500`        | `2.0.13` |
 | tip-disabled    | `boolean`           | Whether to disable tooltip                                                                                                                       | `false`      | `2.1.18` |
 | shift           | `TooltipShift`      | Whether to limit tip inside the visible area                                                                                                     | `false`      | `2.2.12` |
+
+### Ellipsis Slots
+
+| Name    | Description                                       | Parameters            | Since    |
+| ------- | ------------------------------------------------- | --------------------- | -------- |
+| default | The slot that triggers the content of the balloon | -                     | -        |
+| content | Slot for the content of the balloon               | `{ content: string }` | `2.3.38` |
