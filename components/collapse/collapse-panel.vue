@@ -42,9 +42,9 @@ const collapseState = inject(COLLAPSE_STATE, null)
 
 const nh = useNameHelper('collapse')
 const icons = useIcons()
-const loaded = ref(false)
 const currentExpanded = ref(props.expanded)
 const currentLabel = ref(props.label)
+const loaded = ref(currentExpanded.value)
 
 const tab = ref<HTMLElement>()
 
@@ -138,16 +138,15 @@ const showDirectiveValue = computed(() => {
   return !alive.value || currentExpanded.value
 })
 
-const { stop: stopWatchCurrentExpanded } = watch(
-  currentExpanded,
-  value => {
-    if (value) {
-      stopWatchCurrentExpanded()
+if (!currentExpanded.value) {
+  watch(
+    currentExpanded,
+    () => {
       loaded.value = true
-    }
-  },
-  { immediate: true },
-)
+    },
+    { once: true },
+  )
+}
 
 function setExpanded(expanded: boolean) {
   currentExpanded.value = expanded
