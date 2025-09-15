@@ -1,3 +1,18 @@
+## [2.3.38](https://github.com/vexip-ui/vexip-ui/compare/v2.3.37...v2.3.38) (2025-09-15)
+
+
+### ✨ Features
+
+* **ellipsis:** add content slot ([#586](https://github.com/vexip-ui/vexip-ui/issues/586)) ([b263901](https://github.com/vexip-ui/vexip-ui/commit/b263901039399cab80973ef1ba12346ac491220d))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** correctly process internal loaded value ([#588](https://github.com/vexip-ui/vexip-ui/issues/588)) ([689dbf2](https://github.com/vexip-ui/vexip-ui/commit/689dbf280feea567971645643c11f9b01917a517))
+* **confirm:** should emit cancel event when close by mask ([5e1bf9f](https://github.com/vexip-ui/vexip-ui/commit/5e1bf9f76dd75c01fe50a33f77436f929fa86709))
+
+
+
 ## [2.3.37](https://github.com/vexip-ui/vexip-ui/compare/v2.3.36...v2.3.37) (2025-09-01)
 
 
