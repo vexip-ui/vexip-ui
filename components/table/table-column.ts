@@ -82,7 +82,7 @@ export default defineComponent({
         static: true,
       },
       width: null,
-      minWidth: 100,
+      minWidth: 10,
       maxWidth: null,
       filter: null,
       sorter: false,
