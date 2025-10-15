@@ -1,0 +1,49 @@
+@use 'sass:map';
+
+@use './shared' as *;
+@use './design' as *;
+
+$layout-fit: () !default;
+$layout-fit: map.merge(
+  (
+    inner-width: 0px,
+    inner-height: 0px,
+    scale-x: 1,
+    scale-y: 1,
+  ),
+  $layout-fit
+);
+
+.#{$namespace}-layout-fit {
+  &-vars {
+    @include define-preset-values('layout-fit', $layout-fit);
+  }
+
+  @include basis {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 0;
+  }
+
+  &__inner {
+    position: absolute;
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
+  &__scale {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    transform-origin: left top;
+  }
+}

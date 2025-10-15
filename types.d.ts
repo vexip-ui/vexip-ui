@@ -51,6 +51,7 @@ declare module 'vue' {
     Input: (typeof import('vexip-ui'))['Input'],
     Layout: (typeof import('vexip-ui'))['Layout'],
     LayoutAside: (typeof import('vexip-ui'))['LayoutAside'],
+    LayoutFit: (typeof import('vexip-ui'))['LayoutFit'],
     LayoutFooter: (typeof import('vexip-ui'))['LayoutFooter'],
     LayoutHeader: (typeof import('vexip-ui'))['LayoutHeader'],
     LayoutMain: (typeof import('vexip-ui'))['LayoutMain'],
