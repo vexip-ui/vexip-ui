@@ -1,33 +1,41 @@
 <template>
   <div class="h5-component">
     <div class="h5-header">
-      <h2>LayoutFit 高级示例</h2>
+      <h2>LayoutFit Advanced Example</h2>
     </div>
-    <!-- 参数展示区域 -->
+    <!-- Parameter display area -->
 
     <div class="h5-content">
-      <div class="description-section">
-        <p>适合邪修开发H5</p>
-        <p>这是一个自适应布局容器，会根据父容器尺寸自动调整内容大小。</p>
-        <p>这里可能是一个用设计稿自动生成的H5页面</p>
-        <p>可以使用绝对单位完成页面开发</p>
+      <div class="feature-card" style="text-align: left">
+        <p>Suitable for H5 development</p>
+        <p>
+          This is an adaptive layout container that automatically adjusts content size based on
+          parent container dimensions.
+        </p>
+        <p>This might be an H5 page automatically generated from design drafts</p>
+        <p>Can use absolute units for page development</p>
       </div>
-      <div class="params-section">
-        <h4>布局参数</h4>
+      <div class="feature-card">
+        <h4>Layout Parameters</h4>
+
         <div class="param-item">
-          <span>窗口宽度:</span>
-          <span>{{ windowWidth?.toFixed(2) || 'N/A' }}</span>
-        </div>
-        <div class="param-item">
-          <span>缩放比例:</span>
+          <span>Scale Ratio:</span>
           <span>{{ scale?.toFixed(2) || 'N/A' }}</span>
         </div>
         <div class="param-item">
-          <span>实际宽度:</span>
+          <span>Window Width:</span>
+          <span>{{ windowWidth?.toFixed(2) || 'N/A' }}</span>
+        </div>
+        <div class="param-item">
+          <span>Design Width:</span>
+          <span>{{ designWidth?.toFixed(2) || 'N/A' }}</span>
+        </div>
+        <div class="param-item">
+          <span>Actual Width:</span>
           <span>{{ currentWidth?.toFixed(2) || 'N/A' }}</span>
         </div>
         <div class="param-item">
-          <span>实际高度:</span>
+          <span>Actual Height:</span>
           <span>{{ currentHeight?.toFixed(2) || 'N/A' }}</span>
         </div>
       </div>
@@ -35,33 +43,33 @@
         <div class="icon">
           📱
         </div>
-        <h3>移动优先</h3>
-        <p>专为移动设备优化设计</p>
+        <h3>Mobile First</h3>
+        <p>Optimized design for mobile devices</p>
       </div>
 
       <div class="feature-card">
         <div class="icon">
           🎨
         </div>
-        <h3>美观界面</h3>
-        <p>现代化UI设计风格</p>
+        <h3>Beautiful Interface</h3>
+        <p>Modern UI design style</p>
       </div>
 
       <div class="feature-card">
         <div class="icon">
           ⚡
         </div>
-        <h3>快速加载</h3>
-        <p>优化性能，流畅体验</p>
+        <h3>Fast Loading</h3>
+        <p>Optimized performance, smooth experience</p>
       </div>
     </div>
 
     <div class="h5-footer">
       <button class="action-btn">
-        立即体验
+        Try Now
       </button>
       <p class="footer-text">
-        © 2025 AI生成的固定宽度页面
+        © 2025 AI-generated fixed-width page
       </p>
     </div>
   </div>
@@ -73,6 +81,7 @@ interface Props {
   scale?: number,
   currentWidth?: number,
   currentHeight?: number,
+  designWidth?: number,
 }
 
 defineProps<Props>()
@@ -104,23 +113,6 @@ defineProps<Props>()
   margin: 0;
   font-size: 14px;
   opacity: 90%;
-}
-
-.description-section {
-  padding: 15px;
-  margin-top: 15px;
-  text-align: left;
-  background: rgba(255, 255, 255, 5%);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 15%);
-  border-radius: 8px;
-}
-
-.description-section p {
-  margin: 5px 0;
-  font-size: 12px;
-  line-height: 1.4;
-  opacity: 85%;
 }
 
 .h5-content {
@@ -183,22 +175,6 @@ defineProps<Props>()
   margin: 15px 0 0;
   font-size: 12px;
   opacity: 70%;
-}
-
-.params-section {
-  padding: 15px;
-  margin-top: 20px;
-  background: rgba(255, 255, 255, 10%);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 20%);
-  border-radius: 8px;
-}
-
-.params-section h4 {
-  margin: 0 0 10px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
 }
 
 .param-item {

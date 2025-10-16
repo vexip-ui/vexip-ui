@@ -101,6 +101,7 @@ export const enUS = defineI18n({
     Grid: 'Grid',
     Divider: 'Divider',
     Layout: 'Layout',
+    LayoutFit: 'LayoutFit',
     NativeScroll: 'NativeScroll',
     Row: 'Row',
     Scroll: 'Scroll',

@@ -1,8 +1,7 @@
-import { buildProps, eventProp } from '@vexip-ui/config'
+import { buildProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ResizeObserverEntry } from '@juggle/resize-observer'
 
 export const layoutFitProps = buildProps({
   width: {
@@ -22,18 +21,6 @@ export const layoutFitProps = buildProps({
     type: Boolean,
     default: false,
   },
-  onResize:
-    eventProp<
-      (data: {
-        contentWidth: number,
-        contentHeight: number,
-        scaleX: number,
-        scaleY: number,
-        innerWidth: number,
-        innerHeight: number,
-        _entries: ResizeObserverEntry[],
-      }) => void
-    >(),
 })
 
 export type LayoutFitProps = ExtractPropTypes<typeof layoutFitProps>

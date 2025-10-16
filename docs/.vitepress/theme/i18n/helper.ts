@@ -99,6 +99,7 @@ export interface I18nConfig {
     Grid: string,
     Divider: string,
     Layout: string,
+    LayoutFit: string,
     NativeScroll: string,
     Row: string,
     Scroll: string,
