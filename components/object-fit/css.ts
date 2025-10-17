@@ -1,2 +1,2 @@
 import '@/components/preset/css'
-import '@/css/layout-fit.scss'
+import '@/css/object-fit.scss'

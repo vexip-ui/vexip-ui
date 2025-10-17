@@ -1,7 +1,7 @@
 <template>
   <div class="h5-component">
     <div class="h5-header">
-      <h2>LayoutFit Advanced Example</h2>
+      <h2>ObjectFit Advanced Example</h2>
     </div>
     <!-- Parameter display area -->
 

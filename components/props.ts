@@ -46,7 +46,7 @@ import type { ImageViewerCProps } from './image-viewer'
 import type { InputCProps } from './input'
 import type { LayoutCProps } from './layout'
 import type { LayoutAsideCProps } from './layout-aside'
-import type { LayoutFitCProps } from './layout-fit'
+import type { ObjectFitCProps } from './object-fit'
 import type { LayoutFooterCProps } from './layout-footer'
 import type { LayoutHeaderCProps } from './layout-header'
 import type { LayoutMainCProps } from './layout-main'
@@ -176,7 +176,7 @@ export interface PropsOptions {
   input?: InputCProps,
   layout?: LayoutCProps,
   layoutAside?: LayoutAsideCProps,
-  layoutFit?: LayoutFitCProps,
+  objectFit?: ObjectFitCProps,
   layoutFooter?: LayoutFooterCProps,
   layoutHeader?: LayoutHeaderCProps,
   layoutMain?: LayoutMainCProps,

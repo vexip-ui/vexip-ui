@@ -1,4 +1,4 @@
-# LayoutFit 自适应布局 ==!s|2.3.39==
+# ObjectFit 自适应布局 ==!s|2.3.39==
 
 是一个将 object-fit 功能实现到非可替换元素的组件。
 
@@ -6,17 +6,17 @@
 
 ## 基础示例
 
-:::demo layout-fit/basis
+:::demo object-fit/basis
 
 ### 基础用法
 
-LayoutFit 组件会自动缩放内容以适应父容器，同时保持指定的宽高比。
+ObjectFit 组件会自动缩放内容以适应父容器，同时保持指定的宽高比。
 
 :::
 
 ## 高级示例
 
-:::demo layout-fit/advanced
+:::demo object-fit/advanced
 
 ### 高级用法
 
@@ -31,7 +31,7 @@ LayoutFit 组件会自动缩放内容以适应父容器，同时保持指定的�
 ### 预设类型
 
 ```ts
-interface LayoutFitExposed {
+interface ObjectFitExposed {
   currentWidth: number,
   currentHeight: number,
   scaleX: number,
@@ -39,7 +39,7 @@ interface LayoutFitExposed {
 }
 ```
 
-### LayoutFit 属性
+### ObjectFit 属性
 
 | 名称     | 类型                                                       | 说明                         | 默认值   |
 | -------- | ---------------------------------------------------------- | ---------------------------- | -------- |
@@ -48,13 +48,13 @@ interface LayoutFitExposed {
 | fit      | `'contain' \| 'cover' \| 'fill' \| 'none' \| 'scale-down'` | 内容如何调整大小以适应其容器 | `'none'` |
 | is-scale | `boolean`                                                  | 是否对内容应用缩放变换       | `false`  |
 
-### LayoutFit 插槽
+### ObjectFit 插槽
 
 | 名称    | 说明         | 参数 | 始于 |
 | ------- | ------------ | ---- | ---- |
 | default | 要渲染的内容 | -    | -    |
 
-### LayoutFit Exposed
+### ObjectFit Exposed
 
 | 名称          | 类型     | 说明             | 始于 |
 | ------------- | -------- | ---------------- | ---- |

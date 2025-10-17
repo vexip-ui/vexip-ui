@@ -14,8 +14,8 @@
           position: 'relative',
         }"
       >
-        <LayoutFit
-          ref="layoutFit"
+        <ObjectFit
+          ref="objectFit"
           :width="designWidth"
           :height="designHeight"
           fit="contain"
@@ -25,16 +25,16 @@
             v-resize="handleH5Resize"
             style="position: relative; overflow: auto; background: #eee"
           >
-            <!-- Imported H5 component -->
+            <!-- 导入的H5组件 -->
             <H5Component
               :window-width="windowWidth"
-              :scale="layoutFit?.scaleX"
-              :current-width="layoutFit?.currentWidth"
-              :current-height="layoutFit?.currentHeight"
+              :scale="objectFit?.scaleX"
+              :current-width="objectFit?.currentWidth"
+              :current-height="objectFit?.currentHeight"
               :design-width="designWidth"
             ></H5Component>
           </div>
-        </LayoutFit>
+        </ObjectFit>
       </div>
     </NativeScroll>
   </div>
@@ -42,27 +42,27 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { LayoutFit } from 'vexip-ui'
-import H5Component from './h5-component.en-US.vue'
-const layoutFit = ref()
-// Window width
+import { ObjectFit } from 'vexip-ui'
+import H5Component from './h5-component.zh-CN.vue'
+const objectFit = ref()
+// 窗口宽度
 const windowWidth = ref(0)
 const windowHeight = ref(0)
 
-// Design draft width
+// 设计稿宽度
 const designWidth = 300
-// Design draft height
+// 设计稿高度
 const designHeight = ref(0)
-// Listen for H5 page height changes
+// 监听H5页面高度变化
 function handleH5Resize(entry: ResizeObserverEntry) {
   const { height } = entry.contentRect
   designHeight.value = height
 }
-// H5 page height
+// H5页面高度
 const h5Height = computed(() => {
   return (designHeight.value / designWidth) * windowWidth.value
 })
-// Listen for window changes
+// 监听窗口变化
 function handleResize(entry: ResizeObserverEntry) {
   windowWidth.value = entry.contentRect.width
   windowHeight.value = entry.contentRect.height

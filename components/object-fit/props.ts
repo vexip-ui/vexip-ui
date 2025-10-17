@@ -3,7 +3,7 @@ import { buildProps } from '@vexip-ui/config'
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
-export const layoutFitProps = buildProps({
+export const objectFitProps = buildProps({
   width: {
     type: Number,
     default: 100,
@@ -23,5 +23,5 @@ export const layoutFitProps = buildProps({
   },
 })
 
-export type LayoutFitProps = ExtractPropTypes<typeof layoutFitProps>
-export type LayoutFitCProps = ConfigurableProps<LayoutFitProps>
+export type ObjectFitProps = ExtractPropTypes<typeof objectFitProps>
+export type ObjectFitCProps = ConfigurableProps<ObjectFitProps>

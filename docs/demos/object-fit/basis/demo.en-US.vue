@@ -13,7 +13,7 @@
       background: '#eee',
     }"
   >
-    <LayoutFit
+    <ObjectFit
       :width="fixedWidth"
       :height="fixedHeight"
       :fit="fit"
@@ -37,13 +37,13 @@
           Success
         </Button>
       </Card>
-    </LayoutFit>
+    </ObjectFit>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { LayoutFit } from 'vexip-ui'
+import { ObjectFit } from 'vexip-ui'
 
 const fixedWidth = 420
 const fixedHeight = 300

@@ -56,7 +56,7 @@ const components = [
   'Input',
   'Layout',
   'LayoutAside',
-  'LayoutFit',
+  'ObjectFit',
   'LayoutFooter',
   'LayoutHeader',
   'LayoutMain',

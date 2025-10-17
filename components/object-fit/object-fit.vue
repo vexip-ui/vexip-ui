@@ -4,23 +4,23 @@ import { vResize } from '@/directives/resize'
 import { computed, ref, watch } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { layoutFitProps } from './props'
+import { objectFitProps } from './props'
 
 import type { ResizeInfo } from '@/common/hooks/src/resize'
 
 defineOptions({
-  name: 'LayoutFit',
+  name: 'ObjectFit',
 })
 
-const _props = defineProps(layoutFitProps)
-const props = useProps('layoutFit', _props, {
+const _props = defineProps(objectFitProps)
+const props = useProps('objectFit', _props, {
   width: 0,
   height: 0,
   fit: 'none',
   isScale: false,
 })
 
-const nh = useNameHelper('layout-fit')
+const nh = useNameHelper('object-fit')
 
 const aspectRatio = computed(() => props.width / props.height)
 const container = ref<HTMLElement>()

@@ -3,20 +3,20 @@
 @use './shared' as *;
 @use './design' as *;
 
-$layout-fit: () !default;
-$layout-fit: map.merge(
+$object-fit: () !default;
+$object-fit: map.merge(
   (
     inner-width: 0px,
     inner-height: 0px,
     scale-x: 1,
     scale-y: 1,
   ),
-  $layout-fit
+  $object-fit
 );
 
-.#{$namespace}-layout-fit {
+.#{$namespace}-object-fit {
   &-vars {
-    @include define-preset-values('layout-fit', $layout-fit);
+    @include define-preset-values('object-fit', $object-fit);
   }
 
   @include basis {

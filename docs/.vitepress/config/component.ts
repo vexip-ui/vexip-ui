@@ -25,7 +25,7 @@ export function getComponentConfig(): ComponentGroup[] {
         { name: 'Grid', since: '2.0.0' },
         { name: 'Divider' },
         { name: 'Layout', since: '2.0.0' },
-        { name: 'LayoutFit', since: '2.3.39' },
+        { name: 'ObjectFit', since: '2.3.39' },
         { name: 'NativeScroll', since: '1.3.1' },
         { name: 'Row' },
         { name: 'Scroll' },

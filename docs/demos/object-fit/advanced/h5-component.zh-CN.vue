@@ -1,7 +1,7 @@
 <template>
   <div class="h5-component">
     <div class="h5-header">
-      <h2>LayoutFit 高级示例</h2>
+      <h2>ObjectFit 高级示例</h2>
     </div>
     <!-- 参数展示区域 -->
 

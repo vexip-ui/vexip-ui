@@ -53,7 +53,7 @@ import { ImageViewer } from './image-viewer'
 import { Input } from './input'
 import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
-import { LayoutFit } from './layout-fit'
+import { ObjectFit } from './object-fit'
 import { LayoutFooter } from './layout-footer'
 import { LayoutHeader } from './layout-header'
 import { LayoutMain } from './layout-main'
@@ -181,7 +181,7 @@ const components = [
   Input,
   Layout,
   LayoutAside,
-  LayoutFit,
+  ObjectFit,
   LayoutFooter,
   LayoutHeader,
   LayoutMain,
@@ -323,7 +323,7 @@ export * from './image-viewer'
 export * from './input'
 export * from './layout'
 export * from './layout-aside'
-export * from './layout-fit'
+export * from './object-fit'
 export * from './layout-footer'
 export * from './layout-header'
 export * from './layout-main'

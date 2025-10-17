@@ -1,8 +1,8 @@
-export interface LayoutFitSlots {
+export interface ObjectFitSlots {
   default: () => any,
 }
 
-export type LayoutFitExposed = {
+export type ObjectFitExposed = {
   currentWidth: number,
   currentHeight: number,
   scaleX: number,

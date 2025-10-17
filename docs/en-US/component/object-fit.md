@@ -1,4 +1,4 @@
-# LayoutFit Adaptive Layout ==!s|2.3.39==
+# ObjectFit Adaptive Layout ==!s|2.3.39==
 
 A component that implements the object-fit functionality for non-replaceable elements.
 
@@ -6,17 +6,17 @@ A responsive layout container component that automatically adjusts content size 
 
 ## Basic Example
 
-:::demo layout-fit/basis
+:::demo object-fit/basis
 
 ### Basic Usage
 
-The LayoutFit component automatically scales content to fit the parent container while maintaining the specified aspect ratio.
+The ObjectFit component automatically scales content to fit the parent container while maintaining the specified aspect ratio.
 
 :::
 
 ## Advanced Example
 
-:::demo layout-fit/advanced
+:::demo object-fit/advanced
 
 ### Advanced Usage
 
@@ -31,7 +31,7 @@ You can develop H5 pages using absolute units, achieving 1:1 design restoration.
 ### Preset Types
 
 ```ts
-interface LayoutFitExposed {
+interface ObjectFitExposed {
   currentWidth: number,
   currentHeight: number,
   scaleX: number,
@@ -39,7 +39,7 @@ interface LayoutFitExposed {
 }
 ```
 
-### LayoutFit Props
+### ObjectFit Props
 
 | Name     | Type                                                       | Description                                   | Default  |
 | -------- | ---------------------------------------------------------- | --------------------------------------------- | -------- |
@@ -48,13 +48,13 @@ interface LayoutFitExposed {
 | fit      | `'contain' \| 'cover' \| 'fill' \| 'none' \| 'scale-down'` | How the content resizes to fit its container  | `'none'` |
 | is-scale | `boolean`                                                  | Whether to apply scaling transform to content | `false`  |
 
-### LayoutFit Slots
+### ObjectFit Slots
 
 | Name    | Description       | Parameters | Since |
 | ------- | ----------------- | ---------- | ----- |
 | default | Content to render | -          | -     |
 
-### LayoutFit Exposed
+### ObjectFit Exposed
 
 | Name          | Type     | Description                     | Since |
 | ------------- | -------- | ------------------------------- | ----- |
