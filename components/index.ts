@@ -53,7 +53,6 @@ import { ImageViewer } from './image-viewer'
 import { Input } from './input'
 import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
-import { ObjectFit } from './object-fit'
 import { LayoutFooter } from './layout-footer'
 import { LayoutHeader } from './layout-header'
 import { LayoutMain } from './layout-main'
@@ -68,6 +67,7 @@ import { Modal } from './modal'
 import { NativeScroll } from './native-scroll'
 import { Notice } from './notice'
 import { NumberInput } from './number-input'
+import { ObjectFit } from './object-fit'
 import { Option } from './option'
 import { OptionGroup } from './option-group'
 import { Overflow } from './overflow'
@@ -181,7 +181,6 @@ const components = [
   Input,
   Layout,
   LayoutAside,
-  ObjectFit,
   LayoutFooter,
   LayoutHeader,
   LayoutMain,
@@ -193,6 +192,7 @@ const components = [
   Modal,
   NativeScroll,
   NumberInput,
+  ObjectFit,
   Option,
   OptionGroup,
   Overflow,
@@ -323,7 +323,6 @@ export * from './image-viewer'
 export * from './input'
 export * from './layout'
 export * from './layout-aside'
-export * from './object-fit'
 export * from './layout-footer'
 export * from './layout-header'
 export * from './layout-main'
@@ -338,6 +337,7 @@ export * from './modal'
 export * from './native-scroll'
 export * from './notice'
 export * from './number-input'
+export * from './object-fit'
 export * from './option'
 export * from './option-group'
 export * from './overflow'

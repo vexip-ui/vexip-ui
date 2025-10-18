@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { objectFitProps } from './props'
+import PositionParser from './PositionParser'
 
 import type { ResizeInfo } from '@/common/hooks/src/resize'
 
@@ -26,6 +27,94 @@ const aspectRatio = computed(() => props.width / props.height)
 const container = ref<HTMLElement>()
 const innerWidth = ref(0)
 const innerHeight = ref(0)
+const defaultPosition = {
+  alignItems: 'center',
+  justifyContent: 'center',
+}
+
+// 定义有效的定位值映射
+const positionMap = {
+  top: 'flex-start',
+  right: 'flex-end',
+  bottom: 'flex-end',
+  left: 'flex-start',
+  center: 'center',
+}
+
+const positionStyle = computed(() => {
+  // 字符串定位处理
+  const pos = PositionParser.parse(props.position)
+
+  let alignItems = positionMap['left']
+  let justifyContent = positionMap['top']
+  let transform
+  if (pos.type === 'single') {
+    if (typeof pos.x === 'string') {
+      justifyContent = positionMap[pos.x]
+      alignItems = 'center'
+    } else {
+      if (pos.x?.type === 'length') {
+        transform = `translateX(${pos.x.value + pos.x.unit})`
+      } else {
+        if (pos.x?.type === 'percent') {
+          // TODO:
+          console.log('pos single x', pos)
+          return defaultPosition
+        } else {
+          return defaultPosition
+        }
+      }
+    }
+  } else if (pos.type === 'double') {
+    let transformY, transformX
+    if (typeof pos.x === 'string') {
+      justifyContent = positionMap[pos.x]
+    } else {
+      if (pos.x?.type === 'length') {
+        transformX = `${pos.x.value + pos.x.unit}`
+      } else {
+        if (pos.x?.type === 'percent') {
+          // TODO:
+          console.log('pos double x', pos)
+          return defaultPosition
+        } else {
+          return defaultPosition
+        }
+      }
+    }
+
+    if (typeof pos.y === 'string') {
+      alignItems = positionMap[pos.y]
+    } else {
+      if (pos.y?.type === 'length') {
+        transformY = `${pos.y.value + pos.y.unit}`
+      } else {
+        if (pos.y?.type === 'percent') {
+          console.log('pos double y', pos)
+          // TODO:
+          return defaultPosition
+        } else {
+          return defaultPosition
+        }
+      }
+    }
+    // 拼接transform
+    if (transformX && transformY) {
+      transform = `translate(${transformX},${transformY})`
+    } else if (transformX) {
+      transform = `translateX(${transformX})`
+    } else if (transformY) {
+      transform = `translateY(${transformY})`
+    }
+  } else if (pos.type === 'edge') {
+    return defaultPosition
+  }
+  return {
+    alignItems,
+    justifyContent,
+    transform,
+  }
+})
 
 const scaleX = computed(() => {
   return innerWidth.value / props.width
@@ -178,7 +267,12 @@ defineExpose({
 </script>
 
 <template>
-  <div ref="container" v-resize="resizeObserverCallBack" :class="nh.b()">
+  <div
+    ref="container"
+    v-resize="resizeObserverCallBack"
+    :class="nh.b()"
+    :style="positionStyle"
+  >
     <div :class="nh.be('inner')" :style="innerStyle">
       <div :class="nh.be('scale')" :style="scaleStyle">
         <slot></slot>

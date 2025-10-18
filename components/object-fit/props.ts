@@ -21,6 +21,10 @@ export const objectFitProps = buildProps({
     type: Boolean,
     default: false,
   },
+  position: {
+    type: String,
+    default: 'center',
+  },
 })
 
 export type ObjectFitProps = ExtractPropTypes<typeof objectFitProps>

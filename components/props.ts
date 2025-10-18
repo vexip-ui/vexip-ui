@@ -46,7 +46,6 @@ import type { ImageViewerCProps } from './image-viewer'
 import type { InputCProps } from './input'
 import type { LayoutCProps } from './layout'
 import type { LayoutAsideCProps } from './layout-aside'
-import type { ObjectFitCProps } from './object-fit'
 import type { LayoutFooterCProps } from './layout-footer'
 import type { LayoutHeaderCProps } from './layout-header'
 import type { LayoutMainCProps } from './layout-main'
@@ -57,6 +56,7 @@ import type { MenuItemCProps } from './menu-item'
 import type { ModalCProps } from './modal'
 import type { NativeScrollCProps } from './native-scroll'
 import type { NumberInputCProps } from './number-input'
+import type { ObjectFitCProps } from './object-fit'
 import type { OverflowCProps } from './overflow'
 import type { PaginationCProps } from './pagination'
 import type { PopperCProps } from './popper'
@@ -176,7 +176,6 @@ export interface PropsOptions {
   input?: InputCProps,
   layout?: LayoutCProps,
   layoutAside?: LayoutAsideCProps,
-  objectFit?: ObjectFitCProps,
   layoutFooter?: LayoutFooterCProps,
   layoutHeader?: LayoutHeaderCProps,
   layoutMain?: LayoutMainCProps,
@@ -187,6 +186,7 @@ export interface PropsOptions {
   modal?: ModalCProps,
   nativeScroll?: NativeScrollCProps,
   numberInput?: NumberInputCProps,
+  objectFit?: ObjectFitCProps,
   overflow?: OverflowCProps,
   pagination?: PaginationCProps,
   popper?: PopperCProps,

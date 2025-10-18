@@ -76,7 +76,6 @@
 @use './switch';
 @use './layout';
 @use './layout-aside';
-@use './object-fit';
 @use './layout-footer';
 @use './layout-header';
 @use './layout-main';
@@ -86,6 +85,7 @@
 @use './popup';
 @use './message';
 @use './notice';
+@use './object-fit';
 @use './option-group';
 @use './pagination';
 @use './portal';
