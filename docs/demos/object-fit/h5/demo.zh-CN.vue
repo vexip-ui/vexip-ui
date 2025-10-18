@@ -1,12 +1,6 @@
 <template>
   <div v-resize="handleResize" class="demo-window-get-width">
-    <NativeScroll
-      use-y-bar
-      use-bar-track
-      bar-color="orange"
-      track-color="yellow"
-      :height="windowHeight"
-    >
+    <NativeScroll use-y-bar use-bar-track :height="windowHeight">
       <div
         :style="{
           width: windowWidth + 'px',
@@ -88,5 +82,10 @@ function handleResize(entry: ResizeObserverEntry) {
 
 .demo-window-get-width::-webkit-scrollbar {
   display: none;
+}
+
+.demo-window-get-width :deep(.vxp-scrollbar-vars) {
+  --vxp-scrollbar-bar-bg-color: #ffcf32;
+  --vxp-scrollbar-track-bg-color: #ffee0017;
 }
 </style>
