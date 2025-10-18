@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import PositionParser from '../PositionParser'
 
-describe('边缘语法', () => {
+describe('Edge syntax', () => {
   it('right 3em bottom 10px -> fixed object', () => {
     const src = 'right 3em bottom 10px'
     const pos = PositionParser.parse(src)
@@ -29,7 +29,7 @@ describe('边缘语法', () => {
   })
 })
 
-describe('单值语法', () => {
+describe('Single value syntax', () => {
   it('关键字 top → y=top, x=center', () => {
     expect(PositionParser.parse('top')).toEqual({
       type: 'single',
@@ -84,8 +84,8 @@ describe('单值语法', () => {
     })
   })
 })
-describe('双值语法', () => {
-  // 普通
+describe('Double value syntax', () => {
+  // Normal
   it('left top → x=left, y=top', () => {
     expect(PositionParser.parse('left top')).toEqual({
       type: 'double',
@@ -93,7 +93,7 @@ describe('双值语法', () => {
       y: 'top',
     })
   })
-  // 归一化
+  // Normalized
   it('top left → 归一化后 x=left, y=top', () => {
     expect(PositionParser.parse('top left')).toEqual({
       type: 'double',
@@ -101,7 +101,7 @@ describe('双值语法', () => {
       y: 'top',
     })
   })
-  // 正向测试
+  // Positive tests
   it('right 20% → x=right, y=20%', () => {
     const src = 'right 20%'
     const pos = PositionParser.parse(src)
@@ -128,7 +128,7 @@ describe('双值语法', () => {
     const pos = PositionParser.parse(src)
     expect(pos).toEqual({ type: 'double', x: 'center', y: 'center' })
   })
-  // 反向测试
+  // Negative tests
   it('20% right → x=right, y=20%', () => {
     const src = '20% right'
     const pos = PositionParser.parse(src)
@@ -171,8 +171,6 @@ describe('双值语法', () => {
   it('30px center → x=30px, y=center', () => {
     const src = '30px center'
     const pos = PositionParser.parse(src)
-    console.log(pos)
-
     expect(pos).toEqual({
       type: 'double',
       x: { type: 'length', value: 30, unit: 'px' },

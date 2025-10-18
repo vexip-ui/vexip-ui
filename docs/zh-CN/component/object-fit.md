@@ -1,8 +1,14 @@
 # ObjectFit 自适应布局 ==!s|2.3.39==
 
-是一个将 object-fit 功能实现到非可替换元素的组件。
+是一个将 CSS 的 `object-fit` 功能实现到非可替换元素的组件。
 
 一个响应式布局容器组件，能够根据父容器尺寸自动调整内容大小，同时保持宽高比。
+
+其中`position`参数与 CSS 的 `object-position`参数一致，默认值为center。
+
+:::warning
+示例中的右下角可以拖拽调整大小，方便查看效果。
+:::
 
 ## 基础示例
 
@@ -19,6 +25,14 @@ ObjectFit 组件会自动缩放内容以适应父容器，同时保持指定的�
 :::demo object-fit/advanced
 
 ### 高级用法
+
+:::
+
+## H5示例
+
+:::demo object-fit/h5
+
+### H5用法
 
 拒绝代码移动端适配
 
@@ -43,12 +57,13 @@ interface ObjectFitExposed {
 
 ### ObjectFit 属性
 
-| 名称     | 类型                                                       | 说明                         | 默认值   |
-| -------- | ---------------------------------------------------------- | ---------------------------- | -------- |
-| width    | `number`                                                   | 内容的原始宽度               | `100`    |
-| height   | `number`                                                   | 内容的原始高度               | `100`    |
-| fit      | `'contain' \| 'cover' \| 'fill' \| 'none' \| 'scale-down'` | 内容如何调整大小以适应其容器 | `'none'` |
-| is-scale | `boolean`                                                  | 是否对内容应用缩放变换       | `false`  |
+| 名称     | 类型                                                       | 说明                         | 默认值     |
+| -------- | ---------------------------------------------------------- | ---------------------------- | ---------- |
+| width    | `number`                                                   | 内容的原始宽度               | `100`      |
+| height   | `number`                                                   | 内容的原始高度               | `100`      |
+| fit      | `'contain' \| 'cover' \| 'fill' \| 'none' \| 'scale-down'` | 内容如何调整大小以适应其容器 | `'none'`   |
+| position | `string`                                                   | 内容的初始位置               | `'center'` |
+| is-scale | `boolean`                                                  | 是否对内容应用缩放变换       | `true`     |
 
 ### ObjectFit 插槽
 

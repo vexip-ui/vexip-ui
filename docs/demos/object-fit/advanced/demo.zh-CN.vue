@@ -1,92 +1,129 @@
 <template>
-  <div v-resize="handleResize" class="demo-window-get-width">
-    <NativeScroll
-      use-y-bar
-      use-bar-track
-      bar-color="orange"
-      track-color="yellow"
-      :height="windowHeight"
-    >
-      <div
-        :style="{
-          width: windowWidth + 'px',
-          height: h5Height + 'px',
-          position: 'relative',
-        }"
-      >
-        <ObjectFit
-          ref="objectFit"
-          :width="designWidth"
-          :height="designHeight"
-          fit="contain"
-          :is-scale="true"
+  <RadioGroup v-model:value="fit">
+    <span style="margin-inline-end: 10px">Fit:</span>
+    <Radio v-for="item in items" :key="item" :label="item">
+      {{ item }}
+    </Radio>
+    <Checkbox v-model:checked="checked">
+      缩放：
+    </Checkbox>
+  </RadioGroup>
+  <br /><br />
+  Position: <Input v-model:value="position" class="demo-position"></Input>
+  <br />
+  <Dropdown class="demo-presets">
+    <Button type="primary">
+      Position 预设
+    </Button>
+    <template #drop>
+      <DropdownList>
+        <DropdownItem
+          v-for="preset in presets"
+          :key="preset.value"
+          :name="preset.value"
+          @click="position = preset.value"
         >
-          <div
-            v-resize="handleH5Resize"
-            style="position: relative; overflow: auto; background: #eee"
-          >
-            <!-- 导入的H5组件 -->
-            <H5Component
-              :window-width="windowWidth"
-              :scale="objectFit?.scaleX"
-              :current-width="objectFit?.innerWidth"
-              :current-height="objectFit?.innerHeight"
-              :design-width="designWidth"
-            ></H5Component>
-          </div>
-        </ObjectFit>
-      </div>
-    </NativeScroll>
+          {{ preset.label }}
+        </DropdownItem>
+      </DropdownList>
+    </template>
+  </Dropdown>
+  <br /><br />
+  <div
+    class="demo-window"
+    :style="{
+      position: 'relative',
+    }"
+  >
+    <ObjectFit
+      :width="fixedWidth"
+      :height="fixedHeight"
+      :fit="fit"
+      :is-scale="checked"
+      :position="position"
+    >
+      <Card
+        title="标题"
+        shadow="never"
+        :style="{ width: fixedWidth + 'px', height: fixedHeight + 'px' }"
+      >
+        <p>卡片的内容</p>
+        <p>卡片的内容</p>
+        <p>卡片的内容</p>
+        <Button type="primary">
+          Primary
+        </Button>
+        <Button type="error">
+          Info
+        </Button>
+        <Button type="success">
+          Success
+        </Button>
+      </Card>
+    </ObjectFit>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { ObjectFit } from 'vexip-ui'
-import H5Component from './h5-component.zh-CN.vue'
-const objectFit = ref()
-// 窗口宽度
-const windowWidth = ref(0)
-const windowHeight = ref(0)
+import { ref } from 'vue'
+import { Button, Dropdown, DropdownItem, DropdownList, Input, ObjectFit } from 'vexip-ui'
 
-// 设计稿宽度
-const designWidth = 300
-// 设计稿高度
-const designHeight = ref(0)
-// 监听H5页面高度变化
-function handleH5Resize(entry: ResizeObserverEntry) {
-  const { height } = entry.contentRect
-  designHeight.value = height
-}
-// H5页面高度
-const h5Height = computed(() => {
-  return (designHeight.value / designWidth) * windowWidth.value
-})
-// 监听窗口变化
-function handleResize(entry: ResizeObserverEntry) {
-  windowWidth.value = entry.contentRect.width
-  windowHeight.value = entry.contentRect.height
-}
+const fixedWidth = 420
+const fixedHeight = 300
+const checked = ref(true)
+const position = ref('center center')
+const fit = ref<'none' | 'contain' | 'cover' | 'fill' | 'scale-down'>('contain')
+
+const items = ['none', 'contain', 'cover', 'fill', 'scale-down']
+const presets = [
+  { label: '居中 center', value: 'center center' },
+  { label: '左上', value: 'left top' },
+  { label: '中上', value: 'center top' },
+  { label: '右上', value: 'right top' },
+  { label: '左中', value: 'left center' },
+  { label: '右中', value: 'right center' },
+  { label: '左下', value: 'left bottom' },
+  { label: '中下', value: 'center bottom' },
+  { label: '右下', value: 'right bottom' },
+  { label: '距离偏移 5em 100px', value: '5em 100px' },
+  { label: '距离偏移 right 10px', value: 'right 10px' },
+  { label: '边缘偏移 left 10% top 20%', value: 'left 10% top 20%' },
+  { label: '边缘偏移 right 10% bottom 20%', value: 'right 10% bottom 20%' },
+]
 </script>
 
 <style scoped>
-.demo-window-get-width {
+.demo-window {
   position: relative;
   box-sizing: border-box;
-  width: 300px;
+  width: 500px;
   min-width: 100px;
   max-width: 1000px;
-  height: 600px;
+  height: 500px;
   min-height: 100px;
   max-height: 1000px;
   overflow: auto;
   color: #000;
   resize: both;
-  background-color: var(--vxp-color-primary-base);
+  background-color: #eee;
   scrollbar-width: none;
 }
 
-.demo-window-get-width::-webkit-scrollbar {
+.demo-window::-webkit-scrollbar {
   display: none;
+}
+
+.demo-position {
+  width: 200px;
+  margin-left: 1rem;
+}
+
+.demo-presets {
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+:deep(.vxp-object-fit__scale) {
+  background-color: var(--vxp-color-primary-light-6);
 }
 </style>

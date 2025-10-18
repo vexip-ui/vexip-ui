@@ -1,4 +1,4 @@
-/* ========================= 基础类型 ========================= */
+/* ========================= Basic types ========================= */
 export type HorKey = 'left' | 'center' | 'right'
 export type VertKey = 'top' | 'center' | 'bottom'
 export type Key = HorKey | VertKey
@@ -8,18 +8,18 @@ export type Length = { type: 'length', value: number, unit: Unit }
 export type Percent = { type: 'percent', value: number, unit: '%' }
 export type LP = Length | Percent
 
-/* ------- 双关键字：输入阶段允许反写，归一化后固定 x 在前 ------- */
+/* ------- Double keywords: reverse writing allowed during input, normalized to x first ------- */
 export type DoubleKeyInput = { x: HorKey, y: VertKey } | { x: VertKey, y: HorKey }
 
 export type DoubleKeyNormalized = { x: HorKey, y: VertKey }
 
-/* ===================== 统一 AST（归一化后） =================== */
+/* ===================== Unified AST (after normalization) =================== */
 export type Position =
   | { type: 'single', x?: LP | HorKey, y?: LP | VertKey } // 单值
   | { type: 'double', x: HorKey | LP, y: VertKey | LP } // 双值：关键字或 LP 均可
   | { type: 'edge', x: { key: HorKey, offset: LP }, y: { key: VertKey, offset: LP } }
 
-/* ======================== 解析器 ============================ */
+/* ======================== Parser ============================ */
 export default class PositionParser {
   private static readonly KEYWORDS: Key[] = ['left', 'center', 'right', 'top', 'bottom']
   private static tokenize(src: string): string[] {
@@ -85,7 +85,7 @@ export default class PositionParser {
     }
   }
 
-  /* -------------- 边缘偏移：顺序任意，必须各出现一次 -------------- */
+  /* -------------- Edge offset: order arbitrary, must each appear once -------------- */
   private static tryEdgeOffset(src: string): Position | null {
     // 1. 横向块： (left|right) <lp>
     const hRe = /(left|right)\s+([+-]?\d+(?:\.\d+)?(?:px|em|rem|ch|cm|mm|in|pt|pc|%))/i
@@ -114,7 +114,7 @@ export default class PositionParser {
     }
   }
 
-  /* ---------- 新增小工具 ---------- */
+  /* ---------- New utilities ---------- */
   private static asKey(s: string): Key | null {
     const k = s.toLowerCase()
     return this.KEYWORDS.includes(k as Key) ? (k as Key) : null
@@ -139,7 +139,7 @@ export default class PositionParser {
     return { x: k1 as HorKey, y: k2 as VertKey }
   }
 
-  /* -------------------- 单值 --------------------------------- */
+  /* -------------------- Single value --------------------------------- */
   private static parseSingle(src: string): Position {
     const tok = src.toLowerCase() as Key
     if (tok === 'left' || tok === 'right' || tok === 'center')
@@ -156,7 +156,7 @@ export default class PositionParser {
     return { type: 'single', x: this.lp(src), y: 'center' }
   }
 
-  /* 工具：字符串 -> LP */
+  /* Utility: string -> LP */
   private static lp(s: string): LP {
     if (s.endsWith('%')) return { type: 'percent', value: Number(s.slice(0, -1)), unit: '%' }
     const m = s.match(/^([+-]?\d+(?:\.\d+)?)(px|em|rem|ch|cm|mm|in|pt|pc)$/i)

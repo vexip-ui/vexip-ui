@@ -18,7 +18,7 @@ const props = useProps('objectFit', _props, {
   width: 0,
   height: 0,
   fit: 'none',
-  isScale: false,
+  isScale: true,
 })
 
 const nh = useNameHelper('object-fit')
@@ -34,7 +34,7 @@ const defaultPosition = {
   justifyContent: 'center',
 }
 
-// 定义有效的定位值映射
+// Define valid position value mapping
 const positionMap = {
   top: 'flex-start',
   right: 'flex-end',
@@ -116,7 +116,7 @@ const positionStyle = computed(() => {
   } else if (pos.value?.type === 'edge') {
     const { x, y } = pos.value
 
-    /* ---------- 横向 ---------- */
+    /* ---------- Horizontal ---------- */
     const justifyContent = x.key === 'left' ? 'flex-start' : 'flex-end'
     let offsetX = 0
     if (x.offset.type === 'length') {
@@ -126,7 +126,7 @@ const positionStyle = computed(() => {
       offsetX = x.key === 'left' ? base : -base
     }
 
-    /* ---------- 纵向 ---------- */
+    /* ---------- Vertical ---------- */
     const alignItems = y.key === 'top' ? 'flex-start' : 'flex-end'
     let offsetY = 0
     if (y.offset.type === 'length') {
@@ -262,7 +262,7 @@ const resizeObserverCallBack = (entry: ResizeInfo) => {
         break
       }
       default: {
-        // 默认模式
+        // Default mode
         innerWidth.value = props.width
         innerHeight.value = props.height
         break
@@ -302,15 +302,12 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    ref="container"
-    v-resize="resizeObserverCallBack"
-    :class="nh.b()"
-    :style="positionStyle"
-  >
-    <div :class="nh.be('inner')" :style="innerStyle">
-      <div :class="nh.be('scale')" :style="scaleStyle">
-        <slot></slot>
+  <div ref="container" v-resize="resizeObserverCallBack" :class="nh.b()">
+    <div :class="nh.be('offset')" :style="positionStyle">
+      <div :class="nh.be('inner')" :style="innerStyle">
+        <div :class="nh.be('scale')" :style="scaleStyle">
+          <slot></slot>
+        </div>
       </div>
     </div>
   </div>

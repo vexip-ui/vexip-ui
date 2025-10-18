@@ -19,7 +19,7 @@ export const objectFitProps = buildProps({
   },
   isScale: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   position: {
     type: String,
