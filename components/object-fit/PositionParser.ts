@@ -1,5 +1,3 @@
-import { isObject } from '@/common/utils/src'
-
 /* ========================= 基础类型 ========================= */
 export type HorKey = 'left' | 'center' | 'right'
 export type VertKey = 'top' | 'center' | 'bottom'

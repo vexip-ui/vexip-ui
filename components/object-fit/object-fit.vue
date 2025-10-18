@@ -114,8 +114,33 @@ const positionStyle = computed(() => {
       transform = `translateY(${transformY})`
     }
   } else if (pos.value?.type === 'edge') {
-    // TODO:
-    return defaultPosition
+    const { x, y } = pos.value
+
+    /* ---------- 横向 ---------- */
+    const justifyContent = x.key === 'left' ? 'flex-start' : 'flex-end'
+    let offsetX = 0
+    if (x.offset.type === 'length') {
+      offsetX = x.key === 'left' ? x.offset.value : -x.offset.value
+    } else {
+      const base = (x.offset.value / 100) * wrapperWidth.value
+      offsetX = x.key === 'left' ? base : -base
+    }
+
+    /* ---------- 纵向 ---------- */
+    const alignItems = y.key === 'top' ? 'flex-start' : 'flex-end'
+    let offsetY = 0
+    if (y.offset.type === 'length') {
+      offsetY = y.key === 'top' ? y.offset.value : -y.offset.value
+    } else {
+      const base = (y.offset.value / 100) * wrapperHeight.value
+      offsetY = y.key === 'top' ? base : -base
+    }
+
+    return {
+      alignItems,
+      justifyContent,
+      transform: `translate(${offsetX}px, ${offsetY}px)`,
+    }
   }
   return {
     alignItems,
