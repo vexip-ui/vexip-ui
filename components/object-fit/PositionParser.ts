@@ -15,8 +15,8 @@ export type DoubleKeyNormalized = { x: HorKey, y: VertKey }
 
 /* ===================== Unified AST (after normalization) =================== */
 export type Position =
-  | { type: 'single', x?: LP | HorKey, y?: LP | VertKey } // 单值
-  | { type: 'double', x: HorKey | LP, y: VertKey | LP } // 双值：关键字或 LP 均可
+  | { type: 'single', x?: LP | HorKey, y?: LP | VertKey }
+  | { type: 'double', x: HorKey | LP, y: VertKey | LP }
   | { type: 'edge', x: { key: HorKey, offset: LP }, y: { key: VertKey, offset: LP } }
 
 /* ======================== Parser ============================ */
@@ -26,36 +26,36 @@ export default class PositionParser {
     return src.split(/\s+/)
   }
 
-  /* 主入口 */
+  /* Main entry */
   static parse(input: string): Position {
     if (typeof input !== 'string') return { type: 'single', x: 'center', y: 'center' }
     const src = input.trim()
     if (!src) throw new Error('Empty input')
     const tokens = this.tokenize(src)
 
-    // 1. 边缘偏移：left 10px top 20%
+    // 1. Edge offset: left 10px top 20%
     if (tokens.length === 4) {
       const edge = this.tryEdgeOffset(src)
       if (edge) return edge
     }
 
-    // 2. 恰好两个 token：区分“双关键字”与“双值”
+    // 2. Exactly two tokens: distinguish between "double keywords" and "double values"
     if (tokens.length === 2) {
       const kw1 = this.asKey(tokens[0])
       const kw2 = this.asKey(tokens[1])
 
-      // 2-1 双关键字
+      // 2-1 Double keywords
       if (kw1 !== null && kw2 !== null) {
         const norm = this.normalizeTwoKeys(kw1, kw2)
         return { type: 'double', x: norm.x, y: norm.y }
       }
 
-      // 2-2 双值
+      // 2-2 Double values
       const xVal = this.tryParseValue(tokens[0])
       const yVal = this.tryParseValue(tokens[1])
 
       if (xVal === null || yVal === null) {
-        // 解析错误
+        // Parse error
         return { type: 'double', x: 'center', y: 'center' }
       } else if (yVal === 'left' || yVal === 'right') {
         return { type: 'double', x: 'center', y: 'center' }
@@ -70,11 +70,10 @@ export default class PositionParser {
       }
     }
 
-    // 3. 单值
+    // 3. Single value
     return this.parseSingle(src)
   }
 
-  /* 反向序列化 */
   static stringify(p: Position): string {
     switch (p.type) {
       case 'single':
@@ -87,24 +86,24 @@ export default class PositionParser {
 
   /* -------------- Edge offset: order arbitrary, must each appear once -------------- */
   private static tryEdgeOffset(src: string): Position | null {
-    // 1. 横向块： (left|right) <lp>
+    // 1. Horizontal: (left|right) <lp>
     const hRe = /(left|right)\s+([+-]?\d+(?:\.\d+)?(?:px|em|rem|ch|cm|mm|in|pt|pc|%))/i
-    // 2. 纵向块： (top|bottom) <lp>
+    // 2. Vertical: (top|bottom) <lp>
     const vRe = /(top|bottom)\s+([+-]?\d+(?:\.\d+)?(?:px|em|rem|ch|cm|mm|in|pt|pc|%))/i
 
     const hMatch = src.match(hRe)
     const vMatch = src.match(vRe)
     if (!hMatch || !vMatch) return null
 
-    // 3. 两块的索引必须不重叠，才算“同时出现”
+    // 3. Block indices must not overlap to be considered "co-occurring"
     const hIdx = hMatch.index!
     const vIdx = vMatch.index!
     const hEnd = hIdx + hMatch[0].length
     const vEnd = vIdx + vMatch[0].length
     const overlap = !(hEnd <= vIdx || vEnd <= hIdx)
-    if (overlap) return null // 同一子串被复用，非法
+    if (overlap) return null // Same substring reused, invalid
 
-    // 4. 归一化：始终 x 在前
+    // 4. Normalization: always x first
     const [, xKey, xOff] = hMatch
     const [, yKey, yOff] = vMatch
     return {
@@ -114,7 +113,7 @@ export default class PositionParser {
     }
   }
 
-  /* ---------- New utilities ---------- */
+  /* ---------- utilities ---------- */
   private static asKey(s: string): Key | null {
     const k = s.toLowerCase()
     return this.KEYWORDS.includes(k as Key) ? (k as Key) : null
@@ -127,12 +126,12 @@ export default class PositionParser {
     try {
       return this.lp(s)
     } catch {
-      /* 继续 */
+      /* Continue */
     }
     return null
   }
 
-  /* 归一化：始终返回 x 在前 */
+  /* Normalization: always return x first */
   private static normalizeTwoKeys(k1: Key, k2: Key): DoubleKeyNormalized {
     const isVert = (k: Key) => k === 'top' || k === 'bottom'
     if (isVert(k1)) return { x: k2 as HorKey, y: k1 as VertKey }
@@ -145,14 +144,14 @@ export default class PositionParser {
     if (tok === 'left' || tok === 'right' || tok === 'center')
       return { type: 'single', x: tok, y: 'center' }
     if (tok === 'top' || tok === 'bottom') return { type: 'single', x: 'center', y: tok }
-    // 零长度可以不带单位
+    // Zero length can omit unit
     if (/^0+$/.test(src))
       return { type: 'single', x: { type: 'length', value: 0, unit: 'px' }, y: 'center' }
 
-    // 其它纯数字 → 走默认
+    // Other pure numbers → use default
     if (/^[\d.-]+$/.test(src)) return { type: 'single', x: 'center', y: 'center' }
 
-    // 带单位或百分比
+    // With unit or percentage
     return { type: 'single', x: this.lp(src), y: 'center' }
   }
 
