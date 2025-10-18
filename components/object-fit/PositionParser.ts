@@ -30,6 +30,7 @@ export default class PositionParser {
 
   /* 主入口 */
   static parse(input: string): Position {
+    if (typeof input !== 'string') return { type: 'single', x: 'center', y: 'center' }
     const src = input.trim()
     if (!src) throw new Error('Empty input')
     const tokens = this.tokenize(src)

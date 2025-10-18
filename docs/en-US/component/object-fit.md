@@ -32,8 +32,10 @@ You can develop H5 pages using absolute units, achieving 1:1 design restoration.
 
 ```ts
 interface ObjectFitExposed {
-  currentWidth: number,
-  currentHeight: number,
+  innerWidth: number,
+  innerHeight: number,
+  wrapperWidth: number,
+  wrapperHeight: number,
   scaleX: number,
   scaleY: number,
 }
@@ -56,9 +58,11 @@ interface ObjectFitExposed {
 
 ### ObjectFit Exposed
 
-| Name          | Type     | Description                     | Since |
-| ------------- | -------- | ------------------------------- | ----- |
-| currentWidth  | `number` | Current calculated width        | -     |
-| currentHeight | `number` | Current calculated height       | -     |
-| scaleX        | `number` | Current horizontal scale factor | -     |
-| scaleY        | `number` | Current vertical scale factor   | -     |
+| Name          | Type     | Description                       | Since |
+| ------------- | -------- | --------------------------------- | ----- |
+| innerWidth    | `number` | Current calculated inner width    | -     |
+| innerHeight   | `number` | Current calculated inner height   | -     |
+| wrapperWidth  | `number` | Current calculated wrapper width  | -     |
+| wrapperHeight | `number` | Current calculated wrapper height | -     |
+| scaleX        | `number` | Current horizontal scale factor   | -     |
+| scaleY        | `number` | Current vertical scale factor     | -     |

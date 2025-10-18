@@ -32,8 +32,10 @@ ObjectFit 组件会自动缩放内容以适应父容器，同时保持指定的�
 
 ```ts
 interface ObjectFitExposed {
-  currentWidth: number,
-  currentHeight: number,
+  innerWidth: number,
+  innerHeight: number,
+  wrapperWidth: number,
+  wrapperHeight: number,
   scaleX: number,
   scaleY: number,
 }
@@ -56,9 +58,11 @@ interface ObjectFitExposed {
 
 ### ObjectFit Exposed
 
-| 名称          | 类型     | 说明             | 始于 |
-| ------------- | -------- | ---------------- | ---- |
-| currentWidth  | `number` | 当前计算出的宽度 | -    |
-| currentHeight | `number` | 当前计算出的高度 | -    |
-| scaleX        | `number` | 当前水平缩放因子 | -    |
-| scaleY        | `number` | 当前垂直缩放因子 | -    |
+| 名称          | 类型     | 说明                 | 始于 |
+| ------------- | -------- | -------------------- | ---- |
+| innerWidth    | `number` | 当前计算出的内部宽度 | -    |
+| innerHeight   | `number` | 当前计算出的内部高度 | -    |
+| wrapperWidth  | `number` | 当前计算出的容器宽度 | -    |
+| wrapperHeight | `number` | 当前计算出的容器高度 | -    |
+| scaleX        | `number` | 当前水平缩放因子     | -    |
+| scaleY        | `number` | 当前垂直缩放因子     | -    |

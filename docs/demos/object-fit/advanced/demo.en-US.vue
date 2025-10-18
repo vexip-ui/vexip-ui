@@ -29,8 +29,8 @@
             <H5Component
               :window-width="windowWidth"
               :scale="objectFit?.scaleX"
-              :current-width="objectFit?.currentWidth"
-              :current-height="objectFit?.currentHeight"
+              :current-width="objectFit?.innerWidth"
+              :current-height="objectFit?.innerHeight"
               :design-width="designWidth"
             ></H5Component>
           </div>

@@ -5,7 +5,7 @@ import { computed, ref, watch } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { objectFitProps } from './props'
-import PositionParser from './PositionParser'
+import PositionParser, { type Key, type Position } from './PositionParser'
 
 import type { ResizeInfo } from '@/common/hooks/src/resize'
 
@@ -25,6 +25,8 @@ const nh = useNameHelper('object-fit')
 
 const aspectRatio = computed(() => props.width / props.height)
 const container = ref<HTMLElement>()
+const wrapperWidth = ref(0)
+const wrapperHeight = ref(0)
 const innerWidth = ref(0)
 const innerHeight = ref(0)
 const defaultPosition = {
@@ -41,64 +43,69 @@ const positionMap = {
   center: 'center',
 }
 
-const positionStyle = computed(() => {
-  // 字符串定位处理
-  const pos = PositionParser.parse(props.position)
+const pos = ref<Position>()
+watch(
+  () => props.position,
+  value => {
+    pos.value = PositionParser.parse(value)
+  },
+  { immediate: true },
+)
 
+const positionStyle = computed(() => {
   let alignItems = positionMap['left']
   let justifyContent = positionMap['top']
   let transform
-  if (pos.type === 'single') {
-    if (typeof pos.x === 'string') {
-      justifyContent = positionMap[pos.x]
+  if (pos.value?.type === 'single') {
+    if (typeof pos.value.x === 'string') {
+      justifyContent = positionMap[pos.value.x as Key]
       alignItems = 'center'
     } else {
-      if (pos.x?.type === 'length') {
-        transform = `translateX(${pos.x.value + pos.x.unit})`
-      } else {
-        if (pos.x?.type === 'percent') {
-          // TODO:
-          console.log('pos single x', pos)
-          return defaultPosition
-        } else {
-          return defaultPosition
+      if (pos.value.x?.type === 'length') {
+        transform = `translateX(${pos.value.x.value + pos.value.x.unit})`
+      } else if (pos.value.x?.type === 'percent') {
+        const left = (pos.value.x.value / 100) * (wrapperWidth.value - innerWidth.value)
+        if (props.fit === 'none' || left <= 0) {
+          transform = `translateX(${left + 'px'})`
         }
+        alignItems = 'center'
+      } else {
+        return defaultPosition
       }
     }
-  } else if (pos.type === 'double') {
+  } else if (pos.value?.type === 'double') {
     let transformY, transformX
-    if (typeof pos.x === 'string') {
-      justifyContent = positionMap[pos.x]
+    if (typeof pos.value.x === 'string') {
+      justifyContent = positionMap[pos.value.x as Key]
     } else {
-      if (pos.x?.type === 'length') {
-        transformX = `${pos.x.value + pos.x.unit}`
+      if (pos.value.x?.type === 'length') {
+        transformX = `${pos.value.x.value + pos.value.x.unit}`
       } else {
-        if (pos.x?.type === 'percent') {
-          // TODO:
-          console.log('pos double x', pos)
-          return defaultPosition
+        if (pos.value.x?.type === 'percent') {
+          const left = (pos.value.x.value / 100) * (wrapperWidth.value - innerWidth.value)
+          if (props.fit === 'none' || left >= 0) {
+            transformX = `${left + 'px'}`
+          }
         } else {
           return defaultPosition
         }
       }
     }
 
-    if (typeof pos.y === 'string') {
-      alignItems = positionMap[pos.y]
+    if (typeof pos.value.y === 'string') {
+      alignItems = positionMap[pos.value.y as Key]
     } else {
-      if (pos.y?.type === 'length') {
-        transformY = `${pos.y.value + pos.y.unit}`
-      } else {
-        if (pos.y?.type === 'percent') {
-          console.log('pos double y', pos)
-          // TODO:
-          return defaultPosition
-        } else {
-          return defaultPosition
+      if (pos.value.y?.type === 'length') {
+        transformY = `${pos.value.y.value + pos.value.y.unit}`
+      } else if (pos.value.y?.type === 'percent') {
+        const top = (pos.value.y.value / 100) * (wrapperHeight.value - innerHeight.value)
+        if (props.fit === 'none' || top >= 0) {
+          transformY = `${top + 'px'}`
         }
+      } else {
+        return defaultPosition
       }
     }
-    // 拼接transform
     if (transformX && transformY) {
       transform = `translate(${transformX},${transformY})`
     } else if (transformX) {
@@ -106,7 +113,8 @@ const positionStyle = computed(() => {
     } else if (transformY) {
       transform = `translateY(${transformY})`
     }
-  } else if (pos.type === 'edge') {
+  } else if (pos.value?.type === 'edge') {
+    // TODO:
     return defaultPosition
   }
   return {
@@ -153,22 +161,22 @@ const resizeObserverCallBack = (entry: ResizeInfo) => {
     const contentBoxSize: ResizeObserverSize = (
       Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize
     ) as ResizeObserverSize
-    const contentWidth = contentBoxSize.inlineSize
-    const contentHeight = contentBoxSize.blockSize
+    wrapperWidth.value = contentBoxSize.inlineSize
+    wrapperHeight.value = contentBoxSize.blockSize
     switch (props.fit) {
       case 'contain': {
         // 1根据容器宽度计算inner高度
-        let width = contentWidth
+        let width = wrapperWidth.value
         let height = width / aspectRatio.value
-        if (height <= contentHeight) {
+        if (height <= wrapperHeight.value) {
           innerHeight.value = height
           innerWidth.value = width
           return
         }
         // 2根据容器高度计算inner宽度
-        height = contentHeight
+        height = wrapperHeight.value
         width = height * aspectRatio.value
-        if (width < contentWidth) {
+        if (width < wrapperWidth.value) {
           innerHeight.value = height
           innerWidth.value = width
           return
@@ -177,33 +185,33 @@ const resizeObserverCallBack = (entry: ResizeInfo) => {
       }
       case 'cover': {
         // 1根据容器宽度计算inner高度
-        let width = contentWidth
+        let width = wrapperWidth.value
         let height = width / aspectRatio.value
-        if (height <= contentHeight) {
-          innerHeight.value = contentHeight
-          innerWidth.value = contentHeight * aspectRatio.value
+        if (height <= wrapperHeight.value) {
+          innerHeight.value = wrapperHeight.value
+          innerWidth.value = wrapperHeight.value * aspectRatio.value
           return
         }
         // 2根据容器高度计算inner宽度
-        height = contentHeight
+        height = wrapperHeight.value
         width = height * aspectRatio.value
-        if (width < contentWidth) {
-          innerHeight.value = contentWidth * (1 / aspectRatio.value)
-          innerWidth.value = contentWidth
+        if (width < wrapperWidth.value) {
+          innerHeight.value = wrapperWidth.value * (1 / aspectRatio.value)
+          innerWidth.value = wrapperWidth.value
           return
         }
         break
       }
       case 'fill': {
-        innerWidth.value = contentWidth
-        innerHeight.value = contentHeight
+        innerWidth.value = wrapperWidth.value
+        innerHeight.value = wrapperHeight.value
         break
       }
       case 'scale-down': {
         // 1根据容器宽度计算inner高度
-        let width = contentWidth
+        let width = wrapperWidth.value
         let height = width / aspectRatio.value
-        if (height <= contentHeight) {
+        if (height <= wrapperHeight.value) {
           if (height < props.height) {
             innerHeight.value = height
             innerWidth.value = width
@@ -214,9 +222,9 @@ const resizeObserverCallBack = (entry: ResizeInfo) => {
           return
         }
         // 2根据容器高度计算inner宽度
-        height = contentHeight
+        height = wrapperHeight.value
         width = height * aspectRatio.value
-        if (width < contentWidth) {
+        if (width < wrapperWidth.value) {
           if (width < props.width) {
             innerHeight.value = height
             innerWidth.value = width
@@ -259,8 +267,10 @@ watch(
 )
 
 defineExpose({
-  currentWidth: innerWidth,
-  currentHeight: innerHeight,
+  innerWidth,
+  innerHeight,
+  wrapperWidth,
+  wrapperHeight,
   scaleX,
   scaleY,
 })

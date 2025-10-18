@@ -3,8 +3,10 @@ export interface ObjectFitSlots {
 }
 
 export type ObjectFitExposed = {
-  currentWidth: number,
-  currentHeight: number,
+  innerWidth: number,
+  innerHeight: number,
+  wrapperWidth: number,
+  wrapperHeight: number,
   scaleX: number,
   scaleY: number,
 }
