@@ -5,7 +5,6 @@
         :style="{
           width: windowWidth + 'px',
           height: h5Height + 'px',
-          position: 'relative',
         }"
       >
         <ObjectFit
@@ -14,10 +13,7 @@
           :height="designHeight"
           fit="contain"
         >
-          <div
-            v-resize="handleH5Resize"
-            style="position: relative; overflow: auto; background: #eee"
-          >
+          <div v-resize="handleH5Resize">
             <!-- 导入的H5组件 -->
             <H5Component
               :window-width="windowWidth"
