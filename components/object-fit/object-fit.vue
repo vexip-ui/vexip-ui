@@ -5,7 +5,7 @@ import { computed, ref, watch } from 'vue'
 
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { objectFitProps } from './props'
-import PositionParser, { type Key, type Position } from './PositionParser'
+import { type Key, type Position, parse } from './position-parser'
 
 import type { ResizeInfo } from '@/common/hooks/src/resize'
 
@@ -18,7 +18,7 @@ const props = useProps('objectFit', _props, {
   width: 0,
   height: 0,
   fit: 'none',
-  isScale: true,
+  scaleDisabled: false,
 })
 
 const nh = useNameHelper('object-fit')
@@ -47,7 +47,7 @@ const pos = ref<Position>()
 watch(
   () => props.position,
   value => {
-    pos.value = PositionParser.parse(value)
+    pos.value = parse(value)
   },
   { immediate: true },
 )
@@ -165,7 +165,7 @@ const innerStyle = computed(() => {
 })
 
 const scaleStyle = computed(() => {
-  if (props.isScale) {
+  if (!props.scaleDisabled) {
     return {
       width: `${(1 / scaleX.value) * 100}%`,
       height: `${(1 / scaleY.value) * 100}%`,

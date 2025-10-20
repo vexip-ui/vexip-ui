@@ -4,8 +4,8 @@
     <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
-    <Checkbox v-model:checked="checked">
-      Scale:
+    <Checkbox v-model:checked="scaleDisabled">
+      禁用缩放：
     </Checkbox>
   </RadioGroup>
   <br /><br />
@@ -13,7 +13,7 @@
   <br />
   <Dropdown class="demo-presets">
     <Button type="primary">
-      Position presets
+      Position 预设
     </Button>
     <template #drop>
       <DropdownList>
@@ -39,17 +39,17 @@
       :width="fixedWidth"
       :height="fixedHeight"
       :fit="fit"
-      :is-scale="checked"
+      :scale-disabled="scaleDisabled"
       :position="position"
     >
       <Card
-        title="Title"
+        title="标题"
         shadow="never"
         :style="{ width: fixedWidth + 'px', height: fixedHeight + 'px' }"
       >
-        <p>Card content</p>
-        <p>Card content</p>
-        <p>Card content</p>
+        <p>卡片的内容</p>
+        <p>卡片的内容</p>
+        <p>卡片的内容</p>
         <Button type="primary">
           Primary
         </Button>
@@ -70,25 +70,25 @@ import { Button, Dropdown, DropdownItem, DropdownList, Input, ObjectFit } from '
 
 const fixedWidth = 420
 const fixedHeight = 300
-const checked = ref(true)
+const scaleDisabled = ref(false)
 const position = ref('center center')
 const fit = ref<'none' | 'contain' | 'cover' | 'fill' | 'scale-down'>('contain')
 
 const items = ['none', 'contain', 'cover', 'fill', 'scale-down']
 const presets = [
-  { label: 'Center', value: 'center center' },
-  { label: 'Left top', value: 'left top' },
-  { label: 'Center top', value: 'center top' },
-  { label: 'Right top', value: 'right top' },
-  { label: 'Left center', value: 'left center' },
-  { label: 'Right center', value: 'right center' },
-  { label: 'Left bottom', value: 'left bottom' },
-  { label: 'Center bottom', value: 'center bottom' },
-  { label: 'Right bottom', value: 'right bottom' },
-  { label: 'Offset 5em 100px', value: '5em 100px' },
-  { label: 'Offset right 10px', value: 'right 10px' },
-  { label: 'Edge offset left 10% top 20%', value: 'left 10% top 20%' },
-  { label: 'Edge offset right 10% bottom 20%', value: 'right 10% bottom 20%' },
+  { label: '居中 center', value: 'center center' },
+  { label: '左上', value: 'left top' },
+  { label: '中上', value: 'center top' },
+  { label: '右上', value: 'right top' },
+  { label: '左中', value: 'left center' },
+  { label: '右中', value: 'right center' },
+  { label: '左下', value: 'left bottom' },
+  { label: '中下', value: 'center bottom' },
+  { label: '右下', value: 'right bottom' },
+  { label: '距离偏移 5em 100px', value: '5em 100px' },
+  { label: '距离偏移 right 10px', value: 'right 10px' },
+  { label: '边缘偏移 left 10% top 20%', value: 'left 10% top 20%' },
+  { label: '边缘偏移 right 10% bottom 20%', value: 'right 10% bottom 20%' },
 ]
 </script>
 

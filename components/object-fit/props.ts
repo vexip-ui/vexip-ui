@@ -2,6 +2,18 @@ import { buildProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+export type ObjectFitValue = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
+export type ObjectFitPosition =
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right'
+  | 'center'
+  | 'top left'
+  | 'top right'
+  | 'bottom left'
+  | 'bottom right'
+  | (string & {})
 
 export const objectFitProps = buildProps({
   width: {
@@ -13,16 +25,16 @@ export const objectFitProps = buildProps({
     default: 100,
   },
   fit: {
-    type: String as PropType<'contain' | 'cover' | 'fill' | 'none' | 'scale-down'>,
+    type: String as PropType<ObjectFitValue>,
     values: ['contain', 'cover', 'fill', 'none', 'scale-down'],
     default: 'none',
   },
-  isScale: {
+  scaleDisabled: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   position: {
-    type: String,
+    type: String as PropType<ObjectFitPosition>,
     default: 'center',
   },
 })

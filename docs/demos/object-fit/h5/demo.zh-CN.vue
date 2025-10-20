@@ -13,7 +13,6 @@
           :width="designWidth"
           :height="designHeight"
           fit="contain"
-          :is-scale="true"
         >
           <div
             v-resize="handleH5Resize"

@@ -4,30 +4,10 @@
     <Radio v-for="item in items" :key="item" :label="item">
       {{ item }}
     </Radio>
-    <Checkbox v-model:checked="checked">
-      缩放：
+    <Checkbox v-model:checked="scaleDisabled">
+      禁用缩放：
     </Checkbox>
   </RadioGroup>
-  <br /><br />
-  Position: <Input v-model:value="position" class="demo-position"></Input>
-  <br />
-  <Dropdown class="demo-presets">
-    <Button type="primary">
-      Position 预设
-    </Button>
-    <template #drop>
-      <DropdownList>
-        <DropdownItem
-          v-for="preset in presets"
-          :key="preset.value"
-          :name="preset.value"
-          @click="position = preset.value"
-        >
-          {{ preset.label }}
-        </DropdownItem>
-      </DropdownList>
-    </template>
-  </Dropdown>
   <br /><br />
   <div
     class="demo-window"
@@ -39,8 +19,7 @@
       :width="fixedWidth"
       :height="fixedHeight"
       :fit="fit"
-      :is-scale="checked"
-      :position="position"
+      :scale-disabled="scaleDisabled"
     >
       <Card
         title="标题"
@@ -66,30 +45,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button, Dropdown, DropdownItem, DropdownList, Input, ObjectFit } from 'vexip-ui'
+import { Button, ObjectFit } from 'vexip-ui'
 
 const fixedWidth = 420
 const fixedHeight = 300
-const checked = ref(true)
-const position = ref('center center')
+const scaleDisabled = ref(true)
 const fit = ref<'none' | 'contain' | 'cover' | 'fill' | 'scale-down'>('contain')
 
 const items = ['none', 'contain', 'cover', 'fill', 'scale-down']
-const presets = [
-  { label: '居中 center', value: 'center center' },
-  { label: '左上', value: 'left top' },
-  { label: '中上', value: 'center top' },
-  { label: '右上', value: 'right top' },
-  { label: '左中', value: 'left center' },
-  { label: '右中', value: 'right center' },
-  { label: '左下', value: 'left bottom' },
-  { label: '中下', value: 'center bottom' },
-  { label: '右下', value: 'right bottom' },
-  { label: '距离偏移 5em 100px', value: '5em 100px' },
-  { label: '距离偏移 right 10px', value: 'right 10px' },
-  { label: '边缘偏移 left 10% top 20%', value: 'left 10% top 20%' },
-  { label: '边缘偏移 right 10% bottom 20%', value: 'right 10% bottom 20%' },
-]
 </script>
 
 <style scoped>
@@ -113,16 +76,7 @@ const presets = [
   display: none;
 }
 
-.demo-position {
-  width: 200px;
-  margin-left: 1rem;
-}
-
-.demo-presets {
-  margin-top: 1rem;
-  margin-left: 1rem;
-}
-
+/* 背景色-便于观察缩放后的区域 */
 :deep(.vxp-object-fit__scale) {
   background-color: var(--vxp-color-primary-light-6);
 }

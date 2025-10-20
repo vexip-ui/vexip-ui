@@ -47,9 +47,9 @@ describe('ObjectFit', () => {
     })
   })
 
-  it('isScale prop', () => {
+  it('scaleDisabled prop', () => {
     const wrapper = mount(() => (
-      <ObjectFit width={200} height={150} isScale>
+      <ObjectFit width={200} height={150} scaleDisabled={true}>
         {TEXT}
       </ObjectFit>
     ))
