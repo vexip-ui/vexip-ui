@@ -107,22 +107,24 @@ export default defineComponent({
 
       const children = wrapper.value.children
       const childCount = children.length
+      const suffixEl = suffix.value
+      const length = childCount - (suffixEl ? 2 : 1)
 
       let overflow = false
 
       if (props.maxCount > 0) {
-        for (let i = 0, len = childCount - 1; i < len; ++i) {
+        for (let i = 0; i < length; ++i) {
           const child = children[i] as HTMLElement
 
           child.style.display = i < props.maxCount ? '' : 'none'
         }
 
-        if (props.maxCount > childCount - 1) {
+        if (props.maxCount >= length) {
           toggleDisplay(counterEl, false)
 
           restCount.value = 0
         } else {
-          restCount.value = childCount - 1 - props.maxCount - (slots.suffix ? 1 : 0)
+          restCount.value = length - props.maxCount
           overflow = restCount.value > 0
         }
 
@@ -130,16 +132,13 @@ export default defineComponent({
         return
       }
 
-      const suffixEl = suffix.value
       const style = getComputedStyle(wrapper.value)
       const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(style)
       const gap = parseFloat(style.columnGap) || 0
+      const counterMargin = computeHorizontalMargin(counterEl)
       const childWidths: number[] = []
 
       let totalWidth = suffixEl ? suffixEl.offsetWidth + computeHorizontalMargin(suffixEl) + gap : 0
-
-      const counterMargin = computeHorizontalMargin(counterEl)
-      const length = childCount - (suffixEl ? 2 : 1)
 
       for (let i = 0; i < length; ++i) {
         if (i < 0) continue
