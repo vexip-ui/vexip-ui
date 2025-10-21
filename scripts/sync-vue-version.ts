@@ -49,7 +49,7 @@ async function main() {
 
       await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
       logger.infoText(`synced vue version to '${pkgName}'`)
-    } catch (e) {
+    } catch {
       logger.errorText(`fail to sync vue version to '${pkgName}'`)
     }
   })
