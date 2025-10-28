@@ -329,7 +329,7 @@ const style = computed(() => {
     [nh.cv('row-indent-width')]:
       typeof props.rowIndent === 'number' ? `${props.rowIndent}px` : props.rowIndent,
     [nh.cv('b-width')]: `${props.borderWidth}px`,
-    [nh.cv('expanded-width')]: `${bodyWidth.value}px`,
+    [nh.cv('viewport-width')]: `${bodyWidth.value}px`,
   }
 
   if (padLeft) {
@@ -1197,17 +1197,17 @@ function renderTableSlot({ name }: { name: string }) {
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
           <TableBody fixed="left">
-            <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
-              <slot name="empty" :is-fixed="isFixed">
-                <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
+            <template v-if="slots.empty || props.slots.empty" #empty>
+              <slot name="empty">
+                <Renderer :renderer="props.slots.empty"></Renderer>
               </slot>
             </template>
           </TableBody>
         </div>
         <TableBody>
-          <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
-            <slot name="empty" :is-fixed="isFixed">
-              <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
+          <template v-if="slots.empty || props.slots.empty" #empty>
+            <slot name="empty">
+              <Renderer :renderer="props.slots.empty"></Renderer>
             </slot>
           </template>
         </TableBody>
@@ -1220,9 +1220,9 @@ function renderTableSlot({ name }: { name: string }) {
           :style="{ minHeight: `${state.totalHeight}px` }"
         >
           <TableBody fixed="right">
-            <template v-if="slots.empty || props.slots.empty" #empty="{ isFixed }">
-              <slot name="empty" :is-fixed="isFixed">
-                <Renderer :renderer="props.slots.empty" :data="{ isFixed }"></Renderer>
+            <template v-if="slots.empty || props.slots.empty" #empty>
+              <slot name="empty">
+                <Renderer :renderer="props.slots.empty"></Renderer>
               </slot>
             </template>
           </TableBody>

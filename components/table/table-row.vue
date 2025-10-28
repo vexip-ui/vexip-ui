@@ -347,7 +347,7 @@ function afterExpand() {
       <div
         v-if="row.expanded"
         ref="expandEl"
-        :class="[nh.be('expanded'), fixed === 'right' && nh.bem('expanded', 'fixed')]"
+        :class="[nh.be('expanded'), fixed === 'right' && nh.bem('expanded', 'right')]"
       >
         <ResizeObserver :disabled="row.expandAnimate" :on-resize="setExpandHeight">
           <div :class="nh.be('expanded-wrapper')">

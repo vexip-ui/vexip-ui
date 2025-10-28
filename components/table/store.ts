@@ -72,7 +72,7 @@ function defaultIndexLabel(index: number) {
 }
 
 const COLUMN_DEFAULT_WIDTH = 100
-const COLUMN_DEFAULT_MIN_WIDTH = 100
+const COLUMN_DEFAULT_MIN_WIDTH = 10
 
 export function useStore(options: StoreOptions) {
   const state = reactive({

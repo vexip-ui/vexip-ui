@@ -119,16 +119,23 @@ export default defineComponent({
     const popper = ref<PopperExposed>()
     const popperEl = computed(() => popper.value?.wrapper)
     const arrow = ref<HTMLElement>()
-    const shift = computed<{ mainAxis?: boolean, crossAxis?: boolean }>(() => {
+    const shift = computed<{ mainAxis: boolean, crossAxis: boolean }>(() => {
       if (!props.shift) {
-        return { mainAxis: false }
+        return { mainAxis: false, crossAxis: false }
       }
 
       if (props.shift === true || props.shift === 'both') {
-        return { crossAxis: true }
+        return { mainAxis: true, crossAxis: true }
       }
 
-      return props.shift === 'horizontal' ? { mainAxis: false, crossAxis: true } : {}
+      const side = placement.value.split('-')[0]
+
+      return props.shift === (side === 'top' || side === 'bottom' ? 'vertical' : 'horizontal')
+        ? { mainAxis: false, crossAxis: true }
+        : {
+          mainAxis: true,
+          crossAxis: false,
+        }
     })
     const { transferTo, updatePopper } = usePopper({
       placement,

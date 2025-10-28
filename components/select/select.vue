@@ -1079,7 +1079,7 @@ function focus(options?: FocusOptions) {
                 :items="currentValues"
                 :max-count="props.maxTagCount"
                 :style="{
-                  maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`
+                  maxWidth: props.maxTagCount <= 0 && `calc(100% - ${anchorWidth}px)`,
                 }"
                 @rest-change="restTagCount = $event"
                 @click.stop="toggleVisible"
@@ -1096,7 +1096,7 @@ function focus(options?: FocusOptions) {
                       :data="{
                         value,
                         option: getOptionFromMap(value),
-                        handleClose: handleTagClose.bind(null, value)
+                        handleClose: handleTagClose.bind(null, value),
                       }"
                     >
                       <Tag
@@ -1141,7 +1141,7 @@ function focus(options?: FocusOptions) {
                       :transfer="false"
                       :visible="restTipShow"
                       trigger="custom"
-                      placement="top-end"
+                      placement="top"
                       :tip-class="nh.be('rest-tip')"
                       @click.stop="toggleShowRestTip"
                     >
@@ -1173,7 +1173,7 @@ function focus(options?: FocusOptions) {
                               :data="{
                                 value,
                                 option: getOptionFromMap(value),
-                                handleClose: handleRestTagClose.bind(null, value)
+                                handleClose: handleRestTagClose.bind(null, value),
                               }"
                             >
                               <Tag
@@ -1211,7 +1211,7 @@ function focus(options?: FocusOptions) {
                 v-if="props.filter && props.filterPosition === 'in-control'"
                 :class="nh.be('anchor')"
                 :style="{
-                  width: `${anchorWidth}px`
+                  width: `${anchorWidth}px`,
                 }"
               >
                 <input
@@ -1219,7 +1219,7 @@ function focus(options?: FocusOptions) {
                   :class="[
                     nh.be('input'),
                     nh.bem('input', 'multiple'),
-                    currentVisible && nh.bem('input', 'visible')
+                    currentVisible && nh.bem('input', 'visible'),
                   ]"
                   :disabled="props.disabled"
                   autocomplete="off"
@@ -1253,7 +1253,7 @@ function focus(options?: FocusOptions) {
                 aria-autocomplete="list"
                 :name="props.name"
                 :style="{
-                  opacity: currentVisible ? undefined : '0%'
+                  opacity: currentVisible ? undefined : '0%',
                 }"
                 @submit.prevent
                 @input="handleFilterInput"
@@ -1271,7 +1271,7 @@ function focus(options?: FocusOptions) {
                 "
                 :class="{
                   [nh.be('selected')]: true,
-                  [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue
+                  [nh.bem('selected', 'placeholder')]: props.filter && currentVisible && hasValue,
                 }"
               >
                 <slot
@@ -1319,7 +1319,7 @@ function focus(options?: FocusOptions) {
         :class="[nh.be('icon'), nh.be('suffix')]"
         :style="{
           color: props.suffixColor,
-          opacity: showClear || props.loading ? '0%' : ''
+          opacity: showClear || props.loading ? '0%' : '',
         }"
       >
         <slot name="suffix">
@@ -1328,7 +1328,7 @@ function focus(options?: FocusOptions) {
               v-if="props.suffix"
               :icon="props.suffix"
               :class="{
-                [nh.be('arrow')]: !props.staticSuffix
+                [nh.be('arrow')]: !props.staticSuffix,
               }"
             ></Icon>
             <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
@@ -1384,7 +1384,7 @@ function focus(options?: FocusOptions) {
             :class="[
               nh.be('list'),
               (slots.prepend || slots.append) && nh.bem('list', 'with-extra'),
-              props.listClass
+              props.listClass,
             ]"
           >
             <div v-if="props.filter && props.filterPosition === 'in-list'" :class="nh.be('filter')">
@@ -1419,7 +1419,7 @@ function focus(options?: FocusOptions) {
               inherit
               :style="{
                 height: undefined,
-                maxHeight: `${props.maxListHeight}px`
+                maxHeight: `${props.maxListHeight}px`,
               }"
               :items="totalOptions"
               :item-size="32"
@@ -1430,7 +1430,7 @@ function focus(options?: FocusOptions) {
                 class: [nh.be('options'), props.optionCheck ? nh.bem('options', 'has-check') : ''],
                 role: 'listbox',
                 ariaLabel: 'options',
-                ariaMultiselectable: props.multiple
+                ariaMultiselectable: props.multiple,
               }"
             >
               <template #default="{ item: option, index }">

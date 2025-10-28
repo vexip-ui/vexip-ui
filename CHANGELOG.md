@@ -1,3 +1,20 @@
+## [2.3.39](https://github.com/vexip-ui/vexip-ui/compare/v2.3.38...v2.3.39) (2025-10-28)
+
+
+### 🐞 Bug Fixes
+
+* **overflow:** correct child count when max-count is effective ([87d8481](https://github.com/vexip-ui/vexip-ui/commit/87d84812922a56b2d5515659b89c5034ef1ea4e0))
+* **overflow:** should always wrap counter elements ([61a366d](https://github.com/vexip-ui/vexip-ui/commit/61a366db175e3399701244bee3c2ec33c7364946))
+* **table:** adjust default value of column min width to 10 ([3664fb4](https://github.com/vexip-ui/vexip-ui/commit/3664fb488dff10026650d9c1ab9b827610826b62)), closes [#581](https://github.com/vexip-ui/vexip-ui/issues/581)
+* **tooltip:** correct the opposite shift direction ([2e0ce2a](https://github.com/vexip-ui/vexip-ui/commit/2e0ce2a88b05de611b52a93fe546cfb91cfd2eb9))
+
+
+### 🔨 Code Refactoring
+
+* **table:** render only one empty for table ([547632c](https://github.com/vexip-ui/vexip-ui/commit/547632c021bf62f108da4d5b4cc0ad1d280d2f70))
+
+
+
 ## [2.3.38](https://github.com/vexip-ui/vexip-ui/compare/v2.3.37...v2.3.38) (2025-09-15)
 
 

@@ -31,6 +31,11 @@ const columns = computed(() => {
       : state.normalColumns
 })
 const data = computed(() => (state.virtual ? state.virtualData : getters.processedData))
+const hasEmpty = computed(() => {
+  if (state.rightFixedColumns.length) return props.fixed === 'right'
+  if (state.leftFixedColumns.length) return props.fixed === 'left'
+  return true
+})
 const style = computed(() => {
   const width =
     props.fixed === 'left'
@@ -40,11 +45,12 @@ const style = computed(() => {
         : getLast(getters.normalWidths)
   const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
   const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+  const showEmpty = hasEmpty.value && data.value.length === 0
 
   return {
-    [nh.cv('expanded-fix-width')]:
+    [nh.cv('right-fixed-width')]:
       props.fixed === 'right' && width ? `${width + padLeft + padRight}px` : '0px',
-    minWidth: width && `${width + padLeft + padRight}px`,
+    [showEmpty ? 'width' : 'minWidth']: width && `${width + padLeft + padRight}px`,
     minHeight: `${state.totalHeight}px`,
   }
 })
@@ -80,11 +86,13 @@ const emptyStyle = computed(() => {
         ></TableCell>
       </TableRow>
     </template>
-    <div v-else :class="nh.be('empty')" :style="emptyStyle">
-      <slot name="empty" :is-fixed="!!fixed">
-        <template v-if="!fixed">
-          {{ locale.empty }}
-        </template>
+    <div
+      v-else-if="hasEmpty"
+      :class="[nh.be('empty'), fixed === 'right' && nh.bem('empty', 'right')]"
+      :style="emptyStyle"
+    >
+      <slot name="empty">
+        {{ locale.empty }}
       </slot>
     </div>
   </div>

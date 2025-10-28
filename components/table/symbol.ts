@@ -44,7 +44,7 @@ export interface TableSlots {
    * @internal
    */
   default?: () => any,
-  empty?: (params: { isFixed: boolean }) => any,
+  empty?: () => any,
 }
 
 export type Accessor<D = Data, Val extends string | number = string | number> = (
