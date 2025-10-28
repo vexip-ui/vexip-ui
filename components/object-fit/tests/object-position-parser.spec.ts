@@ -30,7 +30,7 @@ describe('Edge syntax', () => {
 })
 
 describe('Single value syntax', () => {
-  it('关键字 top → y=top, x=center', () => {
+  it('keyword top → y=top, x=center', () => {
     expect(parse('top')).toEqual({
       type: 'single',
       x: 'center',
@@ -38,7 +38,7 @@ describe('Single value syntax', () => {
     })
   })
 
-  it('关键字 left → x=left, y=center', () => {
+  it('keyword left → x=left, y=center', () => {
     expect(parse('left')).toEqual({
       type: 'single',
       x: 'left',
@@ -46,7 +46,7 @@ describe('Single value syntax', () => {
     })
   })
 
-  it('百分比 30% → x=30%, y=center', () => {
+  it('percent 30% → x=30%, y=center', () => {
     expect(parse('30%')).toEqual({
       type: 'single',
       x: { type: 'percent', value: 30, unit: '%' },
@@ -54,7 +54,7 @@ describe('Single value syntax', () => {
     })
   })
 
-  it('长度 2.5em → x=2.5em, y=center', () => {
+  it('length 2.5em → x=2.5em, y=center', () => {
     expect(parse('2.5em')).toEqual({
       type: 'single',
       x: { type: 'length', value: 2.5, unit: 'em' },
@@ -62,21 +62,21 @@ describe('Single value syntax', () => {
     })
   })
 
-  it('纯数字 100 → 默认 px, x=100px, y=center', () => {
+  it('pure number 100 → 默认 px, x=100px, y=center', () => {
     expect(parse('100')).toEqual({
       type: 'single',
       x: 'center',
       y: 'center',
     })
   })
-  it('零不带单位 0 → x=0px, y=center', () => {
+  it('Zero does not include units, 0 → x=0px, y=center', () => {
     expect(parse('0')).toEqual({
       type: 'single',
       x: { type: 'length', value: 0, unit: 'px' },
       y: 'center',
     })
   })
-  it('关键字 center → x=center, y=center', () => {
+  it('keyword center → x=center, y=center', () => {
     expect(parse('center')).toEqual({
       type: 'single',
       x: 'center',
@@ -94,7 +94,7 @@ describe('Double value syntax', () => {
     })
   })
   // Normalized
-  it('top left → 归一化后 x=left, y=top', () => {
+  it('top left → After normalization x=left, y=top', () => {
     expect(parse('top left')).toEqual({
       type: 'double',
       x: 'left',
@@ -195,7 +195,7 @@ describe('Double value syntax', () => {
     })
   })
 
-  it('0 0 → x=0px, y=0px 零可省略单位', () => {
+  it('0 0 → x=0px, y=0px Zero can omit the unit', () => {
     expect(parse('0 0')).toEqual({
       type: 'double',
       x: { type: 'length', value: 0, unit: 'px' },
