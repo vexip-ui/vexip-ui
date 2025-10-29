@@ -163,6 +163,8 @@ export default defineComponent({
               break
             }
           }
+        } else {
+          restCount.value = 0
         }
       }
 
