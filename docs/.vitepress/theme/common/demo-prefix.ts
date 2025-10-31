@@ -67,6 +67,7 @@ const components = [
   'Modal',
   'NativeScroll',
   'NumberInput',
+  'ObjectFit',
   'Option',
   'OptionGroup',
   'Overflow',
