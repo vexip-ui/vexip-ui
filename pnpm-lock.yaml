@@ -440,13 +440,13 @@ importers:
         version: 1.26.5
       '@vite-pwa/vitepress':
         specifier: ^1.0.0
-        version: 1.0.0(vite-plugin-pwa@1.0.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0))
+        version: 1.0.0(vite-plugin-pwa@1.0.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0))
       '@vitejs/plugin-vue':
         specifier: ^5.2.4
-        version: 5.2.4(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
+        version: 5.2.4(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
       '@vitejs/plugin-vue-jsx':
         specifier: ^4.1.2
-        version: 4.2.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
+        version: 4.2.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
@@ -484,11 +484,11 @@ importers:
         specifier: ^1.89.0
         version: 1.89.0
       vite:
-        specifier: ^6.3.5
-        version: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
+        specifier: ^6.4.1
+        version: 6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
       vite-plugin-pwa:
         specifier: ^1.0.0
-        version: 1.0.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0)
+        version: 1.0.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0)
       vitepress:
         specifier: 1.6.3
         version: 1.6.3(@algolia/client-search@5.25.0)(@types/node@22.15.21)(postcss@8.5.3)(sass-embedded@1.89.0)(sass@1.93.3)(search-insights@2.17.3)(terser@5.39.2)(typescript@5.8.3)
@@ -525,10 +525,10 @@ importers:
         version: 2.0.7
       '@vitejs/plugin-vue':
         specifier: ^5.2.4
-        version: 5.2.4(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
+        version: 5.2.4(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
       '@vitejs/plugin-vue-jsx':
         specifier: ^4.1.2
-        version: 4.2.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
+        version: 4.2.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.3)
@@ -536,8 +536,8 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       vite:
-        specifier: ^6.3.5
-        version: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
+        specifier: ^6.4.1
+        version: 6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
       vue-router:
         specifier: ^4.5.1
         version: 4.5.1(vue@3.5.15(typescript@5.8.3))
@@ -6851,46 +6851,6 @@ packages:
       terser:
         optional: true
 
-  vite@6.3.5:
-    resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
-      jiti: '>=1.21.0'
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.16.0
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      jiti:
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
-        optional: true
-
   vite@6.4.1:
     resolution: {integrity: sha512-+Oxm7q9hDoLMyJOYfUYBuHQo+dkAloi33apOPP56pzj+vsdJDzr+j1NISE5pyaAuKL4A3UD34qd0lx5+kfKp2g==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -7371,7 +7331,7 @@ snapshots:
       '@babel/core': 7.27.1
       '@babel/helper-compilation-targets': 7.27.2
       '@babel/helper-plugin-utils': 7.27.1
-      debug: 4.4.1
+      debug: 4.4.3
       lodash.debounce: 4.0.8
       resolve: 1.22.10
     transitivePeerDependencies:
@@ -9371,28 +9331,17 @@ snapshots:
       stylelint-config-standard-scss: 13.1.0(postcss@8.5.3)(stylelint@16.25.0(typescript@5.8.3))
       stylelint-order: 6.0.4(stylelint@16.25.0(typescript@5.8.3))
 
-  '@vite-pwa/vitepress@1.0.0(vite-plugin-pwa@1.0.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0))':
+  '@vite-pwa/vitepress@1.0.0(vite-plugin-pwa@1.0.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0))':
     dependencies:
-      vite-plugin-pwa: 1.0.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0)
+      vite-plugin-pwa: 1.0.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0)
 
-  '@vitejs/plugin-vue-jsx@4.2.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
+  '@vitejs/plugin-vue-jsx@4.2.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
     dependencies:
       '@babel/core': 7.27.1
       '@babel/plugin-transform-typescript': 7.27.1(@babel/core@7.27.1)
       '@rolldown/pluginutils': 1.0.0-beta.9
       '@vue/babel-plugin-jsx': 1.4.0(@babel/core@7.27.1)
-      vite: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
-      vue: 3.5.15(typescript@5.8.3)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@vitejs/plugin-vue-jsx@4.2.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
-    dependencies:
-      '@babel/core': 7.27.1
-      '@babel/plugin-transform-typescript': 7.27.1(@babel/core@7.27.1)
-      '@rolldown/pluginutils': 1.0.0-beta.9
-      '@vue/babel-plugin-jsx': 1.4.0(@babel/core@7.27.1)
-      vite: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
+      vite: 6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
       vue: 3.5.15(typescript@5.8.3)
     transitivePeerDependencies:
       - supports-color
@@ -9413,14 +9362,9 @@ snapshots:
       vite: 5.4.19(@types/node@22.15.21)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)
       vue: 3.5.15(typescript@5.8.3)
 
-  '@vitejs/plugin-vue@5.2.4(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
+  '@vitejs/plugin-vue@5.2.4(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
     dependencies:
-      vite: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
-      vue: 3.5.15(typescript@5.8.3)
-
-  '@vitejs/plugin-vue@5.2.4(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
-    dependencies:
-      vite: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
+      vite: 6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
       vue: 3.5.15(typescript@5.8.3)
 
   '@vitejs/plugin-vue@5.2.4(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.15(typescript@5.8.3))':
@@ -14188,12 +14132,12 @@ snapshots:
       - rollup
       - supports-color
 
-  vite-plugin-pwa@1.0.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0):
+  vite-plugin-pwa@1.0.0(vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1))(workbox-build@7.3.0)(workbox-window@7.3.0):
     dependencies:
       debug: 4.4.1
       pretty-bytes: 6.1.1
       tinyglobby: 0.2.13
-      vite: 6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
+      vite: 6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1)
       workbox-build: 7.3.0
       workbox-window: 7.3.0
     transitivePeerDependencies:
@@ -14211,11 +14155,11 @@ snapshots:
       sass-embedded: 1.89.0
       terser: 5.39.2
 
-  vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1):
+  vite@6.4.1(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.89.0)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
       esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.4.4(picomatch@4.0.3)
+      picomatch: 4.0.3
       postcss: 8.5.3
       rollup: 4.41.0
       tinyglobby: 0.2.13
@@ -14225,24 +14169,6 @@ snapshots:
       jiti: 2.6.1
       sass: 1.93.3
       sass-embedded: 1.89.0
-      terser: 5.39.2
-      tsx: 4.20.6
-      yaml: 2.8.1
-
-  vite@6.3.5(@types/node@22.15.21)(jiti@2.6.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.39.2)(tsx@4.20.6)(yaml@2.8.1):
-    dependencies:
-      esbuild: 0.25.4
-      fdir: 6.4.4(picomatch@4.0.2)
-      picomatch: 4.0.2
-      postcss: 8.5.3
-      rollup: 4.41.0
-      tinyglobby: 0.2.13
-    optionalDependencies:
-      '@types/node': 22.15.21
-      fsevents: 2.3.3
-      jiti: 2.6.1
-      sass: 1.93.3
-      sass-embedded: 1.93.3
       terser: 5.39.2
       tsx: 4.20.6
       yaml: 2.8.1
