@@ -90,7 +90,7 @@ export interface BEM<B extends string> {
    */
   cvm: <M extends Record<string, any>, S extends Record<any, any>>(
     m: M,
-    s?: S
+    s?: S,
   ) => {
     [K in keyof M extends `${infer I}` ? `--${B}-${I}` : string]: K extends `--${B}-${infer I}`
       ? M[I]
@@ -108,7 +108,7 @@ export interface BEM<B extends string> {
    * @param v the variable
    * @param s the style
    */
-  scv: <V extends string, S extends string>(v: V, s: S) => `--${B}-${V}: ${S};`
+  scv: <V extends string, S extends string>(v: V, s: S) => `--${B}-${V}: ${S};`,
 }
 
 /**
@@ -216,7 +216,7 @@ export interface NBEM<B extends string, N extends string> {
    */
   cvm: <M extends Record<string, any>, S extends Record<any, any>>(
     m: M,
-    s?: S
+    s?: S,
   ) => {
     [K in keyof M extends `${infer I}`
       ? `--${N}-${B}-${I}`
@@ -263,7 +263,7 @@ export interface NBEM<B extends string, N extends string> {
    */
   nvm: <M extends Record<string, any>, S extends Record<any, any>>(
     m: M,
-    s?: S
+    s?: S,
   ) => {
     [K in keyof M extends `${infer I}` ? `--${N}-${I}` : string]: K extends `--${N}-${infer I}`
       ? M[I]
@@ -281,5 +281,5 @@ export interface NBEM<B extends string, N extends string> {
    * @param v the variable
    * @param s the style
    */
-  snv: <V extends string, S extends string>(v: V, s: S) => `--${N}-${V}: ${S};`
+  snv: <V extends string, S extends string>(v: V, s: S) => `--${N}-${V}: ${S};`,
 }

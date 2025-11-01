@@ -42,6 +42,16 @@ Adding the value of the `arrow-type` prop can change the position of the panel a
 
 :::
 
+:::demo collapse/alive
+
+### Keep Mounted
+
+Use the `alive` prop to control the mounting behavior of the panel’s content.
+
+`'mounted'` means that once the panel content is mounted for the first time, it will remain mounted and not be destroyed.
+
+:::
+
 :::demo collapse/single
 
 ### Use Alone
@@ -62,15 +72,27 @@ This component can be used independently to add collapsing transition effects to
 
 ## API
 
+### Preset Types
+
+```ts
+type CollapseArrowType = 'right' | 'left' | 'none'
+type CollapseAliveType = 'always' | 'mounted' | 'never'
+
+interface CollapsePanelSlots {
+  arrow?: (params: { expanded: boolean }) => any,
+}
+```
+
 ### Collapse Props
 
-| Name       | Type                                       | Description                                                                                     | Default   | Since |
-| ---------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------- | --------- | ----- |
-| expanded   | `string \| number \| (string \| number)[]` | Set the label value of the expanded panel, can be passed in an array when not in accordion mode | `null`    | -     |
-| card       | `boolean`                                  | Set whether to be in card mode                                                                  | `false`   | -     |
-| accordion  | `boolean`                                  | Set whether to accordion mode                                                                   | `false`   | -     |
-| arrow-type | `'right' \| 'left' \| 'none'`              | Set the type of the panel's indicator arrow                                                     | `'right'` | -     |
-| ghost      | `boolean`                                  | Set whether to set borderless mode                                                              | `false`   | -     |
+| Name       | Type                                       | Description                                                                                                                               | Default   | Since    |
+| ---------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- |
+| expanded   | `string \| number \| (string \| number)[]` | Set the label value of the expanded panel, can be passed in an array when not in accordion mode                                           | `null`    | -        |
+| card       | `boolean`                                  | Set whether to be in card mode                                                                                                            | `false`   | -        |
+| accordion  | `boolean`                                  | Set whether to accordion mode                                                                                                             | `false`   | -        |
+| arrow-type | `'right' \| 'left' \| 'none'`              | Set the type of the panel's indicator arrow                                                                                               | `'right'` | -        |
+| ghost      | `boolean`                                  | Set whether to set borderless mode                                                                                                        | `false`   | -        |
+| alive      | `boolean \| CollapseAliveType`             | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `false`   | `2.3.37` |
 
 ### Collapse Events
 
@@ -80,17 +102,18 @@ This component can be used independently to add collapsing transition effects to
 
 ### CollapsePanel Props
 
-| Name          | Type                          | Description                                            | Default   | Since |
-| ------------- | ----------------------------- | ------------------------------------------------------ | --------- | ----- |
-| label         | `string \| number`            | The label value of panel, unique within the same group | `null`    | -     |
-| title         | `string`                      | The title of the panel                                 | `''`      | -     |
-| disabled      | `boolean`                     | Set whether the panel is disabled                      | `false`   | -     |
-| content-style | `Record<string, any>`         | The styles the content of the panel                    | `null`    | -     |
-| expanded      | `boolean`                     | Set whether the panel is expanded                      | `false`   | -     |
-| card          | `boolean`                     | Set whether to be in card mode                         | `false`   | -     |
-| arrow-type    | `'right' \| 'left' \| 'none'` | Set the type of the panel's indicator arrow            | `'right'` | -     |
-| icon          | `string`                      | Set the subordinate icon for the panel title           | `''`      | -     |
-| ghost         | `boolean`                     | Set whether to be in borderless mode                   | `false`   | -     |
+| Name          | Type                           | Description                                                                                                                               | Default   | Since    |
+| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------- |
+| label         | `string \| number`             | The label value of panel, unique within the same group                                                                                    | `null`    | -        |
+| title         | `string`                       | The title of the panel                                                                                                                    | `''`      | -        |
+| disabled      | `boolean`                      | Set whether the panel is disabled                                                                                                         | `false`   | -        |
+| content-style | `Record<string, any>`          | The styles the content of the panel                                                                                                       | `null`    | -        |
+| expanded      | `boolean`                      | Set whether the panel is expanded                                                                                                         | `false`   | -        |
+| card          | `boolean`                      | Set whether to be in card mode                                                                                                            | `false`   | -        |
+| arrow-type    | `'right' \| 'left' \| 'none'`  | Set the type of the panel's indicator arrow                                                                                               | `'right'` | -        |
+| icon          | `string`                       | Set the subordinate icon for the panel title                                                                                              | `''`      | -        |
+| ghost         | `boolean`                      | Set whether to be in borderless mode                                                                                                      | `false`   | -        |
+| alive         | `boolean \| CollapseAliveType` | Set whether the panel content should be continuously rendered, `true` is equivalent to `'always'`, and `false` is equivalent to `'never'` | `null`    | `2.3.37` |
 
 ### CollapsePanel Events
 
@@ -100,10 +123,11 @@ This component can be used independently to add collapsing transition effects to
 
 ### CollapsePanel Slots
 
-| Name    | Description                | Parameters | Since |
-| ------- | -------------------------- | ---------- | ----- |
-| default | Content slot for the panel | -          | -     |
-| title   | Title slot for the panel   | -          | -     |
+| Name    | Description                   | Parameters              | Since    |
+| ------- | ----------------------------- | ----------------------- | -------- |
+| default | Content slot for the panel    | -                       | -        |
+| title   | Title slot for the panel      | -                       | -        |
+| arrow   | Arrow icon slot for the panel | `{ expanded: boolean }` | `2.3.36` |
 
 ### CollapseTransition Props
 

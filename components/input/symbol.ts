@@ -13,7 +13,7 @@ export interface InputExposed extends ComponentPublicInstance {
   input?: HTMLInputElement | null,
   copyValue: () => boolean,
   focus: (options?: FocusOptions) => void,
-  blur: () => void
+  blur: () => void,
 }
 
 export type ChangeEvent = (value: string | number) => void
@@ -26,5 +26,5 @@ export interface InputSlots {
   beforeAction?: () => any,
   afterAction?: () => any,
   count?: (params: { value: string }) => any,
-  password?: (params: { plain: boolean }) => any
+  password?: (params: { plain: boolean }) => any,
 }

@@ -9,7 +9,7 @@ export interface DeepCloneOptions {
    *
    * @returns 克隆后对象
    */
-  cloneObject?: (type: string, obj: unknown) => any
+  cloneObject?: (type: string, obj: unknown) => any,
 }
 
 /**
@@ -31,7 +31,7 @@ export function deepClone<T>(obj: T, options: DeepCloneOptions = {}): T {
   const loopList: Array<{
     parent: any,
     prop: any,
-    data: any
+    data: any,
   }> = [
     {
       parent: temp,

@@ -16,5 +16,5 @@ export type TagType = TagState | TagNamedColor
 export interface TagSlots {
   prefix?: () => any,
   suffix?: () => any,
-  default?: () => any
+  default?: () => any,
 }

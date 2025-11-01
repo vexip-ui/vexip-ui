@@ -17,7 +17,7 @@ const props = useProps('tabPanel', _props, {
 
 const slots = defineSlots<{
   default?: () => any,
-  label?: (params: { label: string | number }) => any
+  label?: (params: { label: string | number }) => any,
 }>()
 
 const tabsState = inject(TABS_STATE, null)

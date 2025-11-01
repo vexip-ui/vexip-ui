@@ -93,9 +93,9 @@ const style = computed(() => {
     'icon-color': mixColor(black, baseColor, 0.2).toString(),
     ...(props.colorfulText
       ? {
-          'text-color': mixColor(black, baseColor, 0.2).toString(),
-          'title-color': mixColor(black, baseColor, 0.2).toString(),
-        }
+        'text-color': mixColor(black, baseColor, 0.2).toString(),
+        'title-color': mixColor(black, baseColor, 0.2).toString(),
+      }
       : {}),
   })
 })

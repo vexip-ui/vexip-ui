@@ -34,7 +34,7 @@ interface RowData {
   group: string,
   member: number,
   found: string,
-  progress: number
+  progress: number,
 }
 
 const data = ref(mockData())

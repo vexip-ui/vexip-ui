@@ -7,7 +7,7 @@ export interface ResizeInfo extends ResizeObserverEntry {
   offsetWidth: number,
   offsetHeight: number,
   width: number,
-  height: number
+  height: number,
 }
 
 export type ResizeHandler = (entry: ResizeInfo) => any
@@ -17,7 +17,7 @@ export interface UseResizeOptions {
    * 作用的目标元素的 Ref
    */
   target?: MaybeRef<HTMLElement | null | undefined>,
-  onResize?: ResizeHandler
+  onResize?: ResizeHandler,
 }
 
 const handlerMap = new WeakMap<Element, ResizeHandler>()
@@ -28,7 +28,7 @@ function handleResize(entries: ResizeObserverEntry[]) {
     const handler = handlerMap.get(entry.target)
 
     if (typeof handler === 'function') {
-      const { inlineSize, blockSize } = entry.borderBoxSize?.[0]
+      const { inlineSize, blockSize } = entry.borderBoxSize?.[0] ?? {}
       const { offsetWidth, offsetHeight } = entry.target as HTMLElement
 
       handler(

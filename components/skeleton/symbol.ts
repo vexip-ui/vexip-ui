@@ -8,7 +8,7 @@ export interface GroupState {
   round: boolean,
   circle: boolean,
   block: boolean,
-  loading: boolean
+  loading: boolean,
 }
 
 export const GROUP_STATE = '__VXP_SKELETON_GROUP_STATE' as unknown as InjectionKey<GroupState>

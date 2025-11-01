@@ -9,7 +9,7 @@ import type { ObjectDirective, VNode } from 'vue'
 interface LoadingRecord {
   spin: VNode,
   props: any,
-  originPosition: string
+  originPosition: string,
 }
 
 export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord }, any> = {

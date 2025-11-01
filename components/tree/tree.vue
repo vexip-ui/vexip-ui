@@ -110,6 +110,7 @@ const props = useProps('tree', _props, {
   arrowIcon: createIconProp(),
   blockEffect: false,
   filterLeaf: false,
+  keepSelected: false,
   slots: () => ({}),
 })
 
@@ -414,6 +415,8 @@ provide(
     boundAsyncLoad,
     nodeStates,
     expanding,
+    keepSelected: toRef(props, 'keepSelected'),
+    multiple: toRef(props, 'multiple'),
     getParentNode,
     updateVisibleNodeEls,
     computeCheckedState,
@@ -936,7 +939,7 @@ let dragState: {
   draggingNode: TreeNodeProps,
   treeRect: DOMRect,
   willDropNode: TreeNodeProps | null,
-  dropType: DropType
+  dropType: DropType,
 } | null = null
 
 function handleNodeDragStart(nodeInstance: TreeNodeInstance) {

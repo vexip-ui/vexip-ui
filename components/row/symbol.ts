@@ -13,12 +13,12 @@ export type RowGridAlign = 'top' | 'middle' | 'bottom' | 'stretch'
 
 export interface ColumnFlex {
   justify: RowGridJustify,
-  align: RowGridAlign
+  align: RowGridAlign,
 }
 
 export interface RowState {
   columnFlex: ColumnFlex | false,
-  gap: number | number[]
+  gap: number | number[],
 }
 
 export interface ColumnOptions {
@@ -26,7 +26,7 @@ export interface ColumnOptions {
   offset?: number,
   pull?: number,
   push?: number,
-  order?: number
+  order?: number,
 }
 
 export const breakPoints = Object.freeze<BreakPoint[]>(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])

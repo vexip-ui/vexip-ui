@@ -123,24 +123,24 @@ export default defineComponent({
                   ? ''
                   : props.vertical
                     ? {
-                        marginBottom: index !== lastIndex ? varMap.v : undefined,
-                      }
+                      marginBottom: index !== lastIndex ? varMap.v : undefined,
+                    }
                     : {
-                        paddingTop: varMap.hv,
-                        paddingBottom: varMap.hv,
-                        marginRight: justifySpace
-                          ? notBetween || index !== lastIndex
-                            ? varMap.hh
-                            : undefined
-                          : index !== lastIndex
-                            ? varMap.h
-                            : undefined,
-                        marginLeft: justifySpace
-                          ? notBetween || index !== 0
-                            ? varMap.hh
-                            : undefined
+                      paddingTop: varMap.hv,
+                      paddingBottom: varMap.hv,
+                      marginRight: justifySpace
+                        ? notBetween || index !== lastIndex
+                          ? varMap.hh
+                          : undefined
+                        : index !== lastIndex
+                          ? varMap.h
                           : undefined,
-                      },
+                      marginLeft: justifySpace
+                        ? notBetween || index !== 0
+                          ? varMap.hh
+                          : undefined
+                        : undefined,
+                    },
               ]}
             >
               {vnode}

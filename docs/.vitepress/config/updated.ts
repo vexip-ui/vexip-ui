@@ -3,7 +3,7 @@ import { groupByProps } from '@vexip-ui/utils'
 
 export interface UpdatedFile {
   locale: string,
-  path: string
+  path: string,
 }
 
 const componentRE = /^components\/.+\/.+/

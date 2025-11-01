@@ -13,7 +13,7 @@ import type { LogLevel } from 'vite'
 interface Manifest {
   dependencies?: Record<string, string>,
   peerDependencies?: Record<string, string>,
-  version?: string
+  version?: string,
 }
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8')) as Manifest

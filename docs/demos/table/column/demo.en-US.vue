@@ -35,7 +35,7 @@ interface RowData {
   email: string,
   firstName: string,
   lastName: string,
-  age: string
+  age: string,
 }
 
 const columns = reactive([

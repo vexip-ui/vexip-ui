@@ -35,7 +35,7 @@ const users: {
   name: string,
   slogan?: string,
   logo: string,
-  link?: string
+  link?: string,
 }[] = [
   {
     name: 'Fantastic-admin',

@@ -8,9 +8,9 @@ export interface LoadingOptions {
   strokeWidth?: number,
   state?: LoadingState,
   position?: LoadingPosition,
-  maxPercent?: number
+  maxPercent?: number,
 }
 
 export interface LoadingInstance extends ComponentPublicInstance {
-  startLoading: (options: LoadingOptions) => void
+  startLoading: (options: LoadingOptions) => void,
 }

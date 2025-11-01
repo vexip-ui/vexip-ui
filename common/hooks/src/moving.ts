@@ -15,7 +15,7 @@ export interface MovingState {
   deltaX: number,
   deltaY: number,
   lazy: boolean,
-  [custom: string]: unknown
+  [custom: string]: unknown,
 }
 
 export interface UseMovingOptions {
@@ -68,7 +68,7 @@ export interface UseMovingOptions {
   /**
    * 移动结束时的回调函数
    */
-  onEnd?: (state: MovingState, event: PointerEvent) => void
+  onEnd?: (state: MovingState, event: PointerEvent) => void,
 }
 
 function disableEvent<E extends Event>(event: E) {

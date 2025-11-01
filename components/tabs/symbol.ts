@@ -7,7 +7,7 @@ export interface ItemState {
   icon: Record<string, any>,
   disabled: boolean,
   closable?: boolean,
-  labelRenderer: null | ((data: { label: string | number }) => any)
+  labelRenderer: null | ((data: { label: string | number }) => any),
 }
 
 export interface TabsState {
@@ -17,7 +17,7 @@ export interface TabsState {
   increaseItem: (item: ItemState) => void,
   decreaseItem: (item: ItemState) => void,
   handleActive: (label: string | number) => void,
-  refreshLabels: () => void
+  refreshLabels: () => void,
 }
 
 export interface TabsSlots extends TabNavSlots {}

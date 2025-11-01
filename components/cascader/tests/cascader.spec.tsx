@@ -10,7 +10,7 @@ interface CascaderOption {
   value: string,
   label: string,
   disabled: boolean,
-  children: CascaderOption[] | null
+  children: CascaderOption[] | null,
 }
 
 const icons = globalIcons.value

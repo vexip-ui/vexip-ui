@@ -115,8 +115,8 @@ const trackStyle = computed(() => {
     height: trackRect.height ? `${trackRect.height}px` : undefined,
     transform: trackRect.offset
       ? `translate${props.vertical ? 'Y' : 'X'}(${
-          isRtl.value && !props.vertical ? `${-trackRect.offset}` : trackRect.offset
-        }px) translateZ(0)`
+        isRtl.value && !props.vertical ? `${-trackRect.offset}` : trackRect.offset
+      }px) translateZ(0)`
       : undefined,
     transitionDuration: isLocked.value ? '0ms' : `${props.speed}ms`,
   }

@@ -5,5 +5,5 @@ export interface FullScreenSlotParams {
   placeId: string,
   enter: (type?: FullScreenType, zIndex?: number) => Promise<void>,
   exit: () => Promise<void>,
-  toggle: (type?: FullScreenType, zIndex?: number) => Promise<void>
+  toggle: (type?: FullScreenType, zIndex?: number) => Promise<void>,
 }

@@ -240,7 +240,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
       :disabled="column.ellipsis ?? state.ellipsis"
       :on-resize="handleCellResize"
     >
-      <span :class="nh.be('content')">
+      <span
+        :class="{
+          [nh.be('content')]: true,
+          [nh.bem('content', 'ellipsis')]: column.ellipsis ?? state.ellipsis,
+        }"
+      >
         <Ellipsis
           v-if="column.ellipsis ?? state.ellipsis"
           inherit
@@ -254,7 +259,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
               column,
               index: column.index,
               rows: state.data,
-              meta: summaryData
+              meta: summaryData,
             }"
           ></Renderer>
         </Ellipsis>
@@ -265,7 +270,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             column,
             index: column.index,
             rows: state.data,
-            meta: summaryData
+            meta: summaryData,
           }"
         ></Renderer>
       </span>

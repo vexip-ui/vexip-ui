@@ -17,12 +17,12 @@ export interface CaptchaExposed extends ComponentPublicInstance {
   canvas?: HTMLCanvasElement | null,
   subCanvas?: HTMLCanvasElement | null,
   slider?: CaptchaSliderExposed | null,
-  reset: (image?: string | (() => Promise<string>)) => void
+  reset: (image?: string | (() => Promise<string>)) => void,
 }
 
 export interface CaptchaSliderSlots {
   tip?: (params: { success: boolean }) => any,
-  trigger?: (params: { success: boolean }) => any
+  trigger?: (params: { success: boolean }) => any,
 }
 
 export interface CaptchaSlots {
@@ -31,7 +31,7 @@ export interface CaptchaSlots {
   texts?: (params: { tests: string[] }) => any,
   refresh?: () => any,
   loadingIcon?: () => any,
-  trigger?: (params: { visible: boolean, success: boolean }) => any
+  trigger?: (params: { visible: boolean, success: boolean }) => any,
 }
 
 export type SuccessEvent = (value: number | number[]) => void

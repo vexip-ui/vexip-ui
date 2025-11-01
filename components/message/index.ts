@@ -18,13 +18,13 @@ import type {
 export type { MessageConfig, MessageType, MessagePlacement, MessageOptions }
 
 type FuzzyOptions = string | MessageOptions
-type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Record<string, unknown>
+type ManagerOptions = { duration?: number } & MessageConfig & Record<string, unknown>
 
 interface AipMethod {
   (options: MessageOptions): () => void,
   (content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const placementWhiteList: MessagePlacement[] = ['top', 'bottom']
@@ -52,6 +52,8 @@ export class MessageManager {
   private _container: HTMLElement | null
   private _wrapper: HTMLElement | SVGElement | null
   private _mountedEl: HTMLElement | null
+  private _installed: boolean
+  private _configRecord: MessageConfig | null
 
   constructor(options: ManagerOptions = {}) {
     options = {
@@ -65,6 +67,8 @@ export class MessageManager {
     this._container = null
     this._wrapper = null
     this._mountedEl = null
+    this._installed = false
+    this._configRecord = null
     this.name = 'Message'
     this.defaults = {}
 
@@ -121,25 +125,30 @@ export class MessageManager {
   }
 
   config({ placement, startOffset, itemGap, ...others }: MessageConfig & MessageOptions) {
-    const instance = this._getInstance()
-
-    if (instance) {
-      if (placement) {
-        instance.config({
-          placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
-        })
-      }
-
-      instance.config({ startOffset, itemGap })
-    }
-
+    this._configRecord = { placement, startOffset, itemGap }
     this.defaults = { ...this.defaults, ...others }
+
+    if (this._installed) {
+      const instance = this._getInstance()
+
+      if (instance) {
+        if (placement) {
+          instance.config({
+            placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
+          })
+        }
+
+        instance.config({ startOffset, itemGap })
+      }
+    }
   }
 
   clone() {
     const manager = new MessageManager(this.defaults)
 
     manager._mountedApp = this._mountedApp
+    manager._configRecord = this._configRecord
+    manager._installed = this._installed
 
     return manager
   }
@@ -162,8 +171,9 @@ export class MessageManager {
   install(app: App, options: ManagerOptions & { property?: string } = {}) {
     const { property, ...others } = options
 
-    this.config(others)
     this._mountedApp = app
+    this._installed = true
+    this.config(others)
 
     if (property || !app.config.globalProperties.$message) {
       app.config.globalProperties[property || '$message'] = this

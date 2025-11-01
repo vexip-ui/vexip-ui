@@ -11,7 +11,7 @@ interface Contributor {
   name?: string,
   email: string,
   url: string,
-  avatarUrl: string
+  avatarUrl: string,
 }
 
 const users = (metaData as any)._users as Record<string, Contributor>

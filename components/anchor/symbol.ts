@@ -4,26 +4,26 @@ export interface AnchorLinkOptions {
   to: string,
   label: string,
   title?: string,
-  children?: AnchorLinkOptions[]
+  children?: AnchorLinkOptions[],
 }
 
 export interface AnchorLinkState {
   el?: HTMLElement,
   to: string,
   active: boolean,
-  indent: number
+  indent: number,
 }
 
 export interface AnchorState {
   currentActive: string,
   increaseLink(state: AnchorLinkState): void,
   decreaseLink(state: AnchorLinkState): void,
-  handleActive(label: string): void
+  handleActive(label: string): void,
 }
 
 export interface AnchorSlots {
   default?: () => any,
-  marker?: () => any
+  marker?: () => any,
 }
 
 export const baseIndentWidth = 14 // px

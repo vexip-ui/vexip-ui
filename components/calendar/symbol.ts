@@ -13,7 +13,7 @@ export interface CalendarPanelSlots {
     isNext: boolean,
     isToday: boolean,
     disabled: boolean,
-    inRange: boolean
+    inRange: boolean,
   }) => any,
   itemContent?: (params: {
     date: Date,
@@ -24,9 +24,9 @@ export interface CalendarPanelSlots {
     isNext: boolean,
     isToday: boolean,
     disabled: boolean,
-    inRange: boolean
+    inRange: boolean,
   }) => any,
-  footer?: () => any
+  footer?: () => any,
 }
 
 export interface CalendarSlots {
@@ -40,7 +40,7 @@ export interface CalendarSlots {
     isPrev: boolean,
     isNext: boolean,
     isToday: boolean,
-    disabled: boolean
+    disabled: boolean,
   }) => any,
   content?: (params: {
     selected: boolean,
@@ -49,6 +49,6 @@ export interface CalendarSlots {
     isPrev: boolean,
     isNext: boolean,
     isToday: boolean,
-    disabled: boolean
-  }) => any
+    disabled: boolean,
+  }) => any,
 }

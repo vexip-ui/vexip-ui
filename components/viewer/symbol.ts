@@ -23,7 +23,6 @@ export type ViewerPresetAction =
   | 'full-screen'
   | 'full-screen-exit'
   | 'reset'
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type ViewerActionName = ViewerPresetAction | (string & {})
 export type ViewerActionLayout = ViewerActionName[][]
 
@@ -36,7 +35,7 @@ export interface ViewerState {
   flipY: boolean,
   full: boolean,
   moving: boolean,
-  [custom: string]: unknown
+  [custom: string]: unknown,
 }
 
 export interface ViewerToolbarAction {
@@ -51,7 +50,7 @@ export interface ViewerToolbarAction {
   /** @deprecated */
   divided?: boolean | ((state: ViewerState) => boolean),
   hidden?: boolean | ((state: ViewerState) => boolean),
-  disabled?: boolean | ((state: ViewerState) => boolean)
+  disabled?: boolean | ((state: ViewerState) => boolean),
 }
 
 export const enum InternalActionName {

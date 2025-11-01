@@ -13,7 +13,7 @@ export type UseIntersectionOptions = IntersectionObserverInit & {
   /**
    * 作用的目标元素的 Ref
    */
-  target?: Ref<HTMLElement | null | undefined>
+  target?: Ref<HTMLElement | null | undefined>,
 }
 
 const observerCache = new WeakMap<

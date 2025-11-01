@@ -434,7 +434,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
       :disabled="column.ellipsis ?? state.ellipsis"
       :on-resize="handleCellResize"
     >
-      <span :class="nh.be('content')">
+      <span
+        :class="{
+          [nh.be('content')]: true,
+          [nh.bem('content', 'ellipsis')]: column.ellipsis ?? state.ellipsis,
+        }"
+      >
         <Ellipsis
           v-if="column.ellipsis ?? state.ellipsis"
           inherit
@@ -474,7 +479,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             <span
               :class="{
                 [nh.bem('sorter', 'asc')]: true,
-                [nh.bem('sorter', 'active')]: sorter.type === 'asc'
+                [nh.bem('sorter', 'active')]: sorter.type === 'asc',
               }"
               @click="handleSortAsc()"
             >
@@ -483,7 +488,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
             <span
               :class="{
                 [nh.bem('sorter', 'desc')]: true,
-                [nh.bem('sorter', 'active')]: sorter.type === 'desc'
+                [nh.bem('sorter', 'active')]: sorter.type === 'desc',
               }"
               @click="handleSortDesc()"
             >
@@ -505,12 +510,12 @@ function handleCellResize(entry: ResizeObserverEntry) {
               :class="{
                 [nh.be('filter')]: true,
                 [nh.bem('filter', 'visible')]: filterVisible,
-                [nh.bem('filter', 'active')]: filter.active
+                [nh.bem('filter', 'active')]: filter.active,
               }"
               :tip-class="{
                 [nh.be('filter-wrapper')]: true,
                 [nh.bs('vars')]: true,
-                [nh.bem('filter-wrapper', 'multiple')]: filter.multiple
+                [nh.bem('filter-wrapper', 'multiple')]: filter.multiple,
               }"
             >
               <template #trigger>
@@ -554,7 +559,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
                 <div
                   :class="{
                     [nh.be('filter-item')]: true,
-                    [nh.bem('filter-item', 'active')]: !filter.active
+                    [nh.bem('filter-item', 'active')]: !filter.active,
                   }"
                   @click="handleResetFilter"
                 >
@@ -565,7 +570,7 @@ function handleCellResize(entry: ResizeObserverEntry) {
                   :key="item.value"
                   :class="{
                     [nh.be('filter-item')]: true,
-                    [nh.bem('filter-item', 'active')]: item.active
+                    [nh.bem('filter-item', 'active')]: item.active,
                   }"
                   @click="handleFilterItemSelect(item.value, !item.active)"
                 >

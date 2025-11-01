@@ -86,7 +86,7 @@ export interface IconOptions extends Record<string, any> {
   effect?: string,
   size?: string,
   color?: string,
-  rotate?: number | string
+  rotate?: number | string,
 }
 
 export type IconArrayValue = [IconValue, IconOptions?]
@@ -161,7 +161,7 @@ export interface IconsOptions {
   playState?: IconConfig,
   pauseState?: IconConfig,
   playPrev?: IconConfig,
-  playNext?: IconConfig
+  playNext?: IconConfig,
 }
 
 export type IconName = keyof IconsOptions

@@ -95,8 +95,8 @@ type TabNavPlacement = 'top' | 'right' | 'bottom' | 'left'
 | placement | `TabNavPlacement`  | 设置标签导航的放置位置                            | `'top'`  | `2.0.13` |
 | show-add  | `boolean`          | 设置是否显示添加按钮                              | `false`  | `2.0.13` |
 | closable  | `boolean`          | 设置是否显示关闭按钮                              | `false`  | `2.0.13` |
-| lazy      | `boolean           | 设置是否所有的面板都在非激活时不渲染              | `false`  | `2.3.31` |
-| lazy      | `boolean           | 设置是否所有的面板都为懒加载（第一次激活后渲染）  | `false`  | `2.3.33` |
+| lazy      | `boolean`          | 设置是否所有的面板都在非激活时不渲染              | `false`  | `2.3.31` |
+| lazy-load | `boolean`          | 设置是否所有的面板都为懒加载（第一次激活后渲染）  | `false`  | `2.3.33` |
 
 ### Tabs 事件
 

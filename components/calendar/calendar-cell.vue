@@ -59,7 +59,7 @@ defineSlots<{
     isNext: boolean,
     isToday: boolean,
     disabled: boolean,
-    inRange: boolean
+    inRange: boolean,
   }) => any,
   default: (params: {
     date: Date,
@@ -70,8 +70,8 @@ defineSlots<{
     isNext: boolean,
     isToday: boolean,
     disabled: boolean,
-    inRange: boolean
-  }) => any
+    inRange: boolean,
+  }) => any,
 }>()
 
 const nh = useNameHelper('calendar')
@@ -116,7 +116,7 @@ const label = computed(() => {
           [nh.bem('index', 'next')]: isNext,
           [nh.bem('index', 'today')]: isToday,
           [nh.bem('index', 'disabled')]: disabled,
-          [nh.bem('index', 'in-range')]: inRange
+          [nh.bem('index', 'in-range')]: inRange,
         }"
         tabindex="0"
         role="button"

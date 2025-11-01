@@ -385,7 +385,7 @@ function handleWheel({
 }: {
   clientX: number,
   clientY: number,
-  sign: 1 | -1
+  sign: 1 | -1,
 }) {
   const active = props.horizontal
     ? Math.round(clientX / targetWidth.value)
@@ -438,7 +438,7 @@ function handleItemClick(option: WheelOption, index: number) {
       :class="[
         nh.be('arrow'),
         nh.bem('arrow', 'prev'),
-        prevDisabled ? nh.bem('arrow', 'disabled') : ''
+        prevDisabled ? nh.bem('arrow', 'disabled') : '',
       ]"
       aria-hidden
       @click="handlePrev"
@@ -490,7 +490,7 @@ function handleItemClick(option: WheelOption, index: number) {
         :class="{
           [nh.be('border')]: true,
           [nh.bem('border', 'active')]: props.loading,
-          [nh.bem('border', 'vertical')]: props.horizontal
+          [nh.bem('border', 'vertical')]: props.horizontal,
         }"
         :style="borderStyle"
       ></div>
@@ -501,7 +501,7 @@ function handleItemClick(option: WheelOption, index: number) {
       :class="[
         nh.be('arrow'),
         nh.bem('arrow', 'next'),
-        nextDisabled ? nh.bem('arrow', 'disabled') : ''
+        nextDisabled ? nh.bem('arrow', 'disabled') : '',
       ]"
       aria-hidden
       @click="handleNext"

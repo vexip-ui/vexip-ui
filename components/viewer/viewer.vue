@@ -39,7 +39,7 @@ const props = useProps('viewer', _props, {
 
 defineSlots<{
   default: (params: { state: ViewerState }) => any,
-  [action: `action-${string}`]: (params: { state: ViewerState }) => any
+  [action: `action-${string}`]: (params: { state: ViewerState }) => any,
 }>()
 
 const nh = useNameHelper('viewer')
@@ -466,9 +466,9 @@ function handleLeaveToolbar() {
               :class="[
                 {
                   [nh.be('action')]: true,
-                  [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled')
+                  [nh.bem('action', 'disabled')]: getActionProp(action, 'disabled'),
                 },
-                getActionProp(action, 'class')
+                getActionProp(action, 'class'),
               ]"
               :title="getActionProp(action, 'title')"
               @click.stop="action.process(state)"

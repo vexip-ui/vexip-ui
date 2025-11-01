@@ -41,8 +41,8 @@ export default defineComponent({
     const style = computed(() => {
       return coloredMarker.value
         ? {
-            [nh.cv('marker-color')]: props.markerType,
-          }
+          [nh.cv('marker-color')]: props.markerType,
+        }
         : null
     })
 

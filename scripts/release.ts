@@ -6,7 +6,7 @@ const args = minimist<{
   d?: boolean,
   dry?: boolean,
   p?: string,
-  preid?: string
+  preid?: string,
 }>(process.argv.slice(2))
 
 const inputPkg = args._[0]

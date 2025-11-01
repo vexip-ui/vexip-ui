@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { CollapseTransition } from '@/components/collapse-transition'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 
 import { computed, inject, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
@@ -8,7 +9,7 @@ import { createIconProp, emitEvent, useIcons, useNameHelper, useProps } from '@v
 import { collapsePanelProps } from './props'
 import { COLLAPSE_STATE, getIndexId } from './symbol'
 
-import type { CollapseArrowType, PanelState } from './symbol'
+import type { CollapseArrowType, CollapsePanelSlots, PanelState } from './symbol'
 
 defineOptions({ name: 'CollapsePanel' })
 
@@ -29,9 +30,13 @@ const props = useProps('collapsePanel', _props, {
   },
   icon: createIconProp(),
   ghost: false,
+  alive: null,
+  slots: () => ({}),
 })
 
 const emit = defineEmits(['update:expanded'])
+
+defineSlots<CollapsePanelSlots>()
 
 const collapseState = inject(COLLAPSE_STATE, null)
 
@@ -39,6 +44,7 @@ const nh = useNameHelper('collapse')
 const icons = useIcons()
 const currentExpanded = ref(props.expanded)
 const currentLabel = ref(props.label)
+const loaded = ref(currentExpanded.value)
 
 const tab = ref<HTMLElement>()
 
@@ -66,6 +72,10 @@ const useArrowType = computed(() => {
   }
 
   return props.arrowType
+})
+const alive = computed(() => {
+  // 以 CollapsePanel 自身的 alive 属性优先
+  return props.alive ?? collapseState?.alive ?? false
 })
 const className = computed(() => {
   return [
@@ -112,6 +122,32 @@ if (collapseState) {
   )
 }
 
+const ifDirectiveValue = computed(() => {
+  switch (alive.value) {
+    case true:
+    case 'always':
+      return true
+    case 'mounted':
+      return loaded.value
+    default:
+      return currentExpanded.value
+  }
+})
+
+const showDirectiveValue = computed(() => {
+  return !alive.value || currentExpanded.value
+})
+
+if (!currentExpanded.value) {
+  watch(
+    currentExpanded,
+    () => {
+      loaded.value = true
+    },
+    { once: true },
+  )
+}
+
 function setExpanded(expanded: boolean) {
   currentExpanded.value = expanded
 
@@ -153,7 +189,11 @@ defineExpose({
       @click="handleToggle()"
     >
       <div :class="nh.be('arrow')">
-        <Icon v-bind="icons.angleRight"></Icon>
+        <slot name="arrow" :expanded="currentExpanded">
+          <Renderer :renderer="props.slots.arrow" :data="{ expanded: currentExpanded }">
+            <Icon v-bind="icons.angleRight"></Icon>
+          </Renderer>
+        </slot>
       </div>
       <slot name="title">
         <div v-if="props.icon" :class="nh.be('icon')">
@@ -164,7 +204,8 @@ defineExpose({
     </button>
     <CollapseTransition>
       <div
-        v-if="currentExpanded"
+        v-if="ifDirectiveValue"
+        v-show="showDirectiveValue"
         :id="bodyId"
         :class="nh.be('body')"
         role="tabpanel"

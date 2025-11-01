@@ -36,7 +36,7 @@ const emit = defineEmits(['update:active'])
 
 const slots = defineSlots<{
   mask?: () => any,
-  default?: (params: { show: boolean }) => any
+  default?: (params: { show: boolean }) => any,
 }>()
 
 const getIndex = useZIndex()
@@ -261,7 +261,7 @@ function handleEscape(event: KeyboardEvent) {
         zIndex,
         ...($attrs.style || {}),
         pointerEvents: wrapperShow ? undefined : 'none',
-        visibility: wrapperShow ? undefined : 'hidden'
+        visibility: wrapperShow ? undefined : 'hidden',
       }"
       @focusin="handleFocusIn"
       @keydown.escape="handleEscape"

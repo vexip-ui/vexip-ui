@@ -18,12 +18,12 @@ export interface ToastOptions extends Record<string, any> {
   maskClass?: ClassType,
   maskStyle?: StyleType,
   parseHtml?: boolean,
-  onClose?: () => void
+  onClose?: () => void,
 }
 
 export interface ToastInstance extends ComponentPublicInstance {
   openToast: (options: ToastOptions) => Promise<void>,
-  closeToast: () => void
+  closeToast: () => void,
 }
 
 export const effectiveTypes = Object.freeze(['success', 'warning', 'error', 'loading'])

@@ -4,7 +4,7 @@ export interface AlertSlots {
   default?: () => any,
   title?: () => any,
   close?: () => any,
-  icon?: () => any
+  icon?: () => any,
 }
 
 export const alertTypes = Object.freeze<AlertType[]>([

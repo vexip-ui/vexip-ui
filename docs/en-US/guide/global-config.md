@@ -52,15 +52,15 @@ createApp(App)
       //   size: 'large'
       // },
       input: {
-        size: 'large'
+        size: 'large',
       },
       select: {
-        size: 'large'
+        size: 'large',
       },
       checkbox: {
-        size: 'large'
-      }
-    }
+        size: 'large',
+      },
+    },
   })
   .mount('#app')
 ```
@@ -123,7 +123,7 @@ The default language of Vexip UI is `'zh-CN'`. I18n can be configured by passing
 import { enUSLocale, install } from 'vexip-ui'
 
 app.use(install, {
-  locale: enUSLocale()
+  locale: enUSLocale(),
 })
 ```
 
@@ -135,11 +135,11 @@ import { enUSLocale, install, registerLocale } from 'vexip-ui'
 registerLocale(enUSLocale())
 
 const vexipuiLocale = ref({
-  locale: 'zh-CN'
+  locale: 'zh-CN',
 })
 
 app.use(install, {
-  locale: { locale: 'en-US' }
+  locale: { locale: 'en-US' },
 })
 
 // Change
@@ -153,9 +153,9 @@ app.use(install, {
   locale: {
     locale: 'zh-CN',
     input: {
-      placeholder: 'Try to input something'
-    }
-  }
+      placeholder: 'Try to input something',
+    },
+  },
 })
 ```
 
@@ -185,9 +185,9 @@ app.use(install, {
     // can be an array, and set parameters in second item
     loading: [
       Spinner,
-      { effect: 'pulse-in' }
-    ]
-  }
+      { effect: 'pulse-in' },
+    ],
+  },
 })
 ```
 
@@ -211,4 +211,5 @@ Finally, let's take a look at an actual effect after configuration:
 | locale     | [`LocaleOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/locale/helper.ts) | The internationalization configuration                                                                                                                                                                                           | `zhCNLocale()` | -        |
 | icons      | [`IconsOptions`](https://github.com/vexip-ui/vexip-ui/blob/main/common/config/src/icons.ts)          | The internal icons configuration                                                                                                                                                                                                 | `globalIcons`  | `2.1.9`  |
 | zIndex     | `number`                                                                                             | The number of base z-index                                                                                                                                                                                                       | `2000`         | `2.1.17` |
+| theme      | `'base' \| 'dark'`                                                                                   | The theme of the component, which can be used to switch the theme of the component dynamically                                                                                                                                   | `null`         | -        |
 | hoverDelay | `number`                                                                                             | The number of milliseconds of hover delay                                                                                                                                                                                        | `100`          | `2.2.11` |

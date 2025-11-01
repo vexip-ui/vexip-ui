@@ -10,22 +10,22 @@ interface ContributorInfo {
   name: string,
   email: string,
   url: string,
-  avatarUrl: string
+  avatarUrl: string,
 }
 
 interface FetchOptions {
-  paths: { component: string, path: string, cursor?: string }[]
+  paths: { component: string, path: string, cursor?: string }[],
 }
 
 interface PageInfo {
   hasNextPage: boolean,
-  endCursor: string
+  endCursor: string,
 }
 
 interface Node {
   author: {
-    user: ContributorInfo
-  }
+    user: ContributorInfo,
+  },
 }
 
 interface FetchResponse {
@@ -33,10 +33,10 @@ interface FetchResponse {
     object: {
       [key in string]: {
         pageInfo: PageInfo,
-        nodes: Node[]
+        nodes: Node[],
       }
-    }
-  }
+    },
+  },
 }
 
 const GRAPHQL_URL = 'https://api.github.com/graphql'

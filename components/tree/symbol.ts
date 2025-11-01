@@ -25,7 +25,7 @@ export interface TreeNodeKeyConfig {
   selectDisabled?: string,
   expandDisabled?: string,
   checkDisabled?: string,
-  isLeaf?: string
+  isLeaf?: string,
 }
 
 export const enum DropType {
@@ -69,14 +69,14 @@ export type TreeNodeProps<D = Data> = {
   /** @internal */
   upstreamLast: boolean[],
   /** @internal */
-  lineIndexes: number[]
+  lineIndexes: number[],
 }
 
 export type TreeNodePostCreate<D = Data> = (node: TreeNodeProps<D>) => void
 export type TreeNodeRenderFn<D = Data> = (params: { data: D, node: TreeNodeProps<D> }) => any
 export type AsyncLoadFn<D = Data> = (
   data: D,
-  node: Readonly<TreeNodeProps<D>>
+  node: Readonly<TreeNodeProps<D>>,
 ) => void | boolean | Promise<any>
 export type FilterFn<D = Data> = (data: D, node: TreeNodeProps<D>) => boolean
 export type NodePropsFn<D = Data> = (data: D, node: TreeNodeProps<D>) => Data
@@ -85,7 +85,7 @@ export interface TreeCommonSlotParams {
   data: Data,
   node: TreeNodeProps,
   depth: number,
-  focused: boolean
+  focused: boolean,
 }
 
 export interface TreeNodeSlotParams extends TreeCommonSlotParams {
@@ -94,20 +94,20 @@ export interface TreeNodeSlotParams extends TreeCommonSlotParams {
   lineIndexes: number[],
   toggleCheck: (checked?: boolean) => void,
   toggleExpand: (expanded?: boolean) => Promise<void>,
-  toggleSelect: (able?: boolean) => Promise<void>
+  toggleSelect: (able?: boolean) => Promise<void>,
 }
 
 export interface TreeNodeInstance {
   el?: HTMLElement | null,
   arrow?: HTMLElement | null,
-  node: TreeNodeProps
+  node: TreeNodeProps,
 }
 
 export interface TreeNodeState {
   el?: HTMLElement | null,
   depth: number,
   disabled: boolean,
-  readonly: boolean
+  readonly: boolean,
 }
 
 export interface TreeCollapseProps {
@@ -115,7 +115,7 @@ export interface TreeCollapseProps {
   placeholder: true,
   type: 'expand' | 'reduce',
   height: number,
-  nodes: TreeNodeProps[]
+  nodes: TreeNodeProps[],
 }
 
 export interface TreeState {
@@ -137,6 +137,8 @@ export interface TreeState {
   boundAsyncLoad: boolean,
   nodeStates: Map<Key, TreeNodeState>,
   expanding: boolean,
+  keepSelected: boolean,
+  multiple: boolean,
   getParentNode(node: TreeNodeProps): TreeNodeProps | null,
   updateVisibleNodeEls(): void,
   computeCheckedState(originNode: TreeNodeProps, able: boolean): void,
@@ -153,7 +155,7 @@ export interface TreeState {
   handleNodeDragEnd(nodeInstance: TreeNodeInstance): void,
   handleHittingChange(type: 'up' | 'down'): void,
   handleNodeHitting(nodeEl?: HTMLElement | null): void,
-  handleLabelClick(node: TreeNodeProps): void
+  handleLabelClick(node: TreeNodeProps): void,
 }
 
 export interface TreeSlots {
@@ -162,7 +164,7 @@ export interface TreeSlots {
   label?: (params: TreeCommonSlotParams) => any,
   prefix?: (params: TreeCommonSlotParams) => any,
   suffix?: (params: TreeCommonSlotParams) => any,
-  empty?: () => any
+  empty?: () => any,
 }
 
 export const TREE_STATE = '__VXP_TREE_STATE' as unknown as InjectionKey<TreeState>

@@ -439,9 +439,9 @@ function transferRect(withSize = true) {
     },
     withSize
       ? {
-          width: `${offsetWidth}px`,
-          height: `${offsetHeight}px`,
-        }
+        width: `${offsetWidth}px`,
+        height: `${offsetHeight}px`,
+      }
       : {},
   )
 }

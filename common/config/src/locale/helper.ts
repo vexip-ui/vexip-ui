@@ -52,8 +52,8 @@ export interface LocaleConfig {
       week4: string,
       week5: string,
       week6: string,
-      week7: string
-    }
+      week7: string,
+    },
   },
 
   captcha: {
@@ -64,11 +64,11 @@ export interface LocaleConfig {
     doCaptcha: string,
     pointInOrder: string,
     trigger: string,
-    completed: string
+    completed: string,
   },
 
   checkbox: {
-    all: string
+    all: string,
   },
 
   colorPicker: {
@@ -76,13 +76,13 @@ export interface LocaleConfig {
     cancel: string,
 
     ariaLabel: {
-      clear: string
-    }
+      clear: string,
+    },
   },
 
   confirm: {
     confirm: string,
-    cancel: string
+    cancel: string,
   },
 
   datePicker: {
@@ -96,7 +96,7 @@ export interface LocaleConfig {
       datetime: string,
       start: string,
       end: string,
-      select: string
+      select: string,
     },
     startTime: string,
     endTime: string,
@@ -108,45 +108,45 @@ export interface LocaleConfig {
       date: string,
       hour: string,
       minute: string,
-      second: string
-    }
+      second: string,
+    },
   },
 
   drawer: {
     confirm: string,
-    cancel: string
+    cancel: string,
   },
 
   form: {
     submit: string,
     reset: string,
     notNullable: string,
-    validateFail: string
+    validateFail: string,
   },
 
   image: {
     placeholder: string,
-    error: string
+    error: string,
   },
 
   input: {
     placeholder: string,
 
     ariaLabel: {
-      clear: string
-    }
+      clear: string,
+    },
   },
 
   layout: {
     signOut: string,
     signType: string,
     majorColor: string,
-    themeMode: string
+    themeMode: string,
   },
 
   modal: {
     confirm: string,
-    cancel: string
+    cancel: string,
   },
 
   numberInput: {
@@ -156,8 +156,8 @@ export interface LocaleConfig {
     ariaLabel: {
       clear: string,
       increase: string,
-      decrease: string
-    }
+      decrease: string,
+    },
   },
 
   pagination: {
@@ -169,7 +169,7 @@ export interface LocaleConfig {
     next: string,
     total: string,
     jumpTo: string,
-    itemUnit: string
+    itemUnit: string,
   },
 
   select: {
@@ -178,15 +178,15 @@ export interface LocaleConfig {
     search: string,
 
     ariaLabel: {
-      clear: string
-    }
+      clear: string,
+    },
   },
 
   table: {
     empty: string,
     filterConfirm: string,
     filterReset: string,
-    filterAll: string
+    filterAll: string,
   },
 
   timeAgo: {
@@ -201,7 +201,7 @@ export interface LocaleConfig {
     lastMonth: string,
     months: string,
     lastYear: string,
-    years: string
+    years: string,
   },
 
   timePicker: {
@@ -211,22 +211,22 @@ export interface LocaleConfig {
       time: string,
       start: string,
       end: string,
-      select: string
+      select: string,
     },
 
     ariaLabel: {
       clear: string,
       hour: string,
       minute: string,
-      second: string
-    }
+      second: string,
+    },
   },
 
   tour: {
     prev: string,
     next: string,
     done: string,
-    stepCount: string
+    stepCount: string,
   },
 
   transfer: {
@@ -234,11 +234,11 @@ export interface LocaleConfig {
     target: string,
     empty: string,
     reverse: string,
-    search: string
+    search: string,
   },
 
   tree: {
-    empty: string
+    empty: string,
   },
 
   upload: {
@@ -248,8 +248,8 @@ export interface LocaleConfig {
 
     ariaLabel: {
       preview: string,
-      delete: string
-    }
+      delete: string,
+    },
   },
 
   video: {
@@ -265,7 +265,7 @@ export interface LocaleConfig {
     fullWindowExit: string,
     fullScreen: string,
     fullScreenExit: string,
-    chapterCount: string
+    chapterCount: string,
   },
 
   viewer: {
@@ -277,8 +277,8 @@ export interface LocaleConfig {
     zoomOut: string,
     fullScreen: string,
     fullScreenExit: string,
-    reset: string
-  }
+    reset: string,
+  },
 }
 
 export type LocaleOptions = DeepPartial<LocaleConfig>

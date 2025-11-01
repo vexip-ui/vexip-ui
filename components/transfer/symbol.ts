@@ -3,7 +3,7 @@ import type { ComponentPublicInstance } from 'vue'
 export interface TransferKeyConfig {
   value?: string,
   label?: string,
-  disabled?: string
+  disabled?: string,
 }
 
 export interface TransferOptionState {
@@ -12,13 +12,13 @@ export interface TransferOptionState {
   disabled: boolean,
   hidden: boolean,
   hitting: boolean,
-  data: string | Record<string, any>
+  data: string | Record<string, any>,
 }
 
 export type TransferFilter = (
   value: string,
   options: TransferOptionState,
-  type: 'source' | 'target'
+  type: 'source' | 'target',
 ) => boolean
 
 export interface TransferExposed extends ComponentPublicInstance {
@@ -27,7 +27,7 @@ export interface TransferExposed extends ComponentPublicInstance {
   handlePanelFocus: (type: 'source' | 'target') => void,
   handlePanelBlur: () => void,
   focus: (options?: FocusOptions) => void,
-  blur: () => void
+  blur: () => void,
 }
 
 export interface TransferPanelSlotParams {
@@ -40,13 +40,13 @@ export interface TransferPanelSlotParams {
   selected: (string | number)[],
   options: TransferOptionState[],
   toggleSelectAll: (event?: Event) => void,
-  handleReverse: () => void
+  handleReverse: () => void,
 }
 
 export interface TransferOptionSlotParams {
   type: 'source' | 'target',
   option: TransferOptionState,
-  index: number
+  index: number,
 }
 
 export interface TransferSlots {
@@ -71,5 +71,5 @@ export interface TransferSlots {
   targetHeader?: (params: TransferPanelSlotParams) => any,
   targetTitle?: (params: TransferPanelSlotParams) => any,
   targetBody?: (params: TransferPanelSlotParams) => any,
-  targetFooter?: (params: TransferPanelSlotParams) => any
+  targetFooter?: (params: TransferPanelSlotParams) => any,
 }

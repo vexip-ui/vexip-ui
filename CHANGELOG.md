@@ -1,3 +1,92 @@
+## [2.3.39](https://github.com/vexip-ui/vexip-ui/compare/v2.3.38...v2.3.39) (2025-10-28)
+
+
+### 🐞 Bug Fixes
+
+* **overflow:** correct child count when max-count is effective ([87d8481](https://github.com/vexip-ui/vexip-ui/commit/87d84812922a56b2d5515659b89c5034ef1ea4e0))
+* **overflow:** should always wrap counter elements ([61a366d](https://github.com/vexip-ui/vexip-ui/commit/61a366db175e3399701244bee3c2ec33c7364946))
+* **table:** adjust default value of column min width to 10 ([3664fb4](https://github.com/vexip-ui/vexip-ui/commit/3664fb488dff10026650d9c1ab9b827610826b62)), closes [#581](https://github.com/vexip-ui/vexip-ui/issues/581)
+* **tooltip:** correct the opposite shift direction ([2e0ce2a](https://github.com/vexip-ui/vexip-ui/commit/2e0ce2a88b05de611b52a93fe546cfb91cfd2eb9))
+
+
+### 🔨 Code Refactoring
+
+* **table:** render only one empty for table ([547632c](https://github.com/vexip-ui/vexip-ui/commit/547632c021bf62f108da4d5b4cc0ad1d280d2f70))
+
+
+
+## [2.3.38](https://github.com/vexip-ui/vexip-ui/compare/v2.3.37...v2.3.38) (2025-09-15)
+
+
+### ✨ Features
+
+* **ellipsis:** add content slot ([#586](https://github.com/vexip-ui/vexip-ui/issues/586)) ([b263901](https://github.com/vexip-ui/vexip-ui/commit/b263901039399cab80973ef1ba12346ac491220d))
+
+
+### 🐞 Bug Fixes
+
+* **collapse:** correctly process internal loaded value ([#588](https://github.com/vexip-ui/vexip-ui/issues/588)) ([689dbf2](https://github.com/vexip-ui/vexip-ui/commit/689dbf280feea567971645643c11f9b01917a517))
+* **confirm:** should emit cancel event when close by mask ([5e1bf9f](https://github.com/vexip-ui/vexip-ui/commit/5e1bf9f76dd75c01fe50a33f77436f929fa86709))
+
+
+
+## [2.3.37](https://github.com/vexip-ui/vexip-ui/compare/v2.3.36...v2.3.37) (2025-09-01)
+
+
+### ✨ Features
+
+* **collapsel:** add alive prop ([#583](https://github.com/vexip-ui/vexip-ui/issues/583)) ([31d5d46](https://github.com/vexip-ui/vexip-ui/commit/31d5d46b9b5b23a4490456342d9572ad9ddbec35))
+
+
+### 🐞 Bug Fixes
+
+* **config:** exports defineLocale & defineLocaleConfig ([7682370](https://github.com/vexip-ui/vexip-ui/commit/7682370da134d9bdad579975c5b5dd9cf3b92364))
+* **table:** abnormal display of sorter and filter icons when ellipsis is enabled ([#585](https://github.com/vexip-ui/vexip-ui/issues/585)) ([a0ae0a1](https://github.com/vexip-ui/vexip-ui/commit/a0ae0a109aa9ab56a81a8431ee6c291e922d5b54))
+
+
+
+## [2.3.36](https://github.com/vexip-ui/vexip-ui/compare/v2.3.35...v2.3.36) (2025-08-11)
+
+
+### ✨ Features
+
+* **collapse:** add arrow slot for panel ([b321985](https://github.com/vexip-ui/vexip-ui/commit/b3219851be432b6aa071eafe039959cf58c4dd54))
+* **form:** emit native submit event ([ea4dd58](https://github.com/vexip-ui/vexip-ui/commit/ea4dd5861ac4e91b831a8ff7c68181afb065b68b))
+
+
+### 🐞 Bug Fixes
+
+* **table:** correct hover state for rows when using virtual ([8b49e23](https://github.com/vexip-ui/vexip-ui/commit/8b49e23ad37cdc8d7f245ed51abce9e25fe2c345))
+* **v-loading:** correctly sync app context from parent node ([a90069d](https://github.com/vexip-ui/vexip-ui/commit/a90069de250e25406af4440faf0e7bc0aaf7ec29))
+
+
+
+## [2.3.35](https://github.com/vexip-ui/vexip-ui/compare/v2.3.34...v2.3.35) (2025-07-31)
+
+
+### 🐞 Bug Fixes
+
+* correctly clone manager for Message & Notice ([5d80cda](https://github.com/vexip-ui/vexip-ui/commit/5d80cda6e6b6756bcf578f59953ea92d36278192))
+
+
+
+## [2.3.34](https://github.com/vexip-ui/vexip-ui/compare/v2.3.33...v2.3.34) (2025-07-29)
+
+
+### ✨ Features
+
+* **scripts:** add testAfterBuild option for relase ([7615091](https://github.com/vexip-ui/vexip-ui/commit/7615091e47364943f0167dfe93586bb8b10e298d))
+* **tree:** add keep-selected prop ([85016e5](https://github.com/vexip-ui/vexip-ui/commit/85016e554a07c83faef5b5387c4055c93c0a6355))
+
+
+### 🐞 Bug Fixes
+
+* correctly construct for Message & Notice ([935f44d](https://github.com/vexip-ui/vexip-ui/commit/935f44d97c4bc88e0d0e6f4d7ec7cc16de6eed04))
+* **hooks:** ensure default-key-at is effective for useVirtual ([1a24dd7](https://github.com/vexip-ui/vexip-ui/commit/1a24dd7f5ed496ba36ebd11500cae66161a60af1))
+* **table:** revert content display to flex ([7fa5e45](https://github.com/vexip-ui/vexip-ui/commit/7fa5e45dfc8f282f7cf3ee9b4ca18e7f97ce1a8a)), closes [#578](https://github.com/vexip-ui/vexip-ui/issues/578)
+
+
+
 ## [2.3.33](https://github.com/vexip-ui/vexip-ui/compare/v2.3.32...v2.3.33) (2025-07-11)
 
 

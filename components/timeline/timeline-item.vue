@@ -28,7 +28,7 @@ const props = useProps('timelineItem', _props, {
 defineSlots<{
   default: () => any,
   signal: () => any,
-  line: () => any
+  line: () => any,
 }>()
 
 const timelineState = inject(TIMELINE_STATE, null)

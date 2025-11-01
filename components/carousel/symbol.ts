@@ -8,7 +8,7 @@ export interface ItemState {
   label: number,
   width: number,
   height: number,
-  offset: number
+  offset: number,
 }
 
 export interface CarouselState {
@@ -16,14 +16,14 @@ export interface CarouselState {
   increaseItem: (item: ItemState) => void,
   decreaseItem: (item: ItemState) => void,
   isItemActive: (label: number) => boolean,
-  handleSelect: (label: number) => void
+  handleSelect: (label: number) => void,
 }
 
 export interface CarouselSlots {
   default?: () => any,
   prevArrow?: (params: { disabled: boolean }) => any,
   nextArrow?: (params: { disabled: boolean }) => any,
-  pointer?: (params: { active: boolean }) => any
+  pointer?: (params: { active: boolean }) => any,
 }
 
 export const CAROUSEL_STATE = '__VXP_CAROUSEL_STATE' as unknown as InjectionKey<CarouselState>

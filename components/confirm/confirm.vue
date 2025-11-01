@@ -151,12 +151,17 @@ async function openConfirm(options: ConfirmOptions) {
     }
 
     state.visible = true
+
+    let resolved = false
+
     onConfirm = () => {
-      resolve(true)
+      !resolved && resolve(true)
+      resolved = true
       beforeConfirmR = null
     }
     onCancel = () => {
-      resolve(false)
+      !resolved && resolve(false)
+      resolved = true
       beforeConfirmR = null
     }
   })
@@ -234,6 +239,7 @@ function handleReset() {
       :y-offset="state.yOffset"
       :mask-close="state.maskClose"
       @hide="handleReset"
+      @close="handleCancel"
     >
       <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
       <template v-else>
@@ -264,7 +270,7 @@ function handleReset() {
           :class="[
             nh.be('body'),
             nh.bem('body', state.contentAlign),
-            !state.title && nh.bem('body', 'no-title')
+            !state.title && nh.bem('body', 'no-title'),
           ]"
         >
           <div v-if="state.icon !== false" :class="nh.be('icon')">
@@ -278,7 +284,7 @@ function handleReset() {
               :scale="2.2"
               v-bind="{
                 ...(state.cancelable ? icons.question : icons.warning),
-                ...state.iconProps
+                ...state.iconProps,
               }"
               :icon="(state.cancelable ? icons.question : icons.warning).icon"
             ></Icon>

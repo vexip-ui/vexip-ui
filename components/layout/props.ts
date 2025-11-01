@@ -17,7 +17,6 @@ import type {
 
 const breakpointProp = {
   type: [String, Boolean, Function] as PropType<
-    // eslint-disable-next-line @typescript-eslint/ban-types
     boolean | BreakPoint | LayoutMediaJudger | (string & {})
   >,
   default: null,

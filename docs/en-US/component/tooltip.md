@@ -107,16 +107,16 @@ type TooltipShift = 'horizontal' | 'vertical' | 'both'
 
 type TooltipVirtual =
   | {
-    getBoundingClientRect: () => DOMRect
+    getBoundingClientRect: () => DOMRect,
   }
   | {
     $el: {
-      getBoundingClientRect: () => DOMRect
-    }
+      getBoundingClientRect: () => DOMRect,
+    },
   }
   | {
     x: number,
-    y: number
+    y: number,
   }
 ```
 

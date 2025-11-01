@@ -1,11 +1,11 @@
 export interface PositionPayload {
   top: number,
-  left: number
+  left: number,
 }
 
 export interface SizePayload {
   width: number,
-  height: number
+  height: number,
 }
 
 export interface ModalSlotParams {
@@ -14,7 +14,7 @@ export interface ModalSlotParams {
   handleResize: () => void,
   handleConfirm: () => void,
   handleCancel: () => void,
-  handleClose: (isConfirm?: boolean) => Promise<unknown>
+  handleClose: (isConfirm?: boolean) => Promise<unknown>,
 }
 
 export type ModalCommonSlot = (params: ModalSlotParams) => any
@@ -24,5 +24,5 @@ export interface ModalSlots {
   title?: ModalCommonSlot,
   close?: ModalCommonSlot,
   default?: ModalCommonSlot,
-  footer?: ModalCommonSlot
+  footer?: ModalCommonSlot,
 }

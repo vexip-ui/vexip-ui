@@ -267,10 +267,10 @@ function handleContainerScroll(event: Event) {
 
   const scrollTop = isRawViewer
     ? (
-        (event.target === window || event.target === document
-          ? document.documentElement
-          : event.target) as HTMLElement
-      ).scrollTop
+      (event.target === window || event.target === document
+        ? document.documentElement
+        : event.target) as HTMLElement
+    ).scrollTop
     : (event as MouseEvent).clientY
 
   computeCurrentLink(scrollTop)

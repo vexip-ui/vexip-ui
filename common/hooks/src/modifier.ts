@@ -8,7 +8,7 @@ import type { MaybeRef, Ref } from 'vue'
 export type ModifierState = Readonly<
   Omit<Record<string, boolean>, 'activeKeys'> & {
     activeKeys: Set<string>,
-    resetAll: () => void
+    resetAll: () => void,
   }
 >
 
@@ -54,7 +54,7 @@ export interface UseModifierOptions {
   /**
    * 键抬起的时间回调函数
    */
-  onKeyUp?: (event: KeyboardEvent, modifier: ModifierState) => void
+  onKeyUp?: (event: KeyboardEvent, modifier: ModifierState) => void,
 }
 
 const defaultAliasMap: Record<string, string> = {

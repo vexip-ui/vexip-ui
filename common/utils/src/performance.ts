@@ -3,8 +3,8 @@ import { isClient, noop } from './common'
 export const raf = isClient
   ? requestAnimationFrame
   : (cb: FrameRequestCallback) => {
-      setTimeout(cb, 16)
-    }
+    setTimeout(cb, 16)
+  }
 
 /**
  * 将一个方法进行节流

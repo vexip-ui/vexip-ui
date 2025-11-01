@@ -20,6 +20,14 @@ Renders a list of `10000` elements with a fixed height.
 
 :::
 
+:::demo virtual-list/default-key-at
+
+### Default At
+
+You can use the `default-key-at` prop to specify the element to scroll to initially.
+
+:::
+
 ## API
 
 ### VirtualList Props

@@ -13,19 +13,18 @@ export type VideoPresetControl =
   | 'full-window'
   | 'full-browser'
 export type VideoShortcutOptions = Partial<Record<VideoPresetControl, string>>
-// eslint-disable-next-line @typescript-eslint/ban-types
 export type VideoControlName = VideoPresetControl | (string & {})
 export type VideoControlConfig = VideoControlName | [VideoControlName, any]
 
 export interface VideoControlLayout {
   left?: VideoControlConfig[],
   center?: VideoControlConfig[],
-  right?: VideoControlConfig[]
+  right?: VideoControlConfig[],
 }
 
 export interface VideoPlaybackRate {
   label?: string,
-  value: number
+  value: number,
 }
 
 export type VideoControlType = 'button' | 'select' | 'panel'
@@ -36,12 +35,12 @@ export interface VideoControlOption {
   selectedLabel?: string,
   disabled?: boolean,
   divided?: boolean,
-  title?: string
+  title?: string,
 }
 
 export interface VideoSegment {
   time: number,
-  title?: string
+  title?: string,
 }
 
 // export interface VideoKernel {
@@ -57,11 +56,11 @@ export interface VideoSegment {
 export interface VideoState {
   placeId?: string,
   iconScale: number,
-  addShortcut: (key: string, cb: () => void) => () => void
+  addShortcut: (key: string, cb: () => void) => () => void,
 }
 
 export interface VideoSlots {
-  poster?: () => any
+  poster?: () => any,
 }
 
 const defaultLayout: Required<VideoControlLayout> = {

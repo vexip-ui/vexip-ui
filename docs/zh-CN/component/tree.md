@@ -313,6 +313,7 @@ interface TreeNodeSlotParams extends TreeCommonSlotParams {
 | arrow-icon      | `VueComponent`                                                         | 设置箭头位置的图标                                                                                                                                                      | `null`         | `2.2.5`  |
 | block-effect    | `boolean`                                                              | 节点是否为块级效应                                                                                                                                                      | `false`        | `2.2.5`  |
 | filter-leaf     | `boolean`                                                              | 是否仅过滤叶子节点                                                                                                                                                      | `false`        | `2.2.14` |
+| keep-selected   | `boolean`                                                              | 是否保持住节点的选中状态，仅单选时有效                                                                                                                                  | `false`        | `2.3.34` |
 
 ### Tree 事件
 

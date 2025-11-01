@@ -36,7 +36,7 @@ defineSlots<{
   default: () => any,
   label: () => any,
   panel: () => any,
-  option: (params: { option: VideoControlOption, index: number, selected: boolean }) => any
+  option: (params: { option: VideoControlOption, index: number, selected: boolean }) => any,
 }>()
 
 const nh = useNameHelper('video')
@@ -135,7 +135,7 @@ function handleSelect(option: VideoControlOption) {
             :key="option.value"
             :class="{
               [nh.be('control-option')]: true,
-              [nh.bem('control-option', 'selected')]: option.value === currentValue
+              [nh.bem('control-option', 'selected')]: option.value === currentValue,
             }"
             :label="option.label"
             :value="option.value"

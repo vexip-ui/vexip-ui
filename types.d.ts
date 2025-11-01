@@ -124,7 +124,7 @@ declare module 'vue' {
     H5: (typeof import('vexip-ui'))['H5'],
     H6: (typeof import('vexip-ui'))['H6'],
     P: (typeof import('vexip-ui'))['P'],
-    Strong: (typeof import('vexip-ui'))['Strong']
+    Strong: (typeof import('vexip-ui'))['Strong'],
   }
 
   interface ComponentCustomProperties {
@@ -133,7 +133,7 @@ declare module 'vue' {
     $loading: (typeof import('vexip-ui'))['Loading'],
     $message: (typeof import('vexip-ui'))['Message'],
     $notice: (typeof import('vexip-ui'))['Notice'],
-    $toast: (typeof import('vexip-ui'))['Toast']
+    $toast: (typeof import('vexip-ui'))['Toast'],
   }
 }
 

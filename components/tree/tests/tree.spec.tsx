@@ -712,4 +712,41 @@ describe('Tree', () => {
       { label: 'n5' },
     ])
   })
+
+  it('keep selected', async () => {
+    const onNodeSelect = vi.fn()
+    const onNodeCancel = vi.fn()
+    const data = [
+      {
+        id: 1,
+        label: 'n1',
+      },
+      {
+        id: 2,
+        label: 'n2',
+        parent: 1,
+      },
+    ]
+    const wrapper = mount(() => (
+      <Tree
+        data={data}
+        keep-selected
+        onNodeSelect={onNodeSelect}
+        onNodeCancel={onNodeCancel}
+      ></Tree>
+    ))
+
+    await nextTick()
+    const nodes = wrapper.findAll('.vxp-tree__node')
+
+    await nodes[0].find('.vxp-tree__label').trigger('click')
+    expect(nodes[0].classes()).toContain('vxp-tree__node--selected')
+    expect(onNodeSelect).toHaveBeenCalledTimes(1)
+    expect(onNodeSelect).toHaveBeenCalledWith(data[0], expect.objectContaining({ data: data[0] }))
+
+    await nodes[0].find('.vxp-tree__label').trigger('click')
+    expect(nodes[0].classes()).toContain('vxp-tree__node--selected')
+    expect(onNodeSelect).toHaveBeenCalledTimes(1)
+    expect(onNodeCancel).not.toHaveBeenCalled()
+  })
 })

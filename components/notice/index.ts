@@ -18,17 +18,15 @@ import type {
 export type { NoticeConfig, NoticeType, NoticePlacement, NoticeOptions }
 
 type FuzzyOptions = string | NoticeOptions
-type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticePlacement } & Record<
-  string,
-  unknown
->
+type ManagerOptions = { marker?: boolean, duration?: number } & NoticeConfig &
+  Record<string, unknown>
 
 interface AipMethod {
   (options: NoticeOptions): () => void,
   (title: string, duration?: number): () => void,
   (title: string, content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const placementWhiteList: NoticePlacement[] = [
@@ -61,6 +59,8 @@ export class NoticeManager {
   private _container: HTMLElement | null
   private _wrapper: HTMLElement | SVGElement | null
   private _mountedEl: HTMLElement | null
+  private _installed: boolean
+  private _configRecord: NoticeConfig | null
 
   constructor(options: ManagerOptions = {}) {
     options = {
@@ -75,6 +75,8 @@ export class NoticeManager {
     this._container = null
     this._wrapper = null
     this._mountedEl = null
+    this._installed = false
+    this._configRecord = null
     this.name = 'Notice'
     this.defaults = {}
 
@@ -131,25 +133,30 @@ export class NoticeManager {
   }
 
   config({ placement, startOffset, itemGap, ...others }: NoticeConfig & NoticeOptions) {
-    const instance = this._getInstance()
-
-    if (instance) {
-      if (placement) {
-        instance.config({
-          placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
-        })
-      }
-
-      instance.config({ startOffset, itemGap })
-    }
-
+    this._configRecord = { placement, startOffset, itemGap }
     this.defaults = { ...this.defaults, ...others }
+
+    if (this._installed) {
+      const instance = this._getInstance()
+
+      if (instance) {
+        if (placement) {
+          instance.config({
+            placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
+          })
+        }
+
+        instance.config({ startOffset, itemGap })
+      }
+    }
   }
 
   clone() {
     const manager = new NoticeManager(this.defaults)
 
     manager._mountedApp = this._mountedApp
+    manager._configRecord = this._configRecord
+    manager._installed = this._installed
 
     return manager
   }
@@ -172,8 +179,9 @@ export class NoticeManager {
   install(app: App, options: ManagerOptions & { property?: string } = {}) {
     const { property, ...others } = options
 
-    this.config(others)
     this._mountedApp = app
+    this._installed = true
+    this.config({ ...this._configRecord, ...others })
 
     if (property || !app.config.globalProperties.$notice) {
       app.config.globalProperties[property || '$notice'] = this

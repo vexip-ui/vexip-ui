@@ -3,5 +3,5 @@
  */
 export default {
   extends: ['@vexip-ui/stylelint-config'],
-  plugins: ['stylelint-prettier']
+  plugins: ['stylelint-prettier'],
 }
