@@ -24,7 +24,7 @@
     "@vitejs/plugin-vue-jsx": "^4.1.2",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.3",
-    "vite": "^6.4.1",
+    "vite": "^7.0.8",
     "vue-router": "^4.5.1"
   }
 }
