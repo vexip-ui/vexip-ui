@@ -17,7 +17,7 @@
 import { reactive } from 'vue'
 
 interface Model {
-  name: string
+  name: string,
 }
 
 const model = reactive({} as Model)
@@ -180,7 +180,7 @@ interface Rule<T = any> {
   strict?: boolean,
   enums?: T[],
   message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorResult
+  validator?(value: T, model: Record<string, any>): ValidatorResult,
 }
 ```
 
@@ -215,14 +215,15 @@ interface Rule<T = any> {
 
 ### Form 方法
 
-| 名称             | 说明                                 | 签名                                               | 始于 |
-| ---------------- | ------------------------------------ | -------------------------------------------------- | ---- |
-| validate         | 对表单的所有字段进行验证             | `() => Promise<string[]>`                          | -    |
-| validateFields   | 根据属性对表单指定的字段进行验证     | `(props: string \| string[]) => Promise<string[]>` | -    |
-| reset            | 对表单的所有字段进行重置             | `() => void`                                       | -    |
-| resetFields      | 根据属性对表单指定的字段进行重置     | `(props: string \| string[]) => void`              | -    |
-| clearError       | 清除表单的所有错误信息               | `() => void`                                       | -    |
-| clearFieldsError | 根据属性清除表单指定的字段的错误信息 | `(props: string \| string[]) => void`              | -    |
+| 名称             | 说明                                 | 签名                                                | 始于     |
+| ---------------- | ------------------------------------ | --------------------------------------------------- | -------- |
+| validate         | 对表单的所有字段进行验证             | `() => Promise<string[]>`                           | -        |
+| validateFields   | 根据属性对表单指定的字段进行验证     | `(fields: string \| string[]) => Promise<string[]>` | -        |
+| reset            | 对表单的所有字段进行重置             | `() => void`                                        | -        |
+| resetFields      | 根据属性对表单指定的字段进行重置     | `(fields: string \| string[]) => void`              | -        |
+| clearError       | 清除表单的所有错误信息               | `() => void`                                        | -        |
+| clearFieldsError | 根据属性清除表单指定的字段的错误信息 | `(fields: string \| string[]) => void`              | -        |
+| setFieldsError   | 为特定的字段赋予错误信息             | `(fieldErrorMap: Record<string \| string>) => void` | `2.3.40` |
 
 ### Form 插槽
 

@@ -80,6 +80,7 @@ defineExpose({
   validateFields,
   reset,
   resetFields,
+  setFieldsError,
   clearError,
   clearFieldsError,
 })
@@ -92,40 +93,40 @@ function getLabelWidth() {
   return labelWidth.value
 }
 
-function getPropMap() {
-  const propMap: Record<string, FieldOptions> = {}
+function getFieldMap() {
+  const fieldMap: Record<string, FieldOptions> = {}
 
   for (const field of fieldSet) {
     if (field.prop.value) {
-      propMap[field.prop.value] = field
+      fieldMap[field.prop.value] = field
     }
   }
 
-  return propMap
+  return fieldMap
 }
 
 function validate() {
-  return validateItems(fieldSet)
+  return validateFieldsBase(fieldSet)
 }
 
-function validateFields(props: string | string[]) {
-  if (!Array.isArray(props)) {
-    props = [props]
+function validateFields(fields: string | string[]) {
+  if (!Array.isArray(fields)) {
+    fields = [fields]
   }
 
-  const propMap = getPropMap()
-  const fields = new Set<FieldOptions>()
+  const fieldMap = getFieldMap()
+  const normalizedFields = new Set<FieldOptions>()
 
-  props.forEach(prop => {
-    if (propMap[prop]) {
-      fields.add(propMap[prop])
+  fields.forEach(field => {
+    if (fieldMap[field]) {
+      normalizedFields.add(fieldMap[field])
     }
   })
 
-  return validateItems(fields)
+  return validateFieldsBase(normalizedFields)
 }
 
-function validateItems(items: Set<FieldOptions>) {
+function validateFieldsBase(items: Set<FieldOptions>) {
   const validations: Promise<string[] | null>[] = []
 
   items.forEach(item => {
@@ -145,16 +146,28 @@ function reset() {
   })
 }
 
-function resetFields(props: string | string[]) {
-  if (!Array.isArray(props)) {
-    props = [props]
+function resetFields(fields: string | string[]) {
+  if (!Array.isArray(fields)) {
+    fields = [fields]
   }
 
-  const propMap = getPropMap()
+  const fieldMap = getFieldMap()
 
-  props.forEach(prop => {
-    if (propMap[prop]) {
-      propMap[prop].reset()
+  fields.forEach(field => {
+    if (fieldMap[field]) {
+      fieldMap[field].reset()
+    }
+  })
+}
+
+function setFieldsError(fieldErrorMap: Record<string, string>) {
+  const fieldMap = getFieldMap()
+
+  Object.keys(fieldErrorMap).forEach(field => {
+    const error = fieldErrorMap[field]
+
+    if (error && fieldMap[field]) {
+      fieldMap[field].setError(error)
     }
   })
 }
@@ -165,16 +178,16 @@ function clearError() {
   })
 }
 
-function clearFieldsError(props: string | string[]) {
-  if (!Array.isArray(props)) {
-    props = [props]
+function clearFieldsError(fields: string | string[]) {
+  if (!Array.isArray(fields)) {
+    fields = [fields]
   }
 
-  const propMap = getPropMap()
+  const fieldMap = getFieldMap()
 
-  props.forEach(prop => {
-    if (propMap[prop]) {
-      propMap[prop].clearError()
+  fields.forEach(field => {
+    if (fieldMap[field]) {
+      fieldMap[field].clearError()
     }
   })
 }

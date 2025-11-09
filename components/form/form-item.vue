@@ -218,6 +218,7 @@ const fieldObject = Object.freeze({
   emitter,
   labelWidth,
   validate,
+  setError,
   clearError,
   reset,
   getValue,
@@ -299,6 +300,11 @@ function validate() {
   return handleValidate()
 }
 
+function setError(error: string) {
+  isError.value = true
+  errorTip.value = error
+}
+
 function clearError() {
   isError.value = false
   errorTip.value = ''
@@ -355,11 +361,10 @@ async function handleValidate() {
 function handleValidateEnd(errors: string[] | null) {
   validating.value = false
 
-  if (!errors) {
+  if (!errors?.length) {
     clearError()
   } else {
-    isError.value = true
-    errorTip.value = Array.isArray(errors) ? errors[0] : errors
+    setError(Array.isArray(errors) ? errors[0] : errors)
   }
 
   return errors
