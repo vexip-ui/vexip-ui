@@ -209,7 +209,7 @@ const instances = new Set<any>()
 
 const fieldObject = Object.freeze({
   prop: computed(() => props.prop),
-  idFor: computed(() => props.prop),
+  idFor: useId(),
   labelId,
   state: computed<ComponentState>(() => (isError.value ? 'error' : 'default')),
   disabled: computed(() => !!formProps.disabled),
@@ -439,7 +439,7 @@ const isNative = computed(() => !!(formProps.action && formProps.method))
       :class="{
         [nh.be('control')]: true,
         [nh.bem('control', 'no-label')]: !hasLabel,
-        [nh.bem('control', 'action')]: props.action
+        [nh.bem('control', 'action')]: props.action,
       }"
       role="alert"
       aria-relevant="all"
