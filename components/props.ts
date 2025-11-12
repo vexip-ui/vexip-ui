@@ -56,6 +56,7 @@ import type { MenuItemCProps } from './menu-item'
 import type { ModalCProps } from './modal'
 import type { NativeScrollCProps } from './native-scroll'
 import type { NumberInputCProps } from './number-input'
+import type { ObjectFitCProps } from './object-fit'
 import type { OverflowCProps } from './overflow'
 import type { PaginationCProps } from './pagination'
 import type { PopperCProps } from './popper'
@@ -185,6 +186,7 @@ export interface PropsOptions {
   modal?: ModalCProps,
   nativeScroll?: NativeScrollCProps,
   numberInput?: NumberInputCProps,
+  objectFit?: ObjectFitCProps,
   overflow?: OverflowCProps,
   pagination?: PaginationCProps,
   popper?: PopperCProps,
