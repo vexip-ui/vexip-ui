@@ -58,6 +58,16 @@
 
 :::
 
+:::demo confirm/loading
+
+### 异步确认
+
+通过 `onBeforeConfirm` 选项指定一个异步函数，可以实现异步的确认效果。
+
+同时设置 `loadingLock` 选项为 `true` 可以在等待中禁用其他关闭确认框的手段。
+
+:::
+
 :::demo confirm/renderer
 
 ### 自定义渲染
@@ -95,6 +105,7 @@ type ConfirmAlign = 'left' | 'center' | 'right'
 interface ConfirmState {
   visible: boolean,
   loading: boolean,
+  loadingLock: boolean,
   title: string | (() => any),
   content: string | (() => any),
   icon: Record<string, any> | (() => any) | null | boolean,
@@ -119,14 +130,14 @@ interface ConfirmState {
   left: number | string,
   xOffset: number | string,
   yOffset: number | string,
-  raw: Record<any, any>
+  raw: Record<any, any>,
 }
 
 type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, cancel: () => void) => any
 
 interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>, Record<any, any> {
   renderer?: ConfirmRenderFn,
-  onBeforeConfirm?: () => unknown
+  onBeforeConfirm?: () => unknown,
 }
 ```
 
@@ -160,3 +171,4 @@ interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading
 | left            | `number \| string`                              | 设置确认框距离右侧的初始距离，为 `'auto'` 时自动计算                          | `'auto'`         | `2.2.12` |
 | xOffset         | `number \| string`                              | 设置确认框横向的偏移量，与定位属性互不影响                                    | `'auto'`         | `2.2.12` |
 | yOffset         | `number \| string`                              | 设置确认框纵向的偏移量，与定位属性互不影响                                    | `'auto'`         | `2.2.12` |
+| loadingLock     | `boolean`                                       | 等待时是否禁用其他关闭手段                                                    | `false`          | `2.3.40` |

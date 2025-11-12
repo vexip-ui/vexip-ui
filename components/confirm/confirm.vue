@@ -73,6 +73,7 @@ const props = useProps('confirm', _props, {
   cancelable: true,
   xOffset: 0,
   yOffset: 0,
+  loadingLock: false,
 })
 
 const nh = useNameHelper('confirm')
@@ -102,6 +103,7 @@ const commonProps = [
   'left',
   'xOffset',
   'yOffset',
+  'loadingLock',
 ] as const
 
 const state = reactive<ConfirmState>({
@@ -168,6 +170,8 @@ async function openConfirm(options: ConfirmOptions) {
 }
 
 async function handleConfirm() {
+  if (state.loading) return
+
   state.loading = true
 
   if (isFunction(beforeConfirmR)) {
@@ -193,7 +197,9 @@ async function handleConfirm() {
   }
 }
 
-function handleCancel() {
+function handleCancel(force = false) {
+  if (!force && state.loadingLock && state.loading) return
+
   state.visible = false
 
   if (isFunction(onCancel)) {
@@ -253,9 +259,13 @@ function handleReset() {
           <button
             v-if="state.closable"
             type="button"
-            :class="nh.be('close')"
+            :class="[
+              nh.be('close'),
+              state.loadingLock && state.loading && nh.bem('close', 'disabled'),
+            ]"
+            :disabled="state.loadingLock && state.loading"
             @mousedown.stop
-            @click="handleCancel"
+            @click="handleCancel()"
           >
             <slot name="close">
               <Icon
@@ -304,6 +314,7 @@ function handleReset() {
             inherit
             no-pulse
             :type="state.cancelType"
+            :disabled="state.loadingLock && state.loading"
             @click="handleCancel"
           >
             {{ state.cancelText || locale.cancel }}
