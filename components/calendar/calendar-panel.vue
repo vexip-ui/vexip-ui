@@ -145,7 +145,7 @@ function parseValue(value: Dateable | Dateable[]) {
 }
 
 function isSameRow(current: Date, target: Date) {
-  return props.selectRow && differenceWeeks(current, target) === 0
+  return props.selectRow && differenceWeeks(current, target, props.weekStart) === 0
 }
 
 function isSelected(date: Date) {
@@ -276,7 +276,7 @@ function isInRange(date: Date) {
       nh.be('panel'),
       nh.bs('vars'),
       props.selectRow && nh.bem('panel', 'select-row'),
-      props.inherit && nh.bem('panel', 'inherit')
+      props.inherit && nh.bem('panel', 'inherit'),
     ]"
     role="grid"
   >
@@ -296,7 +296,7 @@ function isInRange(date: Date) {
             :data="{
               label: getWeekLabel((week - 1 + props.weekStart) % 7),
               index: week - 1,
-              week: (week - 1 + props.weekStart) % 7
+              week: (week - 1 + props.weekStart) % 7,
             }"
           >
             <div :class="nh.be('index')">
@@ -320,6 +320,7 @@ function isInRange(date: Date) {
           :is-today="isToday(dateRange[(row - 1) * 7 + cell - 1])"
           :disabled="isDisabled(dateRange[(row - 1) * 7 + cell - 1])"
           :in-range="props.range && isInRange(dateRange[(row - 1) * 7 + cell - 1])"
+          :select-row="props.selectRow"
           @hover="handleHover"
           @select="handleSelect"
         >
@@ -334,7 +335,7 @@ function isInRange(date: Date) {
               isNext,
               isToday: matchedToday,
               disabled,
-              inRange
+              inRange,
             }"
           >
             <slot
@@ -360,7 +361,7 @@ function isInRange(date: Date) {
                   isNext,
                   isToday: matchedToday,
                   disabled,
-                  inRange
+                  inRange,
                 }"
               ></Renderer>
             </slot>

@@ -30,7 +30,7 @@ $calendar-panel: map.merge(
       value('calendar-index-b-color'),
     index-radius: value('radius-base'),
     range-bg-color: value('color-primary-opacity-8'),
-    range-opacity: 60%
+    range-opacity: 60%,
   ),
   $calendar-panel
 );
@@ -165,6 +165,7 @@ $calendar-panel: map.merge(
 
     &:first-child {
       #{$index},
+      #{$index}--selected::before,
       #{$index-inner} {
         border-start-start-radius: value('calendar-index-radius');
         border-end-start-radius: value('calendar-index-radius');
@@ -173,6 +174,7 @@ $calendar-panel: map.merge(
 
     &:last-child {
       #{$index},
+      #{$index}--selected::before,
       #{$index-inner} {
         border-start-end-radius: value('calendar-index-radius');
         border-end-end-radius: value('calendar-index-radius');

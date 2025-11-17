@@ -579,6 +579,7 @@ function createDateState() {
       dateValue.year = date.getFullYear()
       dateValue.month = date.getMonth() + 1
       dateValue.date = date.getDate()
+      dateValue.week = getWeekOfYear(date, props.weekStart)
 
       if (withTime) {
         dateValue.hour = date.getHours()
@@ -1125,6 +1126,11 @@ function handleDateHover(hoverDate: Date | null) {
         startState.dateValue[types[i]] = start[i]
         endState.dateValue[types[i]] = end[i]
       }
+
+      if (props.type === 'week') {
+        updateWeekFromDate('start')
+        updateWeekFromDate('end')
+      }
     }
   }
 }
@@ -1168,6 +1174,7 @@ function handlePanelChange(values: number[]) {
     for (let i = 0, len = types.length; i < len; ++i) {
       startState.dateValue[types[i]] = values[i]
       endState.dateValue[types[i]] = values[i]
+
       updateDateActivated(types[i], 'start')
       updateDateActivated(types[i], 'end')
     }
@@ -1400,7 +1407,7 @@ function handleClickOutside() {
         :class="[nh.be('icon'), nh.be('suffix')]"
         :style="{
           color: props.suffixColor,
-          opacity: showClear || props.loading ? '0%' : ''
+          opacity: showClear || props.loading ? '0%' : '',
         }"
       >
         <slot name="suffix">
