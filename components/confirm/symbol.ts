@@ -8,6 +8,7 @@ export type ConfirmAlign = 'left' | 'center' | 'right'
 export interface ConfirmState {
   visible: boolean,
   loading: boolean,
+  loadingLock: boolean,
   title: string | (() => any),
   content: string | (() => any),
   icon: Record<string, any> | (() => any) | null | boolean,
@@ -53,6 +54,6 @@ export interface ConfirmOptions
 
 export interface ConfirmInstance extends ComponentPublicInstance {
   openConfirm: (options: ConfirmOptions) => Promise<boolean>,
-  closeConfirm: () => void,
+  closeConfirm: (force?: boolean) => void,
   handleReset: () => void,
 }
