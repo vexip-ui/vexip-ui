@@ -233,15 +233,16 @@ defineExpose({ refreshCalendar })
 function getStringValue(type: 'start' | 'end') {
   const value = type === 'start' ? props.startValue : props.endValue
 
-  let { month, date } = value
+  let { year, month, date } = value
 
   if (props.type === 'week') {
-    const realDate = yearWeekToDate(value.year, value.week)
+    const realDate = yearWeekToDate(year, value.week, props.weekStart)
+    year = realDate.getFullYear()
     month = realDate.getMonth() + 1
     date = realDate.getDate()
   }
 
-  return value ? `${value.year}-${month}-${date}` : ''
+  return value ? `${year}-${month}-${date}` : ''
 }
 
 function getMonthLabel(index: number) {
@@ -536,7 +537,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
       [nh.be('panel')]: true,
       [nh.bem('panel', type)]: true,
       [nh.bem('panel', 'vertical')]:
-        shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
+        shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom'),
     }"
     :aria-labelledby="labeledBy"
     :style="panelStyle"
@@ -548,7 +549,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
           nh.be('list'),
           nh.bem('list', 'sub'),
           nh.be('shortcuts'),
-          nh.bem('shortcuts', shortcutsPlacement)
+          nh.bem('shortcuts', shortcutsPlacement),
         ]"
       >
         <div
@@ -627,7 +628,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
                   [nh.bem('year-item', 'selected')]: isSelectedYear(item),
                   [nh.bem('year-item', 'next')]: index > 9,
                   [nh.bem('year-item', 'disabled')]: isDisabledYear(item),
-                  [nh.bem('year-item', 'in-range')]: isYearInRange(item)
+                  [nh.bem('year-item', 'in-range')]: isYearInRange(item),
                 }"
                 @click.stop="handleSelectYear(item)"
                 @mouseenter="handleYearHover(item)"
@@ -660,7 +661,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
                   [nh.be('month-item')]: true,
                   [nh.bem('month-item', 'selected')]: isSelectedMonth(index),
                   [nh.bem('month-item', 'disabled')]: isDisabledMonth(index),
-                  [nh.bem('month-item', 'in-range')]: isMonthInRange(index)
+                  [nh.bem('month-item', 'in-range')]: isMonthInRange(index),
                 }"
                 @click.stop="handleSelectMonth(index)"
                 @mouseenter="handleMonthHover(index)"

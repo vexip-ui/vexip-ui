@@ -1078,6 +1078,7 @@ function handleClear(finish = true) {
       finish && handleBlur()
 
       lastValue.value = ''
+      firstSelected.value = undefined
 
       nextTick(() => {
         toggleActivated(false)
