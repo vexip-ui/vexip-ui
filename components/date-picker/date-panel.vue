@@ -278,7 +278,7 @@ function handleShortcut(index: number) {
 }
 
 function handleSelectDate(date: Date) {
-  emitChange([date.getFullYear(), date.getMonth() + 1, date.getDate()])
+  emitChange(new Date(date.getFullYear(), date.getMonth(), date.getDate()))
 }
 
 function handleSelectYear(year: number) {
@@ -289,7 +289,7 @@ function handleSelectYear(year: number) {
   if (props.type !== 'year') {
     togglePanel('month')
   } else {
-    emitChange([year, 1, 1])
+    emitChange(new Date(year, 0, 1))
   }
 }
 
@@ -301,12 +301,12 @@ function handleSelectMonth(month: number) {
   if (props.type !== 'month') {
     togglePanel('date')
   } else {
-    emitChange([calendarYear.value, month, 1])
+    emitChange(new Date(calendarYear.value, month - 1, 1))
   }
 }
 
-function emitChange(values: number[]) {
-  emit('change', values)
+function emitChange(date: Date) {
+  emit('change', date)
 }
 
 function handleStartTimeChange(type: TimeType, time: number) {

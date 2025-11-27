@@ -279,9 +279,9 @@ const min = computed(() => {
 
     if (Number.isNaN(+date)) return -Infinity
 
-    date.setHours(0, 0, 0, 0)
-
     if (props.type !== 'datetime') {
+      date.setHours(0, 0, 0, 0)
+
       if (props.type === 'year') {
         date.setMonth(0)
         date.setDate(1)
@@ -446,8 +446,9 @@ watch(
 watch(
   () => props.type,
   value => {
-    const hasMonth = value !== 'year'
-    const hasDate = hasMonth && value !== 'month'
+    const hasWeek = value === 'week'
+    const hasMonth = value !== 'year' && !hasWeek
+    const hasDate = hasMonth && value !== 'month' && !hasWeek
 
     startState.enabled.year = true
     endState.enabled.year = true
@@ -455,6 +456,8 @@ watch(
     endState.enabled.month = hasMonth
     startState.enabled.date = hasDate
     endState.enabled.date = hasDate
+    startState.enabled.week = hasWeek
+    endState.enabled.week = hasWeek
   },
   { immediate: true },
 )
@@ -588,6 +591,10 @@ function createDateState() {
       }
     },
     getDate: () => {
+      if (props.type === 'week') {
+        return yearWeekToDate(dateValue.year, dateValue.week)
+      }
+
       return new Date(
         dateValue.year,
         dateValue.month - 1,
@@ -672,15 +679,10 @@ function parseDateUnitOrder() {
   dateUnitOrder.value = [...orderSet]
 }
 
-function parseUnitEnabled() {
+function parseTimeUnitEnabled() {
   const isDatetime = props.type === 'datetime'
-  const isWeek = props.type === 'week'
 
   ;[startState, endState].forEach(state => {
-    state.enabled.year = true
-    state.enabled.month = true
-    state.enabled.week = false
-    state.enabled.date = true
     state.enabled.hour = false
     state.enabled.minute = false
     state.enabled.second = false
@@ -709,18 +711,12 @@ function parseUnitEnabled() {
         }
       }
     }
-
-    if (isWeek) {
-      state.enabled.month = false
-      state.enabled.week = true
-      state.enabled.date = false
-    }
   })
 }
 
 function parseFormat() {
   parseDateUnitOrder()
-  parseUnitEnabled()
+  parseTimeUnitEnabled()
 }
 
 function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
@@ -1142,15 +1138,22 @@ function updateWeekFromDate(valueType?: 'start' | 'end') {
   state.dateValue.week = getWeekOfYear(state.getDate(), props.weekStart)
 }
 
-function handlePanelChange(values: number[]) {
+function handlePanelChange(date: Date) {
   let types: DateUnitType[]
+  let values: number[]
 
   if (props.type === 'year') {
     types = ['year']
+    values = [date.getFullYear()]
   } else if (props.type === 'month') {
     types = ['year', 'month']
+    values = [date.getFullYear(), date.getMonth() + 1]
+  } else if (props.type === 'week') {
+    types = ['year', 'week']
+    values = [date.getFullYear(), getWeekOfYear(date, props.weekStart)]
   } else {
     types = ['year', 'month', 'date']
+    values = [date.getFullYear(), date.getMonth() + 1, date.getDate()]
   }
 
   if (!props.range) {
@@ -1159,10 +1162,10 @@ function handlePanelChange(values: number[]) {
       updateDateActivated(types[i], 'start')
     }
 
-    if (props.type === 'week') {
-      updateWeekFromDate('start')
-      updateDateActivated('week', 'start')
-    }
+    // if (props.type === 'week') {
+    //   updateWeekFromDate('start')
+    //   updateDateActivated('week', 'start')
+    // }
 
     if (noActionMode.value) handleEnter()
 
@@ -1180,12 +1183,12 @@ function handlePanelChange(values: number[]) {
       updateDateActivated(types[i], 'end')
     }
 
-    if (props.type === 'week') {
-      updateWeekFromDate('start')
-      updateWeekFromDate('end')
-      updateDateActivated('week', 'start')
-      updateDateActivated('week', 'end')
-    }
+    // if (props.type === 'week') {
+    //   updateWeekFromDate('start')
+    //   updateWeekFromDate('end')
+    //   updateDateActivated('week', 'start')
+    //   updateDateActivated('week', 'end')
+    // }
   } else {
     const [year, month, date] = firstSelected.value
     const firstTime = new Date(`${year}-${month}-${date}`).getTime()
@@ -1200,12 +1203,12 @@ function handlePanelChange(values: number[]) {
       updateDateActivated(types[i], 'end')
     }
 
-    if (props.type === 'week') {
-      updateWeekFromDate('start')
-      updateWeekFromDate('end')
-      updateDateActivated('week', 'start')
-      updateDateActivated('week', 'end')
-    }
+    // if (props.type === 'week') {
+    //   updateWeekFromDate('start')
+    //   updateWeekFromDate('end')
+    //   updateDateActivated('week', 'start')
+    //   updateDateActivated('week', 'end')
+    // }
 
     verifyRangeValue()
     firstSelected.value = undefined
@@ -1470,8 +1473,8 @@ function handleClickOutside() {
         :no-action="props.noAction"
         :steps="props.steps"
         :range="props.range"
-        :min="props.min"
-        :max="props.max"
+        :min="min"
+        :max="max"
         :disabled-date="isDateDisabled"
         :disabled-time="isTimeDisabled"
         :has-error="startError || endError"
