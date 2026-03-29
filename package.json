@@ -178,7 +178,7 @@
     "gulp-autoprefixer": "10.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-sass": "^6.0.1",
-    "happy-dom": "20.0.10",
+    "happy-dom": "20.8.9",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
     "jiti": "^2.6.1",
