@@ -3,7 +3,10 @@ import { isValidNumber, toNumber } from './number'
 
 import type { TransferNode } from './dom-event'
 
-const TABABLE_SELECTOR = [
+/**
+ * 可获得焦点的元素选择器
+ */
+export const TABABLE_SELECTOR: string = [
   'button',
   '[href]:not(.disabled)',
   'input',
@@ -15,13 +18,100 @@ const TABABLE_SELECTOR = [
   .map(s => `${s}:not(:disabled):not([disabled])`)
   .join(', ')
 
-function isElement(el?: Element | null): el is HTMLElement {
+export function isHTMLElement(el?: Element | null): el is HTMLElement {
   return !!el && el.nodeType === 1
 }
 
-function ensureElement(el?: Element | null) {
-  return isElement(el) ? el : document.body
+export const isElement = isHTMLElement
+
+export function isValidElement(el: unknown): el is Element {
+  return !!el && typeof el === 'object' && 'nodeType' in el && (el as Element).nodeType === 1
 }
+
+function ensureElement(el?: Element | null) {
+  return isHTMLElement(el) ? el : document.body
+}
+
+type StyleValueProperty = Extract<keyof CSSStyleDeclaration,
+  'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom' |
+  'marginLeft' | 'marginRight' | 'marginTop' | 'marginBottom' |
+  'borderLeftWidth' | 'borderRightWidth' | 'borderTopWidth' | 'borderBottomWidth'
+>
+
+type CSSProperties = readonly [left: StyleValueProperty, right: StyleValueProperty]
+
+function createStyleSum<const T extends CSSProperties>(
+  properties: T
+): (el: Element | null | undefined) => number {
+  return (el: Element | null | undefined) => {
+    if (!isClient || !el) return 0
+
+    const computedStyle = getComputedStyle(el)
+    const sum = parseFloat(computedStyle[properties[0]]) + parseFloat(computedStyle[properties[1]])
+
+    return sum || 0
+  }
+}
+
+export function toAttrValue(value?: boolean | null): 'true' | undefined
+export function toAttrValue(value?: string | number | null): string | undefined
+export function toAttrValue(value?: string | number | boolean | null) {
+  return isDefined(value) && value !== false ? String(value) : undefined
+}
+
+/**
+ * 获取元素横向的内边距像素值
+ *
+ * @param el 指定的元素
+ *
+ * @returns 元素横向的内边距像素值
+ */
+export const getXPadding = createStyleSum(['paddingLeft', 'paddingRight'])
+
+/**
+ * 获取元素纵向的内边距像素值
+ *
+ * @param el 指定的元素
+ *
+ * @returns 元素纵向的内边距像素值
+ */
+export const getYPadding = createStyleSum(['paddingTop', 'paddingBottom'])
+
+/**
+ * 获取元素横向的外边距像素值
+ *
+ * @param el 指定的元素
+ *
+ * @returns 元素横向的外边距像素值
+ */
+export const getXMargin = createStyleSum(['marginLeft', 'marginRight'])
+
+/**
+ * 获取元素纵向的外边距像素值
+ *
+ * @param el 指定的元素
+ *
+ * @returns 元素纵向的外边距像素值
+ */
+export const getYMargin = createStyleSum(['marginTop', 'marginBottom'])
+
+/**
+ * 获取元素横向的边框像素值
+ *
+ * @param el 指定的元素
+ *
+ * @returns 元素横向的边框像素值
+ */
+export const getXBorder = createStyleSum(['borderLeftWidth', 'borderRightWidth'])
+
+/**
+ * 获取元素纵向的边框像素值
+ *
+ * @param el 指定的元素
+ *
+ * @returns 元素纵向的边框像素值
+ */
+export const getYBorder = createStyleSum(['borderTopWidth', 'borderBottomWidth'])
 
 /**
  * 检索匹配指定选择器的所有元素
@@ -49,7 +139,7 @@ export function isFocusIn(el?: Element | null) {
 
   const activeEl = document.activeElement as HTMLElement
 
-  if (!isElement(el) || !activeEl) return false
+  if (!isHTMLElement(el) || !activeEl) return false
 
   return el === activeEl || contains(activeEl, el)
 }
@@ -62,7 +152,7 @@ export function isFocusIn(el?: Element | null) {
  *
  * @returns 元素是否包含另一个元素
  */
-export function contains(el?: Element | null, parent?: HTMLElement | null) {
+export function contains(el?: Element | null, parent?: Element | null) {
   if (!el || !parent) return false
 
   const tel = (parent as TransferNode).__transferElement
@@ -78,7 +168,7 @@ export function contains(el?: Element | null, parent?: HTMLElement | null) {
  * @returns 元素是否隐藏
  */
 export function isHidden(el?: Element | null) {
-  if (!isClient || !isElement(el) || !el.parentNode || !contains(el, document.body)) {
+  if (!isClient || !isHTMLElement(el) || !el.parentNode || !contains(el, document.body)) {
     return true
   }
 
@@ -111,7 +201,7 @@ export function isVisible(el?: Element | null) {
  */
 export function isDisabled(el?: Element | null) {
   return (
-    !isElement(el) ||
+    !isHTMLElement(el) ||
     (el.hasAttribute('disabled') && el.getAttribute('disabled') !== 'false') ||
     (el as HTMLInputElement).disabled
   )
@@ -125,110 +215,12 @@ export function isDisabled(el?: Element | null) {
  *
  * @returns 可以被切换焦点的元素
  */
-export function queryTabables(root?: HTMLElement, includeDisabled = false) {
+export function queryTabables(root?: Element | null, includeDisabled = false) {
   const isDis = includeDisabled ? () => false : isDisabled
 
   return queryAll(TABABLE_SELECTOR, root).filter(
     el => isVisible(el) && el.tabIndex > -1 && !isDis(el),
   )
-}
-
-/**
- * 获取元素横向的内边距像素值
- *
- * @param el 指定的元素
- *
- * @returns 元素横向的内边距像素值
- */
-export function getXPadding(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const padding = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight)
-
-  return padding || 0
-}
-
-/**
- * 获取元素纵向的内边距像素值
- *
- * @param el 指定的元素
- *
- * @returns 元素纵向的内边距像素值
- */
-export function getYPadding(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const padding = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom)
-
-  return padding || 0
-}
-
-/**
- * 获取元素横向的外边距像素值
- *
- * @param el 指定的元素
- *
- * @returns 元素横向的外边距像素值
- */
-export function getXMargin(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const margin = parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight)
-
-  return margin || 0
-}
-
-/**
- * 获取元素纵向的外边距像素值
- *
- * @param el 指定的元素
- *
- * @returns 元素纵向的外边距像素值
- */
-export function getYMargin(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const margin = parseFloat(computedStyle.marginTop) + parseFloat(computedStyle.marginBottom)
-
-  return margin || 0
-}
-
-/**
- * 获取元素横向的边框像素值
- *
- * @param el 指定的元素
- *
- * @returns 元素横向的边框像素值
- */
-export function getXBorder(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const width =
-    parseFloat(computedStyle.borderLeftWidth) + parseFloat(computedStyle.borderRightWidth)
-
-  return width || 0
-}
-
-/**
- * 获取元素纵向的边框像素值
- *
- * @param el 指定的元素
- *
- * @returns 元素纵向的边框像素值
- */
-export function getYBorder(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const width =
-    parseFloat(computedStyle.borderTopWidth) + parseFloat(computedStyle.borderBottomWidth)
-
-  return width || 0
 }
 
 /**
@@ -238,7 +230,7 @@ export function getYBorder(el: HTMLElement | null) {
  *
  * @returns 元素的选中宽度
  */
-export function getRangeWidth(el: HTMLElement | null) {
+export function getRangeWidth(el?: Element | null) {
   if (!isClient || !el) return 0
 
   const range = document.createRange()
@@ -261,17 +253,4 @@ export function getRangeWidth(el: HTMLElement | null) {
  */
 export function toCssSize(value: number | string) {
   return isValidNumber(value, true) ? `${toNumber(value)}px` : String(value).trim()
-}
-
-/**
- * 将指定的值转换为 HTML 属性值
- *
- * @param value 需要转换的值
- *
- * @returns 转换后的 HTML 属性值
- */
-export function toAttrValue(value?: boolean | null): 'true' | undefined
-export function toAttrValue(value?: string | number | null): string | undefined
-export function toAttrValue(value?: string | number | boolean | null) {
-  return isDefined(value) && value !== false ? String(value) : undefined
 }
