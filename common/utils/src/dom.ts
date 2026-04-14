@@ -3,7 +3,7 @@ import { isValidNumber, toNumber } from './number'
 
 import type { TransferNode } from './dom-event'
 
-const TABABLE_SELECTOR = [
+const TABABLE_SELECTOR: string = [
   'button',
   '[href]:not(.disabled)',
   'input',
@@ -15,12 +15,25 @@ const TABABLE_SELECTOR = [
   .map(s => `${s}:not(:disabled):not([disabled])`)
   .join(', ')
 
-function isElement(el?: Element | null): el is HTMLElement {
+function isHTMLElement(el?: Element | null | undefined): el is HTMLElement {
   return !!el && el.nodeType === 1
 }
 
-function ensureElement(el?: Element | null) {
-  return isElement(el) ? el : document.body
+/**
+ * 判断一个值是否为有效的 Element 元素
+ *
+ * @param value 需判断的值
+ *
+ * @returns 是否为有效的 Element 元素
+ */
+export function isValidElement<T extends Element = Element>(
+  value: unknown,
+): value is T {
+  return isHTMLElement(value as Element)
+}
+
+function ensureElement(el?: Element | null | undefined) {
+  return isHTMLElement(el) ? el : document.body
 }
 
 /**
@@ -31,7 +44,7 @@ function ensureElement(el?: Element | null) {
  *
  * @returns 匹配的所有元素
  */
-export function queryAll(selector: string, root?: Element | null) {
+export function queryAll(selector: string, root?: Element | null | undefined) {
   if (!isClient || !selector) return []
 
   return Array.from(ensureElement(root).querySelectorAll(selector)) as HTMLElement[]
@@ -44,12 +57,12 @@ export function queryAll(selector: string, root?: Element | null) {
  *
  * @returns 是否聚焦或包含聚焦的元素
  */
-export function isFocusIn(el?: Element | null) {
+export function isFocusIn(el?: Element | null | undefined) {
   if (!isClient) return false
 
   const activeEl = document.activeElement as HTMLElement
 
-  if (!isElement(el) || !activeEl) return false
+  if (!isHTMLElement(el) || !activeEl) return false
 
   return el === activeEl || contains(activeEl, el)
 }
@@ -62,7 +75,7 @@ export function isFocusIn(el?: Element | null) {
  *
  * @returns 元素是否包含另一个元素
  */
-export function contains(el?: Element | null, parent?: HTMLElement | null) {
+export function contains(el?: Element | null | undefined, parent?: HTMLElement | null | undefined) {
   if (!el || !parent) return false
 
   const tel = (parent as TransferNode).__transferElement
@@ -77,8 +90,8 @@ export function contains(el?: Element | null, parent?: HTMLElement | null) {
  *
  * @returns 元素是否隐藏
  */
-export function isHidden(el?: Element | null) {
-  if (!isClient || !isElement(el) || !el.parentNode || !contains(el, document.body)) {
+export function isHidden(el?: Element | null | undefined) {
+  if (!isClient || !isHTMLElement(el) || !el.parentNode || !contains(el, document.body)) {
     return true
   }
 
@@ -98,7 +111,7 @@ export function isHidden(el?: Element | null) {
  *
  * @returns 元素是否可见
  */
-export function isVisible(el?: Element | null) {
+export function isVisible(el?: Element | null | undefined) {
   return !isHidden(el)
 }
 
@@ -109,9 +122,9 @@ export function isVisible(el?: Element | null) {
  *
  * @returns 元素是否被禁用
  */
-export function isDisabled(el?: Element | null) {
+export function isDisabled(el?: Element | null | undefined) {
   return (
-    !isElement(el) ||
+    !isHTMLElement(el) ||
     (el.hasAttribute('disabled') && el.getAttribute('disabled') !== 'false') ||
     (el as HTMLInputElement).disabled
   )
@@ -125,12 +138,31 @@ export function isDisabled(el?: Element | null) {
  *
  * @returns 可以被切换焦点的元素
  */
-export function queryTabables(root?: HTMLElement, includeDisabled = false) {
+export function queryTabables(root?: HTMLElement | null | undefined, includeDisabled = false) {
   const isDis = includeDisabled ? () => false : isDisabled
 
   return queryAll(TABABLE_SELECTOR, root).filter(
     el => isVisible(el) && el.tabIndex > -1 && !isDis(el),
   )
+}
+
+type CSSBoxProperty = 'padding' | 'margin' | 'border'
+type CSSDirection = 'Left' | 'Right' | 'Top' | 'Bottom'
+
+function getBoxValue(
+  el: Element | null | undefined,
+  type: CSSBoxProperty,
+  directions: [CSSDirection, CSSDirection],
+): number {
+  if (!isClient || !el) return 0
+
+  const computedStyle = getComputedStyle(el)
+  const prop = type === 'border' ? 'Width' : ''
+  const value =
+    parseFloat(computedStyle.getPropertyValue(`${type}${directions[0]}${prop}`)) +
+    parseFloat(computedStyle.getPropertyValue(`${type}${directions[1]}${prop}`))
+
+  return value || 0
 }
 
 /**
@@ -140,13 +172,8 @@ export function queryTabables(root?: HTMLElement, includeDisabled = false) {
  *
  * @returns 元素横向的内边距像素值
  */
-export function getXPadding(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const padding = parseFloat(computedStyle.paddingLeft) + parseFloat(computedStyle.paddingRight)
-
-  return padding || 0
+export function getXPadding(el: Element | null | undefined): number {
+  return getBoxValue(el, 'padding', ['Left', 'Right'])
 }
 
 /**
@@ -156,13 +183,8 @@ export function getXPadding(el: HTMLElement | null) {
  *
  * @returns 元素纵向的内边距像素值
  */
-export function getYPadding(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const padding = parseFloat(computedStyle.paddingTop) + parseFloat(computedStyle.paddingBottom)
-
-  return padding || 0
+export function getYPadding(el: Element | null | undefined): number {
+  return getBoxValue(el, 'padding', ['Top', 'Bottom'])
 }
 
 /**
@@ -172,13 +194,8 @@ export function getYPadding(el: HTMLElement | null) {
  *
  * @returns 元素横向的外边距像素值
  */
-export function getXMargin(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const margin = parseFloat(computedStyle.marginLeft) + parseFloat(computedStyle.marginRight)
-
-  return margin || 0
+export function getXMargin(el: Element | null | undefined): number {
+  return getBoxValue(el, 'margin', ['Left', 'Right'])
 }
 
 /**
@@ -188,13 +205,8 @@ export function getXMargin(el: HTMLElement | null) {
  *
  * @returns 元素纵向的外边距像素值
  */
-export function getYMargin(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const margin = parseFloat(computedStyle.marginTop) + parseFloat(computedStyle.marginBottom)
-
-  return margin || 0
+export function getYMargin(el: Element | null | undefined): number {
+  return getBoxValue(el, 'margin', ['Top', 'Bottom'])
 }
 
 /**
@@ -204,14 +216,8 @@ export function getYMargin(el: HTMLElement | null) {
  *
  * @returns 元素横向的边框像素值
  */
-export function getXBorder(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const width =
-    parseFloat(computedStyle.borderLeftWidth) + parseFloat(computedStyle.borderRightWidth)
-
-  return width || 0
+export function getXBorder(el: Element | null | undefined): number {
+  return getBoxValue(el, 'border', ['Left', 'Right'])
 }
 
 /**
@@ -221,14 +227,8 @@ export function getXBorder(el: HTMLElement | null) {
  *
  * @returns 元素纵向的边框像素值
  */
-export function getYBorder(el: HTMLElement | null) {
-  if (!isClient || !el) return 0
-
-  const computedStyle = getComputedStyle(el)
-  const width =
-    parseFloat(computedStyle.borderTopWidth) + parseFloat(computedStyle.borderBottomWidth)
-
-  return width || 0
+export function getYBorder(el: Element | null | undefined): number {
+  return getBoxValue(el, 'border', ['Top', 'Bottom'])
 }
 
 /**
@@ -238,7 +238,7 @@ export function getYBorder(el: HTMLElement | null) {
  *
  * @returns 元素的选中宽度
  */
-export function getRangeWidth(el: HTMLElement | null) {
+export function getRangeWidth(el: Element | null | undefined) {
   if (!isClient || !el) return 0
 
   const range = document.createRange()
@@ -270,8 +270,12 @@ export function toCssSize(value: number | string) {
  *
  * @returns 转换后的 HTML 属性值
  */
-export function toAttrValue(value?: boolean | null): 'true' | undefined
-export function toAttrValue(value?: string | number | null): string | undefined
-export function toAttrValue(value?: string | number | boolean | null) {
-  return isDefined(value) && value !== false ? String(value) : undefined
+export function toAttrValue<T extends string | number | boolean | null | undefined>(
+  value: T,
+): T extends boolean ? 'true' | undefined : string | undefined {
+  return (isDefined(value) && value !== false ? String(value) : undefined) as T extends boolean
+    ? 'true' | undefined
+    : string | undefined
 }
+
+export { isHTMLElement, isHTMLElement as isElement }
