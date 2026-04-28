@@ -20,6 +20,7 @@ export const ellipsisProps = buildProps({
     type: [Boolean, String] as PropType<boolean | TooltipShift>,
     default: null,
   },
+  tipDelay: [Number, Array] as PropType<number | number[]>,
   slots: Object as PropType<EllipsisSlots>,
 })
 
