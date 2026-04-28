@@ -14,12 +14,11 @@
     "allowSyntheticDefaultImports": true,
     "jsxImportSource": "vue",
     "sourceMap": false,
-    "baseUrl": ".",
     "types": ["node", "vite/client"],
     "paths": {
       "@/*": ["./*"],
-      "@vexip-ui/*": ["common/*/src"],
-      "vexip-ui": ["."]
+      "@vexip-ui/*": ["./common/*/src"],
+      "vexip-ui": ["./index"]
     },
     "lib": ["esnext", "dom"]
   },
