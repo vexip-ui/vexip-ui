@@ -121,6 +121,12 @@ export default defineComponent({
         return
       }
 
+      // Ensure all children are visible before computing wrapper width,
+      // so wrapperWidth is based on the maximum possible content width
+      for (let i = 0; i < length; ++i) {
+        toggleDisplay(children[i] as HTMLElement, true)
+      }
+
       const style = getComputedStyle(wrapper.value)
       const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(style)
       const gap = parseFloat(style.columnGap) || 0
@@ -137,8 +143,6 @@ export default defineComponent({
         if (overflow) {
           toggleDisplay(child, false)
           continue
-        } else {
-          toggleDisplay(child, true)
         }
 
         const childWidth = computeOuterWidth(child) + gap

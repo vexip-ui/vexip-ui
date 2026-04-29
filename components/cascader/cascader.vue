@@ -1087,6 +1087,7 @@ function handlePanelsEnter() {
                     :visible="restTipShow"
                     trigger="custom"
                     placement="top-end"
+                    shift
                     :tip-class="nh.be('rest-tip')"
                     @click.stop="toggleShowRestTip"
                   >
@@ -1136,7 +1137,7 @@ function handlePanelsEnter() {
         :class="[nh.be('icon'), nh.be('suffix')]"
         :style="{
           color: props.suffixColor,
-          opacity: showClear || props.loading ? '0%' : ''
+          opacity: showClear || props.loading ? '0%' : '',
         }"
       >
         <slot name="suffix">
@@ -1145,7 +1146,7 @@ function handlePanelsEnter() {
               v-if="props.suffix"
               :icon="props.suffix"
               :class="{
-                [nh.be('arrow')]: !props.staticSuffix
+                [nh.be('arrow')]: !props.staticSuffix,
               }"
             ></Icon>
             <Icon v-else v-bind="icons.angleDown" :class="nh.be('arrow')"></Icon>
@@ -1189,7 +1190,7 @@ function handlePanelsEnter() {
       <div
         :class="{
           [nh.be('panels')]: true,
-          [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length
+          [nh.bem('panels', 'empty')]: !optionsList[0] || !optionsList[0].length,
         }"
       >
         <template v-if="optionsList[0] && optionsList[0].length">
