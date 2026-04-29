@@ -20,8 +20,9 @@ import { logger, release, run } from '@vexip-ui/scripts'
 release({
   pkgDir: 'Absolute package directory path',
   // isDryRun: true,
-  // preId: 'beta'
+  // preId: 'beta',
   // publish: true,
+  // updateVersionByType: 'patch',
   runTest: () => run('pnpm', ['test']),
   runBuild: () => run('pnpm', ['build']),
   runChangelog: () => run('pnpm', ['changelog'])
@@ -30,6 +31,20 @@ release({
   process.exit(1)
 })
 ```
+
+#### updateVersionByType
+
+When specified, the version will be automatically bumped based on the type instead of prompting for selection.
+
+| Type         | Stable Version           | Pre-release Version                                    |
+| ------------ | ------------------------ | ------------------------------------------------------ |
+| `patch`      | `1.0.0` → `1.0.1`        | `1.0.0-beta.1` → `1.0.1-beta.0`                        |
+| `minor`      | `1.0.0` → `1.1.0`        | `1.0.0-beta.1` → `1.1.0-beta.0`                        |
+| `major`      | `1.0.0` → `2.0.0`        | `1.0.0-beta.1` → `2.0.0-beta.0`                        |
+| `release`    | `1.0.0` → `1.0.1`        | `1.0.0-beta.1` → `1.0.0` (release to stable)           |
+| `prerelease` | `1.0.0` → `1.0.1-beta.0` | `1.0.0-beta.1` → `1.0.0-beta.2` (continue pre-release) |
+
+Combine with `preId` to specify the pre-release identifier (defaults to the current preId or `beta`).
 
 ### Publish
 

@@ -23,9 +23,11 @@ export interface ReleaseOptions {
    */
   updateVersion?: boolean,
   /**
-   * You can use the 'release' type to release next pre version.
+   * You can use the 'release' type to release from pre version to stable version.
+   *
+   * You can use the 'prerelease' type to quickly release the next pre version.
    */
-  updateVersionByType?: 'patch' | 'minor' | 'major' | 'release',
+  updateVersionByType?: 'patch' | 'minor' | 'major' | 'release' | 'prerelease',
   /**
    * @default true
    */
@@ -203,12 +205,26 @@ export async function release(options: ReleaseOptions) {
 function updateVersionByType(
   currentVersion: string,
   options: {
-    type: 'patch' | 'minor' | 'major' | 'release',
+    type: 'patch' | 'minor' | 'major' | 'release' | 'prerelease',
     preId?: string,
   },
 ) {
-  const preId = String(options.preId || (semver.prerelease(currentVersion)?.[0] ?? ''))
-  const version = semver.inc(currentVersion, `${preId ? 'pre' : ''}${options.type}`, preId)
+  let version: string | null
+
+  if (options.type === 'release') {
+    if (semver.prerelease(currentVersion)) {
+      const parsed = semver.parse(currentVersion)
+      version = parsed ? `${parsed.major}.${parsed.minor}.${parsed.patch}` : null
+    } else {
+      version = semver.inc(currentVersion, 'patch')
+    }
+  } else if (options.type === 'prerelease') {
+    const preId = String(options.preId || semver.prerelease(currentVersion)?.[0] || 'beta')
+    version = semver.inc(currentVersion, 'prerelease', preId)
+  } else {
+    const preId = String(options.preId || (semver.prerelease(currentVersion)?.[0] ?? ''))
+    version = semver.inc(currentVersion, `${preId ? 'pre' : ''}${options.type}`, preId)
+  }
 
   if (!version) {
     throw new Error(`Invalid target version: ${version}`)
