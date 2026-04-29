@@ -41,7 +41,10 @@
   @each $name in map.keys($style-map) {
     @include define-css-var(
       ($base-name, $name),
-      if($inspect, #{meta.inspect(map.get($style-map, $name))}, map.get($style-map, $name))
+      if(
+        sass($inspect): #{meta.inspect(map.get($style-map, $name))};
+          else: map.get($style-map, $name)
+      )
     );
   }
 }

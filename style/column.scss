@@ -8,7 +8,7 @@
 $column: () !default;
 $column: map.merge(
   (
-    display: block
+    display: block,
   ),
   $column
 );
@@ -31,7 +31,7 @@ $column: map.merge(
     @include define-preset-values(
       'column',
       (
-        display: flex
+        display: flex,
       )
     );
   }
@@ -80,7 +80,7 @@ $column: map.merge(
     $size: (math.div(1, 24) * $i * 100) * 1%;
 
     &--#{$i} {
-      display: if($i == 0, none, value('column-display'));
+      display: if(sass($i == 0): none; else: value('column-display'));
       flex: 0 0 $size;
       max-width: $size;
     }
