@@ -5,6 +5,7 @@ import { getPkgInfo, logger, run } from './utils'
 export interface PublishOptions {
   pkgDir: string,
   isDryRun?: boolean,
+  provenance?: boolean,
   releaseTag?: string,
 }
 
@@ -31,6 +32,10 @@ export async function publish(options: PublishOptions) {
 
   if (options.isDryRun) {
     publishArgs.push('--dry-run')
+  }
+
+  if (options.provenance) {
+    publishArgs.push('--provenance')
   }
 
   if (options.releaseTag) {
