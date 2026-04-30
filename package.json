@@ -116,7 +116,7 @@
     "types.d.ts"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "keywords": [
     "flex",
