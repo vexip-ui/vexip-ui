@@ -21,14 +21,12 @@ export async function publish(options: PublishOptions) {
 
   await writeFile(pkgPath, JSON.stringify(copiedPkg, null, 2), 'utf-8')
 
-  const publishArgs = [
-    'publish',
-    '--access',
-    'public',
-    '--registry',
-    'https://registry.npmjs.org/',
-    '--no-git-checks',
-  ]
+  const useNpm = !!options.provenance
+  const publishArgs = ['publish', '--access', 'public', '--registry', 'https://registry.npmjs.org/']
+
+  if (!useNpm) {
+    publishArgs.push('--no-git-checks')
+  }
 
   if (options.isDryRun) {
     publishArgs.push('--dry-run')
@@ -43,7 +41,7 @@ export async function publish(options: PublishOptions) {
   }
 
   try {
-    await run('pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
+    await run(useNpm ? 'npm' : 'pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
     logger.successText(`Successfully published v${pkg.version}`)
   } catch (error) {
     if ((error as any).stderr?.match(/previously published/)) {
