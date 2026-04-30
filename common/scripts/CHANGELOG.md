@@ -1,3 +1,19 @@
+# [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.5.0...scripts@1.6.0) (2026-04-30)
+
+
+### ✨ Features
+
+* **scripts:** support provenance option in publish function ([bd14417](https://github.com/vexip-ui/vexip-ui/commit/bd14417732278b5b999d38399924e2e009cb0862))
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** publish with npm instead of pnpm ([e78e1b5](https://github.com/vexip-ui/vexip-ui/commit/e78e1b5e541b61ee7429e55f7f9cc4d695097877))
+* **scripts:** updateVersionByType release to stable and add prerelease type ([d7351e5](https://github.com/vexip-ui/vexip-ui/commit/d7351e52756434e254d14b6ac8d99fdcf44c037f))
+* **scripts:** use npm for provenance publish to support OIDC auth ([0fe4c46](https://github.com/vexip-ui/vexip-ui/commit/0fe4c467fa6e8af91a162017f9e9c37e096a9e18))
+
+
+
 # [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.4.1...scripts@1.5.0) (2025-07-29)
 
 
