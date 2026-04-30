@@ -12,15 +12,16 @@ on:
       - scripts*
       - utils*
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     # prevents this action from running on forks
     if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     environment: production
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,6 +35,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24.x
+          registry-url: 'https://registry.npmjs.org'
           cache: pnpm
 
       - name: Install deps
@@ -61,6 +63,6 @@ jobs:
         run: pnpm run build
 
       - name: Publish package
-        run: pnpm run publish:ci ${{ github.ref_name }} --provenance
+        run: pnpm run publish:ci ${{ github.ref_name }}
         env:
           NODE_OPTIONS: --max-old-space-size=4096
