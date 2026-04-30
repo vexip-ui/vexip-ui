@@ -8,12 +8,15 @@ import { getPackageName } from './utils'
 const args = minimist<{
   d?: boolean,
   dry?: boolean,
+  p?: boolean,
+  provenance?: boolean,
   t?: string,
   tag?: string,
 }>(process.argv.slice(2))
 
 const target = args._[0]
 const isDryRun = args.dry || args.d
+const provenance = args.provenance || args.p
 const releaseTag = args.tag || args.t
 
 async function main() {
@@ -32,7 +35,7 @@ async function main() {
   const pkgName = await getPackageName(inputPkg)
   const pkgDir = pkgName === 'vexip-ui' ? rootDir : resolve(rootDir, pkgName)
 
-  await publish({ pkgDir, isDryRun, releaseTag })
+  await publish({ pkgDir, isDryRun, provenance, releaseTag })
 }
 
 main().catch(error => {
