@@ -18,6 +18,9 @@ jobs:
     if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,7 +62,6 @@ jobs:
         run: pnpm run build
 
       - name: Publish package
-        run: pnpm run publish:ci ${{ github.ref_name }}
+        run: pnpm run publish:ci ${{ github.ref_name }} --provenance
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_OPTIONS: --max-old-space-size=4096
