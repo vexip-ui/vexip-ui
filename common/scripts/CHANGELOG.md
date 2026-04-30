@@ -1,3 +1,12 @@
+## [1.6.1](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.6.0...scripts@1.6.1) (2026-04-30)
+
+
+### 🐞 Bug Fixes
+
+* **scripts:** use pnpm pack to resolve workspace deps before npm publish ([962b236](https://github.com/vexip-ui/vexip-ui/commit/962b236d52a33157983c11d44776c185c860c16d))
+
+
+
 # [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/scripts@1.5.0...scripts@1.6.0) (2026-04-30)
 
 
