@@ -11,6 +11,8 @@ $drawer: map.merge(
     s-color: value('shadow-color-base'),
     header-v-padding: 10px,
     header-h-padding: 14px,
+    body-v-padding: 14px,
+    body-h-padding: 16px,
     title-color: value('content-color-primary'),
     d-color: value('border-color-light-2'),
     title-font-size: value('font-size-primary'),
@@ -20,7 +22,7 @@ $drawer: map.merge(
     handler-bg-color-hover: rgba($color-black, 0.15),
     handler-width: 5px,
     footer-v-padding: 10px,
-    footer-h-padding: 16px
+    footer-h-padding: 16px,
   ),
   $drawer
 );
@@ -134,7 +136,7 @@ $drawer: map.merge(
     flex: auto;
     min-width: 0;
     min-height: 0;
-    padding: 14px 16px;
+    padding: value('drawer-body-v-padding') value('drawer-body-h-padding');
   }
 
   &__footer {

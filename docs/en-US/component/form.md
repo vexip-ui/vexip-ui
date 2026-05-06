@@ -17,7 +17,7 @@ When using the `model` prop to init the Form, you can directly pass in an empty 
 import { reactive } from 'vue'
 
 interface Model {
-  name: string
+  name: string,
 }
 
 const model = reactive({} as Model)
@@ -180,7 +180,7 @@ interface Rule<T = any> {
   strict?: boolean,
   enums?: T[],
   message?: string,
-  validator?(value: T, model: Record<string, any>): ValidatorResult
+  validator?(value: T, model: Record<string, any>): ValidatorResult,
 }
 ```
 
@@ -215,14 +215,15 @@ interface Rule<T = any> {
 
 ### Form Methods
 
-| Name             | Description                                                                                | Signature                                          | Since |
-| ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------- | ----- |
-| validate         | Validate all fields of the form                                                            | `() => Promise<string[]>`                          | -     |
-| validateFields   | Validate the fields specified by the form according to the properties                      | `(props: string \| string[]) => Promise<string[]>` | -     |
-| reset            | resets all fields of the form                                                              | `() => void`                                       | -     |
-| resetFields      | Reset the fields specified by the form according to the properties                         | `(props: string \| string[]) => void`              | -     |
-| clearError       | Clear all error messages of the form                                                       | `() => void`                                       | -     |
-| clearFieldsError | Clears the error information of the fields specified by the form according to the property | `(props: string \| string[]) => void`              | -     |
+| Name             | Description                                                                             | Signature                                           | Since    |
+| ---------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------- | -------- |
+| validate         | Validate all fields of the form                                                         | `() => Promise<string[]>`                           | -        |
+| validateFields   | Validate the fields specified by the form according to the properties                   | `(props: string \| string[]) => Promise<string[]>`  | -        |
+| reset            | resets all fields of the form                                                           | `() => void`                                        | -        |
+| resetFields      | Reset the fields specified by the form according to the properties                      | `(props: string \| string[]) => void`               | -        |
+| clearError       | Clear all error messages of the form                                                    | `() => void`                                        | -        |
+| clearFieldsError | Clears the error messages of the fields specified by the form according to the property | `(props: string \| string[]) => void`               | -        |
+| setFieldsError   | Set error messages for specified fields                                                 | `(fieldErrorMap: Record<string \| string>) => void` | `2.3.40` |
 
 ### Form Slots
 

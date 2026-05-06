@@ -1,3 +1,28 @@
+## [2.3.40](https://github.com/vexip-ui/vexip-ui/compare/v2.3.39...v2.3.40) (2026-05-06)
+
+
+### ✨ Features
+
+* **confirm:** supports loadingLock option ([ea43586](https://github.com/vexip-ui/vexip-ui/commit/ea43586a4ed2e3a1c72f490fcd021ab4371b00f1))
+* **drawer:** support customize body padding css variables ([#595](https://github.com/vexip-ui/vexip-ui/issues/595)) ([67aed0e](https://github.com/vexip-ui/vexip-ui/commit/67aed0e9d55ffd46b19c96e3a488253d427a6df8))
+* **ellipsis:** add tip-delay prop to control tooltip visibility delay ([c43371e](https://github.com/vexip-ui/vexip-ui/commit/c43371ec8a0c824c7c36e3742e5df6832b5af86f))
+* **form:** add setFieldsError method ([53960ea](https://github.com/vexip-ui/vexip-ui/commit/53960ea9a4a33645b62db5780ae1ad96edd3de3f))
+* **scripts:** support provenance option in publish function ([17b2f68](https://github.com/vexip-ui/vexip-ui/commit/17b2f684ce2a11b725dfac635764b8b2388e0dd3))
+
+
+### 🐞 Bug Fixes
+
+* **form:** switch to use useId to generate id ([6f1b97b](https://github.com/vexip-ui/vexip-ui/commit/6f1b97b1deb8e639fe715821b0a0e720d1aea588))
+* **hooks/clickoutside:** fix clickoutside misfiring after dragging inside component and releasing outside ([0d73817](https://github.com/vexip-ui/vexip-ui/commit/0d73817f6fd68f776432469ddaa16ef0e5e47001))
+* **overflow:** correct rest count when items are removed and no longer overflow ([#594](https://github.com/vexip-ui/vexip-ui/issues/594)) ([c27538a](https://github.com/vexip-ui/vexip-ui/commit/c27538a1d8178ae58883989f9c812356206777ea))
+* **scripts:** publish with npm instead of pnpm ([29947ab](https://github.com/vexip-ui/vexip-ui/commit/29947ab941d4159a312fa2319e0f6086224d0d0f))
+* **scripts:** updateVersionByType release to stable and add prerelease type ([623d0c7](https://github.com/vexip-ui/vexip-ui/commit/623d0c7058d5ca81b7b0eeccbdc221925d8688fc))
+* **scripts:** use npm for provenance publish to support OIDC auth ([7db3366](https://github.com/vexip-ui/vexip-ui/commit/7db3366191c6d85a05b61901e0f02c74e7e104ae))
+* **scripts:** use pnpm pack to resolve workspace deps before npm publish ([c1dff48](https://github.com/vexip-ui/vexip-ui/commit/c1dff4847ac566987c12e4e6fbdd2340a1cddb8c))
+* **select, overflow:** fix tag overflow count instability and tooltip edge overflow ([#597](https://github.com/vexip-ui/vexip-ui/issues/597)) ([4b10e7e](https://github.com/vexip-ui/vexip-ui/commit/4b10e7e84b3208cd9a7523e70397d6c9def0f31f))
+
+
+
 ## [2.3.39](https://github.com/vexip-ui/vexip-ui/compare/v2.3.38...v2.3.39) (2025-10-28)
 
 

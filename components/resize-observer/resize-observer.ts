@@ -48,13 +48,11 @@ export default defineComponent({
       )
     })
 
-    onBeforeUnmount(() => {
-      if (observed) {
-        const el = getCurrentInstance()?.proxy?.$el as Element | null
+    let targetEl: Element | null = null
 
-        if (el?.nextElementSibling) {
-          unobserveResize(el.nextElementSibling)
-        }
+    onBeforeUnmount(() => {
+      if (observed && targetEl) {
+        unobserveResize(targetEl)
       }
     })
 
@@ -62,25 +60,27 @@ export default defineComponent({
       if (observed) return
 
       const el = instance?.proxy?.$el as Element | null
+      let target: Element | null = null
 
-      if (el?.nextElementSibling) {
-        if (el.nextElementSibling !== el.nextSibling && el.nodeType === 3 && el.nodeValue !== '') {
-          return
+      if (el) {
+        if (el.nodeType === 1) {
+          target = el
+        } else if (el.nextElementSibling) {
+          target = el.nextElementSibling
         }
+      }
 
-        observeResize(el.nextElementSibling, throttleResize)
+      if (target) {
+        observeResize(target, throttleResize)
+        targetEl = target
         observed = true
       }
     }
 
     function unobserve() {
-      if (observed) {
-        const el = instance?.proxy?.$el as Element | null
-
-        if (el?.nextElementSibling) {
-          unobserveResize(el.nextElementSibling)
-        }
-
+      if (observed && targetEl) {
+        unobserveResize(targetEl)
+        targetEl = null
         observed = false
       }
     }

@@ -21,7 +21,7 @@ $confirm: map.merge(
     body-v-padding: 10px,
     body-h-padding: 14px,
     footer-v-padding: 12px,
-    footer-h-padding: 14px
+    footer-h-padding: 14px,
   ),
   $confirm
 );
@@ -126,6 +126,16 @@ $confirm: map.merge(
     &:hover,
     &:focus {
       color: value('confirm-close-color-hover');
+    }
+
+    &--disabled {
+      cursor: default;
+
+      &,
+      &:hover,
+      &:focus {
+        color: value('confirm-close-color');
+      }
     }
   }
 }

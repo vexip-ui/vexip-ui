@@ -260,7 +260,7 @@ function refreshScroll() {
     :inner-classes="layoutClasses"
     :style="{
       '--vxp-layout-aside-width': 'var(--aside-width)',
-      '--vxp-layout-header-height': 'var(--header-height)'
+      '--vxp-layout-header-height': 'var(--header-height)',
     }"
   >
     <template #sign>
@@ -327,17 +327,15 @@ function refreshScroll() {
     </template>
   </Layout>
 
-  <teleport to="body">
-    <Scrollbar
-      v-show="!expanded"
-      ref="bar"
-      class="docs-scrollbar"
-      :disabled="barDisabled"
-      :bar-length="barLength"
-      wrapper="body"
-      @scroll="handleBarScroll"
-    ></Scrollbar>
-  </teleport>
+  <Scrollbar
+    v-show="!expanded"
+    ref="bar"
+    class="docs-scrollbar"
+    :disabled="barDisabled"
+    :bar-length="barLength"
+    wrapper="body"
+    @scroll="handleBarScroll"
+  ></Scrollbar>
 </template>
 
 <style lang="scss">

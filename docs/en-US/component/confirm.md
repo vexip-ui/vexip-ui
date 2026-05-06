@@ -58,6 +58,16 @@ Setting the `title` option can add a title, so we can change the layout style.
 
 :::
 
+:::demo confirm/loading
+
+### Async Confirm
+
+You can specify an async function using the `onBeforeConfirm` option to enable async confirm behavior.
+
+By also setting the `loadingLock` option to `true`, you can disable other ways of closing the Confirm while waiting.
+
+:::
+
 :::demo confirm/renderer
 
 ### Custom Render
@@ -95,6 +105,7 @@ type ConfirmAlign = 'left' | 'center' | 'right'
 interface ConfirmState {
   visible: boolean,
   loading: boolean,
+  loadingLock: boolean,
   title: string | (() => any),
   content: string | (() => any),
   icon: Record<string, any> | (() => any) | null | boolean,
@@ -119,14 +130,14 @@ interface ConfirmState {
   left: number | string,
   xOffset: number | string,
   yOffset: number | string,
-  raw: Record<any, any>
+  raw: Record<any, any>,
 }
 
 type ConfirmRenderFn = (options: ConfirmState, confirm: () => Promise<void>, cancel: () => void) => any
 
 interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>, Record<any, any> {
   renderer?: ConfirmRenderFn,
-  onBeforeConfirm?: () => unknown
+  onBeforeConfirm?: () => unknown,
 }
 ```
 
@@ -160,3 +171,4 @@ interface ConfirmOptions extends Partial<Omit<ConfirmState, 'visible' | 'loading
 | left            | `number \| string`                              | Set the initial distance from the right of the confirm, will automatically calculate when it is `'auto'`     | `'auto'`         | `2.2.12` |
 | xOffset         | `number \| string`                              | Set the horizontal offset of the confirm, which do not effect the position props                             | `'auto'`         | `2.2.12` |
 | yOffset         | `number \| string`                              | Set the vertical offset of the confirm, which do not effect the position props                               | `'auto'`         | `2.2.12` |
+| loadingLock     | `boolean`                                       | Whether disable other ways of closing while waiting                                                          | `false`          | `2.3.40` |

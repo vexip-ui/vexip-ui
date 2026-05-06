@@ -283,7 +283,7 @@ export function formatByteSize(
   byte: number,
   unit?: SizeUnitWithAuto,
   joinUtil?: true,
-  precision?: number
+  precision?: number,
 ): number
 export function formatByteSize(
   byte: number,

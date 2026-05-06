@@ -20,6 +20,7 @@ export default defineConfig([
       '**/common/icons/types',
 
       '**/dev-server/play*.vue',
+      'AGENTS.md',
     ],
   },
   {

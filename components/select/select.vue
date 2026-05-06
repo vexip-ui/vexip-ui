@@ -1142,6 +1142,7 @@ function focus(options?: FocusOptions) {
                       :visible="restTipShow"
                       trigger="custom"
                       placement="top"
+                      shift
                       :tip-class="nh.be('rest-tip')"
                       @click.stop="toggleShowRestTip"
                     >

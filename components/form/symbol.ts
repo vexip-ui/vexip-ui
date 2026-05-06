@@ -57,6 +57,7 @@ export interface FieldOptions {
   labelWidth: Ref<number>,
   validate: () => Promise<string[] | null>,
   reset: () => boolean,
+  setError: (error: string) => void,
   clearError: () => void,
   getValue: (defaultValue?: unknown) => unknown,
   setValue: (value: unknown, strict?: boolean) => void,

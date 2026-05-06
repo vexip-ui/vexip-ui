@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 
@@ -33,7 +33,7 @@ describe('Confirm', () => {
   it('render', async () => {
     const wrapper = mount(Confirm)
     await nextTick()
-    wrapper.vm.openConfirm('content')
+    wrapper.vm.openConfirm({ content: 'content' })
     await nextTick()
     await nextTick()
 
@@ -102,6 +102,30 @@ describe('Confirm', () => {
     buttons[1].click()
     await nextTick()
     await expect(promise).resolves.toEqual(true)
+  })
+
+  it('async confirm', async () => {
+    vi.useFakeTimers()
+    const Confirm = createConfirm()
+
+    const promise = Confirm.open({
+      content: 'content',
+      confirmText: 'ok',
+      cancelText: 'no',
+      onBeforeConfirm: () => new Promise(r => setTimeout(r, 100)),
+    })
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
+    buttons[1].click()
+    await nextTick()
+    expect(buttons[1].classList).toContain('vxp-button--loading')
+    await vi.runAllTimersAsync()
+    await nextTick()
+    expect(promise).resolves.toEqual(true)
+    vi.useRealTimers()
   })
 
   it('title', async () => {

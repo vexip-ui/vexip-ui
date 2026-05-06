@@ -35,6 +35,7 @@ export const confirmProps = buildProps({
   cancelable: booleanProp,
   xOffset: positionType,
   yOffset: positionType,
+  loadingLock: booleanProp,
 })
 
 export type ConfirmProps = ExtractPropTypes<typeof confirmProps>

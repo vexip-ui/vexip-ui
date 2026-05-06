@@ -67,7 +67,7 @@ export class ConfirmManager {
   }
 
   close() {
-    this._getInstance()?.closeConfirm()
+    this._getInstance()?.closeConfirm(true)
   }
 
   config(options: Record<string, unknown>) {
