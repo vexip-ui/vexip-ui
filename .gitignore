@@ -47,6 +47,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+.codebuddy/*
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json

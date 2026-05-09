@@ -101,6 +101,7 @@ export const zhCN = defineI18n({
     Grid: '栅格布局',
     Divider: '分割线',
     Layout: '布局',
+    ObjectFit: '自适应对象',
     NativeScroll: '原生滚动',
     Row: '行布局',
     Scroll: '滚动',
