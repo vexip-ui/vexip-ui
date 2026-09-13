@@ -33,13 +33,18 @@ import {
   doubleDigits,
   format,
   getTime,
+  getWeekOfYear,
+  getWeekYear,
+  getWeeksInYear,
   isLeapYear,
   isObject,
   mergeObjects,
   startOfMonth,
+  startOfWeek,
   toAttrValue,
   toDate,
   toFalse,
+  yearWeekToDate,
 } from '@vexip-ui/utils'
 import { datePickerProps } from './props'
 import { useColumn, useTimeBound } from './helper'
@@ -52,7 +57,7 @@ import type {
   DatePickerFormatFn,
   DatePickerSlots,
   DateTimeType,
-  DateType,
+  DateUnitType,
   TimeType,
 } from './symbol'
 
@@ -101,7 +106,7 @@ const props = useProps('datePicker', _props, {
   clearable: false,
   noAction: false,
   labels: () => ({}),
-  dateSeparator: '/',
+  dateSeparator: null,
   timeSeparator: ':',
   shortcuts: () => [],
   disabledDate: {
@@ -157,10 +162,10 @@ const startState = createDateState()
 const endState = createDateState()
 const currentState = ref<'start' | 'end'>('start')
 const lastValue = ref('')
-const firstSelected = ref<number[] | undefined>()
+const firstSelected = ref<number | undefined>()
 const hoveredDate = ref(new Date())
 const staticWheel = ref(false)
-const dateUnitOrder = ref<DateType[]>([])
+const dateUnitOrder = ref<DateUnitType[]>([])
 
 const { timer } = useSetTimeout()
 
@@ -183,6 +188,11 @@ const mergedLocale = computed(() => {
   const locale = mergeObjects(calendarLocale.value, datePickerLocale.value, true)
 
   return isObject(props.locale) ? mergeObjects(locale, props.locale) : locale
+})
+const weekStart = computed(() => {
+  const value = props.weekStart ?? 0
+
+  return Number.isInteger(value) ? ((value % 7) + 7) % 7 : 0
 })
 const startPlaceholder = computed(() => {
   if (props.placeholder) {
@@ -242,32 +252,49 @@ const hasPrefix = computed(() => {
 })
 const currentValue = computed(() => {
   const values = [startState, endState].map(state => {
-    const values = Object.values(state.dateValue).map(doubleDigits)
+    const realDate = state.getDate()
+    const year = realDate.getFullYear()
+    const month = realDate.getMonth() + 1
+    const date = realDate.getDate()
+    const hour = realDate.getHours()
+    const minute = realDate.getMinutes()
+    const second = realDate.getSeconds()
 
-    return `${values.slice(0, 3).join('-')} ${values.slice(3).join(':')}`
+    return `${year.toString().padStart(4, '0')}-${doubleDigits(month)}-${doubleDigits(
+      date,
+    )} ${doubleDigits(hour)}:${doubleDigits(minute)}:${doubleDigits(second)}`
   })
 
   return props.range ? values : values[0]
 })
 const hoveredLarge = computed(() => {
-  if (!firstSelected.value) return false
-
-  const [year, month, date] = firstSelected.value
-  const firstTime = new Date(`${year}-${month}-${date}`).getTime()
-  const hoverTime = hoveredDate.value.getTime()
-
-  return firstTime < hoverTime
+  return (
+    firstSelected.value !== undefined &&
+    firstSelected.value < +normalizePanelDate(hoveredDate.value)
+  )
 })
 const showClear = computed(() => {
   return !props.disabled && !readonly.value && props.clearable && isHover.value && !!lastValue.value
 })
 const min = computed(() => {
   if (props.min) {
-    const date = rawValueToDate(props.min, invalidDate)
+    let date = rawValueToDate(props.min, invalidDate)
 
     if (Number.isNaN(+date)) return -Infinity
 
+    // 日期面板按天判断边界，datetime 的时分秒由时间滚轮约束。
     date.setHours(0, 0, 0, 0)
+
+    if (props.type !== 'datetime') {
+      if (props.type === 'year') {
+        date.setMonth(0)
+        date.setDate(1)
+      } else if (props.type === 'month') {
+        date = startOfMonth(date)
+      } else if (props.type === 'week') {
+        date = startOfWeek(date, weekStart.value)
+      }
+    }
 
     return date.getTime()
   }
@@ -287,11 +314,15 @@ const max = computed(() => {
         date.setMonth(11)
         date.setDate(31)
       } else if (props.type === 'month') {
-        date.setMonth(date.getMonth() + 1)
         date = startOfMonth(date)
-        date.setDate(date.getDate() - 1)
+        date.setMonth(date.getMonth() + 1, 0)
+      } else if (props.type === 'week') {
+        date = startOfWeek(date, weekStart.value)
+        date.setDate(date.getDate() + 6)
       }
     }
+
+    date.setHours(23, 59, 59, 999)
 
     return date.getTime()
   }
@@ -346,6 +377,8 @@ const endMaxTime = computed(() => {
 const startReversed = computed(() => {
   if (!props.range) return false
 
+  if (props.type === 'week') return +startState.getDate() > +endState.getDate()
+
   const startValue = startState.dateValue
   const endValue = endState.dateValue
 
@@ -368,6 +401,7 @@ const startReversed = computed(() => {
 
   return false
 })
+const dateSeparator = computed(() => props.dateSeparator ?? (props.type === 'week' ? '-' : '/'))
 
 const startTimeBound = useTimeBound(startMinTime, startMaxTime)
 const endTimeBound = useTimeBound(endMinTime, endMaxTime)
@@ -406,6 +440,14 @@ const endError = computed(() => {
 const noActionMode = computed(() => props.type !== 'datetime' && props.noAction)
 
 watch(() => props.type, parseFormat)
+watch([() => props.type, weekStart], () => {
+  const value = props.value ?? (lastValue.value ? lastValue.value.split('|') : null)
+
+  parseValue(value)
+  firstSelected.value = undefined
+  lastValue.value = (Array.isArray(value) ? value.some(Boolean) : value) ? getStringValue() : ''
+  nextTick(() => datePanel.value?.refreshCalendar(currentState.value))
+})
 watch(
   () => props.value,
   value => {
@@ -418,8 +460,9 @@ watch(
 watch(
   () => props.type,
   value => {
-    const hasMonth = value !== 'year'
-    const hasDate = hasMonth && value !== 'month'
+    const hasWeek = value === 'week'
+    const hasMonth = value !== 'year' && !hasWeek
+    const hasDate = hasMonth && value !== 'month' && !hasWeek
 
     startState.enabled.year = true
     endState.enabled.year = true
@@ -427,6 +470,8 @@ watch(
     endState.enabled.month = hasMonth
     startState.enabled.date = hasDate
     endState.enabled.date = hasDate
+    startState.enabled.week = hasWeek
+    endState.enabled.week = hasWeek
   },
   { immediate: true },
 )
@@ -440,6 +485,9 @@ watch(
 watch(currentVisible, value => {
   if (value) {
     updatePopper()
+    nextTick(() => datePanel.value?.refreshCalendar(currentState.value))
+  } else {
+    firstSelected.value = undefined
   }
 })
 watch(focused, value => {
@@ -511,15 +559,17 @@ function createDateState() {
   const { currentColumn, enabled, resetColumn, enterColumn } = useColumn([
     'year',
     'month',
+    'week',
     'date',
     'hour',
     'minute',
     'second',
-  ] as DateTimeType[])
+  ] as DateUnitType[])
 
   const dateValue = reactive({
     year: 1970,
     month: 1, // 1 ~ 12
+    week: 1, // 1 ~ 53
     date: 1,
     hour: 0,
     minute: 0,
@@ -528,6 +578,7 @@ function createDateState() {
   const activated = reactive({
     year: false,
     month: false,
+    week: false,
     date: false,
     hour: false,
     minute: false,
@@ -545,9 +596,13 @@ function createDateState() {
     resetColumn,
     enterColumn,
     setDate: (date: Date, withTime = true) => {
-      dateValue.year = date.getFullYear()
+      if (props.type === 'week') date = startOfWeek(date, weekStart.value)
+
+      dateValue.year =
+        props.type === 'week' ? getWeekYear(date, weekStart.value) : date.getFullYear()
       dateValue.month = date.getMonth() + 1
       dateValue.date = date.getDate()
+      dateValue.week = getWeekOfYear(date, weekStart.value)
 
       if (withTime) {
         dateValue.hour = date.getHours()
@@ -556,6 +611,10 @@ function createDateState() {
       }
     },
     getDate: () => {
+      if (props.type === 'week') {
+        return yearWeekToDate(dateValue.year, dateValue.week, weekStart.value)
+      }
+
       return new Date(
         dateValue.year,
         dateValue.month - 1,
@@ -607,7 +666,7 @@ function parseValue<T extends Dateable | null>(value: T | T[]) {
 }
 
 function parseDateUnitOrder() {
-  const orderSet = new Set<DateType>()
+  const orderSet = new Set<DateUnitType>()
 
   // to ignore 'xxx'
   let inQuotation = false
@@ -619,6 +678,7 @@ function parseDateUnitOrder() {
       inQuotation = !inQuotation
     } else if (!inQuotation) {
       switch (char) {
+        case 'Y':
         case 'y':
           orderSet.add('year')
           break
@@ -628,11 +688,21 @@ function parseDateUnitOrder() {
         case 'd':
           orderSet.add('date')
           break
+        case 'W':
+        case 'w':
+          orderSet.add('week')
+          break
       }
     }
   }
 
   dateUnitOrder.value = [...orderSet]
+
+  if (props.type === 'week') {
+    dateUnitOrder.value = dateUnitOrder.value.filter(type => type === 'year' || type === 'week')
+    if (!dateUnitOrder.value.includes('year')) dateUnitOrder.value.push('year')
+    if (!dateUnitOrder.value.includes('week')) dateUnitOrder.value.push('week')
+  }
 }
 
 function parseTimeUnitEnabled() {
@@ -683,7 +753,7 @@ function toggleActivated(value: boolean, valueType?: 'start' | 'end') {
     : [startState, endState]
 
   states.forEach(state => {
-    ;(Object.keys(state.activated) as DateTimeType[]).forEach(type => {
+    ;(Object.keys(state.activated) as DateUnitType[]).forEach(type => {
       state.activated[type] = value
     })
   })
@@ -694,6 +764,23 @@ function getStringValue() {
 }
 
 function isDateDisabled(date: Date) {
+  if (props.type === 'week') {
+    const start = startOfWeek(date, weekStart.value)
+
+    for (let day = 0; day < 7; ++day) {
+      const current = new Date(start)
+      current.setDate(current.getDate() + day)
+
+      if (isDayDisabled(current)) return true
+    }
+
+    return false
+  }
+
+  return isDayDisabled(date)
+}
+
+function isDayDisabled(date: Date) {
   if (typeof props.disabledDate === 'function') {
     if (props.disabledDate(date)) {
       return true
@@ -736,7 +823,6 @@ function emitChange() {
   if (lastValue.value !== getStringValue()) {
     lastValue.value = getStringValue()
 
-    const values = Array.isArray(currentValue.value) ? currentValue.value : [currentValue.value]
     const emitValues: number[] = []
     const formattedValues: unknown[] = []
 
@@ -763,9 +849,11 @@ function emitChange() {
           0,
         ).getTime()
       } else if (props.type !== 'datetime') {
-        emitValues[i] = new Date(values[i].split(' ')[0] + ' 00:00:00').getTime()
+        const date = (i === 0 ? startState : endState).getDate()
+        date.setHours(0, 0, 0, 0)
+        emitValues[i] = date.getTime()
       } else {
-        emitValues[i] = new Date(values[i]).getTime()
+        emitValues[i] = (i === 0 ? startState : endState).getDate().getTime()
       }
 
       formattedValues[i] = formatValue(emitValues[i], i === 0 ? 'start' : 'end')
@@ -787,13 +875,14 @@ function emitChange() {
 
 function finishInput(shouldChange = true) {
   setVisible(false)
+  firstSelected.value = undefined
 
   shouldChange && emitChange()
   startState.resetColumn()
   endState.resetColumn()
 }
 
-function verifyValue(type: DateTimeType) {
+function verifyValue(type: DateUnitType) {
   const dateValue = getCurrentState().dateValue
 
   switch (type) {
@@ -803,6 +892,14 @@ function verifyValue(type: DateTimeType) {
     }
     case 'month': {
       dateValue.month = boundRange(dateValue.month, 1, 12)
+      break
+    }
+    case 'week': {
+      dateValue.week = boundRange(
+        dateValue.week,
+        1,
+        getWeeksInYear(dateValue.year, weekStart.value),
+      )
       break
     }
     case 'date': {
@@ -899,7 +996,7 @@ function handleInput(value: number) {
   }
 }
 
-function handleInputNumber(type: DateTimeType, number: number) {
+function handleInputNumber(type: DateUnitType, number: number) {
   const state = getCurrentState()
   const prev = state.dateValue[type]
 
@@ -911,16 +1008,20 @@ function handleInputNumber(type: DateTimeType, number: number) {
   }
 
   type !== 'year' && verifyValue(type)
+
+  if (props.type === 'week' && type === 'year' && state.dateValue.year >= 1000) {
+    verifyValue('week')
+  }
   emitEvent(props.onInput, type, state.dateValue[type])
 }
 
-function setActivatedTrue(type: DateTimeType) {
+function setActivatedTrue(type: DateUnitType) {
   const activated = getCurrentState().activated
 
   if (type === 'date') {
     activated.year = true
     activated.month = true
-  } else if (type === 'month') {
+  } else if (type === 'month' || type === 'week') {
     activated.year = true
   } else if (type === 'minute') {
     activated.hour = true
@@ -932,11 +1033,11 @@ function setActivatedTrue(type: DateTimeType) {
   activated[type] = true
 }
 
-function handleInputFocus(type: DateTimeType) {
+function handleInputFocus(type: DateUnitType) {
   getCurrentState().column = type
 }
 
-function isTimeType(type: DateTimeType): type is TimeType {
+function isTimeType(type: DateUnitType): type is TimeType {
   return ['hour', 'minute', 'second'].includes(type)
 }
 
@@ -962,6 +1063,7 @@ function handleAdjust(adjustType: 'plus' | 'minus', ctrlKey: boolean) {
         state.dateValue[type] += sign
       }
 
+      if (props.type === 'week' && (type === 'year' || ctrlKey)) verifyValue('week')
       computeDate()
       updateDateActivated(type)
     }
@@ -981,7 +1083,14 @@ function handleMinus(ctrlKey: boolean) {
 }
 
 function computeDate() {
-  const dateValue = getCurrentState().dateValue
+  const state = getCurrentState()
+
+  if (props.type === 'week') {
+    state.setDate(state.getDate())
+    return
+  }
+
+  const dateValue = state.dateValue
   const date = new Date(dateValue.year, dateValue.month - 1, dateValue.date)
 
   dateValue.year = date.getFullYear()
@@ -1026,6 +1135,7 @@ function handleClear(finish = true) {
       finish && handleBlur()
 
       lastValue.value = ''
+      firstSelected.value = undefined
 
       nextTick(() => {
         toggleActivated(false)
@@ -1055,73 +1165,49 @@ function handleDateHover(hoverDate: Date | null) {
   if (props.range && hoverDate) {
     hoveredDate.value = hoverDate
 
-    if (firstSelected.value) {
-      const hoverValues = [hoverDate.getFullYear(), hoverDate.getMonth() + 1, hoverDate.getDate()]
-      const start = hoveredLarge.value ? firstSelected.value : hoverValues
-      const end = hoveredLarge.value ? hoverValues : firstSelected.value
-
-      let types: DateTimeType[]
-
-      if (props.type === 'year') {
-        types = ['year']
-      } else if (props.type === 'month') {
-        types = ['year', 'month']
-      } else {
-        types = ['year', 'month', 'date']
-      }
-
-      for (let i = 0, len = types.length; i < len; ++i) {
-        startState.dateValue[types[i]] = start[i]
-        endState.dateValue[types[i]] = end[i]
-      }
+    if (firstSelected.value !== undefined) {
+      updatePanelRange(+normalizePanelDate(hoverDate))
     }
   }
 }
 
-function handlePanelChange(values: number[]) {
-  let types: DateTimeType[]
+/** 将面板选择统一转换为对应日期单位的起始日。 */
+function normalizePanelDate(date: Date) {
+  if (props.type === 'week') return startOfWeek(date, weekStart.value)
+  if (props.type === 'year') return new Date(date.getFullYear(), 0, 1)
+  if (props.type === 'month') return new Date(date.getFullYear(), date.getMonth(), 1)
 
-  if (props.type === 'year') {
-    types = ['year']
-  } else if (props.type === 'month') {
-    types = ['year', 'month']
-  } else {
-    types = ['year', 'month', 'date']
-  }
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
+
+function updatePanelValue(date: Date, valueType: 'start' | 'end') {
+  const state = valueType === 'start' ? startState : endState
+  state.setDate(date, false)
+  updateDateActivated(props.type === 'datetime' ? 'date' : props.type, valueType)
+}
+
+function updatePanelRange(time: number) {
+  const first = firstSelected.value!
+  updatePanelValue(new Date(Math.min(first, time)), 'start')
+  updatePanelValue(new Date(Math.max(first, time)), 'end')
+}
+
+function handlePanelChange(date: Date) {
+  date = normalizePanelDate(date)
 
   if (!props.range) {
-    for (let i = 0, len = types.length; i < len; ++i) {
-      startState.dateValue[types[i]] = values[i]
-      updateDateActivated(types[i], 'start')
-    }
+    updatePanelValue(date, 'start')
 
     if (noActionMode.value) handleEnter()
 
     return
   }
 
-  if (!firstSelected.value) {
-    firstSelected.value = values
-
-    for (let i = 0, len = types.length; i < len; ++i) {
-      startState.dateValue[types[i]] = values[i]
-      endState.dateValue[types[i]] = values[i]
-      updateDateActivated(types[i], 'start')
-      updateDateActivated(types[i], 'end')
-    }
+  if (firstSelected.value === undefined) {
+    firstSelected.value = +date
+    updatePanelRange(+date)
   } else {
-    const [year, month, date] = firstSelected.value
-    const firstTime = new Date(`${year}-${month}-${date}`).getTime()
-    const secondTime = new Date(`${values[0]}-${values[1]}-${values[2]}`).getTime()
-    const start = firstTime < secondTime ? firstSelected.value : values
-    const end = firstTime < secondTime ? values : firstSelected.value
-
-    for (let i = 0, len = types.length; i < len; ++i) {
-      startState.dateValue[types[i]] = start[i]
-      endState.dateValue[types[i]] = end[i]
-      updateDateActivated(types[i], 'start')
-      updateDateActivated(types[i], 'end')
-    }
+    updatePanelRange(+date)
 
     verifyRangeValue()
     firstSelected.value = undefined
@@ -1139,10 +1225,10 @@ function handleTimeChange(valueType: 'start' | 'end', type: TimeType, time: numb
   updateDateActivated('second', valueType)
 }
 
-function updateDateActivated(type: DateTimeType, valueType?: 'start' | 'end') {
+function updateDateActivated(type: DateUnitType, valueType?: 'start' | 'end') {
   const state = valueType ? (valueType === 'start' ? startState : endState) : getCurrentState()
 
-  if (type === 'month') {
+  if (type === 'month' || type === 'week') {
     state.activated.year = true
   } else if (type === 'date') {
     state.activated.year = true
@@ -1191,7 +1277,7 @@ function enterColumn(type: 'prev' | 'next') {
   }
 }
 
-function handleStartInput(type: DateTimeType) {
+function handleStartInput(type: DateUnitType) {
   toggleCurrentState('start')
   handleInputFocus(type)
 
@@ -1200,7 +1286,7 @@ function handleStartInput(type: DateTimeType) {
   })
 }
 
-function handleEndInput(type: DateTimeType) {
+function handleEndInput(type: DateUnitType) {
   toggleCurrentState('end')
   handleInputFocus(type)
 
@@ -1257,11 +1343,13 @@ function handleClickOutside() {
           :enabled="startState.enabled"
           :activated="startState.activated"
           :date-value="startState.dateValue"
+          :locale="mergedLocale"
+          :week-start="weekStart"
           :steps="props.steps"
           :ctrl-steps="props.ctrlSteps"
           :focused="focused"
           :visible="currentVisible"
-          :date-separator="props.dateSeparator"
+          :date-separator="dateSeparator"
           :time-separator="props.timeSeparator"
           :filler="props.filler"
           :labels="props.labels"
@@ -1294,11 +1382,13 @@ function handleClickOutside() {
             :enabled="endState.enabled"
             :activated="endState.activated"
             :date-value="endState.dateValue"
+            :locale="mergedLocale"
+            :week-start="weekStart"
             :steps="props.steps"
             :ctrl-steps="props.ctrlSteps"
             :focused="focused"
             :visible="currentVisible"
-            :date-separator="props.dateSeparator"
+            :date-separator="dateSeparator"
             :time-separator="props.timeSeparator"
             :filler="props.filler"
             :labels="props.labels"
@@ -1324,7 +1414,7 @@ function handleClickOutside() {
         :class="[nh.be('icon'), nh.be('suffix')]"
         :style="{
           color: props.suffixColor,
-          opacity: showClear || props.loading ? '0%' : ''
+          opacity: showClear || props.loading ? '0%' : '',
         }"
       >
         <slot name="suffix">
@@ -1386,14 +1476,14 @@ function handleClickOutside() {
         :no-action="props.noAction"
         :steps="props.steps"
         :range="props.range"
-        :min="props.min"
-        :max="props.max"
+        :min="min"
+        :max="max"
         :disabled-date="isDateDisabled"
         :disabled-time="isTimeDisabled"
         :has-error="startError || endError"
         :selecting-type="hoveredLarge ? 'end' : 'start'"
         :locale="mergedLocale"
-        :week-start="props.weekStart"
+        :week-start="weekStart"
         :static-wheel="staticWheel"
         :shortcuts-placement="props.shortcutsPlacement"
         :labeled-by="labelId"

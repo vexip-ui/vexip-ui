@@ -93,6 +93,7 @@ export function arEGLocale() {
       placeholder: {
         year: 'سنة',
         month: 'شهر',
+        week: 'أسبوع',
         date: 'يوم',
         datetime: 'تاريخ',
         start: 'يبدأ بـ',

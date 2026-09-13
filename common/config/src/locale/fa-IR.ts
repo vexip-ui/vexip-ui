@@ -93,6 +93,7 @@ export function faIRLocale() {
       placeholder: {
         year: 'سال',
         month: 'ماه',
+        week: 'هفته',
         date: 'تاریخ',
         datetime: 'زمان',
         start: 'شروع',

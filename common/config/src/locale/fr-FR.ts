@@ -93,6 +93,7 @@ export function frFRLocale() {
       placeholder: {
         year: 'année',
         month: 'mois',
+        week: 'semaine',
         date: 'journée',
         datetime: 'date & heure',
         start: 'Début',

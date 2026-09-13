@@ -8,6 +8,14 @@
   ></DatePicker>
   <p>Current Year Range: {{ yearRange }}</p>
   <DatePicker
+    v-model:value="weekRange"
+    range
+    type="week"
+    clearable
+    style="max-width: 300px"
+  ></DatePicker>
+  <p>Current Week Range: {{ weekRange }}</p>
+  <DatePicker
     v-model:value="dateRange"
     range
     clearable
@@ -28,6 +36,7 @@
 import { ref } from 'vue'
 
 const yearRange = ref<number[]>([])
+const weekRange = ref<number[]>([])
 const dateRange = ref<string[]>([])
 const datetimeRange = ref<string[]>([])
 </script>

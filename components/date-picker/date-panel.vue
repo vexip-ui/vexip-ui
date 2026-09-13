@@ -8,7 +8,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 
 import TimeWheel from './time-wheel.vue'
 import { useIcons, useNameHelper } from '@vexip-ui/config'
-import { callIfFunc, range as rangeNumbers, toDate } from '@vexip-ui/utils'
+import { callIfFunc, range as rangeNumbers, toDate, yearWeekToDate } from '@vexip-ui/utils'
 import { useRtl } from '@vexip-ui/hooks'
 import { datePickerTypes } from './symbol'
 
@@ -21,8 +21,8 @@ import type {
   DatePickerType,
   DateShortcut,
   DateShortcutsPlacement,
-  DateTimeType,
   DateType,
+  DateUnitType,
   DisabledTime,
   TimeType,
 } from './symbol'
@@ -35,15 +35,15 @@ const props = defineProps({
     validator: (value: DatePickerType) => datePickerTypes.includes(value),
   },
   enabled: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   startValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
+    type: Object as PropType<Record<DateUnitType, number>>,
     default: null,
   },
   endValue: {
-    type: Object as PropType<Record<DateTimeType, number>>,
+    type: Object as PropType<Record<DateUnitType, number>>,
     default: null,
   },
   shortcuts: {
@@ -79,11 +79,11 @@ const props = defineProps({
     default: false,
   },
   startActivated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   endActivated: {
-    type: Object as PropType<Record<DateTimeType, boolean>>,
+    type: Object as PropType<Record<DateUnitType, boolean>>,
     default: () => ({}),
   },
   min: {
@@ -177,10 +177,18 @@ const panelStyle = computed(() => {
 const startActivated = computed(() => {
   const activated = props.startActivated
 
+  if (props.type === 'week') {
+    return activated.year && activated.week
+  }
+
   return activated.year && activated.month && activated.date
 })
 const endActivated = computed(() => {
   const activated = props.endActivated
+
+  if (props.type === 'week') {
+    return activated.year && activated.week
+  }
 
   return activated.year && activated.month && activated.date
 })
@@ -190,10 +198,10 @@ const isDatetime = computed(() => {
 const calendarValue = computed(() => {
   return props.range
     ? startActivated.value || endActivated.value
-      ? [getStringValue('start'), getStringValue('end')]
+      ? [getDateValue('start'), getDateValue('end')]
       : ['', '']
     : startActivated.value
-      ? getStringValue('start')
+      ? getDateValue('start')
       : ''
 })
 const weekDays = computed(() => {
@@ -215,6 +223,12 @@ watch(
   },
   { immediate: true },
 )
+watch(
+  () => props.type,
+  type => {
+    currentPanel.value = type === 'year' ? 'year' : type === 'month' ? 'month' : 'date'
+  },
+)
 
 onMounted(() => {
   refreshCalendar('start')
@@ -222,10 +236,16 @@ onMounted(() => {
 
 defineExpose({ refreshCalendar })
 
-function getStringValue(type: 'start' | 'end') {
+function getDateValue(type: 'start' | 'end') {
   const value = type === 'start' ? props.startValue : props.endValue
 
-  return value ? `${value.year}-${value.month}-${value.date}` : ''
+  if (!value) return ''
+
+  if (props.type === 'week') {
+    return yearWeekToDate(value.year, value.week, props.weekStart)
+  }
+
+  return new Date(value.year, value.month - 1, value.date)
 }
 
 function getMonthLabel(index: number) {
@@ -261,7 +281,7 @@ function handleShortcut(index: number) {
 }
 
 function handleSelectDate(date: Date) {
-  emitChange([date.getFullYear(), date.getMonth() + 1, date.getDate()])
+  emitChange(new Date(date.getFullYear(), date.getMonth(), date.getDate()))
 }
 
 function handleSelectYear(year: number) {
@@ -272,7 +292,7 @@ function handleSelectYear(year: number) {
   if (props.type !== 'year') {
     togglePanel('month')
   } else {
-    emitChange([year, 1, 1])
+    emitChange(new Date(year, 0, 1))
   }
 }
 
@@ -284,12 +304,12 @@ function handleSelectMonth(month: number) {
   if (props.type !== 'month') {
     togglePanel('date')
   } else {
-    emitChange([calendarYear.value, month, 1])
+    emitChange(new Date(calendarYear.value, month - 1, 1))
   }
 }
 
-function emitChange(values: number[]) {
-  emit('change', values)
+function emitChange(date: Date) {
+  emit('change', date)
 }
 
 function handleStartTimeChange(type: TimeType, time: number) {
@@ -492,6 +512,15 @@ function isMonthInRange(month: number) {
 function refreshCalendar(valueType: 'start' | 'end') {
   const today = toDate(props.today)
 
+  if (props.type === 'week') {
+    const activated = valueType === 'start' ? startActivated.value : endActivated.value
+    const date = activated ? getDateValue(valueType) || today : today
+
+    calendarYear.value = date.getFullYear()
+    calendarMonth.value = date.getMonth() + 1
+    return
+  }
+
   if (valueType === 'start') {
     calendarYear.value = props.startActivated.year ? props.startValue.year : today.getFullYear()
     calendarMonth.value = props.startActivated.month ? props.startValue.month : today.getMonth() + 1
@@ -518,8 +547,9 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
   <div
     :class="{
       [nh.be('panel')]: true,
+      [nh.bem('panel', type)]: true,
       [nh.bem('panel', 'vertical')]:
-        shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom')
+        shortcuts.length && (shortcutsPlacement === 'top' || shortcutsPlacement === 'bottom'),
     }"
     :aria-labelledby="labeledBy"
     :style="panelStyle"
@@ -531,7 +561,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
           nh.be('list'),
           nh.bem('list', 'sub'),
           nh.be('shortcuts'),
-          nh.bem('shortcuts', shortcutsPlacement)
+          nh.bem('shortcuts', shortcutsPlacement),
         ]"
       >
         <div
@@ -610,7 +640,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
                   [nh.bem('year-item', 'selected')]: isSelectedYear(item),
                   [nh.bem('year-item', 'next')]: index > 9,
                   [nh.bem('year-item', 'disabled')]: isDisabledYear(item),
-                  [nh.bem('year-item', 'in-range')]: isYearInRange(item)
+                  [nh.bem('year-item', 'in-range')]: isYearInRange(item),
                 }"
                 @click.stop="handleSelectYear(item)"
                 @mouseenter="handleYearHover(item)"
@@ -643,7 +673,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
                   [nh.be('month-item')]: true,
                   [nh.bem('month-item', 'selected')]: isSelectedMonth(index),
                   [nh.bem('month-item', 'disabled')]: isDisabledMonth(index),
-                  [nh.bem('month-item', 'in-range')]: isMonthInRange(index)
+                  [nh.bem('month-item', 'in-range')]: isMonthInRange(index),
                 }"
                 @click.stop="handleSelectMonth(index)"
                 @mouseenter="handleMonthHover(index)"
@@ -677,6 +707,7 @@ function handleShortcutsResize(entry: ResizeObserverEntry) {
               :max="max"
               :week-start="weekStart"
               :week-days="weekDays"
+              :select-row="type === 'week'"
               @select="handleSelectDate"
               @hover="handleHoverDate"
             >

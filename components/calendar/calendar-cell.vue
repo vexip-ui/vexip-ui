@@ -45,6 +45,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  selectRow: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['select', 'hover'])
@@ -84,6 +88,10 @@ const label = computed(() => {
   const weekDay = (props.date.getDay() || 7) as WeekIndex
 
   return `${label[`week${weekDay}`]}, ${label[`month${month}`]} ${day}, ${year}`
+})
+
+const inRange = computed(() => {
+  return props.selectRow ? props.selected || props.inRange : props.inRange
 })
 </script>
 

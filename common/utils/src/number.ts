@@ -232,28 +232,6 @@ export function leaveNumber(number: number, divideBy: number, limit = 0) {
   return remainders.reverse()
 }
 
-const ordinalSuffixes = ['th', 'st', 'nd', 'rd']
-
-/**
- * 将给定的数字转换为序数词
- *
- * @param value 需要转换的数字
- *
- * @returns 转换后的序数词
- */
-export function ordinalNumber(value: number) {
-  value = Math.round(value)
-
-  if (value <= 0) return `${value}th`
-
-  const suffix =
-    value % 100 > 10 && value % 100 < 14
-      ? ordinalSuffixes[0]
-      : ordinalSuffixes[value % 10] || ordinalSuffixes[0]
-
-  return `${value}${suffix}`
-}
-
 export type SizeUnitWithAuto = AnyCase<'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'AUTO'>
 export type SizeUnit = Exclude<SizeUnitWithAuto, AnyCase<'AUTO'>>
 
@@ -358,6 +336,38 @@ export function random(max: number, min = 0) {
   }
 
   return Math.random() * (max - min) + min
+}
+
+const ordinalSuffixes = ['th', 'st', 'nd', 'rd']
+
+/**
+ * 根据给定的数字计算序数词后缀
+ *
+ * @param value 数字
+ *
+ * @returns 序数词后缀
+ */
+export function getOrdinalSuffix(value: number) {
+  value = Math.round(value)
+
+  if (value <= 0) return 'th'
+
+  return value % 100 > 10 && value % 100 < 14
+    ? ordinalSuffixes[0]
+    : ordinalSuffixes[value % 10] || ordinalSuffixes[0]
+}
+
+/**
+ * 将给定的数字转换为序数词
+ *
+ * @param value 需要转换的数字
+ *
+ * @returns 转换后的序数词
+ */
+export function ordinalNumber(value: number) {
+  value = Math.round(value)
+
+  return `${value}${getOrdinalSuffix(value)}`
 }
 
 /**

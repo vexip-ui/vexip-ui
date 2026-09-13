@@ -6,6 +6,7 @@ import { globalIcons } from '@vexip-ui/config'
 import { Github } from 'lucide-vue-next'
 import { format } from '@vexip-ui/utils'
 import { DatePicker } from '..'
+import DatePanel from '../date-panel.vue'
 
 vi.useFakeTimers()
 
@@ -21,6 +22,28 @@ function nextFrame() {
 }
 
 describe('DatePicker', () => {
+  it('keeps a datetime boundary day selectable while constraining its time', () => {
+    const wrapper = mount(DatePicker, {
+      props: {
+        type: 'datetime',
+        visible: true,
+        value: new Date(2026, 0, 7, 12),
+        min: new Date(2026, 0, 7, 10),
+        max: new Date(2026, 0, 7, 18),
+      },
+    })
+    const panel = wrapper.findComponent(DatePanel)
+    expect(panel.props('disabledDate')(new Date(2026, 0, 7))).toBe(false)
+    expect(panel.props('disabledDate')(new Date(2026, 0, 6))).toBe(true)
+    expect(panel.props('disabledDate')(new Date(2026, 0, 8))).toBe(true)
+    expect(wrapper.vm.startError).toBe(false)
+    wrapper.vm.startState.dateValue.hour = 9
+    expect(wrapper.vm.startError).toBe(true)
+    wrapper.vm.startState.dateValue.hour = 19
+    expect(wrapper.vm.startError).toBe(true)
+    wrapper.unmount()
+  })
+
   it('render', () => {
     const wrapper = mount(DatePicker, {
       props: { visible: true },

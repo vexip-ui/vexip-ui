@@ -8,6 +8,7 @@ import {
   divide,
   doubleDigits,
   formatByteSize,
+  getOrdinalSuffix,
   isValidNumber,
   leaveNumber,
   minus,
@@ -24,6 +25,19 @@ import {
 } from '../src'
 
 describe('number', () => {
+  it('ordinal suffix returns only the suffix', () => {
+    expect([0, -1, 1.2, 2.5, 11, 12, 13, 21].map(getOrdinalSuffix)).toEqual([
+      'th',
+      'th',
+      'st',
+      'rd',
+      'th',
+      'th',
+      'th',
+      'st',
+    ])
+  })
+
   it('isValidNumber', () => {
     expect(isValidNumber('123')).toBe(true)
     expect(isValidNumber('abc')).toBe(false)
