@@ -198,10 +198,10 @@ const isDatetime = computed(() => {
 const calendarValue = computed(() => {
   return props.range
     ? startActivated.value || endActivated.value
-      ? [getStringValue('start'), getStringValue('end')]
+      ? [getDateValue('start'), getDateValue('end')]
       : ['', '']
     : startActivated.value
-      ? getStringValue('start')
+      ? getDateValue('start')
       : ''
 })
 const weekDays = computed(() => {
@@ -223,6 +223,12 @@ watch(
   },
   { immediate: true },
 )
+watch(
+  () => props.type,
+  type => {
+    currentPanel.value = type === 'year' ? 'year' : type === 'month' ? 'month' : 'date'
+  },
+)
 
 onMounted(() => {
   refreshCalendar('start')
@@ -230,19 +236,16 @@ onMounted(() => {
 
 defineExpose({ refreshCalendar })
 
-function getStringValue(type: 'start' | 'end') {
+function getDateValue(type: 'start' | 'end') {
   const value = type === 'start' ? props.startValue : props.endValue
 
-  let { year, month, date } = value
+  if (!value) return ''
 
   if (props.type === 'week') {
-    const realDate = yearWeekToDate(year, value.week, props.weekStart)
-    year = realDate.getFullYear()
-    month = realDate.getMonth() + 1
-    date = realDate.getDate()
+    return yearWeekToDate(value.year, value.week, props.weekStart)
   }
 
-  return value ? `${year}-${month}-${date}` : ''
+  return new Date(value.year, value.month - 1, value.date)
 }
 
 function getMonthLabel(index: number) {
@@ -508,6 +511,15 @@ function isMonthInRange(month: number) {
 // 重新计算日历页面
 function refreshCalendar(valueType: 'start' | 'end') {
   const today = toDate(props.today)
+
+  if (props.type === 'week') {
+    const activated = valueType === 'start' ? startActivated.value : endActivated.value
+    const date = activated ? getDateValue(valueType) || today : today
+
+    calendarYear.value = date.getFullYear()
+    calendarMonth.value = date.getMonth() + 1
+    return
+  }
 
   if (valueType === 'start') {
     calendarYear.value = props.startActivated.year ? props.startValue.year : today.getFullYear()

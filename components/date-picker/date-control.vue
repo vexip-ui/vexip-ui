@@ -2,12 +2,12 @@
 import { computed, ref } from 'vue'
 
 import { useNameHelper } from '@vexip-ui/config'
-import { debounce, doubleDigits, getLastDayOfMonth, getOrdinalSuffix } from '@vexip-ui/utils'
+import { doubleDigits, getLastDayOfMonth, getWeeksInYear } from '@vexip-ui/utils'
 import { handleKeyEnter } from './helper'
 
 import type { PropType } from 'vue'
 import type { LocaleConfig } from '@vexip-ui/config'
-import type { DateTimeType, DateUnitType } from './symbol'
+import type { DateUnitType } from './symbol'
 
 defineOptions({ name: 'DateControl' })
 
@@ -35,6 +35,10 @@ const props = defineProps({
   timeSeparator: {
     type: String,
     default: ':',
+  },
+  weekStart: {
+    type: Number,
+    default: 0,
   },
   visible: {
     type: Boolean,
@@ -107,7 +111,7 @@ const wrapper = ref<HTMLElement>()
 
 const label = computed(() => props.locale.ariaLabel ?? {})
 const isActivated = computed(() => {
-  return (Object.keys(props.enabled) as DateTimeType[]).every(type => {
+  return (Object.keys(props.enabled) as DateUnitType[]).every(type => {
     return !props.enabled[type] || props.activated[type]
   })
 })
@@ -243,8 +247,6 @@ function handleInput(event: KeyboardEvent) {
 function handleBlur() {
   emit('blur')
 }
-
-const debounceHandleInput = debounce(handleInput, 32)
 </script>
 
 <template>
@@ -253,7 +255,7 @@ const debounceHandleInput = debounce(handleInput, 32)
     :class="className"
     role="none"
     tabindex="-1"
-    @keydown="debounceHandleInput"
+    @keydown="handleInput"
     @blur="handleBlur"
   >
     <div v-if="!focused && !isActivated" :class="nh.be('placeholder')">
@@ -333,7 +335,7 @@ const debounceHandleInput = debounce(handleInput, 32)
           :aria-valuenow="dateValue.week"
           :aria-valuetext="formattedWeek"
           :aria-valuemin="1"
-          :aria-valuemax="53"
+          :aria-valuemax="getWeeksInYear(dateValue.year, weekStart)"
           :aria-labelledby="labeledBy"
           :style="{ order: dateUnitOrder['week'] }"
           @click="handleInputFocus('week')"
@@ -341,13 +343,13 @@ const debounceHandleInput = debounce(handleInput, 32)
           {{ formattedWeek }}
         </div>
         <div
-          v-if="labels.week || activated.week"
+          v-if="labels.week ?? (activated.week && label.week)"
           :class="nh.be('label')"
           aria-hidden
           :style="{ order: dateUnitOrder['week'] }"
           @click="handleInputFocus('week')"
         >
-          {{ labels.week || getOrdinalSuffix(dateValue.week) }}
+          {{ labels.week ?? label.week }}
         </div>
       </template>
       <template v-if="enabled.date">

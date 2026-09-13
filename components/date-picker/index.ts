@@ -12,6 +12,7 @@ export type {
   DateType,
   TimeType,
   DateTimeType,
+  DateUnitType,
   DatePickerType,
   DatePickerFormatFn,
   DateShortcut,

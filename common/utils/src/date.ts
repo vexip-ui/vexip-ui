@@ -915,7 +915,7 @@ export function differenceFullYears(left: Dateable, right: Dateable) {
 }
 
 /**
- * 获取指定年份和周数的第一天日期
+ * 获取指定周年和周数的第一天日期，包含 1 月 1 日的周为第一周
  *
  * @param year 年份
  * @param week 周数（1 表示第一周）
@@ -941,7 +941,38 @@ export function yearWeekToDate(year: number, week: number, startOn = 0): Date {
 }
 
 /**
- * 获取指定日期是本年的第几周
+ * 获取指定日期所属的周年，跨年周归入新年
+ */
+export function getWeekYear(date: Dateable, startOn = 0): number {
+  date = toDate(date)
+  const year = date.getFullYear()
+
+  return +date >= +yearWeekToDate(year + 1, 1, startOn) ? year + 1 : year
+}
+
+/**
+ * 获取指定周年的周数（52 或 53）
+ */
+export function getWeeksInYear(year: number, startOn = 0): number {
+  return Math.round(
+    calendarDayDifference(yearWeekToDate(year + 1, 1, startOn), yearWeekToDate(year, 1, startOn)) /
+      7,
+  )
+}
+
+/**
+ * 以 UTC 日序比较本地日历日期，避免夏令时影响整日差值
+ */
+function calendarDayDifference(date: Date, other: Date): number {
+  return (
+    (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
+      Date.UTC(other.getFullYear(), other.getMonth(), other.getDate())) /
+    DAY_ON_MILLISECONDS
+  )
+}
+
+/**
+ * 获取指定日期在所属周年的第几周，包含 1 月 1 日的周为第一周
  *
  * @param date 日期
  * @param startOn 设定周的第一天，默认为周日（0 表示周日）
@@ -949,21 +980,9 @@ export function yearWeekToDate(year: number, week: number, startOn = 0): Date {
  * @returns 第几周（从 1 开始）
  */
 export function getWeekOfYear(date: Dateable, startOn = 0): number {
-  startOn = startOn % 7
-
-  if (startOn < 0) {
-    startOn += 7
-  }
-
   date = startOfDay(date)
-  const year = date.getFullYear()
-  const yearStart = new Date(year, 0, 1)
-  const day = yearStart.getDay()
-
-  const difference = (day < startOn ? 7 : 0) + day - startOn
-
-  const firstWeekStart = new Date(year, 0, 1 - difference, 0, 0, 0, 0)
-  const diffDays = (date.getTime() - firstWeekStart.getTime()) / DAY_ON_MILLISECONDS
+  const firstWeekStart = yearWeekToDate(getWeekYear(date, startOn), 1, startOn)
+  const diffDays = calendarDayDifference(date, firstWeekStart)
 
   return Math.floor(diffDays / 7) + 1
 }

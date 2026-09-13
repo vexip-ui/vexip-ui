@@ -26,10 +26,10 @@ export interface TimeShortcut {
 
 export interface DatePickerState {
   type: DatePickerType,
-  currentColumn: DateTimeType,
-  enabled: Record<DateTimeType, boolean>,
-  activated: Record<DateTimeType, boolean>,
-  dateValue: Record<DateTimeType, number>,
+  currentColumn: DateUnitType,
+  enabled: Record<DateUnitType, boolean>,
+  activated: Record<DateUnitType, boolean>,
+  dateValue: Record<DateUnitType, number>,
   enterColumn(type: 'prev' | 'next'): void,
 }
 

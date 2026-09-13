@@ -261,7 +261,7 @@ export function formatByteSize(
   byte: number,
   unit?: SizeUnitWithAuto,
   joinUtil?: true,
-  precision?: number
+  precision?: number,
 ): number
 export function formatByteSize(
   byte: number,
@@ -350,7 +350,7 @@ const ordinalSuffixes = ['th', 'st', 'nd', 'rd']
 export function getOrdinalSuffix(value: number) {
   value = Math.round(value)
 
-  if (value <= 0) return `${value}th`
+  if (value <= 0) return 'th'
 
   return value % 100 > 10 && value % 100 < 14
     ? ordinalSuffixes[0]
@@ -365,6 +365,8 @@ export function getOrdinalSuffix(value: number) {
  * @returns 转换后的序数词
  */
 export function ordinalNumber(value: number) {
+  value = Math.round(value)
+
   return `${value}${getOrdinalSuffix(value)}`
 }
 
