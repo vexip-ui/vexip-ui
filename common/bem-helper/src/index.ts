@@ -26,7 +26,7 @@ export function useBEM<B extends string>(block: B): BEM<B>
 export function useBEM<B extends string, N extends string>(block: B, namespace: N): NBEM<B, N>
 export function useBEM<B extends string, N extends string>(
   block: B,
-  namespace: (isVar?: boolean) => N
+  namespace: (isVar?: boolean) => N,
 ): NBEM<B, N>
 export function useBEM<B extends string, N extends string>(
   block: B,

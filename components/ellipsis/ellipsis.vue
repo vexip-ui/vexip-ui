@@ -33,6 +33,7 @@ const props = useProps('ellipsis', _props, {
   tipMaxWidth: 500,
   tipDisabled: false,
   tipShift: false,
+  tipDelay: null,
   slots: () => ({}),
 })
 
@@ -65,6 +66,16 @@ const tipStyle = computed(() => {
   }
 })
 
+const delay = computed(() => {
+  if (props.tipDelay === null) {
+    return [hoverDelay.value, hoverDelay.value]
+  }
+
+  return typeof props.tipDelay === 'number'
+    ? new Array<number>(2).fill(props.tipDelay)
+    : props.tipDelay
+})
+
 defineExpose({
   visible,
   wrapper,
@@ -93,7 +104,7 @@ function handleTriggerEnter() {
     }
 
     content.value = visible.value ? (wrapper.value.textContent ?? '') : ''
-  }, hoverDelay.value)
+  }, delay.value[0])
 }
 
 function handleTriggerLeave() {
@@ -103,7 +114,7 @@ function handleTriggerLeave() {
 
   timer.hover = setTimeout(() => {
     visible.value = false
-  }, hoverDelay.value)
+  }, delay.value[1])
 }
 </script>
 

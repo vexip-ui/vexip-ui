@@ -37,14 +37,14 @@
     "execa": "^9.5.3",
     "kolorist": "^1.8.0",
     "local-pkg": "^1.1.1",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.1.1",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-container": "^4.0.0",
     "markdown-it-table-sort": "^1.0.1",
-    "postcss": "^8.5.3",
+    "postcss": "^8.5.12",
     "postcss-discard-duplicates": "^7.0.2",
     "sass-embedded": "^1.89.0",
-    "vite": "^6.4.1",
+    "vite": "^6.4.2",
     "vite-plugin-pwa": "^1.0.0",
     "vitepress": "1.6.3"
   }

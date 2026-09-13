@@ -1,3 +1,12 @@
+## [2.9.4](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.9.3...hooks@2.9.4) (2026-05-06)
+
+
+### 🐞 Bug Fixes
+
+* **hooks/clickoutside:** fix clickoutside misfiring after dragging inside component and releasing outside ([0d73817](https://github.com/vexip-ui/vexip-ui/commit/0d73817f6fd68f776432469ddaa16ef0e5e47001))
+
+
+
 ## [2.9.3](https://github.com/vexip-ui/vexip-ui/compare/hooks@2.9.2...hooks@2.9.3) (2025-07-30)
 
 

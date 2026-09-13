@@ -71,7 +71,7 @@ export function useLocale(): ComputedRef<LocaleConfig>
 export function useLocale<T extends LocaleNames>(name: T): ComputedRef<LocaleConfig[T]>
 export function useLocale<T extends LocaleNames>(
   name: T,
-  customLocale: MaybeRef<Partial<LocaleConfig[T]>>
+  customLocale: MaybeRef<Partial<LocaleConfig[T]>>,
 ): ComputedRef<LocaleConfig[T]>
 export function useLocale<T extends LocaleNames>(
   name?: T,

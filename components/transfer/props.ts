@@ -18,7 +18,7 @@ export type Values = (string | number)[]
 export type SelectHandler = (
   type: 'source' | 'target',
   selected: { source: Values, target: Values },
-  data: { source: RawOption[], target: RawOption[] }
+  data: { source: RawOption[], target: RawOption[] },
 ) => void
 
 export const transferProps = buildProps({

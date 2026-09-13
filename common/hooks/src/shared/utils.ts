@@ -26,12 +26,12 @@ import type { MaybeElement, MaybeInstance } from './types'
 
 export function createSlotRender(
   slots: Slots,
-  names: string[]
+  names: string[],
 ): ((params?: any) => VNodeChild) | null
 export function createSlotRender(
   slots: Slots,
   names: string[],
-  fallback: (params?: any) => VNodeChild
+  fallback: (params?: any) => VNodeChild,
 ): (params?: any) => VNodeChild
 export function createSlotRender(
   slots: Slots,
