@@ -1,10 +1,11 @@
-import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { useMounted, isHiddenElement } from '@vexip-ui/hooks'
-import { isElement, multipleFixed, boundRange } from '@vexip-ui/utils'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+
+import { isHiddenElement, useManualRef, useMounted, useRtl } from '@vexip-ui/hooks'
+import { boundRange, debounce, debounceMinor, isElement, multipleFixed } from '@vexip-ui/utils'
 import { animateScrollTo } from './helper'
 
 import type { Ref } from 'vue'
-import type { ScrollMode } from '@/components/scroll'
+import type { NativeScrollMode } from './symbol'
 
 export function useScrollWrapper({
   mode,
@@ -14,28 +15,39 @@ export function useScrollWrapper({
   scrollY,
   onResize,
   onBeforeRefresh,
-  onAfterRefresh
+  onAfterRefresh,
 }: {
-  mode: Ref<Exclude<ScrollMode, 'horizontal-exact'>>,
+  mode: Ref<NativeScrollMode>,
   disabled: Ref<boolean>,
   appear: Ref<boolean>,
-  width: Ref<number | string>,
-  height: Ref<number | string>,
+  // width: Ref<number | string>,
+  // height: Ref<number | string>,
   scrollX: Ref<number>,
   scrollY: Ref<number>,
   onResize?: (entity: ResizeObserverEntry) => void,
   onBeforeRefresh?: () => void,
-  onAfterRefresh?: () => void
+  onAfterRefresh?: () => void,
 }) {
-  const contentElement = ref<HTMLElement>()
+  const { manualRef, triggerUpdate } = useManualRef()
+
+  const { isRtl } = useRtl()
+
+  const contentEl = ref<HTMLElement>()
 
   const content = reactive({
-    el: contentElement,
+    el: contentEl,
     scrollWidth: 0,
     offsetWidth: 0,
     scrollHeight: 0,
-    offsetHeight: 0
+    offsetHeight: 0,
   })
+
+  // 当前滚动位置
+  const x = manualRef(0)
+  const y = manualRef(0)
+
+  const percentX = manualRef(0)
+  const percentY = manualRef(0)
 
   const xScrollLimit = computed(() => {
     return content.el ? content.scrollWidth - content.offsetWidth : 0
@@ -74,7 +86,7 @@ export function useScrollWrapper({
     return 35
   })
 
-  watch(contentElement, () => {
+  watch(contentEl, () => {
     computeContentSize()
   })
   watch(scrollX, value => {
@@ -84,30 +96,25 @@ export function useScrollWrapper({
     setScrollY(value)
   })
 
-  // 当前滚动位置
-  const currentScroll = reactive({
-    x: 0,
-    y: 0
-  })
-
   function setScrollX(value: number) {
-    currentScroll.x = boundRange(value, 0, xScrollLimit.value)
-
-    if (content.el) {
-      content.el.scrollLeft = currentScroll.x
-    }
+    x.value = boundRange(value, 0, xScrollLimit.value)
+    syncScroll()
   }
 
   function setScrollY(value: number) {
-    currentScroll.y = boundRange(value, 0, yScrollLimit.value)
-
-    if (content.el) {
-      content.el.scrollTop = currentScroll.y
-    }
+    y.value = boundRange(value, 0, yScrollLimit.value)
+    syncScroll()
   }
 
-  const percentX = ref(0)
-  const percentY = ref(0)
+  function syncScroll() {
+    if (content.el) {
+      content.el.scrollTo({
+        top: y.value,
+        left: isRtl.value ? -x.value : x.value,
+        behavior: 'instant',
+      })
+    }
+  }
 
   const { isMounted } = useMounted()
 
@@ -120,20 +127,23 @@ export function useScrollWrapper({
     content.offsetHeight = content.el.offsetHeight
 
     if (mode.value !== 'vertical') {
-      setScrollX(!isMounted.value && appear.value ? scrollX.value : currentScroll.x || 0)
+      setScrollX(!isMounted.value && appear.value ? scrollX.value : x.value || 0)
     }
 
     if (mode.value !== 'horizontal') {
-      setScrollY(!isMounted.value && appear.value ? scrollY.value : currentScroll.y || 0)
+      setScrollY(!isMounted.value && appear.value ? scrollY.value : y.value || 0)
     }
 
     computePercent()
+    triggerUpdate()
   }
 
   function computePercent() {
     if (content.el) {
-      percentX.value = multipleFixed(currentScroll.x / (xScrollLimit.value || 1), 100, 2)
-      percentY.value = multipleFixed(currentScroll.y / (yScrollLimit.value || 1), 100, 2)
+      percentX.value = isRtl.value
+        ? -multipleFixed(x.value / (xScrollLimit.value || 1), 100, 2)
+        : multipleFixed(x.value / (xScrollLimit.value || 1), 100, 2)
+      percentY.value = multipleFixed(y.value / (yScrollLimit.value || 1), 100, 2)
     }
   }
 
@@ -150,45 +160,49 @@ export function useScrollWrapper({
     }
   })
 
-  function refresh() {
-    if (typeof onBeforeRefresh === 'function') {
-      onBeforeRefresh()
-    }
-
-    computeContentSize()
-    setTimeout(() => {
-      if (typeof onAfterRefresh === 'function') {
-        onAfterRefresh()
+  const refresh = debounceMinor(() => {
+    return new Promise<void>(resolve => {
+      if (typeof onBeforeRefresh === 'function') {
+        onBeforeRefresh()
       }
-    }, 0)
-  }
 
-  function scrollTo(clientX: number, clientY: number, duration?: number) {
+      computeContentSize()
+      setTimeout(() => {
+        if (typeof onAfterRefresh === 'function') {
+          onAfterRefresh()
+        }
+
+        resolve()
+      }, 0)
+    })
+  })
+
+  function scrollTo(clientX: number, clientY: number, duration = 500) {
     return new Promise<void>(resolve => {
       if (!content.el) return
 
-      if (!enableXScroll.value || Math.abs(currentScroll.x - clientX) < 0.01) {
-        clientX = currentScroll.x
+      if (!enableXScroll.value || Math.abs(x.value - clientX) < 0.01) {
+        clientX = x.value
       }
 
-      if (!enableYScroll.value || Math.abs(currentScroll.y - clientY) < 0.01) {
-        clientY = currentScroll.y
+      if (!enableYScroll.value || Math.abs(y.value - clientY) < 0.01) {
+        clientY = y.value
       }
 
       animateScrollTo({
         duration,
         el: content.el,
-        xFrom: currentScroll.x,
+        xFrom: x.value,
         xTo: boundRange(clientX, 0, xScrollLimit.value),
-        yFrom: currentScroll.y,
+        yFrom: y.value,
         yTo: boundRange(clientY, 0, yScrollLimit.value),
-        callback: resolve
+        callback: resolve,
       })
     })
   }
 
-  function scrollBy(deltaX: number, deltaY: number, duration?: number) {
-    return scrollTo(currentScroll.x + deltaX, currentScroll.y + deltaY, duration)
+  function scrollBy(deltaX: number, deltaY: number, duration = 500) {
+    return scrollTo(x.value + deltaX, y.value + deltaY, duration)
   }
 
   function scrollToElement(el: string | Element, duration?: number, offset = 0) {
@@ -218,9 +232,11 @@ export function useScrollWrapper({
   }
 
   return {
-    contentElement,
+    contentEl,
 
-    currentScroll,
+    content,
+    x,
+    y,
     percentX,
     percentY,
     xScrollLimit,
@@ -230,13 +246,14 @@ export function useScrollWrapper({
     xBarLength,
     yBarLength,
 
-    handleResize,
+    handleResize: debounce(handleResize),
     setScrollX,
     setScrollY,
     computePercent,
     refresh,
     scrollTo,
     scrollBy,
-    scrollToElement
+    scrollToElement,
+    triggerUpdate,
   }
 }

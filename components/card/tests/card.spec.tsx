@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Card } from '..'
 
 const TEXT = 'Text'
@@ -8,8 +9,8 @@ describe('Card', () => {
   it('render', () => {
     const wrapper = mount(Card, {
       slots: {
-        default: () => <span>{TEXT}</span>
-      }
+        default: () => <span>{TEXT}</span>,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-card-vars')
@@ -40,7 +41,7 @@ describe('Card', () => {
     const wrapper = mount(() => (
       <Card title={TEXT}>
         {{
-          title: () => <span class={'title'}></span>
+          title: () => <span class={'title'}></span>,
         }}
       </Card>
     ))
@@ -54,7 +55,7 @@ describe('Card', () => {
     const wrapper = mount(() => (
       <Card title={TEXT}>
         {{
-          extra: () => <span>{TEXT}</span>
+          extra: () => <span>{TEXT}</span>,
         }}
       </Card>
     ))
@@ -67,7 +68,7 @@ describe('Card', () => {
     const wrapper = mount(() => (
       <Card title={TEXT}>
         {{
-          header: () => <span>{TEXT}</span>
+          header: () => <span>{TEXT}</span>,
         }}
       </Card>
     ))

@@ -3,7 +3,7 @@
     v-model:value="value"
     filter
     :options="options"
-    style="max-width: 400px;"
+    style="max-width: 400px"
   ></AutoComplete>
 </template>
 
@@ -19,7 +19,7 @@ const options = Array.from({ length: 3 }, (_, index) => ({
     `Option ${index + 1}-1`,
     { value: `Option ${index + 1}-2`, disabled: true },
     `Option ${index + 1}-3`,
-    `Option ${index + 1}-4`
-  ]
+    `Option ${index + 1}-4`,
+  ],
 }))
 </script>

@@ -1,17 +1,16 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './column.scss';
-@use './row.scss';
 
 $form: () !default;
 $form: map.merge(
   (
-    error-color: get-css-var('color-error-light-1'),
-    error-shadow: get-css-var('box-shaodw-focus') get-css-var('color-error-opacity-6'),
-    asterisk-color: get-css-var('color-error-base'),
-    asterisk-family: get-css-var('font-family-base'),
-    tip-color: get-css-var('color-error-base')
+    error-color: value('color-error-light-1'),
+    error-shadow: value('box-shaodw-focus') value('color-error-opacity-6'),
+    asterisk-color: value('color-error-base'),
+    asterisk-family: value('font-family-base'),
+    tip-color: value('color-error-base')
   ),
   $form
 );
@@ -21,9 +20,11 @@ $form: map.merge(
     @include define-preset-values('form', $form);
   }
 
-  @include basis;
+  @include basis {
+    position: relative;
+  }
 
-  position: relative;
+  @include inherit-color;
 
   &--inline {
     display: inline-flex;
@@ -31,12 +32,12 @@ $form: map.merge(
   }
 
   &__item {
-    @include basis;
-
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 28px;
+    @include basis {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 28px;
+    }
 
     &--action {
       justify-content: center;
@@ -45,7 +46,7 @@ $form: map.merge(
     }
 
     &--padding::before {
-      padding-right: 8px;
+      padding-inline-end: 8px;
       margin-bottom: 4px;
       pointer-events: none;
       visibility: hidden;
@@ -55,20 +56,26 @@ $form: map.merge(
   }
 
   &--inline &__item {
-    flex: 1;
+    flex: 1 0 auto;
     width: auto;
-    min-width: 0;
+    min-width: 40px;
 
     &--action {
       flex: 0 0 auto;
     }
   }
 
+  &__placeholder,
   &__label {
     display: inline-flex;
     align-items: center;
-    padding-right: 8px;
+    padding-inline-end: 8px;
     white-space: nowrap;
+  }
+
+  &__placeholder {
+    position: absolute;
+    visibility: hidden;
   }
 
   &__control {
@@ -93,6 +100,8 @@ $form: map.merge(
 
   &--label-top &__label {
     justify-content: flex-start;
+    width: 100%;
+    padding-inline-end: 0;
     margin-bottom: 4px;
     text-align: left;
   }
@@ -118,21 +127,20 @@ $form: map.merge(
   }
 
   &__help {
-    margin-right: 3px;
+    margin-inline-end: 3px;
     cursor: help;
   }
 
   &--label-top &__help,
   &--label-left &__help {
     order: 1;
-    margin-right: 0;
-    margin-left: 3px;
+    margin-inline: 3px 0;
   }
 
   @mixin asterisk {
     display: inline-block;
-    font-family: get-css-var('form-asterisk-family');
-    color: get-css-var('form-asterisk-color');
+    font-family: value('form-asterisk-family');
+    color: value('form-asterisk-color');
     content: '*';
     user-select: none;
   }
@@ -140,7 +148,7 @@ $form: map.merge(
   &__item--required &__label::before {
     @include asterisk;
 
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &--label-top &__item--required &__label {
@@ -151,7 +159,7 @@ $form: map.merge(
     &::after {
       @include asterisk;
 
-      margin-left: 4px;
+      margin-inline-start: 4px;
     }
   }
 
@@ -160,7 +168,7 @@ $form: map.merge(
     top: 100%;
     left: 0;
     padding-top: 3px;
-    color: get-css-var('form-tip-color');
+    color: value('form-tip-color');
     white-space: nowrap;
     user-select: none;
   }

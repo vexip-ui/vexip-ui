@@ -1,8 +1,8 @@
-import { buildProps, booleanProp, styleProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp, styleProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { CollapseArrowType } from './symbol'
+import type { CollapseAliveType, CollapseArrowType, CollapsePanelSlots } from './symbol'
 
 export const collapseProps = buildProps({
   expanded: [String, Number, Array] as PropType<string | number | (string | number)[]>,
@@ -10,7 +10,11 @@ export const collapseProps = buildProps({
   accordion: booleanProp,
   arrowType: String as PropType<CollapseArrowType>,
   ghost: booleanProp,
-  onChange: eventProp<(expanded: (string | number)[]) => void>()
+  alive: {
+    type: [Boolean, String] as PropType<boolean | CollapseAliveType>,
+    default: null,
+  },
+  onChange: eventProp<(expanded: (string | number)[]) => void>(),
 })
 
 export type CollapseProps = ExtractPropTypes<typeof collapseProps>
@@ -24,9 +28,14 @@ export const collapsePanelProps = buildProps({
   expanded: booleanProp,
   card: booleanProp,
   arrowType: String as PropType<CollapseArrowType>,
-  icon: Object,
+  icon: iconProp,
   ghost: booleanProp,
-  onToggle: eventProp<(expanded: boolean) => void>()
+  alive: {
+    type: [Boolean, String] as PropType<boolean | CollapseAliveType>,
+    default: null,
+  },
+  slots: Object as PropType<CollapsePanelSlots>,
+  onToggle: eventProp<(expanded: boolean) => void>(),
 })
 
 export type CollapsePanelProps = ExtractPropTypes<typeof collapsePanelProps>
@@ -41,6 +50,13 @@ export const collapseTransitionProps = buildProps({
   duration: Number,
   timing: String,
   fadeEffect: booleanProp,
+  /**
+   * Internal prop for Tree, reverse the enter transition
+   *
+   * @internal
+   */
+  reverse: booleanProp,
+  disabled: booleanProp,
   onBeforeEnter: eventProp<(el: Element) => void>(),
   onEnter: eventProp<(el: Element) => void>(),
   onAfterEnter: eventProp<(el: Element) => void>(),
@@ -48,7 +64,7 @@ export const collapseTransitionProps = buildProps({
   onBeforeLeave: eventProp<(el: Element) => void>(),
   onLeave: eventProp<(el: Element) => void>(),
   onAfterLeave: eventProp<(el: Element) => void>(),
-  onLeaveCancelled: eventProp<(el: Element) => void>()
+  onLeaveCancelled: eventProp<(el: Element) => void>(),
 })
 
 export type CollapseTransitionProps = ExtractPropTypes<typeof collapseTransitionProps>

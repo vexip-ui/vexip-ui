@@ -1,14 +1,20 @@
 <template>
-  <div ref="wrapper" :class="nh.be('hue')" tabindex="-1">
+  <div
+    ref="wrapper"
+    :class="nh.be('hue')"
+    tabindex="-1"
+    role="group"
+  >
     <div :class="nh.be('hue-handler')" :style="{ left: `${currentLeft}%` }"></div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { useModifier, useMoving } from '@vexip-ui/hooks'
-import { toFixed, boundRange } from '@vexip-ui/utils'
+import { boundRange, toFixed } from '@vexip-ui/utils'
 
 export default defineComponent({
   name: 'ColorHue',
@@ -18,8 +24,8 @@ export default defineComponent({
       default: 0,
       validator: (value: number) => {
         return value >= 0 && value <= 360
-      }
-    }
+      },
+    },
   },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
@@ -44,7 +50,7 @@ export default defineComponent({
           prevLeft = currentLeft.value
           handleChange()
         }
-      }
+      },
     })
 
     const { moving: editing } = useMoving({
@@ -76,7 +82,7 @@ export default defineComponent({
       },
       onEnd: () => {
         emit('edit-end')
-      }
+      },
     })
 
     watch(
@@ -85,7 +91,7 @@ export default defineComponent({
         currentLeft.value = (value / 360) * 100
         verifyPosition()
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     function verifyPosition() {
@@ -101,8 +107,8 @@ export default defineComponent({
       currentLeft,
       editing,
 
-      wrapper
+      wrapper,
     }
-  }
+  },
 })
 </script>

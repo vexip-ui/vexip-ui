@@ -1,14 +1,16 @@
 <template>
-  <p style="margin-bottom: 28px;">
-    <span>Flip: </span>
-    <Switch v-model:value="flip" style="margin-right: 10px;"></Switch>
-    <span>Both sides: </span>
-    <Switch v-model:value="bothSides"></Switch>
+  <p>
+    Flip:
+    <Switch v-model:value="flip" style="margin-inline-end: 10px"></Switch>
+  </p>
+  <p style="margin-bottom: 28px">
+    Alternate:
+    <Switch v-model:value="alternate"></Switch>
   </p>
   <Timeline
     horizontal
     :flip="flip"
-    :both-sides="bothSides"
+    :alternate="alternate"
     pending
   >
     <TimelineItem>
@@ -33,7 +35,7 @@
 import { ref } from 'vue'
 
 const flip = ref(false)
-const bothSides = ref(false)
+const alternate = ref(false)
 </script>
 
 <style scoped>

@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
 import { Spin } from '..'
 import { loading } from '../directive'
 
@@ -22,7 +23,7 @@ describe('Spin', () => {
 
   it('active', async () => {
     const wrapper = mount(Spin, {
-      props: { active: true }
+      props: { active: true },
     })
 
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(true)
@@ -35,20 +36,20 @@ describe('Spin', () => {
 
   it('delay', async () => {
     const wrapper = mount(Spin, {
-      props: { delay: 10 }
+      props: { delay: 10 },
     })
 
     await wrapper.setProps({ active: true })
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(false)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(true)
 
     await wrapper.setProps({ active: false })
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(true)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-spin__loading').exists()).toBe(false)
   })
@@ -80,7 +81,7 @@ describe('Spin', () => {
       <Spin active tip={'tip'}>
         {{
           default: () => <div class={'content'}>{'content'}</div>,
-          tip: () => <div class={'tip'}></div>
+          tip: () => <div class={'tip'}></div>,
         }}
       </Spin>
     ))
@@ -92,25 +93,25 @@ describe('Spin', () => {
 
   it('icon', async () => {
     const wrapper = mount(() => (
-      <Spin active icon={GithubB}>
+      <Spin active icon={Github}>
         <div class={'content'}>{'content'}</div>
       </Spin>
     ))
 
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('v-loading', async () => {
     const wrapper = mount({
       template: '<div v-loading="loading"></div>',
       directives: {
-        loading
+        loading,
       },
       data() {
         return {
-          loading: true
+          loading: true,
         }
-      }
+      },
     })
 
     await nextTick()

@@ -1,6 +1,6 @@
 <template>
   <div
-    style="max-width: 400px; height: 100px; border: var(--vxp-border-base);"
+    style="max-width: 400px; height: 100px; border: var(--vxp-border-base)"
     @contextmenu.prevent="contextmenu"
   >
     在此处右键
@@ -21,10 +21,10 @@ async function contextmenu(event: MouseEvent) {
       { key: '选项2' },
       {
         key: '选项3',
-        children: [{ key: '选项3-1' }, { key: '选项3-2' }, { key: '选项3-3' }]
+        children: [{ key: '选项3-1' }, { key: '选项3-2' }, { key: '选项3-3' }],
       },
-      { key: '选项4' }
-    ]
+      { key: '选项4' },
+    ],
   })
 
   console.info(selectedKeys)

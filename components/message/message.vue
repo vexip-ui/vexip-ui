@@ -1,3 +1,66 @@
+<script setup lang="ts">
+import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
+import { Popup } from '@/components/popup'
+
+import { computed, reactive, ref } from 'vue'
+
+import { useIcons, useNameHelper } from '@vexip-ui/config'
+import { assertiveTypes, effectiveTypes } from './symbol'
+
+import type { Key, MessageConfig, MessagePlacement } from './symbol'
+
+defineOptions({ name: 'Message' })
+
+const nh = useNameHelper('message')
+const icons = useIcons()
+
+const predefinedIcons = computed(() => ({
+  primary: icons.value.info,
+  info: icons.value.info,
+  success: icons.value.success,
+  warning: icons.value.warning,
+  error: icons.value.error,
+}))
+
+const placement = ref<MessagePlacement>('top')
+const startOffset = ref(30)
+const itemGap = ref(16)
+const popup = ref<InstanceType<typeof Popup>>()
+
+const placementCenter = computed(() => `${placement.value}-center` as const)
+
+async function add(options: Record<string, any>) {
+  if (popup.value) {
+    await popup.value.add(options)
+  }
+}
+
+async function remove(key: Key) {
+  return !!popup.value && (await popup.value.remove(key))
+}
+
+function config(config: MessageConfig) {
+  placement.value = config.placement || placement.value
+  startOffset.value = config.startOffset || startOffset.value
+  itemGap.value = config.itemGap || itemGap.value
+}
+
+function clear() {
+  popup.value && popup.value.clear()
+}
+
+defineExpose(
+  reactive({
+    popup,
+    add,
+    remove,
+    clear,
+    config,
+  }),
+)
+</script>
+
 <template>
   <!-- eslint-disable vue/no-v-html -->
   <Popup
@@ -5,6 +68,8 @@
     :class="nh.b()"
     :transition-name="nh.ns(`popup-${placement}`)"
     :placement="placementCenter"
+    :start-offset="startOffset"
+    :item-gap="itemGap"
   >
     <template #item="{ item }: { item: import('./symbol').MessageOptions }">
       <div
@@ -33,16 +98,20 @@
         :aria-live="item.type && assertiveTypes.includes(item.type) ? 'assertive' : 'polite'"
       >
         <div :class="nh.be('wrapper')">
-          <div v-if="item.icon" :class="nh.be('icon')" :style="{ color: item.iconColor }">
-            <Renderer
-              v-if="typeof item.icon === 'function'"
-              :renderer="item.icon"
-              :data="item"
-            ></Renderer>
+          <div
+            v-if="item.icon || (item.type && effectiveTypes.includes(item.type))"
+            :class="nh.be('icon')"
+            :style="{ color: item.iconColor }"
+          >
             <Icon
-              v-else-if="item.icon"
+              v-if="item.icon"
               :icon="item.icon"
-              :style="[{ color: item.iconColor }, item.icon.style]"
+              :style="[{ color: item.iconColor }, (item.icon as any).style]"
+            ></Icon>
+            <Icon
+              v-else
+              v-bind="predefinedIcons[item.type!]"
+              :style="{ color: item.iconColor }"
             ></Icon>
           </div>
           <Renderer
@@ -57,66 +126,15 @@
             </div>
           </template>
         </div>
-        <button v-if="item.closable" :class="nh.be('close')" @click="remove(item.key!)">
-          <Icon label="close">
-            <Xmark></Xmark>
-          </Icon>
+        <button
+          v-if="item.closable"
+          type="button"
+          :class="nh.be('close')"
+          @click="remove(item.key!)"
+        >
+          <Icon v-bind="icons.close" label="close"></Icon>
         </button>
       </div>
     </template>
   </Popup>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { Icon } from '@/components/icon'
-import { Renderer } from '@/components/renderer'
-import { Popup } from '@/components/popup'
-import { Xmark } from '@vexip-ui/icons'
-import { useNameHelper } from '@vexip-ui/config'
-
-import type { Key, MessagePlacement } from './symbol'
-
-export default defineComponent({
-  name: 'Message',
-  components: {
-    Icon,
-    Renderer,
-    Popup,
-    Xmark
-  },
-  setup() {
-    const placement = ref<MessagePlacement>('top')
-    const popup = ref<InstanceType<typeof Popup>>()
-
-    async function add(options: Record<string, any>) {
-      return popup.value ? await popup.value.add(options) : null
-    }
-
-    async function remove(key: Key) {
-      return !!popup.value && (await popup.value.remove(key))
-    }
-
-    function clear() {
-      popup.value && popup.value.clear()
-    }
-
-    return {
-      nh: useNameHelper('message'),
-      effectiveTypes: ['info', 'success', 'warning', 'error'],
-      assertiveTypes: ['success', 'warning', 'error'],
-      placement,
-
-      placementCenter: computed(() => {
-        return `${placement.value}-center` as const
-      }),
-
-      popup,
-
-      add,
-      remove,
-      clear
-    }
-  }
-})
-</script>

@@ -1,9 +1,12 @@
 .DS_Store
 node_modules
 dist
+dev-dist
 temp
 .dev
 coverage
+cache
+temp
 /icons
 /es
 /lib
@@ -15,14 +18,18 @@ package-lock.json
 
 __unconfig_vite.config*
 
-meta-data.json
+meta-data*
 
 .yarn/cache
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
 
+.eslintcache
+.stylelintcache
+
 # local env files
+.env
 .env.local
 .env.*.local
 
@@ -34,9 +41,12 @@ pnpm-debug.log*
 
 # Editor directories and files
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

@@ -29,14 +29,14 @@ const active = ref(1)
 const tabs = ref([
   { label: 1, name: '标签 1', content: '标签页 1 的内容。', static: true },
   { label: 2, name: '标签 2', content: '标签页 2 的内容。' },
-  { label: 3, name: '标签 3', content: '标签页 3 的内容。' }
+  { label: 3, name: '标签 3', content: '标签页 3 的内容。' },
 ])
 
 function addTab() {
   tabs.value.push({
     label: labelCount,
     name: `标签 ${labelCount}`,
-    content: `标签页 ${labelCount++} 的内容。`
+    content: `标签页 ${labelCount++} 的内容。`,
   })
 }
 

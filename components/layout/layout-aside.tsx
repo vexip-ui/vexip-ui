@@ -1,9 +1,19 @@
-import { defineComponent, ref, toRef, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
 import { Menu } from '@/components/menu'
 import { NativeScroll } from '@/components/native-scroll'
-import { Indent, Outdent, CaretRight } from '@vexip-ui/icons'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch,
+} from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { layoutAsideProps } from './props'
 import { useLayoutState, useMediaQuery, useUpdateCounter } from './helper'
 
@@ -14,24 +24,24 @@ export default defineComponent({
   props: layoutAsideProps,
   emits: ['update:reduced', 'update:expanded'],
   setup(_props, { slots, emit, expose }) {
-    const props = useProps('layout', _props, {
+    const props = useProps('layoutAside', _props, {
       tag: 'aside',
+      expanded: false,
       reduced: false,
       menus: {
         default: () => [],
-        static: true
+        static: true,
       },
       menuProps: null,
       logo: '',
       signName: '',
       fixed: 'lg',
-      onReducedChange: null,
-      onExpandedChange: null,
-      onSignClick: null,
-      onMenuSelect: null
+      signType: 'aside',
     })
 
     const nh = useNameHelper('layout')
+    const icons = useIcons()
+
     const layoutState = useLayoutState()
     const currentReduced = ref(props.reduced)
     const currentExpanded = ref(props.expanded)
@@ -42,7 +52,7 @@ export default defineComponent({
 
     const top = ref<HTMLElement>()
     const bottom = ref<HTMLElement>()
-    const menu = ref<MenuExposed | null>(null)
+    const menu = ref<MenuExposed>()
 
     const className = computed(() => {
       return [
@@ -52,8 +62,10 @@ export default defineComponent({
           [nh.bem('aside', 'inherit')]: layoutState.isLayout || props.inherit,
           [nh.bem('aside', 'fixed')]: matched.value,
           [nh.bem('aside', 'expanded')]: currentExpanded.value,
-          [nh.bem('aside', 'reduced')]: currentReduced.value
-        }
+          [nh.bem('aside', 'reduced')]: currentReduced.value,
+          [nh.bem('aside', 'no-sign')]: props.signType !== 'aside',
+        },
+        layoutState.classes.aside,
       ]
     })
     const hasTop = computed(() => {
@@ -63,26 +75,36 @@ export default defineComponent({
       return !!(props.menus?.length || props.menuProps?.router)
     })
 
-    expose({ menu, expandMenuByLabel })
+    const slotParams = shallowReadonly(
+      reactive({
+        expanded: currentExpanded,
+        reduced: currentReduced,
+        toggleExpanded,
+        toggleReduced,
+      }),
+    )
+
+    expose({ menu, toggleExpanded, toggleReduced, expandMenuByLabel })
 
     watch(
       () => props.reduced,
       value => {
         currentReduced.value = value
-      }
+      },
     )
     watch(
       () => props.expanded,
       value => {
         currentExpanded.value = value
-      }
+      },
     )
     watch(
       matched,
       value => {
-        layoutState.expanded = !value
+        layoutState.useExpand = !value
+        value && toggleExpanded(false)
       },
-      { immediate: true }
+      { immediate: true },
     )
     watch(counter, () => computeScrollHeight)
 
@@ -105,18 +127,18 @@ export default defineComponent({
       }
     }
 
-    function toggleReduce(target = !currentReduced.value) {
-      currentReduced.value = target
+    function toggleExpanded(expanded = !currentExpanded.value) {
+      currentExpanded.value = expanded
 
-      emitEvent(props.onReducedChange, target)
-      emit('update:reduced', target)
+      emit('update:expanded', expanded)
+      emitEvent(props.onExpandedChange, expanded)
     }
 
-    function toggleExpand(target = !currentExpanded.value) {
-      currentExpanded.value = target
+    function toggleReduced(reduced = !currentReduced.value) {
+      currentReduced.value = reduced
 
-      emitEvent(props.onExpandedChange, target)
-      emit('update:expanded', target)
+      emit('update:reduced', reduced)
+      emitEvent(props.onReducedChange, reduced)
     }
 
     function handleSignClick(event: MouseEvent) {
@@ -131,26 +153,16 @@ export default defineComponent({
       menu.value?.expandItemByLabel(label)
     }
 
-    function getSlotParams() {
-      return {
-        reduced: currentReduced.value,
-        toggleReduce,
-        toggleExpand
-      }
-    }
-
     return () => {
       const CustomTag = (props.tag || 'aside') as any
 
       return (
         <CustomTag class={className.value}>
           {hasTop.value && (
-            <div ref={top} class={nh.be('aside-top')}>
-              {slots.top
-                ? (
-                    slots.top(getSlotParams())
-                  )
-                : (
+            <div ref={top} class={[nh.be('aside-top'), layoutState.classes.asideTop]}>
+              {slots.top ? (
+                renderSlot(slots, 'top', slotParams)
+              ) : (
                 <div class={nh.be('sign')} onClick={handleSignClick}>
                   {props.logo && (
                     <div class={nh.be('logo')}>
@@ -159,16 +171,18 @@ export default defineComponent({
                   )}
                   {props.signName && <span class={nh.be('sign-name')}>{props.signName}</span>}
                 </div>
-                  )}
+              )}
             </div>
           )}
-          <NativeScroll class={nh.be('aside-main')} height={scrollHeight.value}>
-            {slots.default
-              ? (
-                  slots.default(getSlotParams())
-                )
-              : hasMenu.value
-                ? (
+          <NativeScroll
+            class={[nh.be('aside-main'), layoutState.classes.main]}
+            use-y-bar
+            observe-deep
+            height={scrollHeight.value}
+          >
+            {slots.default ? (
+              renderSlot(slots, 'default', slotParams)
+            ) : hasMenu.value ? (
               <Menu
                 ref={menu}
                 {...(props.menuProps || {})}
@@ -177,33 +191,33 @@ export default defineComponent({
                 reduced={currentReduced.value}
                 onSelect={handleMenuSelect}
               ></Menu>
-                  )
-                : null}
+            ) : null}
           </NativeScroll>
-          <div ref={bottom} class={nh.be('aside-bottom')}>
-            {slots.bottom
-              ? (
-                  slots.bottom(getSlotParams())
-                )
-              : (
-              <div class={nh.be('reduce-handler')} onClick={() => toggleReduce()}>
-                <Icon icon={currentReduced.value ? Indent : Outdent}></Icon>
+          <div ref={bottom} class={[nh.be('aside-bottom'), layoutState.classes.asideBottom]}>
+            {slots.bottom ? (
+              renderSlot(slots, 'bottom', slotParams)
+            ) : (
+              <div class={nh.be('reduce-handler')} onClick={() => toggleReduced()}>
+                {currentReduced.value ? (
+                  <Icon {...icons.value.indent}></Icon>
+                ) : (
+                  <Icon {...icons.value.outdent}></Icon>
+                )}
               </div>
-                )}
+            )}
           </div>
-          <div class={nh.be('expand-handler')} onClick={() => toggleExpand()}>
-            {slots.expand
-              ? (
-                  slots.expand(getSlotParams())
-                )
-              : (
-              <Icon>
-                <CaretRight></CaretRight>
-              </Icon>
-                )}
+          <div
+            class={[nh.be('expand-handler'), layoutState.classes.expandHandler]}
+            onClick={() => toggleExpanded()}
+          >
+            {slots.expand ? (
+              renderSlot(slots, 'expand', slotParams)
+            ) : (
+              <Icon {...icons.value.angleRight}></Icon>
+            )}
           </div>
         </CustomTag>
       )
     }
-  }
+  },
 })

@@ -1,5 +1,7 @@
-import { ref, reactive, computed, watch, onMounted, nextTick } from 'vue'
-import { toNumber, multipleFixed } from '@vexip-ui/utils'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+
+import { useManualRef } from '@vexip-ui/hooks'
+import { multipleFixed, toNumber } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
 import type { ScrollMode } from './symbol'
@@ -13,7 +15,7 @@ export function useScrollWrapper({
   scrollY,
   onResize,
   onBeforeRefresh,
-  onAfterRefresh
+  onAfterRefresh,
 }: {
   mode: Ref<Exclude<ScrollMode, 'horizontal-exact'>>,
   disabled: Ref<boolean>,
@@ -23,24 +25,34 @@ export function useScrollWrapper({
   scrollY: Ref<number>,
   onResize?: (entry: ResizeObserverEntry) => void,
   onBeforeRefresh?: () => void,
-  onAfterRefresh?: () => void
+  onAfterRefresh?: () => void,
 }) {
-  const wrapperElement = ref<HTMLElement>()
-  const contentElement = ref<HTMLElement>()
+  const { manualRef, triggerUpdate } = useManualRef()
+
+  const wrapperEl = ref<HTMLElement>()
+  const contentEl = ref<HTMLElement>()
 
   // 容器长宽
   const wrapper = reactive({
-    el: wrapperElement,
+    el: wrapperEl,
     width: toNumber(width.value),
-    height: toNumber(height.value)
+    height: toNumber(height.value),
   })
 
   // 内容长宽
   const content = reactive({
-    el: contentElement,
+    el: contentEl,
     width: 0,
-    height: 0
+    height: 0,
   })
+
+  const x = manualRef(-scrollX.value)
+  const y = manualRef(-scrollY.value)
+
+  const isReady = ref(false)
+
+  const percentX = manualRef(0)
+  const percentY = manualRef(0)
 
   const xScrollLimit = computed(() => {
     return wrapper.width ? wrapper.width - content.width : 0
@@ -79,31 +91,29 @@ export function useScrollWrapper({
     return 35
   })
 
-  watch(wrapperElement, () => {
+  watch(wrapperEl, () => {
     refreshWrapper()
   })
-  watch(contentElement, () => {
+  watch(contentEl, () => {
     computeContentSize()
   })
   watch(scrollX, value => {
-    currentScroll.x = -value
+    x.value = -value
     verifyScroll()
   })
   watch(scrollY, value => {
-    currentScroll.y = -value
+    y.value = -value
     verifyScroll()
   })
   watch(width, () => {
-    refreshWrapper()
-    verifyScroll()
+    refreshWrapper().then(verifyScroll)
   })
   watch(height, () => {
-    refreshWrapper()
-    verifyScroll()
+    refreshWrapper().then(verifyScroll)
   })
 
   function computeWrapperSize(sizeType: 'width' | 'height') {
-    nextTick(() => {
+    return nextTick(() => {
       if (!wrapper.el) return
 
       const size = sizeType === 'width' ? width.value : height.value
@@ -111,7 +121,7 @@ export function useScrollWrapper({
 
       // 获取 wrapper 的 px 大小
       if (typeof size === 'string') {
-        if (!size.endsWith('px') && Number.isNaN(Number(size))) {
+        if (!size.endsWith('px') && (!size || Number.isNaN(Number(size)))) {
           wrapper[sizeType] =
             wrapper.el[`offset${titleCaseSizeType}` as 'offsetWidth' | 'offsetHeight']
         } else {
@@ -123,66 +133,65 @@ export function useScrollWrapper({
     })
   }
 
-  function refreshWrapper() {
+  async function refreshWrapper() {
+    const promises: Promise<void>[] = []
+
     if (mode.value !== 'vertical') {
-      computeWrapperSize('width')
+      promises.push(computeWrapperSize('width'))
     }
 
     if (mode.value !== 'horizontal') {
-      computeWrapperSize('height')
+      promises.push(computeWrapperSize('height'))
     }
+
+    await Promise.all(promises)
   }
-
-  const isReady = ref(false)
-
-  // 当前滚动位置
-  const currentScroll = reactive({
-    x: -scrollX.value,
-    y: -scrollY.value
-  })
-
-  const percentX = ref(0)
-  const percentY = ref(0)
 
   let timer: ReturnType<typeof setTimeout>
 
   function computeContentSize() {
     clearTimeout(timer)
 
-    timer = setTimeout(() => {
-      if (!content.el) return
-
-      if (mode.value !== 'vertical') {
-        content.width = content.el.offsetWidth
-
-        if (wrapper.width >= content.width) {
-          currentScroll.x = 0
-        } else {
-          if (currentScroll.x === 0) {
-            currentScroll.x = -scrollX.value
-          }
-        }
-      }
-
-      if (mode.value !== 'horizontal') {
-        content.height = content.el.offsetHeight
-
-        if (wrapper.height >= content.height) {
-          currentScroll.y = 0
-        } else {
-          if (currentScroll.y === 0) {
-            currentScroll.y = -scrollY.value
-          }
-        }
-      }
-
+    return new Promise<void>(resolve => {
       isReady.value = false
 
-      setTimeout(() => {
-        isReady.value = true
-        verifyScroll()
-      }, 1)
-    }, 0)
+      timer = setTimeout(() => {
+        if (!content.el) {
+          resolve()
+          return
+        }
+
+        if (mode.value !== 'vertical') {
+          content.width = content.el.offsetWidth
+
+          if (wrapper.width >= content.width) {
+            x.value = 0
+          } else {
+            if (x.value === 0) {
+              x.value = -scrollX.value
+            }
+          }
+        }
+
+        if (mode.value !== 'horizontal') {
+          content.height = content.el.offsetHeight
+
+          if (wrapper.height >= content.height) {
+            y.value = 0
+          } else {
+            if (y.value === 0) {
+              y.value = -scrollY.value
+            }
+          }
+        }
+
+        setTimeout(() => {
+          isReady.value = true
+          verifyScroll()
+          resolve()
+        }, 1)
+      }, 0)
+    })
   }
 
   /**
@@ -194,19 +203,28 @@ export function useScrollWrapper({
     }
 
     if (mode.value !== 'vertical') {
-      currentScroll.x = Math.min(0, Math.max(currentScroll.x, xScrollLimit.value))
+      x.value = Math.min(0, Math.max(x.value, xScrollLimit.value))
+
+      if (mode.value !== 'both') {
+        y.value = 0
+      }
     }
 
     if (mode.value !== 'horizontal') {
-      currentScroll.y = Math.min(0, Math.max(currentScroll.y, yScrollLimit.value))
+      y.value = Math.min(0, Math.max(y.value, yScrollLimit.value))
+
+      if (mode.value !== 'both') {
+        x.value = 0
+      }
     }
 
     computePercent()
+    triggerUpdate()
   }
 
   function computePercent() {
-    percentX.value = multipleFixed(currentScroll.x / (xScrollLimit.value || -1), 100, 2)
-    percentY.value = multipleFixed(currentScroll.y / (yScrollLimit.value || -1), 100, 2)
+    percentX.value = multipleFixed(x.value / (xScrollLimit.value || -1), 100, 2)
+    percentY.value = multipleFixed(y.value / (yScrollLimit.value || -1), 100, 2)
 
     percentX.value = Math.max(0, Math.min(percentX.value, 100))
     percentY.value = Math.max(0, Math.min(percentY.value, 100))
@@ -224,33 +242,35 @@ export function useScrollWrapper({
     isMounted = true
   })
 
-  function refresh() {
+  async function refresh() {
     if (typeof onBeforeRefresh === 'function') {
       onBeforeRefresh()
     }
 
     refreshWrapper()
-    computeContentSize()
+    await computeContentSize().then(() => {
+      setTimeout(
+        () => {
+          verifyScroll()
 
-    setTimeout(
-      () => {
-        verifyScroll()
-
-        if (typeof onAfterRefresh === 'function') {
-          onAfterRefresh()
-        }
-      },
-      isMounted ? 20 : 100
-    )
+          if (typeof onAfterRefresh === 'function') {
+            onAfterRefresh()
+          }
+        },
+        isMounted ? 20 : 100,
+      )
+    })
   }
 
   return {
-    wrapperElement,
-    contentElement,
+    wrapperEl,
+    contentEl,
 
     wrapper,
+    content,
     isReady,
-    currentScroll,
+    x,
+    y,
     percentX,
     percentY,
     xScrollLimit,
@@ -263,6 +283,7 @@ export function useScrollWrapper({
     handleResize,
     verifyScroll,
     computePercent,
-    refresh
+    refresh,
+    triggerUpdate,
   }
 }

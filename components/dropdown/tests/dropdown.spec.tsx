@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Dropdown } from '..'
 
 vi.useFakeTimers()
@@ -10,7 +12,7 @@ vi.useFakeTimers()
 describe('Dropdown', () => {
   it('render', () => {
     const wrapper = mount(() => (
-      <Dropdown>
+      <Dropdown visible>
         {{
           default: () => 'Dropdown',
           drop: () => (
@@ -19,7 +21,7 @@ describe('Dropdown', () => {
               <DropdownItem>{'2'}</DropdownItem>
               <DropdownItem>{'3'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -37,7 +39,7 @@ describe('Dropdown', () => {
   })
 
   it('transfer', async () => {
-    const wrapper = mount(() => <Dropdown transfer></Dropdown>)
+    const wrapper = mount(() => <Dropdown transfer visible></Dropdown>)
 
     await nextTick()
     await nextTick()
@@ -64,29 +66,27 @@ describe('Dropdown', () => {
             <DropdownList>
               <DropdownItem>{'1'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
 
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
 
     await wrapper.find('.vxp-dropdown').trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).not.toContain(
-      'display: none;'
-    )
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
     expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenLastCalledWith(true)
 
     await wrapper.find('.vxp-dropdown').trigger('mouseleave')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(onToggle).toHaveBeenLastCalledWith(false)
   })
@@ -103,7 +103,7 @@ describe('Dropdown', () => {
               <DropdownItem label={'2'}>{'2'}</DropdownItem>
               <DropdownItem label={'3'}>{'3'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -129,7 +129,7 @@ describe('Dropdown', () => {
                 {'3'}
               </DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -152,29 +152,27 @@ describe('Dropdown', () => {
             <DropdownList>
               <DropdownItem>{'1'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
 
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
 
     await wrapper.find('.vxp-dropdown__trigger').trigger('click')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).not.toContain(
-      'display: none;'
-    )
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
     expect(onToggle).toHaveBeenCalledTimes(1)
     expect(onToggle).toHaveBeenLastCalledWith(true)
 
     await wrapper.find('.vxp-dropdown__trigger').trigger('click')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(false)
     expect(onToggle).toHaveBeenCalledTimes(2)
     expect(onToggle).toHaveBeenLastCalledWith(false)
   })
@@ -196,11 +194,11 @@ describe('Dropdown', () => {
                       <DropdownItem label={'2-1'}>{'2-1'}</DropdownItem>
                       <DropdownItem label={'2-2'}>{'2-2'}</DropdownItem>
                     </DropdownList>
-                  )
+                  ),
                 }}
               </Dropdown>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -209,7 +207,7 @@ describe('Dropdown', () => {
     expect(innerDropdown.exists()).toBe(true)
 
     await innerDropdown.trigger('mouseenter')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(innerDropdown.classes()).toContain('vxp-dropdown--visible')
     expect(onSelect).not.toHaveBeenCalled()
@@ -218,19 +216,19 @@ describe('Dropdown', () => {
     expect(onSelect).toHaveBeenCalled()
     expect(onSelect).toHaveBeenCalledWith(['2', '2-1'], [{}, {}])
     expect(wrapper.find('.vxp-dropdown').classes()).not.toContain('vxp-dropdown--visible')
-    expect(innerDropdown.classes()).not.toContain('vxp-dropdown--visible')
+    expect(wrapper.find('.inner-dropdown').exists()).toBe(false)
   })
 
   it('item divided', () => {
     const wrapper = mount(() => (
-      <Dropdown>
+      <Dropdown visible>
         {{
           default: () => 'Dropdown',
           drop: () => (
             <DropdownList>
               <DropdownItem divided>{'1'}</DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -239,7 +237,7 @@ describe('Dropdown', () => {
   })
 
   it('drop class', () => {
-    const wrapper = mount(() => <Dropdown drop-class={'test'}></Dropdown>)
+    const wrapper = mount(() => <Dropdown visible drop-class={'test'}></Dropdown>)
 
     expect(wrapper.find('.vxp-dropdown__popper').classes()).toContain('test')
   })
@@ -257,7 +255,7 @@ describe('Dropdown', () => {
                 {'2'}
               </DropdownItem>
             </DropdownList>
-          )
+          ),
         }}
       </Dropdown>
     ))
@@ -265,5 +263,12 @@ describe('Dropdown', () => {
 
     await items[1].trigger('click')
     expect(onSelect).toHaveBeenCalledWith(['2'], [{ a: 2 }])
+  })
+
+  it('alive', () => {
+    const wrapper = mount(() => <Dropdown alive></Dropdown>)
+
+    expect(wrapper.find('.vxp-dropdown__popper').exists()).toBe(true)
+    expect(wrapper.find('.vxp-dropdown__popper').attributes('style')).toContain('display: none;')
   })
 })

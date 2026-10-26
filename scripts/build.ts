@@ -1,15 +1,12 @@
 import minimist from 'minimist'
-import { logger, run } from './utils'
+import { logger, run } from '@vexip-ui/scripts'
 
 const args = minimist<{
   d?: boolean,
   dev?: boolean,
-  s?: boolean,
-  sourcemap?: boolean
 }>(process.argv.slice(2))
 
 const devOnly = args.dev || args.d
-const sourceMap = args.sourcemap || args.s
 
 const env = devOnly ? 'development' : 'production'
 
@@ -17,12 +14,11 @@ async function main() {
   logger.withBothLn(() => logger.successText('start building lib...'))
 
   await run('pnpm', ['bootstrap'])
-  await run('pnpm', ['props'])
+  await run('pnpm', ['gen:props'])
   await run('vite', ['build', '--config', 'vite.config.ts'], {
     env: {
       NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
-    }
+    },
   })
 
   logger.ln()
@@ -31,15 +27,14 @@ async function main() {
     stdio: 'inherit',
     env: {
       NODE_ENV: env,
-      SOURCE_MAP: sourceMap ? 'true' : ''
-    }
+    },
   })
   await run('pnpm', ['build:style'])
 
   logger.ln()
 
   if (!process.exitCode) {
-    logger.withEndLn(() => logger.success('all builds completed successfully'))
+    logger.withEndLn(() => logger.success('All builds completed successfully'))
   }
 }
 

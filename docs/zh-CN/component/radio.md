@@ -1,0 +1,157 @@
+# Radio 单选框
+
+需要在一组选项中进行单项选择时使用，或是结合单选框组用于需要表示两种状态之间的切换的场合。
+
+## 代码示例
+
+:::demo radio/basis
+
+### 基础用法
+
+单选框具有 `label` 和 `value` 两个基础属性，当 `value` 的值与 `label` 全等时，单选框处于被选状态。
+
+每个单选框的 `label` 属性都必须是一个有效的字符串或数字。
+
+:::
+
+:::demo radio/disabled
+
+### 禁用状态
+
+添加 `disabled` 属性可以设置禁用状态。
+
+:::
+
+:::demo radio/group
+
+### 单选框组
+
+使用单选框组可以轻松的通过数组结构生成系列单选框，这也是更常用的做法。
+
+:::
+
+:::demo radio/border
+
+### 边框样式
+
+设置 `shape` 属性为 `'border'` 可以置单选框组为边框样式。
+
+:::
+
+:::demo radio/button
+
+### 按钮样式
+
+==!s|2.2.8==
+
+设置 `shape` 属性为 `'button'` 可以置单选框组为按钮样式。
+
+:::
+
+:::demo radio/button-group
+
+### 按钮组样式
+
+设置 `shape` 属性为 `'button-group'` 可以置单选框组为按钮组样式。
+
+:::
+
+:::demo radio/vertical
+
+### 垂直排列
+
+添加 `vertical` 属性可以设置单选框组垂直布局。
+
+:::
+
+:::demo radio/size
+
+### 改变尺寸
+
+设置 `size` 属性的值可以改变单选框的尺寸，目前一共提供了三种尺寸供选择。
+
+:::
+
+:::demo radio/loading
+
+### 加载状态
+
+通过 `loading` 属性可以控制单选框的加载状态。
+
+如果你希望在加载中时为只读，你需要添加 `loading-lock` 属性。
+
+:::
+
+:::demo radio/state
+
+### 不同状态
+
+通过 `state` 可以设置不同的状态。
+
+:::
+
+## API
+
+### 预设类型
+
+```ts
+type RadioShape = 'default' | 'border' | 'button'
+type RadioGroupShape = RadioShape | 'button-group'
+
+type RadioRawOption =
+  | string
+  | {
+    label: string | number | boolean,
+    content?: string,
+    disabled?: boolean
+  }
+```
+
+### Radio 属性
+
+| 名称         | 类型                                             | 说明                                                                                 | 默认值      | 始于    |
+| ------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------ | ----------- | ------- |
+| value        | `string \| number \| boolean`                    | 单选框的值，与 `label` 全等时单选框被选中，与 RadioGroup 一同使用时无效              | `null`      | -       |
+| **label**    | `string \| number \| boolean`                    | 单选框的标签，**必须设置**，当与 `value` 或 RadioGroup 的 `value` 全等时单选框被选中 | `null`      | -       |
+| label-class  | `ClassType`                                      | 单选框的标签内容的自定义类名                                                         | `null`      | -       |
+| size         | `'small' \| 'default' \| 'large'`                | 单选框的大小                                                                         | `'default'` | -       |
+| state        | `'default' \| 'success' \| 'error' \| 'warning'` | 单选框的状态                                                                         | `'default'` | -       |
+| disabled     | `boolean`                                        | 设置是否禁用单选框                                                                   | `false`     | -       |
+| loading      | `boolean`                                        | 设置是否为加载中                                                                     | `false`     | `2.0.0` |
+| loading-lock | `boolean`                                        | 设置在加载中时是否为只读                                                             | `false`     | `2.0.0` |
+| name         | `string`                                         | 设置内部 `<input>` 的 `name` 属性                                                    | `''`        | `2.2.2` |
+| shape        | `RadioShape`                                     | 设置单选框的外形                                                                     | `'default'` | `2.2.8` |
+
+### Radio 事件
+
+| 名称   | 说明                                   | 参数                                   | 始于 |
+| ------ | -------------------------------------- | -------------------------------------- | ---- |
+| change | 当单选框的值发生变化时触发，返回当前值 | `(value: string \| number \| boolean)` | -    |
+
+### Radio 插槽
+
+| 名称    | 说明                                             | 参数 | 始于    |
+| ------- | ------------------------------------------------ | ---- | ------- |
+| default | 单选框标签内容的插槽                             | -    | -       |
+| extra   | 额外内容的插槽，此处的内容被点击将不会选中单选框 | -    | `2.3.4` |
+
+### RadioGroup 属性
+
+| 名称           | 类型                              | 说明                                                               | 默认值      | 始于    |
+| -------------- | --------------------------------- | ------------------------------------------------------------------ | ----------- | ------- |
+| value          | `string \| number \| boolean`     | 单选框组的值，标签值与该值相同的单选框将被选中                     | `null`      | -       |
+| vertical       | `boolean`                         | 设置是否开启纵向显示                                               | `false`     | -       |
+| size           | `'small' \| 'default' \| 'large'` | 单选框的大小，会覆盖单选框单独设置的 `size`                        | `'default'` | -       |
+| disabled       | `boolean`                         | 设置是否禁用单选框组                                               | `false`     | -       |
+| options        | `RadioRawOption[]`                | 设置选子单选框的选项，一般用于简单快速生成单选框组，使用插槽后失效 | `[]`        | -       |
+| loading        | `boolean`                         | 设置是否为加载中                                                   | `false`     | `2.0.0` |
+| loading-icon   | `VueComponent`                    | 设置加载中的图标，只在按钮模式生效                                 | `Spinner`   | `2.0.0` |
+| loading-lock   | `boolean`                         | 设置在加载中时是否为只读                                           | `false`     | `2.0.0` |
+| loading-effect | `string`                          | 设置加载中图标的效果动画，只在按钮模式生效                         | `false`     | `2.0.0` |
+| shape          | `RadioGroupShape`                 | 设置单选框组的外形                                                 | `'default'` | `2.2.8` |
+
+### RadioGroup 事件
+
+| 名称   | 说明                                     | 参数                                   | 始于 |
+| ------ | ---------------------------------------- | -------------------------------------- | ---- |
+| change | 当单选框组的值发生变化时触发，返回当前值 | `(value: string \| number \| boolean)` | -    |

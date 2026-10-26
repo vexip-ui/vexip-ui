@@ -1,13 +1,24 @@
 export { default as Upload } from './upload'
-export { iconMaps as uploadFileIconMap } from './file-icon'
+export { uploadProps } from './props'
+
 export type { UploadProps, UploadCProps } from './props'
 export type {
   UploadListType,
-  UploadStatusType,
+  UploadStatus,
+  UploadSourceFile,
+  UploadHttpError,
+  UploadFetchMethod,
+  UploadFileState,
+  UploadFileOptions,
+  UploadFetchOptions as UploadOptions,
+  UploadExposed,
+  UploadSlots,
+  UploadListSlots,
+  UploadFileSlots,
+
+  // deprecated
   SourceFile,
   HttpError,
   FileState,
   FileOptions,
-  UploadOptions,
-  UploadExposed
 } from './symbol'

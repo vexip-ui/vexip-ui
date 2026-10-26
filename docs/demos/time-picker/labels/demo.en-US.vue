@@ -7,7 +7,7 @@
       minute: 'M',
       second: 'S'
     }"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
 </template>
 

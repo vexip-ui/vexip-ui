@@ -1,36 +1,30 @@
-import { createApp, markRaw } from 'vue'
+import { createApp, createVNode, markRaw, render } from 'vue'
+
 import Component from './message.vue'
-import { isClient, isNull, noop, toNumber, destroyObject } from '@vexip-ui/utils'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
+import { proxyExposed, unrefElement } from '@vexip-ui/hooks'
+import { destroyObject, isClient, isNull, noop, toNumber } from '@vexip-ui/utils'
 
-import type { App } from 'vue'
-import type { Key, MessageType, MessagePlacement, MessageOptions, MessageInstance } from './symbol'
+import type { App, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
+import type {
+  Key,
+  MessageConfig,
+  MessageInstance,
+  MessageOptions,
+  MessagePlacement,
+  MessageType,
+} from './symbol'
 
-export type { MessageType, MessagePlacement, MessageOptions }
+export type { MessageConfig, MessageType, MessagePlacement, MessageOptions }
 
 type FuzzyOptions = string | MessageOptions
-type ManagerOptions = { duration?: number, placement?: MessagePlacement } & Record<string, unknown>
+type ManagerOptions = { duration?: number } & MessageConfig & Record<string, unknown>
 
 interface AipMethod {
   (options: MessageOptions): () => void,
   (content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
-}
-
-const conveniences: Record<MessageType, { icon: Record<string, any> }> = {
-  info: {
-    icon: CircleInfo
-  },
-  success: {
-    icon: CircleCheck
-  },
-  warning: {
-    icon: CircleExclamation
-  },
-  error: {
-    icon: CircleXmark
-  }
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const placementWhiteList: MessagePlacement[] = ['top', 'bottom']
@@ -46,24 +40,35 @@ export class MessageManager {
   defaults: Record<string, unknown>
 
   open: AipMethod
+  primary: AipMethod
   info: AipMethod
   success: AipMethod
   warning: AipMethod
   error: AipMethod
 
+  private _mountedApp: App<unknown> | null
   private _instance: MessageInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
+  private _wrapper: HTMLElement | SVGElement | null
+  private _mountedEl: HTMLElement | null
+  private _installed: boolean
+  private _configRecord: MessageConfig | null
 
   constructor(options: ManagerOptions = {}) {
     options = {
       ...options,
-      duration: options.duration ? toNumber(options.duration) : 3000
+      duration: options.duration ? toNumber(options.duration) : 3000,
     }
 
+    this._mountedApp = null
     this._instance = null
     this._innerApp = null
     this._container = null
+    this._wrapper = null
+    this._mountedEl = null
+    this._installed = false
+    this._configRecord = null
     this.name = 'Message'
     this.defaults = {}
 
@@ -71,6 +76,10 @@ export class MessageManager {
 
     this.open = (content: FuzzyOptions, duration?: number) => {
       return this._open(null, content, duration)
+    }
+
+    this.primary = (content: FuzzyOptions, duration?: number) => {
+      return this._open('primary', content, duration)
     }
 
     this.info = (content: FuzzyOptions, duration?: number) => {
@@ -98,7 +107,7 @@ export class MessageManager {
     state: boolean,
     success: string | MessageOptions,
     error: string | MessageOptions,
-    duration?: number
+    duration?: number,
   ) {
     if (state) {
       this.success(success, duration)
@@ -111,30 +120,47 @@ export class MessageManager {
     if (isNull(key)) {
       this.clear()
     } else {
-      this._getInstance().remove(key)
+      this._getInstance()?.remove(key)
     }
   }
 
-  config({ placement, ...others }: { placement?: MessagePlacement, [x: string]: unknown }) {
-    if (placement) {
-      this._getInstance().placement = placementWhiteList.includes(placement)
-        ? placement
-        : placementWhiteList[0]
-    }
-
+  config({ placement, startOffset, itemGap, ...others }: MessageConfig & MessageOptions) {
+    this._configRecord = { placement, startOffset, itemGap }
     this.defaults = { ...this.defaults, ...others }
+
+    if (this._installed) {
+      const instance = this._getInstance()
+
+      if (instance) {
+        if (placement) {
+          instance.config({
+            placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
+          })
+        }
+
+        instance.config({ startOffset, itemGap })
+      }
+    }
   }
 
   clone() {
-    return new MessageManager(this.defaults)
+    const manager = new MessageManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+    manager._configRecord = this._configRecord
+    manager._installed = this._installed
+
+    return manager
   }
 
   clear() {
-    this._getInstance().clear()
+    this._getInstance()?.clear()
   }
 
   destroy() {
+    this._mountedEl && this._wrapper?.removeChild(this._mountedEl)
     this._innerApp?.unmount()
+    this._container && render(null, this._container)
     destroyObject(this)
   }
 
@@ -145,20 +171,52 @@ export class MessageManager {
   install(app: App, options: ManagerOptions & { property?: string } = {}) {
     const { property, ...others } = options
 
+    this._mountedApp = app
+    this._installed = true
     this.config(others)
-    app.config.globalProperties[property || '$message'] = this
+
+    if (property || !app.config.globalProperties.$message) {
+      app.config.globalProperties[property || '$message'] = this
+    }
+  }
+
+  transferTo(target: MaybeRef<string | MaybeInstance>) {
+    if (!isClient) return
+
+    const el = unrefElement(target)
+
+    if (el) {
+      this._wrapper = el
+
+      if (this._instance) {
+        this._mountedEl && this._wrapper.appendChild(this._mountedEl)
+      } else {
+        this._getInstance()
+      }
+    }
   }
 
   private _getInstance() {
-    if (!this._instance) {
-      this._container = document.createElement('div')
-      // 使用 createVNode 和 render 手动控制可以有效降低开销
-      // 然而使用上述方式创建的组件无法被 devTool 正确加载
-      // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      this._innerApp = createApp(Component)
-      this._instance = this._innerApp.mount(this._container) as MessageInstance
+    if (!this._instance && isClient) {
+      if (!this._mountedApp) {
+        console.warn('[vexip-ui:Message]: App missing, the plugin maybe not installed.')
 
-      document.body.appendChild(this._container.firstElementChild!)
+        this._container = document.createElement('div')
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as MessageInstance
+      } else {
+        const vnode = createVNode(Component, null, null)
+
+        this._container = document.createElement('div')
+        vnode.appContext = this._mountedApp._context
+
+        render(vnode, this._container)
+
+        this._instance = proxyExposed<MessageInstance>(vnode)
+      }
+
+      this._mountedEl = this._container.firstElementChild as HTMLElement
+      ;(this._wrapper || document.body).appendChild(this._mountedEl)
     }
 
     return this._instance
@@ -172,8 +230,7 @@ export class MessageManager {
     const options = typeof content === 'string' ? { content, duration: _duration } : content
 
     const key = options.key ?? getKey()
-    const message = this._getInstance()
-    const convenienceOptions = type ? conveniences[type] ?? {} : {}
+    const message = this._getInstance()!
 
     let timer: ReturnType<typeof setTimeout>
 
@@ -186,24 +243,54 @@ export class MessageManager {
       }
     }
 
-    const item: MessageOptions = Object.assign({}, this.defaults, convenienceOptions, options, {
+    const userEnterFn = options.onEnter
+    const onEnter = () => {
+      if (options.liveOnEnter) {
+        clearTimeout(timer)
+      }
+
+      if (typeof userEnterFn === 'function') {
+        return userEnterFn()
+      }
+    }
+
+    const userLeaveFn = options.onLeave
+    const onLeave = () => {
+      if (options.liveOnEnter) {
+        clearTimeout(timer)
+        setDelayClose()
+      }
+
+      if (typeof userLeaveFn === 'function') {
+        return userLeaveFn()
+      }
+    }
+
+    const item: MessageOptions = {
+      ...this.defaults,
+      ...options,
       key,
-      type,
-      onClose
-    })
+      type: type ?? options.type,
+      onClose,
+      onEnter,
+      onLeave,
+    }
 
     if (item.icon && typeof item.icon !== 'function') {
       item.icon = markRaw(item.icon)
     }
 
     message.add(item)
+    setDelayClose()
 
-    const duration = typeof item.duration === 'number' ? item.duration : 3000
+    function setDelayClose() {
+      const duration = typeof item.duration === 'number' ? item.duration : 3000
 
-    if (duration >= 500) {
-      timer = setTimeout(() => {
-        message.remove(key)
-      }, duration)
+      if (duration >= 500) {
+        timer = setTimeout(() => {
+          message.remove(key)
+        }, duration)
+      }
     }
 
     return () => {

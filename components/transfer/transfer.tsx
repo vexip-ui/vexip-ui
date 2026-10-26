@@ -1,42 +1,67 @@
-import { defineComponent, ref, reactive, computed, watchEffect, watch } from 'vue'
-import TransferPanel from './transfer-panel.vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { useFieldStore } from '@/components/form'
-import { ChevronRight, ChevronLeft, Spinner } from '@vexip-ui/icons'
-import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
+
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  renderSlot,
+  toRef,
+  watch,
+  watchEffect,
+} from 'vue'
+
+import {
+  createIconProp,
+  createStateProp,
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps,
+} from '@vexip-ui/config'
 import { isNull } from '@vexip-ui/utils'
+import { createSlotRender, useRtl } from '@vexip-ui/hooks'
+import TransferPanel from './transfer-panel'
 import { transferProps } from './props'
 
-import type { TransferKeyConfig, TransferOptionState } from './symbol'
+import type { TransferKeyConfig, TransferOptionState, TransferSlots } from './symbol'
 
 const defaultKeyConfig: Required<TransferKeyConfig> = {
   value: 'value',
   label: 'label',
-  disabled: 'disabled'
+  disabled: 'disabled',
 }
 
 export default defineComponent({
   name: 'Transfer',
-  components: {
-    Button,
-    TransferPanel
-  },
   props: transferProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, disabled, loading, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
+    const {
+      idFor,
+      labelId,
+      state,
+      disabled,
+      loading,
+      validateField,
+      getFieldValue,
+      setFieldValue,
+    } = useFieldStore<(string | number)[]>(() => source.value?.$el?.focus())
 
     const props = useProps('transfer', _props, {
       state: createStateProp(state),
+      locale: null,
       options: {
         default: () => [],
-        static: true
+        static: true,
       },
       value: {
-        default: () => getFieldValue([]),
-        static: true
+        default: () => getFieldValue(),
+        static: true,
       },
       disabled: () => disabled.value,
       paged: false,
@@ -45,20 +70,24 @@ export default defineComponent({
       keyConfig: () => ({}),
       optionHeight: {
         default: 32,
-        validator: value => value > 0
+        validator: value => value > 0,
       },
       ignoreCase: false,
       sourceTitle: null,
       targetTitle: null,
       deepState: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: createIconProp(),
       loadingLock: false,
-      loadingSpin: false
+      loadingEffect: null,
+      slots: () => ({}),
     })
 
+    const { isRtl } = useRtl()
+
     const nh = useNameHelper('transfer')
-    const locale = useLocale('transfer')
+    const locale = useLocale('transfer', toRef(props, 'locale'))
+    const icons = useIcons()
 
     const currentValue = ref<Set<string | number>>(null!)
     const sourceSelected = ref(new Set<string | number>())
@@ -82,7 +111,10 @@ export default defineComponent({
       props.keyConfig.value
       props.keyConfig.label
       props.keyConfig.disabled
-      props.options
+
+      for (let i = 0, len = props.options.length; i < len; ++i) {
+        props.options[i]
+      }
       /* eslint-enable */
 
       updateTrigger.value++
@@ -133,7 +165,7 @@ export default defineComponent({
           label,
           hidden: oldState?.hidden ?? false,
           hitting: oldState?.hitting ?? false,
-          data: option
+          data: option,
         })
 
         map.set(value, optionState)
@@ -144,14 +176,17 @@ export default defineComponent({
       currentValue.value = new Set(emittedValue)
     }
 
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
         nh.bs('vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm(props.state)]: props.state !== 'default'
-        }
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading,
+        },
       ]
     })
     const actionType = computed(() => {
@@ -162,8 +197,8 @@ export default defineComponent({
     const defaultFilter = computed(() => {
       return props.ignoreCase
         ? (value: string, option: TransferOptionState) =>
-            String(option.value).toLocaleLowerCase().includes(value)
-        : (value: string, option: TransferOptionState) => String(option.value).includes(value)
+          option.label.toLocaleLowerCase().includes(value)
+        : (value: string, option: TransferOptionState) => option.label.includes(value)
     })
     const sourceFilter = computed(() => getFilterMethod('source'))
     const targetFilter = computed(() => getFilterMethod('target'))
@@ -173,10 +208,20 @@ export default defineComponent({
       value => {
         emittedValue = value
         currentValue.value = new Set(emittedValue)
-      }
+      },
     )
 
-    expose({ handleToTarget, handleToSource, handlePanelFocus, handlePanelBlur })
+    expose({
+      handleToTarget,
+      handleToSource,
+      handlePanelFocus,
+      handlePanelBlur,
+      focus: (options?: FocusOptions) => source.value?.$el?.focus(options),
+      blur: () => {
+        source.value?.$el?.blur()
+        target.value?.$el?.blur()
+      },
+    })
 
     function getFilterMethod(type: 'source' | 'target') {
       const filter = props.filter
@@ -193,9 +238,9 @@ export default defineComponent({
     function handleChange() {
       emittedValue = Array.from(currentValue.value)
 
+      emit('update:value', emittedValue)
       setFieldValue(emittedValue)
       emitEvent(props.onChange, emittedValue)
-      emit('update:value', emittedValue)
       validateField()
     }
 
@@ -220,11 +265,11 @@ export default defineComponent({
     function handleSelect(type: 'source' | 'target') {
       const selected = {
         source: Array.from(sourceSelected.value),
-        target: Array.from(targetSelected.value)
+        target: Array.from(targetSelected.value),
       }
       const data = {
         source: selected.source.map(value => optionValueMap.get(value)?.data ?? ''),
-        target: selected.target.map(value => optionValueMap.get(value)?.data ?? '')
+        target: selected.target.map(value => optionValueMap.get(value)?.data ?? ''),
       }
 
       emitEvent(props.onSelect, type, selected, data)
@@ -243,9 +288,33 @@ export default defineComponent({
       target.value?.$el.blur()
     }
 
+    function getSlotRender(names: string[]) {
+      let renderer: unknown = createSlotRender(slots, names)
+
+      if (!renderer) {
+        for (const name of names) {
+          renderer = props.slots[name as keyof TransferSlots]
+          if (typeof renderer === 'function') {
+            break
+          }
+        }
+
+        return typeof renderer === 'function'
+          ? (params: any) => <Renderer renderer={renderer as any} data={params}></Renderer>
+          : null
+      }
+
+      return null
+    }
+
     return () => {
       return (
-        <div id={idFor.value} class={className.value}>
+        <div
+          id={idFor.value}
+          class={className.value}
+          role={'application'}
+          aria-labelledby={labelId.value}
+        >
           <TransferPanel
             ref={source}
             v-model:selected={sourceSelected.value}
@@ -264,64 +333,70 @@ export default defineComponent({
             loading={props.loading}
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
-            loading-spin={props.loadingSpin}
+            loading-effect={props.loadingEffect}
+            locale={locale.value}
             onSelect={() => handleSelect('source')}
             onEnter={handleToTarget}
             onSwitch={() => handlePanelFocus('target')}
           >
             {{
-              header: slots['source-header'] || slots.sourceHeader || slots.header,
-              title: slots['source-title'] || slots.sourceTitle || slots.title,
-              body: slots['source-body'] || slots.sourceBody || slots.body,
-              footer: slots['source-footer'] || slots.sourceFooter || slots.footer,
-              option: slots['source-option'] || slots.sourceOption || slots.option
+              header: getSlotRender(['source-header', 'sourceHeader', 'header']),
+              title: getSlotRender(['source-title', 'sourceTitle', 'title']),
+              body: getSlotRender(['source-body', 'sourceBody', 'body']),
+              footer: getSlotRender(['source-footer', 'sourceFooter', 'footer']),
+              option: getSlotRender(['source-option', 'sourceOption', 'option']),
+              label: getSlotRender(['source-label', 'sourceLabel', 'label']),
             }}
           </TransferPanel>
           <div class={nh.be('actions')}>
-            {slots.actions
-              ? slots.actions({ handleToTarget, handleToSource })
-              : [
-                  <Button
-                    inherit
-                    class={nh.be('action')}
-                    type={actionType.value}
-                    size={'small'}
-                    disabled={props.disabled || !toTargetEnabled.value}
-                    loading={props.loading && props.loadingLock}
-                    loading-icon={props.loadingIcon}
-                    loading-spin={props.loadingSpin}
-                    style={{ marginBottom: '6px' }}
-                    onClick={handleToTarget}
-                  >
-                    {{
-                      icon: () => (
-                        <Icon label="to right">
-                          <ChevronRight></ChevronRight>
-                        </Icon>
-                      )
-                    }}
-                  </Button>,
-                  <Button
-                    inherit
-                    class={nh.be('action')}
-                    type={actionType.value}
-                    size={'small'}
-                    disabled={props.disabled || !toSourceEnabled.value}
-                    loading={props.loading && props.loadingLock}
-                    loading-icon={props.loadingIcon}
-                    loading-spin={props.loadingSpin}
-                    style={{ margin: '0' }}
-                    onClick={handleToSource}
-                  >
-                    {{
-                      icon: () => (
-                        <Icon label="to left">
-                          <ChevronLeft></ChevronLeft>
-                        </Icon>
-                      )
-                    }}
-                  </Button>
-                ]}
+            {renderSlot(slots, 'actions', { handleToTarget, handleToSource }, () => [
+              <Renderer renderer={props.slots.actions} data={{ handleToTarget, handleToSource }}>
+                <Button
+                  key={1}
+                  inherit
+                  class={nh.be('action')}
+                  type={actionType.value}
+                  size={'small'}
+                  disabled={props.disabled || !toTargetEnabled.value}
+                  loading={readonly.value}
+                  loading-icon={props.loadingIcon}
+                  loading-effect={props.loadingEffect}
+                  style={{ marginBottom: '6px' }}
+                  onClick={handleToTarget}
+                >
+                  {{
+                    icon: () => (
+                      <Icon
+                        {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
+                        label={isRtl.value ? 'to left' : 'to right'}
+                      ></Icon>
+                    ),
+                  }}
+                </Button>
+                <Button
+                  key={2}
+                  inherit
+                  class={nh.be('action')}
+                  type={actionType.value}
+                  size={'small'}
+                  disabled={props.disabled || !toSourceEnabled.value}
+                  loading={readonly.value}
+                  loading-icon={props.loadingIcon}
+                  loading-effect={props.loadingEffect}
+                  style={{ margin: '0' }}
+                  onClick={handleToSource}
+                >
+                  {{
+                    icon: () => (
+                      <Icon
+                        {...(isRtl.value ? icons.value.angleRight : icons.value.angleLeft)}
+                        label={isRtl.value ? 'to right' : 'to left'}
+                      ></Icon>
+                    ),
+                  }}
+                </Button>
+              </Renderer>,
+            ])}
           </div>
           <TransferPanel
             ref={target}
@@ -341,21 +416,23 @@ export default defineComponent({
             loading={props.loading}
             loading-icon={props.loadingIcon}
             loading-lock={props.loadingLock}
-            loading-spin={props.loadingSpin}
+            loading-effect={props.loadingEffect}
+            locale={locale.value}
             onSelect={() => handleSelect('target')}
             onEnter={handleToSource}
             onSwitch={() => handlePanelFocus('source')}
           >
             {{
-              header: slots['target-header'] || slots.targetHeader || slots.header,
-              title: slots['target-title'] || slots.targetTitle || slots.title,
-              body: slots['target-body'] || slots.targetBody || slots.body,
-              footer: slots['target-footer'] || slots.targetFooter || slots.footer,
-              option: slots['target-option'] || slots.targetOption || slots.option
+              header: getSlotRender(['target-header', 'targetHeader', 'header']),
+              title: getSlotRender(['target-title', 'targetTitle', 'title']),
+              body: getSlotRender(['target-body', 'targetBody', 'body']),
+              footer: getSlotRender(['target-footer', 'targetFooter', 'footer']),
+              option: getSlotRender(['target-option', 'targetOption', 'option']),
+              label: getSlotRender(['target-label', 'targetLabel', 'label']),
             }}
           </TransferPanel>
         </div>
       )
     }
-  }
+  },
 })

@@ -1,9 +1,10 @@
-import { computed, inject, provide, getCurrentInstance, onBeforeUnmount } from 'vue'
-import { isNull, noop } from '@vexip-ui/utils'
+import { computed, getCurrentInstance, inject, onBeforeUnmount, provide } from 'vue'
+
+import { isNull, noop, toFalse } from '@vexip-ui/utils'
 import { FIELD_OPTIONS } from './symbol'
 
+import type { Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
-import type { FieldOptions } from './symbol'
 
 /**
  * 根据路径读取对象中的值 (实现 ?. 的逻辑)
@@ -15,7 +16,7 @@ import type { FieldOptions } from './symbol'
 export function getValueByPath<T = unknown>(
   obj: Record<string, any>,
   path: string | string[],
-  strict = false
+  strict = false,
 ): T | null {
   if (!obj || !path) return null
 
@@ -68,7 +69,7 @@ export function setValueByPath(
   obj: Record<string, any>,
   path: string | string[],
   value: unknown,
-  strict = false
+  strict = false,
 ): boolean {
   if (!obj || !path) return false
 
@@ -117,28 +118,49 @@ export function setValueByPath(
   return false
 }
 
-const defaultProp = computed(() => '')
+export interface FormFieldStore<V = unknown> {
+  isField: boolean,
+  idFor: Ref<string | undefined>,
+  labelId: Ref<string | undefined>,
+  state: Ref<ComponentState>,
+  disabled: Ref<boolean>,
+  loading: Ref<boolean>,
+  size: Ref<ComponentSize>,
+  validateField: () => Promise<string[] | null>,
+  clearField: (defaultValue?: V) => void,
+  resetField: () => boolean,
+  getFieldValue: (defaultValue?: V) => V,
+  setFieldValue: (value: V, strict?: boolean) => void,
+}
+
+const defaultId = computed(() => undefined as string | undefined)
 const defaultState = computed(() => 'default' as ComponentState)
 const defaultFalse = computed(() => false)
 const defaultSize = computed(() => 'default' as ComponentSize)
 
-function getEmptyActions<V = unknown>() {
+function getEmptyActions<V>() {
   return {
     isField: false,
-    idFor: defaultProp,
+    idFor: defaultId,
+    labelId: defaultId,
     state: defaultState,
     disabled: defaultFalse,
     loading: defaultFalse,
     size: defaultSize,
-    validateField: noop as FieldOptions['validate'],
-    clearField: noop as FieldOptions['clearError'],
-    resetField: noop as FieldOptions['reset'],
-    getFieldValue: (v => v) as (defaultValue?: V) => V,
-    setFieldValue: noop as (value: V, strict?: boolean) => void
-  }
+    validateField: noop,
+    clearField: noop,
+    resetField: toFalse,
+    getFieldValue: v => v,
+    setFieldValue: noop,
+  } as FormFieldStore<V>
 }
 
-export function useFieldStore<V = unknown>(onFocus?: () => void) {
+/**
+ * Create a field store, provide field states and control methods
+ *
+ * @param onFocus a focus method for focusing when label is clicked
+ */
+export function useFieldStore<V = unknown>(onFocus?: () => void): FormFieldStore<V> {
   const instance = getCurrentInstance()
 
   if (!instance) return getEmptyActions<V>()
@@ -156,7 +178,7 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
   onFocus && fieldOptions.emitter.on('focus', onFocus)
 
   onBeforeUnmount(() => {
-    fieldOptions.unsync(instance)
+    fieldOptions.unSync(instance)
     onFocus && fieldOptions.emitter.off('focus', onFocus)
   })
 
@@ -170,6 +192,7 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
   return {
     isField: true,
     idFor: fieldOptions.idFor,
+    labelId: fieldOptions.labelId,
     state: fieldOptions.state,
     disabled: fieldOptions.disabled,
     loading: fieldOptions.loading,
@@ -178,6 +201,6 @@ export function useFieldStore<V = unknown>(onFocus?: () => void) {
     clearField,
     resetField: fieldOptions.reset,
     getFieldValue: fieldOptions.getValue as (defaultValue?: V) => V,
-    setFieldValue: fieldOptions.setValue as (value: V, strict?: boolean) => void
+    setFieldValue: fieldOptions.setValue as (value: V, strict?: boolean) => void,
   }
 }

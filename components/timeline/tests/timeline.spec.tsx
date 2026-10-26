@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest'
 import { TimelineItem } from '@/components/timeline-item'
-import { GithubB } from '@vexip-ui/icons'
+
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
 import { Timeline } from '..'
 
 describe('Timeline', () => {
@@ -33,10 +35,10 @@ describe('Timeline', () => {
     expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--pending')
   })
 
-  it('both sides', () => {
-    const wrapper = mount(() => <Timeline both-sides></Timeline>)
+  it('alternate', () => {
+    const wrapper = mount(() => <Timeline alternate></Timeline>)
 
-    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--both-sides')
+    expect(wrapper.find('.vxp-timeline').classes()).toContain('vxp-timeline--alternate')
   })
 
   it('flip', () => {
@@ -52,22 +54,14 @@ describe('Timeline', () => {
   })
 
   it('item type', () => {
-    (['default', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'error', 'warning', 'disabled'] as const).forEach(type => {
       const wrapper = mount(() => (
         <Timeline>
           <TimelineItem type={type}></TimelineItem>
         </Timeline>
       ))
 
-      if (type !== 'default') {
-        expect(wrapper.find('.vxp-timeline__item').classes()).toContain(
-          `vxp-timeline__item--${type}`
-        )
-      } else {
-        expect(wrapper.find('.vxp-timeline__item').classes()).not.toContain(
-          `vxp-timeline__item--${type}`
-        )
-      }
+      expect(wrapper.find('.vxp-timeline__item').classes()).toContain(`vxp-timeline__item--${type}`)
     })
   })
 
@@ -79,10 +73,10 @@ describe('Timeline', () => {
     ))
 
     expect(wrapper.find('.vxp-timeline__item').attributes('style')).toContain(
-      '--vxp-timeline-pointer-color: red;'
+      '--vxp-timeline-pointer-color: red;',
     )
     expect(wrapper.find('.vxp-timeline__item').attributes('style')).toContain(
-      '--vxp-timeline-pointer-b-color: red;'
+      '--vxp-timeline-pointer-b-color: red;',
     )
   })
 
@@ -109,10 +103,10 @@ describe('Timeline', () => {
     const items = wrapper.findAll('.vxp-timeline__item')
 
     expect(items[0].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-left-color: yellow;'
+      'border-inline-start-color: yellow;',
     )
     expect(items[1].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-left-color: red;'
+      'border-inline-start-color: red;',
     )
   })
 
@@ -127,11 +121,11 @@ describe('Timeline', () => {
     const items = wrapper.findAll('.vxp-timeline__item')
 
     expect(items[0].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-left-style: dashed;'
+      'border-inline-start-style: dashed;',
     )
     expect(items[1].find('.vxp-timeline__line').attributes('style')).toBeUndefined()
     expect(items[2].find('.vxp-timeline__line').attributes('style')).toContain(
-      'border-left-style: dashed;'
+      'border-inline-start-style: dashed;',
     )
   })
 
@@ -140,12 +134,12 @@ describe('Timeline', () => {
       <Timeline line-color={'yellow'}>
         <TimelineItem>
           {{
-            signal: () => <GithubB></GithubB>
+            signal: () => <Github></Github>,
           }}
         </TimelineItem>
       </Timeline>
     ))
 
-    expect(wrapper.find('.vxp-timeline__item').findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.find('.vxp-timeline__item').findComponent(Github).exists()).toBe(true)
   })
 })

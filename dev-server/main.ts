@@ -4,9 +4,22 @@ import '../style/dark/preset.scss'
 import { createApp } from 'vue'
 
 const isDark = localStorage.getItem('vexip-docs-theme-prefer-dark')
+const isRtl = localStorage.getItem('vexip-docs-direction-prefer-rtl')
+const noPadding = localStorage.getItem('vexip-dev-prefer-no-padding')
 
 if (isDark === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.classList.add('dark')
+}
+
+if (isRtl === 'true') {
+  document.documentElement.classList.add('rtl')
+  document.documentElement.dir = 'rtl'
+} else {
+  document.documentElement.dir = 'ltr'
+}
+
+if (noPadding !== 'true') {
+  document.documentElement.classList.add('padding')
 }
 
 if (__THEME__) {
@@ -22,7 +35,7 @@ if (__THEME__) {
     import('../components/loading'),
     import('../components/message'),
     import('../components/notice'),
-    import('../components/toast')
+    import('../components/toast'),
   ]).then(
     ([
       { router },
@@ -32,7 +45,7 @@ if (__THEME__) {
       { Loading },
       { Message },
       { Notice },
-      { Toast }
+      { Toast },
     ]) => {
       createApp(App)
         .use(router)
@@ -43,6 +56,6 @@ if (__THEME__) {
         .use(Notice)
         .use(Toast)
         .mount('#app')
-    }
+    },
   )
 }

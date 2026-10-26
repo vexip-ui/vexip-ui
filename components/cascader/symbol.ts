@@ -1,3 +1,4 @@
+export type Data = Record<string, any>
 export type CascaderValue = (string | number)[] | (string | number)[][]
 
 export interface CascaderKeyConfig {
@@ -5,7 +6,7 @@ export interface CascaderKeyConfig {
   label?: string,
   children?: string,
   disabled?: string,
-  hasChild?: string
+  hasChild?: string,
 }
 
 export interface CascaderOptionState {
@@ -24,5 +25,30 @@ export interface CascaderOptionState {
   loaded: boolean,
   error: boolean,
   childrenLoaded: boolean,
-  data: Record<string, any>
+  data: Data,
+}
+
+export interface CascaderPanelSlots {
+  default?: (params: {
+    option: CascaderOptionState,
+    index: number,
+    selected: boolean,
+    canCheck: boolean,
+    hasChild: boolean,
+  }) => any,
+  label?: (params: {
+    option: CascaderOptionState,
+    index: number,
+    selected: boolean,
+    canCheck: boolean,
+    hasChild: boolean,
+    handleSelect: () => void,
+  }) => any,
+}
+
+export interface CascaderSlots extends CascaderPanelSlots {
+  prefix?: () => any,
+  suffix?: () => any,
+  control?: () => any,
+  empty?: () => any,
 }

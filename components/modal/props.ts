@@ -1,18 +1,31 @@
 import {
-  buildProps,
   booleanProp,
   booleanStringProp,
+  buildProps,
   classProp,
+  eventProp,
+  localeProp,
+  sizeProp,
   styleProp,
-  eventProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ButtonProps, ButtonType } from '@/components/button'
+import type { ModalSlots, PositionPayload, SizePayload } from './symbol'
 
 const positionType = [Number, String]
 
+export const positionValidator = (value: string | number) => {
+  return value === 'auto' || !Number.isNaN(parseFloat(value as string))
+}
+export const positionProp = {
+  default: 'auto' as const,
+  validator: positionValidator,
+}
+
 export const modalProps = buildProps({
+  locale: localeProp('modal'),
   transfer: booleanStringProp,
   active: booleanProp,
   width: positionType,
@@ -38,19 +51,29 @@ export const modalProps = buildProps({
   transitionName: String,
   confirmText: String,
   cancelText: String,
+  actionSize: sizeProp,
   autoRemove: booleanProp,
+  confirmType: String as PropType<ButtonType>,
+  confirmProps: Object as PropType<ButtonProps>,
+  cancelType: String as PropType<ButtonType>,
+  cancelProps: Object as PropType<ButtonProps>,
+  undivided: booleanProp,
+  xOffset: positionType,
+  yOffset: positionType,
+  disableEsc: booleanProp,
+  slots: Object as PropType<ModalSlots>,
   onToggle: eventProp<(active: boolean) => void>(),
   onConfirm: eventProp(),
   onCancel: eventProp(),
   onClose: eventProp(),
   onShow: eventProp(),
   onHide: eventProp(),
-  onDragStart: eventProp<(position: { top: number, left: number }) => void>(),
-  onDragMove: eventProp<(position: { top: number, left: number }) => void>(),
-  onDragEnd: eventProp<(position: { top: number, left: number }) => void>(),
-  onResizeStart: eventProp<(rect: { width: number, height: number }) => void>(),
-  onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
-  onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>()
+  onDragStart: eventProp<(position: PositionPayload) => void>(),
+  onDragMove: eventProp<(position: PositionPayload) => void>(),
+  onDragEnd: eventProp<(position: PositionPayload) => void>(),
+  onResizeStart: eventProp<(size: SizePayload) => void>(),
+  onResizeMove: eventProp<(size: SizePayload) => void>(),
+  onResizeEnd: eventProp<(size: SizePayload) => void>(),
 })
 
 export type ModalProps = ExtractPropTypes<typeof modalProps>

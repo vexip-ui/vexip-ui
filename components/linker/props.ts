@@ -1,17 +1,17 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { LinkerType } from './symbol'
 
 export const linkerProps = buildProps({
   to: String,
   type: String as PropType<LinkerType>,
-  icon: Object,
+  icon: iconProp,
   underline: booleanProp,
   disabled: booleanProp,
   target: String,
-  onClick: eventProp<(event: MouseEvent) => void>()
+  onClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type LinkerProps = ExtractPropTypes<typeof linkerProps>

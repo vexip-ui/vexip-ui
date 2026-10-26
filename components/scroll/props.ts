@@ -1,11 +1,20 @@
-import { buildProps, booleanProp, booleanNumberProp, classProp, eventProp } from '@vexip-ui/config'
+import {
+  booleanNumberProp,
+  booleanProp,
+  buildProps,
+  classProp,
+  eventProp,
+  styleProp,
+} from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ScrollMode, ScrollPayload, BarScrollPayload } from './symbol'
+import type { BarScrollPayload, ScrollMode, ScrollPayload } from './symbol'
 
 export const scrollProps = buildProps({
   scrollClass: classProp,
+  scrollStyle: styleProp,
+  scrollAttrs: Object as PropType<Record<string, any>>,
   mode: String as PropType<ScrollMode>,
   width: [Number, String],
   height: [Number, String],
@@ -26,7 +35,7 @@ export const scrollProps = buildProps({
   noTransition: booleanProp,
   onBeforeScroll: Function as PropType<(payload: { signX: number, signY: number }) => boolean>,
   useBarTrack: booleanProp,
-  wrapperTag: String,
+  scrollTag: String,
   onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
   onXEnabledChange: eventProp<(enabled: boolean) => void>(),
   onYEnabledChange: eventProp<(enabled: boolean) => void>(),
@@ -37,7 +46,7 @@ export const scrollProps = buildProps({
   onBarScrollStart: eventProp<(payload: BarScrollPayload) => void>(),
   onBarScroll: eventProp<(payload: BarScrollPayload) => void>(),
   onBarScrollEnd: eventProp<(payload: BarScrollPayload) => void>(),
-  onReady: eventProp()
+  onReady: eventProp(),
 })
 
 export type ScrollProps = ExtractPropTypes<typeof scrollProps>

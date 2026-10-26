@@ -1,10 +1,10 @@
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 
 import type { Ref } from 'vue'
 
 export function useLabel(
   rawLabel: Ref<string | number | null>,
-  element: Ref<HTMLElement | null | undefined>
+  element: Ref<HTMLElement | null | undefined>,
 ) {
   const label = ref(rawLabel.value)
 

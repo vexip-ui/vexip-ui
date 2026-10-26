@@ -1,10 +1,11 @@
 import { resolve } from 'node:path'
-import fs from 'fs-extra'
+import { existsSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+
 import minimist from 'minimist'
 import { format } from 'prettier'
-import { rootDir, prettierConfig, logger, run, specifyComponent } from './utils'
-
-const { readdirSync, statSync, existsSync, writeFileSync } = fs
+import { logger, queryIdlePort, run } from '@vexip-ui/scripts'
+import { prettierConfig, rootDir } from './constant'
+import { specifyComponent } from './utils'
 
 const args = minimist<{
   s?: boolean,
@@ -15,11 +16,11 @@ const args = minimist<{
   l?: string,
   lang?: string,
   t?: boolean,
-  theme?: boolean
+  theme?: boolean,
 }>(process.argv.slice(2))
 
 const sourceMap = args.sourcemap || args.s
-const port = args.port || args.p || '8008'
+const argPort = args.port || args.p || '8008'
 const prodMode = args.prod
 const lang = args.lang || args.l
 const theme = args.theme || args.t
@@ -28,7 +29,11 @@ const langs = ['zh-CN', 'en-US']
 
 const devDir = resolve(rootDir, 'dev-server')
 
+let port = parseFloat(argPort) || 8008
+
 async function main() {
+  port = await queryIdlePort(port)
+
   if (theme) {
     await serveTheme()
   } else {
@@ -55,13 +60,20 @@ async function serveComponent() {
     export const router = createRouter({
       history: createWebHashHistory('/'),
       routes: [
-        ${demos.map((demo, index) => {
-          return `{
+        ${demos
+          .map((demo, index) => {
+            return `{
             path: '${index ? `/${demo}` : '/'}',
             name: '${demo}',
             component: () => import('../../docs/demos/${target}/${demo}/demo.${matchedLang}.vue')
           }`
-        }).join(',\n')},
+          })
+          .join(',\n')},
+        {
+          path: '/${demos.includes('play') ? '_' : ''}play',
+          name: 'playground',
+          component: () => import('../play.vue')
+        },
         {
           path: '/:catchAll(.*)',
           redirect: '/'
@@ -76,34 +88,53 @@ async function serveComponent() {
 
   writeFileSync(
     resolve(devDir, 'router', `port-${port}.ts`),
-    format(router, { ...prettierConfig, parser: 'typescript' }),
-    'utf-8'
+    await format(router, { ...prettierConfig, parser: 'typescript' }),
+    'utf-8',
   )
 
-  await run('vite', ['serve'], {
+  const playPath = resolve(devDir, 'play.vue')
+
+  if (!existsSync(playPath)) {
+    writeFileSync(
+      playPath,
+      await format(
+        `<template>
+          <div></div>
+        </template>
+        
+        <script setup lang="ts">
+        // write something or copy from playground
+        </script>`,
+        { ...prettierConfig, parser: 'vue' },
+      ),
+      'utf-8',
+    )
+  }
+
+  await run('pnpm', ['serve'], {
     cwd: devDir,
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',
       TARGET: target,
       DEMOS: JSON.stringify(demos),
-      PORT: port,
+      PORT: `${port}`,
       SOURCE_MAP: sourceMap ? 'true' : '',
-      THEME: theme ? 'true' : ''
-    }
+      THEME: theme ? 'true' : '',
+    },
   })
 }
 
 async function serveTheme() {
-  await run('vite', ['serve'], {
+  await run('pnpm', ['serve'], {
     cwd: devDir,
     stdio: 'inherit',
     env: {
       NODE_ENV: prodMode ? 'production' : 'development',
-      PORT: port,
+      PORT: `${port}`,
       SOURCE_MAP: sourceMap ? 'true' : '',
-      THEME: 'true'
-    }
+      THEME: 'true',
+    },
   })
 }
 
@@ -111,7 +142,7 @@ function queryDemos(target: string, lang: string) {
   const dir = resolve(rootDir, 'docs/demos', target)
 
   return readdirSync(dir).filter(
-    f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, `demo.${lang}.vue`))
+    f => statSync(resolve(dir, f)).isDirectory() && existsSync(resolve(dir, f, `demo.${lang}.vue`)),
   )
 }
 

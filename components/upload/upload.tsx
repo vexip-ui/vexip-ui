@@ -1,26 +1,35 @@
-import { defineComponent, ref, computed, watch, onBeforeUnmount } from 'vue'
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
+import { Renderer } from '@/components/renderer'
 import { UploadList } from '@/components/upload-list'
 import { useFieldStore } from '@/components/form'
-import { useNameHelper, useProps, useLocale, createStateProp, emitEvent } from '@vexip-ui/config'
-import { isClient, noop, isDefined, isFalse, isPromise, randomString } from '@vexip-ui/utils'
-import { CloudArrowUp, Upload as IUpload, Spinner, Plus } from '@vexip-ui/icons'
+
+import { computed, defineComponent, onBeforeUnmount, ref, renderSlot, toRef, watch } from 'vue'
+
+import {
+  createIconProp,
+  createStateProp,
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps,
+} from '@vexip-ui/config'
+import { isClient, isDefined, isFalse, isPromise, noop, randomString } from '@vexip-ui/utils'
 import { uploadProps } from './props'
 import { upload } from './request'
 import { StatusType, uploadListTypes } from './symbol'
 
 import type { Ref } from 'vue'
 import type {
-  UploadListType,
-  HttpError,
-  SourceFile,
-  FileState,
-  FileOptions,
-  DirectoryEntity
+  DirectoryEntity,
+  UploadFileOptions,
+  UploadFileState,
+  UploadHttpError,
+  UploadSourceFile,
 } from './symbol'
 
-function getDefaultFileState(): FileState {
+function getDefaultFileState(): UploadFileState {
   return {
     id: randomString(),
     name: '',
@@ -34,39 +43,38 @@ function getDefaultFileState(): FileState {
     path: '',
     xhr: null,
     response: null,
-    error: null
+    error: null,
+    abort: noop,
   }
 }
 
 export default defineComponent({
   name: 'Upload',
-  components: {
-    Button,
-    Icon,
-    UploadList,
-    CloudArrowUp
-  },
   props: uploadProps,
   emits: ['update:file-list'],
   setup(_props, { slots, emit, expose }) {
-    const { idFor, state, disabled, loading, size, validateField, getFieldValue, setFieldValue } =
-      useFieldStore<FileOptions[]>(() => {
-        if (button.value?.$el) {
-          button.value.$el.focus()
-        } else {
-          panel.value?.focus()
-        }
-      })
+    const {
+      idFor,
+      labelId,
+      state,
+      disabled,
+      loading,
+      size,
+      validateField,
+      getFieldValue,
+      setFieldValue,
+    } = useFieldStore<UploadFileOptions[]>(focus)
 
     const props = useProps('upload', _props, {
       state: createStateProp(state),
+      locale: null,
       url: {
         default: '',
-        static: true
+        static: true,
       },
       fileList: {
-        default: () => getFieldValue([]),
-        static: true
+        default: () => getFieldValue(),
+        static: true,
       },
       multiple: false,
       tip: '',
@@ -74,7 +82,7 @@ export default defineComponent({
       filter: '',
       maxSize: {
         default: null,
-        validator: value => value >= 0
+        validator: value => value >= 0,
       },
       field: 'file',
       data: () => ({}),
@@ -84,25 +92,25 @@ export default defineComponent({
       hiddenFiles: false,
       countLimit: {
         default: 0,
-        validator: value => value >= 0
+        validator: value => value >= 0,
       },
       allowDrag: false,
       onBeforeUpload: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       onBeforeSelect: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       iconRenderer: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       selectToAdd: false,
       listType: {
-        default: 'name' as UploadListType,
-        validator: (value: UploadListType) => uploadListTypes.includes(value)
+        default: 'name',
+        validator: value => uploadListTypes.includes(value),
       },
       block: false,
       loadingText: null,
@@ -112,23 +120,35 @@ export default defineComponent({
       buttonLabel: null,
       disabled: () => disabled.value,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: createIconProp(),
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: null,
+      image: false,
       defaultFiles: () => [],
-      // 'canPreview' using UploadFile default
-      listStyle: null
+      // canPreview: don't set, using UploadFile default value
+      listStyle: null,
+      name: {
+        default: '',
+        static: true,
+      },
+      customFetch: {
+        default: null,
+        isFunc: true,
+      },
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('upload')
-    const locale = useLocale('upload')
-    const fileStates = ref([]) as Ref<FileState[]>
+    const locale = useLocale('upload', toRef(props, 'locale'))
+    const icons = useIcons()
+    const fileStates = ref([]) as Ref<UploadFileState[]>
     const isDragOver = ref(false)
 
     const input = ref<HTMLInputElement>()
     const button = ref<InstanceType<typeof Button>>()
     const panel = ref<HTMLElement>()
 
+    const readonly = computed(() => props.loading && props.loadingLock)
     const className = computed(() => {
       return [
         nh.b(),
@@ -143,8 +163,10 @@ export default defineComponent({
           [nh.bm('block')]: props.block,
           [nh.bm('drag-only')]: props.disabledClick,
           [nh.bm('image')]: props.image,
-          [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length
-        }
+          [nh.bm('has-file')]: !props.hiddenFiles && renderFiles.value.length,
+          [nh.bm('readonly')]: readonly.value,
+          [nh.bm('loading')]: props.loading,
+        },
       ]
     })
     const controlClass = computed(() => {
@@ -152,19 +174,17 @@ export default defineComponent({
         return {
           [nh.be('image-control')]: true,
           [nh.bem('image-control', 'drag-over')]: isDragOver.value,
-          [nh.bem('image-control', 'disabled')]: props.disabled
+          [nh.bem('image-control', 'disabled')]: props.disabled,
         }
       }
 
       return {
         [nh.be('control')]: true,
-        [nh.bem('control', 'drag-over')]: isDragOver.value
+        [nh.bem('control', 'drag-over')]: isDragOver.value,
       }
     })
     const acceptString = computed(() => {
-      if (props.image) return 'image/*'
-
-      const accept = props.accept
+      const accept = props.image ? (props.accept?.length ? props.accept : 'image/*') : props.accept
 
       return accept && (typeof accept === 'string' ? accept : accept.join())
     })
@@ -178,8 +198,8 @@ export default defineComponent({
     watch(
       () => props.fileList,
       value => {
-        const idMap = new Map<string | number, FileState>()
-        const fileMap = new Map<SourceFile, FileState>()
+        const idMap = new Map<string | number, UploadFileState>()
+        const fileMap = new Map<UploadSourceFile, UploadFileState>()
 
         for (const state of fileStates.value) {
           if (isDefined(state.id)) {
@@ -194,17 +214,36 @@ export default defineComponent({
         fileStates.value = (value || []).map(file =>
           createFileState(
             file,
-            file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined
-          )
+            file.id ? idMap.get(file.id) : file.source ? fileMap.get(file.source) : undefined,
+          ),
         )
         syncInputFiles()
       },
-      { immediate: true, deep: true }
+      { immediate: true, deep: true },
     )
 
-    expose({ execute, handleDelete })
+    expose({
+      isDragOver,
+      execute,
+      handleDelete,
+      focus,
+      blur: () => {
+        button.value?.$el.blur()
+        panel.value?.blur()
+      },
+    })
+
+    function focus(options?: FocusOptions) {
+      if (button.value?.$el) {
+        button.value.$el.focus(options)
+      } else {
+        panel.value?.focus(options)
+      }
+    }
 
     function handleClick() {
+      if (props.disabled || readonly.value) return
+
       !props.disabledClick && input.value?.click()
     }
 
@@ -224,8 +263,8 @@ export default defineComponent({
       }
     }
 
-    async function handleFilesChange(inputFiles: FileList | SourceFile[]) {
-      const originFiles = Array.from(inputFiles || []) as SourceFile[]
+    async function handleFilesChange(inputFiles: FileList | UploadSourceFile[]) {
+      const originFiles = Array.from(inputFiles || []) as UploadSourceFile[]
       const shouldAdd = props.selectToAdd
       const files = shouldAdd ? Array.from(fileStates.value) : []
 
@@ -248,7 +287,7 @@ export default defineComponent({
             name: file.name,
             size: file.size,
             type: file.type,
-            source: file
+            source: file,
           })
         }
 
@@ -287,13 +326,13 @@ export default defineComponent({
     }
 
     function emitChangeEvent() {
+      emit('update:file-list', fileStates.value)
       setFieldValue(fileStates.value)
       emitEvent(props.onChange, fileStates.value)
-      emit('update:file-list', fileStates.value)
       validateField()
     }
 
-    function getFileStateBySource(file: SourceFile) {
+    function getFileStateBySource(file: UploadSourceFile) {
       const { name, size, type } = file
       const path = file.path || file.webkitRelativePath
 
@@ -308,7 +347,10 @@ export default defineComponent({
       })
     }
 
-    function createFileState(file: FileOptions, defaults = getDefaultFileState()): FileState {
+    function createFileState(
+      file: UploadFileOptions,
+      defaults = getDefaultFileState(),
+    ): UploadFileState {
       const { id, name, size, type, base64, status, percentage, source, url, path } = file
 
       Object.assign(defaults, {
@@ -324,13 +366,13 @@ export default defineComponent({
         path: path || '',
         xhr: null,
         response: null,
-        error: null
+        error: null,
       })
 
       return defaults
     }
 
-    function getFileExtension(file: FileState) {
+    function getFileExtension(file: UploadFileState) {
       return file.name.split('.').pop()!.toLocaleLowerCase()
     }
 
@@ -340,7 +382,7 @@ export default defineComponent({
       }
 
       const uploadFiles = fileStates.value.filter(
-        item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
+        item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE,
       )
       const requests: Promise<any>[] = []
 
@@ -351,13 +393,13 @@ export default defineComponent({
       return await Promise.all(requests).then(responses => responses.filter(response => response))
     }
 
-    async function uploadFile(file: FileState) {
+    async function uploadFile(file: UploadFileState) {
       if (typeof props.onBeforeUpload === 'function') {
         let result = props.onBeforeUpload(
           file,
           fileStates.value.filter(
-            item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE
-          )
+            item => item.status !== StatusType.SUCCESS && item.status !== StatusType.DELETE,
+          ),
         )
 
         if (isPromise(result)) {
@@ -375,7 +417,7 @@ export default defineComponent({
             file.source = result
           } else {
             file.source = new File([result], file.name, {
-              type: file.type
+              type: file.type,
             })
           }
         }
@@ -388,7 +430,7 @@ export default defineComponent({
       const { url, headers, withCredentials, data, field, pathField } = props
 
       return await new Promise((resolve, reject) => {
-        file.xhr = upload({
+        file.abort = (props.customFetch || upload)({
           url,
           headers,
           withCredentials,
@@ -409,7 +451,7 @@ export default defineComponent({
           },
           onAbort: () => {
             resolve(null)
-          }
+          },
         })
       })
     }
@@ -443,19 +485,16 @@ export default defineComponent({
       return true
     }
 
-    function handleDelete(file: FileState) {
+    function handleDelete(file: UploadFileState) {
       file.status = StatusType.DELETE
 
-      if (file.xhr) {
-        file.xhr.abort()
-      }
-
+      file.abort?.()
       syncInputFiles()
       emitEvent(props.onDelete, file)
       emitChangeEvent()
     }
 
-    function handlePreview(file: FileState) {
+    function handlePreview(file: UploadFileState) {
       emitEvent(props.onPreview, file)
     }
 
@@ -474,7 +513,7 @@ export default defineComponent({
       }
     }
 
-    function handleProgress(percent: number, file: FileState) {
+    function handleProgress(percent: number, file: UploadFileState) {
       if (file.status === StatusType.DELETE) return
 
       file.percentage = percent
@@ -483,7 +522,7 @@ export default defineComponent({
       emitChangeEvent()
     }
 
-    function handleSuccess(response: any, file: FileState) {
+    function handleSuccess(response: any, file: UploadFileState) {
       if (file.status === StatusType.DELETE) return
 
       file.status = StatusType.SUCCESS
@@ -494,7 +533,7 @@ export default defineComponent({
       emitChangeEvent()
     }
 
-    function handleError(error: HttpError, file: FileState) {
+    function handleError(error: UploadHttpError, file: UploadFileState) {
       if (file.status === StatusType.DELETE) return
 
       file.status = StatusType.FAIL
@@ -511,7 +550,7 @@ export default defineComponent({
     })
 
     async function handleDrop(event: DragEvent) {
-      if (!props.allowDrag) return
+      if (!props.allowDrag || props.disabled || readonly.value) return
 
       clearTimeout(dragTimer)
       event.preventDefault()
@@ -526,7 +565,7 @@ export default defineComponent({
     }
 
     function handleDragEnter(event: DragEvent) {
-      if (!props.allowDrag) return
+      if (!props.allowDrag || props.disabled || readonly.value) return
 
       clearTimeout(dragTimer)
       event.preventDefault()
@@ -535,7 +574,7 @@ export default defineComponent({
     }
 
     function handleDragLeave(event: DragEvent) {
-      if (!props.allowDrag) return
+      if (!props.allowDrag || props.disabled || readonly.value) return
 
       event.preventDefault()
 
@@ -594,7 +633,7 @@ export default defineComponent({
 
                 resolve()
               })
-            })
+            }),
           )
         }
       }
@@ -617,97 +656,122 @@ export default defineComponent({
                   entry.file(file => {
                     file.path = `${prefix}/${file.name}`
                     resolve(file)
-                  })
-                )
-            )
-          )
+                  }),
+                ),
+            ),
+          ),
         )
       }
 
       return collectedFiles
     }
 
+    function preventDefault(event: Event) {
+      event.preventDefault()
+    }
+
     function renderNormalAction() {
-      return !props.allowDrag && !props.disabledClick
-        ? (
+      return !props.allowDrag && !props.disabledClick ? (
         <>
           <Button
             ref={button}
             inherit
             size={size.value}
-            icon={IUpload}
             type={props.state}
             disabled={props.disabled}
             loading={props.loading}
-            loading-icon={props.loadingIcon}
-            loading-spin={props.loadingSpin}
           >
-            {props.buttonLabel ?? locale.value.upload}
+            {{
+              default: () => props.buttonLabel ?? locale.value.upload,
+              icon: () => <Icon {...icons.value.upload} />,
+              loading: () => (
+                <Icon
+                  {...icons.value.loading}
+                  class={nh.be('loading-icon')}
+                  effect={props.loadingEffect || icons.value.loading.effect}
+                  icon={props.loadingIcon || icons.value.loading.icon}
+                  label={'loading'}
+                />
+              ),
+            }}
           </Button>
-          {slots.tip ? slots.tip() : props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
+          {renderSlot(slots, 'tip', undefined, () => [
+            <Renderer renderer={props.slots.tip}>
+              {props.tip && <p class={nh.be('tip')}>{props.tip}</p>}
+            </Renderer>,
+          ])}
         </>
-          )
-        : (
+      ) : (
         <div
           ref={panel}
           class={[nh.be('drag-panel'), props.disabled && nh.bem('drag-panel', 'disabled')]}
           tabindex={0}
         >
-          <Icon class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]} scale={4}>
-            <CloudArrowUp></CloudArrowUp>
-          </Icon>
-          {slots.tip
-            ? (
-                slots.tip()
-              )
-            : (
-            <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
-              )}
+          {renderSlot(slots, 'cloud', undefined, () => [
+            <Renderer renderer={props.slots.cloud}>
+              <Icon
+                {...icons.value.uploadCloud}
+                class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+                scale={+(icons.value.uploadCloud.scale || 1) * 4}
+              />
+            </Renderer>,
+          ])}
+          {renderSlot(slots, 'tip', undefined, () => [
+            <Renderer renderer={props.slots.tip}>
+              <p class={nh.be('tip')}>{props.tip || locale.value.dragOrClick}</p>
+            </Renderer>,
+          ])}
           <Icon
+            {...icons.value.loading}
             class={nh.be('loading-icon')}
-            spin={props.loadingSpin}
-            pulse={!props.loadingSpin}
-            icon={props.loadingIcon}
+            effect={props.loadingEffect || icons.value.loading.effect}
+            icon={props.loadingIcon || icons.value.loading.icon}
+            label={'loading'}
             style={{ opacity: props.loading ? '100%' : '0%' }}
-          ></Icon>
+          />
         </div>
-          )
+      )
     }
 
     function renderImageAction() {
       return (
-        <div class={[nh.be('image-action'), props.disabled && nh.bem('image-action', 'disabled')]}>
-          {slots.default
-            ? (
-                slots.default({
-                  isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
-                })
-              )
-            : (
-            <>
-              {props.loading
-                ? (
-                <Icon
-                  class={nh.be('loading-icon')}
-                  spin={props.loadingSpin}
-                  pulse={!props.loadingSpin}
-                  icon={props.loadingIcon}
-                  style={{ marginBottom: '6px' }}
-                ></Icon>
-                  )
-                : (
-                <Icon
-                  class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
-                  scale={1.2}
-                  style={{ marginBottom: '6px' }}
-                >
-                  <Plus></Plus>
-                </Icon>
-                  )}
-              <span>{props.buttonLabel ?? locale.value.upload}</span>
-            </>
-              )}
-        </div>
+        <button
+          class={[nh.be('image-action'), props.disabled && nh.bem('image-action', 'disabled')]}
+          type={'button'}
+        >
+          {renderSlot(
+            slots,
+            'default',
+            {
+              isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value,
+            },
+            () => [
+              <Renderer
+                renderer={props.slots.default}
+                data={{ isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value }}
+              >
+                {props.loading ? (
+                  <Icon
+                    {...icons.value.loading}
+                    class={nh.be('loading-icon')}
+                    effect={props.loadingEffect || icons.value.loading.effect}
+                    icon={props.loadingIcon || icons.value.loading.icon}
+                    label={'loading'}
+                    style={{ marginBottom: '6px' }}
+                  />
+                ) : (
+                  <Icon
+                    {...icons.value.plus}
+                    class={[nh.be('cloud'), props.disabled && nh.bem('cloud', 'disabled')]}
+                    scale={+(icons.value.plus.scale || 1) * 1.2}
+                    style={{ marginBottom: '6px' }}
+                  />
+                )}
+                <span>{props.buttonLabel ?? locale.value.upload}</span>
+              </Renderer>,
+            ],
+          )}
+        </button>
       )
     }
 
@@ -731,18 +795,32 @@ export default defineComponent({
               class={nh.be('input')}
               disabled={props.disabled}
               multiple={props.multiple}
+              name={props.name}
               accept={acceptString.value}
-              webkitdirectory={props.directory}
+              webkitdirectory={props.directory || undefined}
               onChange={handleInputChange}
+              onSubmit={preventDefault}
             />
           )}
           {props.image
             ? renderImageAction()
-            : slots.default
-              ? slots.default({
-                isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value
-              })
-              : renderNormalAction()}
+            : renderSlot(
+              slots,
+              'default',
+              {
+                isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value,
+              },
+              () => [
+                <Renderer
+                  renderer={props.slots.default}
+                  data={{
+                    isDragOver: (props.allowDrag || props.disabledClick) && isDragOver.value,
+                  }}
+                >
+                  {renderNormalAction()}
+                </Renderer>,
+              ],
+            )}
         </HtmlTag>
       )
     }
@@ -762,19 +840,31 @@ export default defineComponent({
           onPreview={handlePreview}
         >
           {{
-            item: slots.item,
-            icon: slots.icon,
+            item:
+              slots.item || props.slots.item
+                ? (params: any) =>
+                  renderSlot(slots, 'item', params, () => [
+                    <Renderer renderer={props.slots.item} data={params}></Renderer>,
+                  ])
+                : null,
+            icon:
+              slots.icon || props.slots.icon
+                ? (params: any) =>
+                  renderSlot(slots, 'icon', params, () => [
+                    <Renderer renderer={props.slots.icon} data={params}></Renderer>,
+                  ])
+                : null,
             suffix: () =>
-              props.image && (!props.maxSize || renderFiles.value.length < props.maxSize)
+              props.image && (!props.countLimit || renderFiles.value.length < props.countLimit)
                 ? renderControl()
-                : null
+                : null,
           }}
         </UploadList>
       )
     }
 
     return () => (
-      <div id={idFor.value} class={className.value}>
+      <div id={idFor.value} class={className.value} role={'group'} aria-labelledby={labelId.value}>
         {!props.image && renderControl()}
         {!props.hiddenFiles && renderFileList()}
       </div>
@@ -782,6 +872,8 @@ export default defineComponent({
   },
   methods: {
     execute: noop as () => Promise<false | any[]>,
-    handleDelete: noop as (file: FileState) => void
-  }
+    handleDelete: noop as (file: UploadFileState) => void,
+    focus: noop as (options?: FocusOptions) => void,
+    blur: noop as () => void,
+  },
 })

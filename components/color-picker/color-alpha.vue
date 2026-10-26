@@ -1,5 +1,10 @@
 <template>
-  <div ref="wrapper" :class="nh.be('alpha')" tabindex="-1">
+  <div
+    ref="wrapper"
+    :class="nh.be('alpha')"
+    tabindex="-1"
+    role="group"
+  >
     <div
       :class="nh.be('opacity')"
       :style="{
@@ -11,10 +16,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
+
 import { useNameHelper } from '@vexip-ui/config'
 import { useModifier, useMoving } from '@vexip-ui/hooks'
-import { toFixed, boundRange } from '@vexip-ui/utils'
+import { boundRange, toFixed } from '@vexip-ui/utils'
 
 import type { PropType } from 'vue'
 import type { RGBColor } from '@vexip-ui/utils'
@@ -29,15 +35,15 @@ export default defineComponent({
       },
       validator: (value: RGBColor) => {
         return 'r' in value && 'g' in value && 'b' in value
-      }
+      },
     },
     alpha: {
       type: Number,
       default: 1,
       validator: (value: number) => {
         return value >= 0 && value <= 1
-      }
-    }
+      },
+    },
   },
   emits: ['edit-start', 'edit-end', 'change'],
   setup(props, { emit }) {
@@ -62,7 +68,7 @@ export default defineComponent({
           prevLeft = currentLeft.value
           handleChange()
         }
-      }
+      },
     })
 
     const { moving: editing } = useMoving({
@@ -94,7 +100,7 @@ export default defineComponent({
       },
       onEnd: () => {
         emit('edit-end')
-      }
+      },
     })
 
     const rgbString = computed(() => {
@@ -111,7 +117,7 @@ export default defineComponent({
         currentLeft.value = value * 100
         verifyPosition()
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     function verifyPosition() {
@@ -129,8 +135,8 @@ export default defineComponent({
 
       rgbString,
 
-      wrapper
+      wrapper,
     }
-  }
+  },
 })
 </script>

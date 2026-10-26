@@ -1,11 +1,12 @@
 <template>
-  <Menu :options="options" style="max-width: 240px;" @select="handleSelect"></Menu>
+  <Menu :options="options" style="max-width: 240px" @select="handleSelect"></Menu>
 </template>
 
 <script setup lang="ts">
 import { h } from 'vue'
+
 import { Icon } from 'vexip-ui'
-import { EnvelopesBulk, City, ChartPie, User, Marker } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, Marker, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
@@ -21,21 +22,21 @@ const options: MenuOptions[] = [
         children: [
           { label: '1-1', name: 'Child Menu 1' },
           { label: '1-2', name: 'Child Menu 2' },
-          { label: '1-3', name: 'Child Menu 3' }
-        ]
+          { label: '1-3', name: 'Child Menu 3' },
+        ],
       },
       {
         label: '2',
         name: 'Menu 2',
         icon: City,
-        disabled: true
+        disabled: true,
       },
       {
         label: '3',
         name: 'Menu 3',
-        icon: ChartPie
-      }
-    ]
+        icon: ChartPie,
+      },
+    ],
   },
   {
     label: 'Group 2',
@@ -44,15 +45,15 @@ const options: MenuOptions[] = [
       {
         label: '4',
         name: () => 'Menu 4',
-        icon: () => h(Icon, { icon: User })
+        icon: () => h(Icon, { icon: User }),
       },
       {
         label: '5',
         name: 'Menu 5',
-        icon: Marker
-      }
-    ]
-  }
+        icon: Marker,
+      },
+    ],
+  },
 ]
 
 function handleSelect(label: string) {

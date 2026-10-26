@@ -1,10 +1,12 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
-import { City, User } from '@vexip-ui/icons'
+
+import { nextTick } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
 import { mount } from '@vue/test-utils'
+
+import { Home, User } from 'lucide-vue-next'
 import { Menu } from '..'
 
 describe('Menu', () => {
@@ -32,8 +34,8 @@ describe('Menu', () => {
             <MenuItem label={'1'}>{'1'}</MenuItem>
             <MenuItem label={'2'}>{'2'}</MenuItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-menu__item')
 
@@ -48,14 +50,14 @@ describe('Menu', () => {
   it('with icon', () => {
     const wrapper = mount(() => (
       <Menu>
-        <MenuItem icon={City}>{'1'}</MenuItem>
+        <MenuItem icon={Home}>{'1'}</MenuItem>
         <MenuItem icon={User}>{'2'}</MenuItem>
       </Menu>
     ))
     const items = wrapper.findAll('.vxp-menu__item')
 
     expect(items[0].find('.vxp-menu__icon').exists()).toBe(true)
-    expect(items[0].findComponent(City).exists()).toBe(true)
+    expect(items[0].findComponent(Home).exists()).toBe(true)
     expect(items[1].findComponent(User).exists()).toBe(true)
   })
 
@@ -118,7 +120,7 @@ describe('Menu', () => {
                 <MenuItem label={'1-1'}>{'1-1'}</MenuItem>
                 <MenuItem label={'1-2'}>{'1-2'}</MenuItem>
               </>
-            )
+            ),
           }}
         </MenuItem>
         <MenuItem label={'2'}>{'2'}</MenuItem>
@@ -147,13 +149,13 @@ describe('Menu', () => {
         <MenuItem class={'p1'} label={'1'}>
           {{
             default: () => '1',
-            group: () => <MenuItem label={'1-1'}>{'1-1'}</MenuItem>
+            group: () => <MenuItem label={'1-1'}>{'1-1'}</MenuItem>,
           }}
         </MenuItem>
         <MenuItem class={'p2'} label={'2'}>
           {{
             default: () => '2',
-            group: () => <MenuItem label={'2-1'}>{'2-1'}</MenuItem>
+            group: () => <MenuItem label={'2-1'}>{'2-1'}</MenuItem>,
           }}
         </MenuItem>
       </Menu>
@@ -209,7 +211,8 @@ describe('Menu', () => {
     expect(wrapper.find('.vxp-menu').classes()).toContain('vxp-menu--horizontal')
   })
 
-  it('use options', () => {
+  it('use options', async () => {
+    const onSelect = vi.fn()
     const options = [
       {
         label: 'g1',
@@ -218,18 +221,21 @@ describe('Menu', () => {
           {
             label: '1',
             name: 'l1',
-            icon: City,
-            children: [{ label: '1-1' }, { label: '1-2' }]
-          }
-        ]
+            icon: Home,
+            children: [
+              { label: '1-1', meta: { foo: '1-1' } },
+              { label: '1-2', meta: { foo: '1-2' } },
+            ],
+          },
+        ],
       },
       {
         label: '2',
         icon: User,
-        disabled: true
-      }
+        disabled: true,
+      },
     ]
-    const wrapper = mount(() => <Menu options={options}></Menu>)
+    const wrapper = mount(() => <Menu options={options} onSelect={onSelect}></Menu>)
     const group = wrapper.find('.vxp-menu-group')
 
     expect(group.exists()).toBe(true)
@@ -238,8 +244,12 @@ describe('Menu', () => {
 
     const parent = group.find('.vxp-menu__item')
     expect(parent.find('.vxp-menu__label').text()).toEqual('l1')
-    expect(parent.findComponent(City).exists()).toBe(true)
+    expect(parent.findComponent(Home).exists()).toBe(true)
     expect(parent.findAll('.vxp-menu__item').length).toEqual(2)
+
+    await parent.find('.vxp-menu__item').find('.vxp-menu__label').trigger('click')
+    expect(onSelect).toHaveBeenCalled()
+    expect(onSelect).toHaveBeenLastCalledWith('1-1', { foo: '1-1' })
 
     expect(wrapper.findAll('.vxp-menu__item')[3].exists()).toBe(true)
     expect(wrapper.findAll('.vxp-menu__item')[3].classes()).toContain('vxp-menu__item--disabled')
@@ -251,8 +261,8 @@ describe('Menu', () => {
       component: {},
       meta: {
         label: '1-1',
-        name: 's1'
-      }
+        name: 's1',
+      },
     }
     const router = createRouter({
       history: createWebHistory(),
@@ -263,7 +273,7 @@ describe('Menu', () => {
           meta: {
             label: '1',
             name: 'l1',
-            icon: City
+            icon: Home,
           },
           children: [
             testRoute,
@@ -272,22 +282,22 @@ describe('Menu', () => {
               component: {},
               meta: {
                 label: '1-2',
-                name: 's2'
-              }
-            }
-          ]
-        }
-      ]
+                name: 's2',
+              },
+            },
+          ],
+        },
+      ],
     })
     const pushRoute = vi.fn()
     router.push = pushRoute
     const wrapper = mount(Menu, {
-      props: { router }
+      props: { router },
     })
     const items = wrapper.findAll('.vxp-menu__item')
 
     expect(items[0].find('.vxp-menu__label').text()).toEqual('l1')
-    expect(items[0].findComponent(City).exists()).toBe(true)
+    expect(items[0].findComponent(Home).exists()).toBe(true)
     expect(items[0].findAll('.vxp-menu__item').length).toEqual(2)
 
     await items[1].find('.vxp-menu__label').trigger('click')

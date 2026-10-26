@@ -1,6 +1,6 @@
-import { buildProps, booleanProp, booleanStringProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, booleanStringProp, buildProps, eventProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const maskerProps = buildProps({
@@ -13,10 +13,14 @@ export const maskerProps = buildProps({
   onBeforeClose: Function as PropType<() => any | Promise<any>>,
   transfer: booleanStringProp,
   autoRemove: booleanProp,
+  permeable: booleanProp,
+  disableEsc: booleanProp,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onHide: eventProp(),
-  onShow: eventProp()
+  onShow: eventProp(),
+  onResize: eventProp<(entry: ResizeObserverEntry) => void>(),
+  onMaskClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type MaskerProps = ExtractPropTypes<typeof maskerProps>

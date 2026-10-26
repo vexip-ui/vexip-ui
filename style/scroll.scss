@@ -1,12 +1,12 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './scrollbar.scss';
 
 $scroll: () !default;
 $scroll: map.merge(
   (
-    move-duration: 140ms,
+    move-duration: 180ms,
     move-timing: cubic-bezier(0.165, 0.84, 0.44, 1)
   ),
   $scroll
@@ -17,53 +17,74 @@ $scroll: map.merge(
     @include define-preset-values('scroll', $scroll);
   }
 
-  @include basis;
-
-  position: relative;
-  overflow: hidden;
-
-  &--vertical > &__wrapper {
-    display: block;
+  @include basis {
+    position: relative;
+    overflow: hidden;
   }
 
-  &--horizontal > &__wrapper,
-  &--both > &__wrapper {
-    display: inline-block;
-  }
+  @include inherit-color;
 
   &__wrapper {
     position: relative;
     vertical-align: top;
-    will-change: transform;
-    transition-timing-function: get-css-var('scroll-move-timing');
-    transition-duration: get-css-var('scroll-move-duration');
+    transition-timing-function: value('scroll-move-timing');
+    transition-duration: value('scroll-move-duration');
     transition-property: transform;
-
-    &--scrolling,
-    &--using-bar,
-    &--no-ready,
-    &--no-transition {
-      transition-duration: 0ms;
-    }
-
-    &--no-ready {
-      display: inline-block;
-    }
-
-    // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
-    &--scrolling > *,
-    &--using-bar > * {
-      pointer-events: none;
-    }
+    will-change: transform;
 
     @include clear-both;
   }
 
+  $wrap: #{&}__wrapper;
+
+  &--scrolling,
+  &--using-bar,
+  &--no-ready,
+  &--no-transition {
+    & > #{$wrap} {
+      transition-duration: 0ms;
+    }
+  }
+
+  &--no-ready {
+    & > #{$wrap} {
+      display: inline-block;
+    }
+  }
+
+  // 与使用 js 找到所有子元素再添加样式相比效率如何 (不太好测试) ?
+  &--scrolling,
+  &--using-bar {
+    & > #{$wrap} > * {
+      pointer-events: none;
+    }
+  }
+
+  &--horizontal,
+  &--both {
+    & > #{$wrap} {
+      display: inline-block;
+    }
+  }
+
+  &__extra {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    & > * {
+      position: relative;
+      z-index: 10;
+    }
+  }
+
   &--both > &__bar--horizontal {
-    width: calc(100% - get-css-var('scrollbar-width') + 1px);
+    width: calc(100% - value('scrollbar-width') + 1px);
   }
 
   &--both > &__bar--vertical {
-    height: calc(100% - get-css-var('scrollbar-width') + 1px);
+    height: calc(100% - value('scrollbar-width') + 1px);
   }
 }

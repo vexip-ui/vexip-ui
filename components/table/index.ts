@@ -1,18 +1,56 @@
-export { default as Table } from './table.vue'
-export { defineFilter, defineSorter, defineColumn, defineColumns } from './helper'
+import Table from './table.vue'
+
+import type { ComponentPublicInstance } from 'vue'
+
+export { Table }
+export { tableProps } from './props'
+export {
+  defineTableFilter,
+  defineTableSorter,
+  defineTableColumn,
+  defineTableColumns,
+  defineTableSummary,
+  defineTableSummaries,
+
+  // legacies
+  defineFilter,
+  defineSorter,
+  defineColumn,
+  defineColumns,
+  defineSummary,
+  defineSummaries,
+} from './helper'
+
+export type TableExposed = ComponentPublicInstance & InstanceType<typeof Table>
+
 export type { TableProps, TableCProps } from './props'
 export type {
-  RowPropFn,
+  TableKeyConfig,
+  TableIconName,
+  TableIcons,
+  TableSlots,
+  TableRowPropFn,
+  TableRowDropType,
   TableColumnType,
-  FilterOptions,
-  SorterOptions,
-  BaseColumn,
-  OrderColumn,
-  SelectionColumn,
-  ExpandColumn,
-  TypeColumn,
+  TableFilterOptions,
+  TableSorterOptions,
+  TableFilterProfile,
+  TableSorterProfile,
+  TableBaseColumn,
+  TableOrderColumn,
+  TableSelectionColumn,
+  TableExpandColumn,
+  TableTypeColumn,
   TableColumnOptions,
+  TableColumnGroupOptions,
+  TableColumnRawOptions,
+  TableCellPropFn,
+  TableHeadPropFn,
   TableRowPayload,
   TableCellPayload,
-  TableHeadPayload
+  TableHeadPayload,
+  TableColResizePayload,
+  TableCellSpanFn,
+  TableSummaryOptions,
+  TableSummaryData,
 } from './symbol'

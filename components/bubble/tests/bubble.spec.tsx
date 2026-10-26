@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { placementWhileList } from '@vexip-ui/hooks'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { placementWhileList } from '@vexip-ui/hooks'
 import { Bubble } from '..'
 
 describe('Bubble', () => {
@@ -21,15 +22,15 @@ describe('Bubble', () => {
   })
 
   it('background', () => {
-    const wrapper = mount(() => <Bubble background={'cyan'} placement={'right'}></Bubble>)
+    const wrapper = mount(Bubble, {
+      props: {
+        background: 'cyan',
+        placement: 'right',
+      },
+    })
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--background')
-    expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
-      'background-color: cyan;'
-    )
-    expect(wrapper.find('.vxp-bubble__arrow').attributes('style')).toContain(
-      'border-right-color: cyan;'
-    )
+    expect(wrapper.attributes('style')).toContain('--vxp-bubble-bg-color: cyan;')
   })
 
   it('shadow', () => {
@@ -37,7 +38,7 @@ describe('Bubble', () => {
 
     expect(wrapper.find('.vxp-bubble').classes()).toContain('vxp-bubble--shadow')
     expect(wrapper.find('.vxp-bubble__content').attributes('style')).toContain(
-      'box-shadow: 0 0 4px cyan;'
+      'box-shadow: 0 0 4px cyan;',
     )
   })
 

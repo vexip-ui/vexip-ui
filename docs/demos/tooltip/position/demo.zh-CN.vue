@@ -1,6 +1,6 @@
 <template>
   <div
-    style="max-width: 200px; height: 200px; padding: 20px; background-color: orange;"
+    style="max-width: 200px; height: 200px; padding: 20px; background-color: orange"
     @click="handleClick"
   >
     在橙色区域点击
@@ -9,19 +9,19 @@
     :visible="visible"
     trigger="custom"
     :virtual="position"
-    @clickoutside="visible = false"
+    @click-outside="visible = false"
   >
     一些提示的内容
   </Tooltip>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const visible = ref(false)
 const position = reactive({
   x: 0,
-  y: 0
+  y: 0,
 })
 
 function handleClick(event: MouseEvent) {

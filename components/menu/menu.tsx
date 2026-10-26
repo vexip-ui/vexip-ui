@@ -1,64 +1,72 @@
-import {
-  defineComponent,
-  ref,
-  toRef,
-  reactive,
-  computed,
-  watch,
-  onMounted,
-  nextTick,
-  provide
-} from 'vue'
 import { MenuItem } from '@/components/menu-item'
 import { MenuGroup } from '@/components/menu-group'
 import { Overflow } from '@/components/overflow'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { callIfFunc } from '@vexip-ui/utils'
+import { Renderer } from '@/components/renderer'
+
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  renderSlot,
+  toRef,
+  watch,
+} from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { callIfFunc, isDefined } from '@vexip-ui/utils'
 import MenuRest from './menu-rest'
 import { menuProps } from './props'
 import { MENU_STATE } from './symbol'
 
-import type { RouteRecordRaw, RouteLocationRaw } from 'vue-router'
-import type { MenuOptions, MenuMarkerType, MenuGroupType, MenuItemState, MenuState } from './symbol'
+import type { VNode } from 'vue'
+import type { RouteLocationRaw, RouteRecordRaw } from 'vue-router'
+import type {
+  MenuArrowSlotParams,
+  MenuItemState,
+  MenuMarkerType,
+  MenuOptions,
+  MenuState,
+} from './symbol'
 
-const menuMarkerTypes = Object.freeze<MenuMarkerType>(['top', 'right', 'bottom', 'left', 'none'])
+const menuMarkerTypes = Object.freeze<MenuMarkerType[]>(['top', 'right', 'bottom', 'left', 'none'])
 
 export default defineComponent({
   name: 'Menu',
-  components: {
-    MenuRest,
-    MenuItem,
-    MenuGroup,
-    Overflow
-  },
   props: menuProps,
   emits: ['update:active'],
   setup(_props, { slots, emit, expose }) {
     const props = useProps('menu', _props, {
       active: {
         default: null,
-        static: true
+        static: true,
       },
       accordion: false,
       markerType: {
-        default: 'right' as MenuMarkerType,
-        validator: value => menuMarkerTypes.includes(value)
+        default: 'right',
+        validator: value => menuMarkerTypes.includes(value),
       },
       reduced: false,
       horizontal: false,
       transfer: false,
       trigger: 'hover',
       groupType: {
-        default: 'collapse' as MenuGroupType,
-        validator: (value: MenuGroupType) => ['collapse', 'dropdown'].includes(value)
+        default: 'collapse',
+        validator: value => ['collapse', 'dropdown'].includes(value),
       },
       tooltipReverse: null,
       options: {
         default: () => [],
-        static: true
+        static: true,
       },
       router: null,
-      manualRoute: false
+      manualRoute: false,
+      indent: null,
+      arrow: null,
+      slots: () => ({}),
     })
 
     const nh = useNameHelper('menu')
@@ -90,9 +98,19 @@ export default defineComponent({
           [nh.bm('inherit')]: props.inherit,
           [nh.bm('reduced')]: isReduced.value,
           [nh.bm('dropdown')]: props.groupType === 'dropdown',
-          [nh.bm('horizontal')]: props.horizontal
-        }
+          [nh.bm('horizontal')]: props.horizontal,
+        },
       ]
+    })
+    const style = computed(() => {
+      const style: Record<string, string> = {}
+
+      if (isDefined(props.indent)) {
+        style[nh.cv('indent-width')] =
+          typeof props.indent === 'number' ? `${props.indent}px` : props.indent
+      }
+
+      return style
     })
     const menus = computed(() => {
       if (props.options?.length) {
@@ -121,18 +139,14 @@ export default defineComponent({
         transfer: toRef(props, 'transfer'),
         trigger: toRef(props, 'trigger'),
         markerType,
+        arrow: toRef(props, 'arrow'),
         handleSelect,
         handleExpand,
         increaseItem,
         decreaseItem,
-        beforeExpand: () => {
-          if (props.accordion) {
-            for (const item of menuItemSet) {
-              item.groupExpanded = false
-            }
-          }
-        }
-      })
+        doForEachItem,
+        renderItemArrow,
+      }),
     )
 
     watch(
@@ -141,7 +155,7 @@ export default defineComponent({
         if (value !== currentActive.value) {
           currentActive.value = value
         }
-      }
+      },
     )
     watch(
       () => props.reduced,
@@ -153,11 +167,11 @@ export default defineComponent({
         } else {
           handleMenuExpand()
         }
-      }
+      },
     )
     watch(currentRoute, value => {
       if (!props.manualRoute && value) {
-        currentActive.value = (value.meta?.label as string) || value.path
+        currentActive.value = (value.meta?.label as string) ?? value.path
       }
     })
 
@@ -165,6 +179,14 @@ export default defineComponent({
       nextTick(() => {
         if (!props.horizontal && props.reduced) handleMenuReduce()
       })
+
+      if (props.router && !props.manualRoute && !currentActive.value) {
+        const route = currentRoute.value
+
+        if (route) {
+          currentActive.value = (route.meta?.label as string) ?? currentRoute.value.path
+        }
+      }
     })
 
     expose({ expandItemByLabel })
@@ -185,7 +207,7 @@ export default defineComponent({
           ...routeMeta,
           route,
           label: routeMeta.label || route.path,
-          name: routeMeta.name || route.name
+          name: routeMeta.name || route.name,
         } as MenuOptions
 
         if (!parent.children) {
@@ -210,12 +232,18 @@ export default defineComponent({
       menuItemSet.delete(state)
     }
 
+    function doForEachItem(cb: (item: MenuItemState) => void) {
+      for (const item of menuItemSet) {
+        cb(item)
+      }
+    }
+
     function handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw) {
       if (currentActive.value !== label) {
         currentActive.value = label
 
-        emitEvent(props.onSelect, label, meta)
         emit('update:active', label)
+        emitEvent(props.onSelect, label, meta)
 
         if (!props.manualRoute && props.router && route) {
           props.router.push(route)
@@ -261,7 +289,7 @@ export default defineComponent({
             el.removeEventListener('transitionend', callback)
 
             const selectedItem = Array.from(menuItemSet).find(
-              item => item.label === currentActive.value
+              item => item.label === currentActive.value,
             )
 
             requestAnimationFrame(() => {
@@ -295,6 +323,14 @@ export default defineComponent({
       }
     }
 
+    function renderItemArrow(params: MenuArrowSlotParams, renderDefault: () => VNode) {
+      return renderSlot(slots, 'arrow', { ...params }, () => [
+        <Renderer renderer={props.slots.arrow} data={params}>
+          {renderDefault()}
+        </Renderer>,
+      ])
+    }
+
     function renderMenuItem(item: MenuOptions) {
       return (
         <MenuItem
@@ -304,6 +340,7 @@ export default defineComponent({
           disabled={item.disabled}
           children={item.children}
           route={item.route}
+          meta={item.meta}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
@@ -312,41 +349,35 @@ export default defineComponent({
 
     function renderMenus() {
       return menus.value.map(menu =>
-        menu.group
-          ? (
-          <MenuGroup label={menu.name ? callIfFunc(menu.name) : menu.label}>
+        menu.group ? (
+          <MenuGroup key={menu.label} label={menu.name ? callIfFunc(menu.name) : menu.label}>
             {menu.children?.length ? menu.children.map(renderMenuItem) : null}
           </MenuGroup>
-            )
-          : (
-              renderMenuItem(menu)
-            )
+        ) : (
+          renderMenuItem(menu)
+        ),
       )
     }
 
     return () => {
       return (
-        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1}>
-          {slots.default
-            ? (
-                slots.default()
-              )
-            : props.horizontal
-              ? (
-            <Overflow inherit>
-              {{
-                default: renderMenus,
-                counter: ({ count }: { count: number }) => (
-                  <MenuRest ref={rest} menus={menus.value.slice(-count)}></MenuRest>
-                )
-              }}
-            </Overflow>
-                )
-              : (
-                  renderMenus()
-                )}
+        <ul ref={wrapper} class={className.value} role={'menu'} tabindex={-1} style={style.value}>
+          {renderSlot(slots, 'default', {}, () => {
+            return props.horizontal
+              ? [
+                <Overflow class={nh.be('overflow')} inherit key={0}>
+                  {{
+                    default: renderMenus,
+                    counter: ({ count }: { count: number }) => (
+                      <MenuRest ref={rest} menus={menus.value.slice(-count)}></MenuRest>
+                    ),
+                  }}
+                </Overflow>,
+              ]
+              : renderMenus()
+          })}
         </ul>
       )
     }
-  }
+  },
 })

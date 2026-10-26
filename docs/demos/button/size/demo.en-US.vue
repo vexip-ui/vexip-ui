@@ -8,7 +8,7 @@
   <Button type="warning" size="large">
     Large Size
   </Button>
-  <Button type="info" style="--vxp-button-height: 50px; --vxp-button-h-padding: 22px;">
-    Custon Size
+  <Button type="info" style="--vxp-button-height: 50px; --vxp-button-h-padding: 22px">
+    Custom Size
   </Button>
 </template>

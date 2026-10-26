@@ -1,5 +1,5 @@
 <template>
-  <Icon pulse>
+  <Icon effect="pulse-in">
     <Spinner></Spinner>
   </Icon>
 </template>

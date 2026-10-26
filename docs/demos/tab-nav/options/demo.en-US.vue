@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { City } from '@vexip-ui/icons'
 
 import type { TabNavOptions } from 'vexip-ui'
@@ -13,12 +14,12 @@ const options: TabNavOptions[] = [
   'Tab 1',
   {
     label: 'Tab 2',
-    disabled: true
+    disabled: true,
   },
   {
     label: 'Tab 3',
     content: 'Tab 3',
-    icon: City
-  }
+    icon: City,
+  },
 ]
 </script>

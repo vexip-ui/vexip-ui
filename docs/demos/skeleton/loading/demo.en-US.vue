@@ -8,11 +8,12 @@
     width="33%"
     :spread="21"
   >
-    <div style="margin-bottom: 14px;">
+    <div style="margin-bottom: 14px">
       Title
     </div>
   </Skeleton>
   <Skeleton :loading="loading" activated :repeat="2">
+    <div>Some content</div>
     <div>Some content</div>
   </Skeleton>
   <Skeleton :loading="loading" activated width="67%">

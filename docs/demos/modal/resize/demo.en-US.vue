@@ -10,9 +10,9 @@
       resizable
       title="Title"
     >
-      <p>Some Content</p>
-      <p>Some Content</p>
-      <p>Some Content</p>
+      <p>Some content</p>
+      <p>Some content</p>
+      <p>Some content</p>
     </Modal>
   </div>
 </template>

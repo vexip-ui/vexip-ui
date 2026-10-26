@@ -1,36 +1,31 @@
-import {
-  ref,
-  reactive,
-  computed,
-  watch,
-  onBeforeMount,
-  onMounted,
-  onUpdated,
-  onBeforeUnmount,
-  inject
-} from 'vue'
-import { isClient, parseColorToRgba, mixColor, adjustAlpha, toFixed } from '@vexip-ui/utils'
+import { currentBreakPoint } from '@/components/grid'
+
+import { computed, inject, onBeforeUnmount, onMounted, onUpdated, reactive, ref, watch } from 'vue'
+
+import { adjustAlpha, isClient, mixColor, noop, parseColorToRgba, toFixed } from '@vexip-ui/utils'
 import { LAYOUT_STATE } from './symbol'
 
 import type { Ref } from 'vue'
 import type { Color } from '@vexip-ui/utils'
+import type { BreakPoint } from '@/components/grid'
+import type { LayoutMediaJudger, LayoutState } from './symbol'
 
 const rootEl = isClient ? document.documentElement : undefined
 const rootStyle = rootEl && getComputedStyle(rootEl)
 
-export function computeSeriesColors(value: Color, storageName = '') {
+export function computeSeriesColors(value: Color) {
   if (!rootEl || !rootStyle) return
 
   const colors: Record<string, string[]> = {
     light: [],
     opacity: [],
-    dark: []
+    dark: [],
   }
   const black = parseColorToRgba(
-    rootStyle.getPropertyValue('--vxp-color-black') || { r: 0, g: 0, b: 0, a: 1 }
+    rootStyle.getPropertyValue('--vxp-color-black') || { r: 0, g: 0, b: 0, a: 1 },
   )
   const white = parseColorToRgba(
-    rootStyle.getPropertyValue('--vxp-color-white') || { r: 255, g: 255, b: 255, a: 1 }
+    rootStyle.getPropertyValue('--vxp-color-white') || { r: 255, g: 255, b: 255, a: 1 },
   )
   const style = rootEl.style
 
@@ -53,7 +48,6 @@ export function computeSeriesColors(value: Color, storageName = '') {
   }
 
   style.setProperty('--vxp-color-primary-base', `${value}`)
-  storageName && localStorage.setItem(storageName, `${value}`)
 
   return colors
 }
@@ -67,30 +61,43 @@ export function useLayoutState() {
       affixed: false,
       scrollY: 0,
       affixMatched: false,
+      expandMatched: false,
+      useExpand: false,
       expanded: false,
       reduced: false,
-      navConfig: false
-    })
+      navConfig: false,
+      classes: Object.freeze({}),
+      changeInLock: noop,
+    }) as LayoutState,
   )
 }
 
-const breakPoints = Object.freeze(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
+const breakPoints = Object.freeze<BreakPoint[]>(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
-export function useMediaQuery(query: Ref<string | boolean>) {
+export function useMediaQuery(query: Ref<boolean | string | LayoutMediaJudger>) {
   const matched = ref(false)
+  const updateTrigger = ref(0)
 
-  if (!isClient) return matched
-
-  const computedStyle = getComputedStyle(document.documentElement)
+  const computedStyle = isClient && getComputedStyle(document.documentElement)
   const computedQuery = computed(() => {
-    if (breakPoints.includes(query.value as any)) {
-      const media = computedStyle.getPropertyValue(`--vxp-break-point-${query.value}`).trim()
-      return `only screen and ${media}`
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    updateTrigger.value
+
+    if (typeof query.value !== 'function' && breakPoints.includes(query.value as any)) {
+      const usedQuery = query.value === 'xs' ? 'sm' : query.value
+
+      if (usedQuery === currentBreakPoint.value) return true
+
+      const media =
+        computedStyle && computedStyle.getPropertyValue(`--vxp-break-point-${usedQuery}`).trim()
+
+      return media && `only screen and ${media}`
     }
 
     return query.value
   })
 
+  let isMounted = false
   let mediaQuery: MediaQueryList | undefined
 
   const update = () => {
@@ -109,25 +116,33 @@ export function useMediaQuery(query: Ref<string | boolean>) {
       return
     }
 
-    if (!mediaQuery) {
-      mediaQuery = matchMedia(computedQuery.value)
+    if (typeof computedQuery.value === 'function') {
+      matched.value = computedQuery.value(currentBreakPoint.value)
+      return
     }
 
-    matched.value = mediaQuery.matches
+    if (isMounted) {
+      mediaQuery = matchMedia(computedQuery.value)
+      mediaQuery?.addEventListener('change', update)
+    }
+
+    matched.value = mediaQuery!.matches
   }
 
   watch(computedQuery, () => {
-    mediaQuery = undefined
     update()
   })
 
-  onBeforeMount(() => {
+  onMounted(() => {
+    ++updateTrigger.value
+    isMounted = true
     update()
-    mediaQuery?.addEventListener('change', update)
   })
 
   onBeforeUnmount(() => {
+    isMounted = false
     mediaQuery?.removeEventListener('change', update)
+    mediaQuery = undefined
   })
 
   return matched

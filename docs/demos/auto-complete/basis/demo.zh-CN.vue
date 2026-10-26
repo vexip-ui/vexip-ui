@@ -1,8 +1,9 @@
 <template>
   <AutoComplete
     v-model:value="value"
-    style="max-width: 400px;"
+    style="max-width: 400px"
     :options="options"
+    debounce
     @input="setOptions"
   ></AutoComplete>
 </template>

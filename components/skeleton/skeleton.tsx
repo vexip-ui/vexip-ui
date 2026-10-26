@@ -1,7 +1,8 @@
-import { defineComponent, computed, inject, h, renderSlot } from 'vue'
 import { Icon } from '@/components/icon'
-import { ImageR } from '@vexip-ui/icons'
-import { useNameHelper, useProps } from '@vexip-ui/config'
+
+import { computed, defineComponent, inject, renderSlot } from 'vue'
+
+import { createIconProp, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { skeletonProps } from './props'
 import { GROUP_STATE } from './symbol'
 
@@ -16,23 +17,24 @@ export default defineComponent({
       height: null,
       repeat: {
         default: 1,
-        validator: (value: number) => value > 0
+        validator: (value: number) => value > 0,
       },
       tag: 'div',
       activated: null,
       image: false,
-      imageIcon: null,
+      imageIcon: createIconProp(),
       iconScale: 4,
       round: null,
       circle: null,
       block: null,
       spread: 0,
-      loading: null
+      loading: null,
     })
 
     const groupState = inject(GROUP_STATE, {} as any)
 
     const nh = useNameHelper('skeleton')
+    const icons = useIcons()
 
     const activated = computed(() => {
       return props.activated ?? groupState.activated ?? false
@@ -62,7 +64,7 @@ export default defineComponent({
         [nh.bm('image')]: props.image,
         [nh.bm('round')]: round.value && !circle.value,
         [nh.bm('circle')]: circle.value,
-        [nh.bm('activated')]: activated.value
+        [nh.bm('activated')]: activated.value,
       }
     })
     const style = computed(() => {
@@ -98,27 +100,35 @@ export default defineComponent({
     }
 
     function renderSkeleton() {
-      if (!loading.value) {
-        return renderSlot(slots, 'default')
-      }
+      const Wrapper = tag.value || 'div'
 
-      return h(
-        tag.value || 'div',
-        {
-          ...attrs,
-          class: [className.value, attrs.class],
-          style: [style.value, attrs.style]
-        },
-        props.image ? [<Icon icon={props.imageIcon || ImageR} scale={props.iconScale}></Icon>] : []
+      return (
+        <Wrapper
+          {...attrs}
+          class={[className.value, attrs.class]}
+          style={[style.value, attrs.style]}
+        >
+          {props.image ? (
+            <Icon
+              {...icons.value.image}
+              icon={props.imageIcon || icons.value.image.icon}
+              scale={props.iconScale}
+            ></Icon>
+          ) : null}
+        </Wrapper>
       )
     }
 
     return () => {
+      if (!loading.value) {
+        return renderSlot(slots, 'default')
+      }
+
       if (props.repeat > 1) {
         return Array.from({ length: props.repeat }, () => renderSkeleton())
       }
 
       return renderSkeleton()
     }
-  }
+  },
 })

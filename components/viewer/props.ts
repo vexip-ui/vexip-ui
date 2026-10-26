@@ -1,10 +1,16 @@
-import { buildProps, booleanProp, booleanNumberProp, eventProp } from '@vexip-ui/config'
+import { booleanNumberProp, booleanProp, buildProps, eventProp, localeProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ViewerState, ViewerToolbarPlacement, ToolbarAction } from './symbol'
+import type {
+  ViewerActionLayout,
+  ViewerState,
+  ViewerToolbarAction,
+  ViewerToolbarPlacement,
+} from './symbol'
 
 export const viewerProps = buildProps({
+  locale: localeProp('viewer'),
   width: [String, Number],
   height: [String, Number],
   moveDisabled: booleanProp,
@@ -17,9 +23,11 @@ export const viewerProps = buildProps({
   rotateDelta: Number,
   fullDisabled: booleanProp,
   toolbarPlacement: String as PropType<ViewerToolbarPlacement>,
-  actions: Array as PropType<ToolbarAction[]>,
+  actions: Array as PropType<ViewerToolbarAction[]>,
   toolbarFade: booleanNumberProp,
   noTransition: booleanProp,
+  centerScale: booleanProp,
+  actionLayout: Array as PropType<ViewerActionLayout>,
   onMoveStart: eventProp<(state: ViewerState) => void>(),
   onMove: eventProp<(state: ViewerState) => void>(),
   onMoveEnd: eventProp<(state: ViewerState) => void>(),
@@ -29,7 +37,7 @@ export const viewerProps = buildProps({
   onFlipY: eventProp<(flip: boolean, state: ViewerState) => void>(),
   onZoom: eventProp<(zoom: number, state: ViewerState) => void>(),
   onFull: eventProp<(full: boolean, state: ViewerState) => void>(),
-  onReset: eventProp<(state: ViewerState) => void>()
+  onReset: eventProp<(state: ViewerState) => void>(),
 })
 
 export type ViewerProps = ExtractPropTypes<typeof viewerProps>

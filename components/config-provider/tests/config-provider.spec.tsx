@@ -1,6 +1,10 @@
-import { describe, it, expect } from 'vitest'
 import { Input } from '@/components/input'
+import { Masker } from '@/components/masker'
+
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { User } from 'lucide-vue-next'
 import { ConfigProvider } from '..'
 
 describe('ConfigProvider', () => {
@@ -11,10 +15,10 @@ describe('ConfigProvider', () => {
   })
 
   it('provide props', () => {
-    const props = {
+    const props: any = {
       input: {
-        size: 'large'
-      }
+        size: 'large',
+      },
     }
     const wrapper = mount(() => (
       <ConfigProvider props={props}>
@@ -28,8 +32,8 @@ describe('ConfigProvider', () => {
   it('provide locale', () => {
     const locale = {
       input: {
-        placeholder: 'test'
-      }
+        placeholder: 'test',
+      },
     }
     const wrapper = mount(() => (
       <ConfigProvider locale={locale}>
@@ -38,5 +42,29 @@ describe('ConfigProvider', () => {
     ))
 
     expect(wrapper.find('input[type="text"]').attributes('placeholder')).toEqual('test')
+  })
+
+  it('provide icons', () => {
+    const icons = {
+      loading: User,
+    }
+    const wrapper = mount(() => (
+      <ConfigProvider icons={icons}>
+        <Input loading></Input>
+      </ConfigProvider>
+    ))
+
+    expect(wrapper.find('.vxp-input').findComponent(User).exists()).toBe(true)
+  })
+
+  it('provide z-index', () => {
+    const zIndex = 666
+    const wrapper = mount(() => (
+      <ConfigProvider z-index={zIndex}>
+        <Masker active></Masker>
+      </ConfigProvider>
+    ))
+
+    expect(wrapper.find('.vxp-masker').attributes('style')).toContain('z-index: 666;')
   })
 })

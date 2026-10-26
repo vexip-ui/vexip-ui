@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
 import Notice from '../notice.vue'
 import { NoticeManager } from '..'
 
@@ -18,7 +19,7 @@ function createNotice() {
       app?.use(Notice)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Notice
@@ -43,13 +44,13 @@ describe('Notice', () => {
     await wrapper.vm.add({
       title: TEXT,
       content: TEXT,
-      icon: GithubB
+      icon: Github,
     })
     const item = wrapper.find('.vxp-notice__item')
 
     expect(item.exists()).toBe(true)
     expect(item.find('.vxp-notice__icon').exists()).toBe(true)
-    expect(item.findComponent(GithubB).exists()).toBe(true)
+    expect(item.findComponent(Github).exists()).toBe(true)
     expect(item.find('.vxp-notice__title').exists()).toBe(true)
     expect(item.find('.vxp-notice__title').text()).toBe(TEXT)
     expect(item.find('.vxp-notice__content').exists()).toBe(true)
@@ -84,7 +85,7 @@ describe('Notice', () => {
     expect(document.querySelector('.vxp-notice__content')?.textContent).toEqual(TEXT)
   })
 
-  const types = ['info', 'success', 'warning', 'error'] as const
+  const types = ['primary', 'info', 'success', 'warning', 'error'] as const
 
   types.forEach(type => {
     it(`type ${type}`, async () => {
@@ -104,7 +105,7 @@ describe('Notice', () => {
 
     Notice.open({
       content: TEXT,
-      closable: true
+      closable: true,
     })
     await noticeOpened()
     expect(document.querySelector('.vxp-notice__close')).toBeTruthy()
@@ -115,14 +116,14 @@ describe('Notice', () => {
 
     Notice.open({
       content: TEXT,
-      icon: GithubB
+      icon: Github,
     })
     await noticeOpened()
     expect(document.querySelector('.vxp-notice__icon')).toBeTruthy()
 
-    const icon = mount(GithubB)
+    const icon = mount(Github)
     expect(document.querySelector('.vxp-notice__icon')!.querySelector('svg')?.innerHTML).toEqual(
-      icon.find('svg').element.innerHTML
+      icon.find('svg').element.innerHTML,
     )
   })
 
@@ -132,10 +133,19 @@ describe('Notice', () => {
     Notice.open({
       title: '<div class="test1"></div>',
       content: '<div class="test2"></div>',
-      parseHtml: true
+      parseHtml: true,
     })
     await noticeOpened()
     expect(document.querySelector('.test1')).toBeTruthy()
     expect(document.querySelector('.test2')).toBeTruthy()
+  })
+
+  it('transferTo', async () => {
+    const Notice = createNotice()
+    const el = document.createElement('div')
+    Notice.transferTo(el)
+
+    await nextTick()
+    expect(el.querySelector('.vxp-notice')).toBeTruthy()
   })
 })

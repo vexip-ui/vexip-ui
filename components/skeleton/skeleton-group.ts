@@ -1,4 +1,5 @@
-import { defineComponent, provide, h, renderSlot } from 'vue'
+import { defineComponent, h, provide, renderSlot } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { skeletonGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
@@ -15,7 +16,7 @@ export default defineComponent({
       round: false,
       circle: false,
       block: false,
-      loading: true
+      loading: true,
     })
 
     const nh = useNameHelper('skeletonGroup')
@@ -28,15 +29,15 @@ export default defineComponent({
           typeof props.tag === 'string' ? props.tag : 'div',
           {
             class: [nh.b(), props.inherit && nh.bm('inherit')],
-            role: 'group'
+            role: 'group',
           },
           {
-            default: () => slots.default?.()
-          }
+            default: () => slots.default?.(),
+          },
         )
       }
 
       return renderSlot(slots, 'default')
     }
-  }
+  },
 })

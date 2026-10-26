@@ -1,11 +1,11 @@
-import { computed, provide, inject, unref, getCurrentInstance } from 'vue'
-import { isClient } from '@vexip-ui/utils'
+import { computed, getCurrentInstance, inject, provide, unref } from 'vue'
 
-import type { App, ComputedRef, Ref } from 'vue'
+import { isClient, isDefined } from '@vexip-ui/utils'
+
+import type { App, ComputedRef, MaybeRef } from 'vue'
 
 export const PROVIDED_Z_INDEX = '___vxp-provided-z-index'
 
-let counter = 0
 let initZIndex = 2000
 
 if (isClient) {
@@ -17,13 +17,23 @@ if (isClient) {
   }
 }
 
-const globalZIndex = computed(() => initZIndex)
-
-function getOrDefault(num: number, def: number) {
-  return !Number.isNaN(num) ? num : def
+const counter = {
+  current: 0,
 }
 
-export function configZIndex(sourceZIndex: number | Ref<number>, app?: App) {
+export const globalZIndex = computed(() => initZIndex)
+
+function getOrDefault(num: number, def: number) {
+  return isDefined(num) && !Number.isNaN(num) ? num : def
+}
+
+/**
+ * Provide a z-index config for under components.
+ *
+ * @param sourceZIndex z-index config
+ * @param app the app of Vue, will use app.provide if specify
+ */
+export function configZIndex(sourceZIndex: MaybeRef<number>, app?: App) {
   if (app) {
     const zIndex = computed(() => {
       const zIndex = unref(sourceZIndex)
@@ -39,7 +49,7 @@ export function configZIndex(sourceZIndex: number | Ref<number>, app?: App) {
 
       return getOrDefault(
         zIndex,
-        upstreamZIndex ? getOrDefault(upstreamZIndex.value, globalZIndex.value) : globalZIndex.value
+        upstreamZIndex ? getOrDefault(upstreamZIndex.value, globalZIndex.value) : globalZIndex.value,
       )
     })
 
@@ -52,5 +62,6 @@ export function useZIndex() {
     ? inject<ComputedRef<number>>(PROVIDED_Z_INDEX, globalZIndex)
     : globalZIndex
 
-  return computed(() => zIndex.value + counter++)
+  // return computed(() => zIndex.value + counter++)
+  return () => zIndex.value + counter.current++
 }

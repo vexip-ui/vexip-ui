@@ -1,3 +1,5 @@
-export interface OverflowExposed {
-  refresh: () => void
+import type { ComponentPublicInstance } from 'vue'
+
+export interface OverflowExposed extends ComponentPublicInstance {
+  refresh: () => void,
 }

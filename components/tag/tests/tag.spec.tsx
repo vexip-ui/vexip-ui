@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Tag } from '..'
 
 const TEXT = 'Text'
@@ -25,7 +26,7 @@ describe('Tag', () => {
   })
 
   it('type', async () => {
-    (['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
+    ;(['primary', 'info', 'success', 'warning', 'error'] as const).forEach(type => {
       const wrapper = mount(() => <Tag type={type}></Tag>)
 
       expect(wrapper.find('.vxp-tag').classes()).toContain(`vxp-tag--${type}`)
@@ -37,8 +38,8 @@ describe('Tag', () => {
       props: {
         border: true,
         simple: true,
-        circle: true
-      }
+        circle: true,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-tag--border')
@@ -49,7 +50,7 @@ describe('Tag', () => {
   it('closable', async () => {
     const onClose = vi.fn()
     const wrapper = mount(Tag, {
-      props: { onClose }
+      props: { onClose },
     })
 
     expect(wrapper.find('.vxp-tag__close').exists()).toBe(false)
@@ -59,5 +60,18 @@ describe('Tag', () => {
 
     await wrapper.find('.vxp-tag__close').trigger('click')
     expect(onClose).toHaveBeenCalled()
+  })
+
+  it('disabled', async () => {
+    const onClose = vi.fn()
+    const wrapper = mount(Tag, {
+      props: { disabled: true, closable: true, onClose },
+    })
+
+    expect(wrapper.find('.vxp-tag').classes()).toContain('vxp-tag--disabled')
+    expect(wrapper.find('.vxp-tag__close').exists()).toBe(true)
+
+    await wrapper.find('.vxp-tag__close').trigger('click')
+    expect(onClose).not.toHaveBeenCalled()
   })
 })

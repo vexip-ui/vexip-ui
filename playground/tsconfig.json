@@ -6,7 +6,7 @@
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
@@ -16,7 +16,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "types": ["vite/client", "vexip-ui/types"],
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["../*"],
       "vexip-ui": ["../components"]

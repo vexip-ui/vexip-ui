@@ -1,5 +1,10 @@
 import { defineLocaleConfig } from './helper'
 
+/**
+ * English locale config.
+ *
+ * @author @qmhc
+ */
 export function enUSLocale() {
   return defineLocaleConfig({
     locale: 'en-US',
@@ -26,78 +31,163 @@ export function enUSLocale() {
       week4: 'Th',
       week5: 'Fr',
       week6: 'Sa',
-      week7: 'Su'
+      week7: 'Su',
+
+      ariaLabel: {
+        year: 'Year',
+        month: 'Month',
+        month1: 'January',
+        month2: 'February',
+        month3: 'March',
+        month4: 'April',
+        month5: 'May',
+        month6: 'June',
+        month7: 'July',
+        month8: 'August',
+        month9: 'September',
+        month10: 'October',
+        month11: 'November',
+        month12: 'December',
+        week1: 'Monday',
+        week2: 'Tuesday',
+        week3: 'Wednesday',
+        week4: 'Thursday',
+        week5: 'Friday',
+        week6: 'Saturday',
+        week7: 'Sunday',
+      },
+    },
+
+    captcha: {
+      slideEnd: 'Please slide to the end',
+      slide: 'Please slide to a suitable position',
+      success: 'Test successful',
+      fail: 'Test failed, please retry',
+      doCaptcha: 'Please complete the captcha below',
+      pointInOrder: 'Please point in order',
+      trigger: 'Click to trigger captcha',
+      completed: 'Captcha completed',
     },
 
     checkbox: {
-      all: 'All'
+      all: 'All',
     },
 
     colorPicker: {
-      confirm: 'Confrim',
-      cancel: 'Cancel'
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+
+      ariaLabel: {
+        clear: 'Clear color',
+      },
     },
 
     confirm: {
-      confirm: 'Confrim',
-      cancel: 'Cancel'
+      confirm: 'Confirm',
+      cancel: 'Cancel',
     },
 
     datePicker: {
-      confirm: 'Confrim',
-      cancel: 'Cancel'
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+      placeholder: {
+        year: 'year',
+        month: 'month',
+        date: 'date',
+        datetime: 'datetime',
+        start: 'Start',
+        end: 'End',
+        select: 'Please select',
+      },
+      startTime: 'Start Time',
+      endTime: 'End Time',
+
+      ariaLabel: {
+        clear: 'Clear date',
+        quarter: 'Quarter',
+        week: 'Week',
+        date: 'Date',
+        hour: 'Hour',
+        minute: 'Minute',
+        second: 'Second',
+      },
     },
 
     drawer: {
-      confirm: 'Confrim',
-      cancel: 'Cancel'
+      confirm: 'Confirm',
+      cancel: 'Cancel',
     },
 
     form: {
       submit: 'Submit',
       reset: 'Reset',
       notNullable: 'must not be null',
-      validateFail: 'Validate failed'
+      validateFail: 'Validate failed',
+    },
+
+    image: {
+      placeholder: 'Loading...',
+      error: 'Loading fail',
     },
 
     input: {
-      placeholder: 'Please input'
+      placeholder: 'Please input',
+
+      ariaLabel: {
+        clear: 'Clear input',
+      },
     },
 
     layout: {
       signOut: 'Sign out',
       signType: 'Navigation Type',
       majorColor: 'Major Color',
-      themeMode: 'Theme Mode'
+      themeMode: 'Theme Mode',
     },
 
     modal: {
-      confirm: 'Confrim',
-      cancel: 'Cancel'
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+    },
+
+    numberInput: {
+      placeholder: 'Please input number',
+      outOfRange: 'Out of range',
+
+      ariaLabel: {
+        clear: 'Clear number',
+        increase: 'Increase',
+        decrease: 'Decrease',
+      },
     },
 
     pagination: {
       page: 'Page | Pages',
-      prePage: '/ Page',
+      perPage: '/ Page',
       prevPage: 'Prev Page',
       nextPage: 'Next Page',
       prev: 'Prev',
       next: 'Next',
       total: 'Total',
       jumpTo: 'Jump to',
-      itemUnit: 'Item | Items'
+      itemUnit: 'Item | Items',
     },
 
     select: {
       placeholder: 'Please select',
-      empty: 'No data'
+      empty: 'No data',
+      search: 'Search options',
+
+      ariaLabel: {
+        clear: 'Clear select',
+      },
     },
 
     table: {
       empty: 'No data',
       filterConfirm: 'Filter',
       filterReset: 'Reset',
-      filterAll: 'All'
+      filterAll: 'All',
     },
 
     timeAgo: {
@@ -112,12 +202,32 @@ export function enUSLocale() {
       lastMonth: 'Last month',
       months: 'Months',
       lastYear: 'Last year',
-      years: 'Years'
+      years: 'Years',
     },
 
     timePicker: {
-      confirm: 'Confrim',
-      cancel: 'Cancel'
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+      placeholder: {
+        time: 'time',
+        start: 'Start',
+        end: 'End',
+        select: 'Please select',
+      },
+
+      ariaLabel: {
+        clear: 'Clear time',
+        hour: 'Hour',
+        minute: 'Minute',
+        second: 'Second',
+      },
+    },
+
+    tour: {
+      prev: 'Prev',
+      next: 'Next',
+      done: 'Done',
+      stepCount: 'Step {n}',
     },
 
     transfer: {
@@ -125,17 +235,38 @@ export function enUSLocale() {
       target: 'Target',
       empty: 'No data',
       reverse: 'Reverse selection',
-      search: 'Search (Ctrl + F)'
+      search: 'Search (Ctrl + F)',
     },
 
     tree: {
-      empty: 'No data'
+      empty: 'No data',
     },
 
     upload: {
       upload: 'Upload files',
       uploading: 'Uploading',
-      dragOrClick: 'Drag files here, or click to upload'
+      dragOrClick: 'Drag files here, or click to upload',
+
+      ariaLabel: {
+        preview: 'Preview file',
+        delete: 'Delete file',
+      },
+    },
+
+    video: {
+      play: 'Play',
+      pause: 'Pause',
+      playPrev: 'Prev',
+      playNext: 'Next',
+      refresh: 'Refresh',
+      flip: 'Flip',
+      requestPip: 'Enter PIP',
+      exitPip: 'Exit PIP',
+      fullWindow: 'Full window',
+      fullWindowExit: 'Full window exit',
+      fullScreen: 'Full screen',
+      fullScreenExit: 'Full screen exit',
+      chapterCount: 'Chapter {n}',
     },
 
     viewer: {
@@ -147,7 +278,7 @@ export function enUSLocale() {
       zoomOut: 'Zoom out',
       fullScreen: 'Full screen',
       fullScreenExit: 'Full screen exit',
-      reset: 'Reset'
-    }
+      reset: 'Reset',
+    },
   })
 }

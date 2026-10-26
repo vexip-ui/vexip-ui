@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <Alert no-border>
-      Some content to alert
-    </Alert>
-    <Alert type="success" no-border>
-      Some content to alert
-    </Alert>
-    <Alert type="warning" no-border>
-      Some content to alert
-    </Alert>
-    <Alert type="error" no-border>
-      Some content to alert
-    </Alert>
-  </div>
+  <Alert
+    v-for="alertType in types"
+    :key="alertType"
+    no-border
+    :type="alertType"
+  >
+    Some content to alert
+  </Alert>
 </template>
+
+<script setup lang="ts">
+const types = ['primary', 'info', 'success', 'warning', 'error'] as const
+</script>
 
 <style scoped>
 .vxp-alert {

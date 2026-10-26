@@ -1,7 +1,7 @@
 import type { ComponentPublicInstance } from 'vue'
 
 export type Key = string | number
-export type MessageType = 'info' | 'success' | 'warning' | 'error'
+export type MessageType = 'primary' | 'info' | 'success' | 'warning' | 'error'
 export type MessagePlacement = 'top' | 'bottom'
 
 export interface MessageOptions extends Record<string, any> {
@@ -9,20 +9,32 @@ export interface MessageOptions extends Record<string, any> {
   key?: Key,
   icon?: Record<string, any> | (() => any),
   iconColor?: string,
-  type?: MessageType,
+  type?: MessageType | null,
   duration?: number,
   className?: string | Record<string, any>,
   style?: string | Record<string, any>,
+  zIndex?: number,
   background?: boolean | string,
   color?: boolean | string,
   closable?: boolean,
   parseHtml?: boolean,
-  renderer?: () => any
+  liveOnEnter?: boolean,
+  renderer?: () => any,
+}
+
+export interface MessageConfig {
+  placement?: MessagePlacement,
+  startOffset?: number,
+  itemGap?: number,
 }
 
 export interface MessageInstance extends ComponentPublicInstance {
-  placement: MessagePlacement,
   add: (options: MessageOptions) => void,
   remove: (key: string | number) => void,
-  clear: () => void
+  clear: () => void,
+  config: (config: MessageConfig) => void,
 }
+
+export const effectiveTypes = Object.freeze(['primary', 'info', 'success', 'warning', 'error'])
+// For a11n
+export const assertiveTypes = Object.freeze(['success', 'warning', 'error'])

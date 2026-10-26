@@ -6,7 +6,7 @@
   <ConfigProvider :props="{ default: { clearable: true } }">
     <Form
       ref="form"
-      style="max-width: 500px;"
+      style="max-width: 500px"
       :model="formModel"
       :loading="loading"
     >
@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 const loading = ref(true)
 const formModel = reactive({})
@@ -81,7 +81,7 @@ function createOptions(depth: number, prefix = 'Op', iterator = 1) {
       value: `${prefix}-${i}`,
       label: `${prefix}-${i}`,
       disabled: i % 4 === 0,
-      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1),
     })
   }
 

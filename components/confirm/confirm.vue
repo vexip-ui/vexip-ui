@@ -1,317 +1,336 @@
-<template>
-  <!-- eslint-disable vue/no-v-html -->
-  <Modal
-    no-footer
-    :closable="false"
-    :active="visible"
-    :class="[nh.b(), nh.bs('vars')]"
-    :modal-class="classR"
-    :modal-style="styleR"
-    :top="props.top"
-    :left="props.left"
-    :width="props.width"
-    :mask-close="maskCloseR"
-    @hide="handleReset"
-  >
-    <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
-    <template v-else>
-      <div v-if="title" :class="nh.be('header')">
-        <div :class="nh.be('title')">
-          {{ title }}
-        </div>
-        <button
-          v-if="closableR"
-          :class="nh.be('close')"
-          @mousedown.stop
-          @click="handleCancel"
-        >
-          <slot name="close">
-            <Icon :scale="1.2" label="close">
-              <Xmark></Xmark>
-            </Icon>
-          </slot>
-        </button>
-      </div>
-      <div
-        :class="[
-          nh.be('body'),
-          nh.bem('body', contentAlignR),
-          title && nh.bem('body', 'with-title')
-        ]"
-      >
-        <div :class="nh.be('icon')">
-          <Renderer v-if="isFunction(icon)" :renderer="icon"></Renderer>
-          <Icon
-            v-else
-            :icon="iconR || CircleQuestion"
-            :scale="2.2"
-            :style="{ color: iconColorR }"
-          ></Icon>
-        </div>
-        <div v-if="parseHtmlR" :class="nh.be('content')" v-html="content"></div>
-        <div v-else :class="nh.be('content')">
-          {{ content }}
-        </div>
-      </div>
-      <div :class="[nh.be('footer'), nh.bem('footer', actionsAlignR)]">
-        <Button
-          :class="nh.be('button')"
-          inherit
-          no-pulse
-          @click="handleCancel"
-        >
-          {{ cancelTextR || locale.cancel }}
-        </Button>
-        <Button
-          :class="nh.be('button')"
-          inherit
-          no-pulse
-          :type="confirmTypeR"
-          :loading="loading"
-          @click="handleConfirm"
-        >
-          {{ confirmTextR || locale.confirm }}
-        </Button>
-      </div>
-      <button
-        v-if="closableR && !title"
-        :class="nh.be('close')"
-        @mousedown.stop
-        @click="handleCancel"
-      >
-        <slot name="close">
-          <Icon :scale="1.2" label="close">
-            <Xmark></Xmark>
-          </Icon>
-        </slot>
-      </button>
-    </template>
-  </Modal>
-</template>
-
-<script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue'
+<script setup lang="ts">
 import { Button } from '@/components/button'
 import { Icon } from '@/components/icon'
 import { Modal } from '@/components/modal'
 import { Renderer } from '@/components/renderer'
-import { useNameHelper, useProps, useLocale } from '@vexip-ui/config'
-import { isPromise, isFunction } from '@vexip-ui/utils'
-import { Xmark, CircleQuestion } from '@vexip-ui/icons'
+
+import { nextTick, onMounted, reactive, ref, toRef } from 'vue'
+
+import { useIcons, useLocale, useNameHelper, useProps } from '@vexip-ui/config'
+import { isFunction, isPromise } from '@vexip-ui/utils'
 import { confirmProps } from './props'
 
-import type { ConfirmType, ConfirmRenderFn, ConfirmOptions } from './symbol'
+import type { ConfirmButtonType, ConfirmOptions, ConfirmRenderFn, ConfirmState } from './symbol'
 
 const positionValidator = (value: string | number) => {
   return value === 'auto' || !Number.isNaN(parseFloat(value as string))
 }
+const positionProp = {
+  default: 'auto',
+  validator: positionValidator,
+}
 
-const confirmTypes = Object.freeze<ConfirmType>([
+const confirmButtonTypes = Object.freeze<ConfirmButtonType[]>([
   'default',
   'primary',
   'info',
   'success',
   'warning',
-  'error'
+  'error',
 ])
 
-export default defineComponent({
-  name: 'Confirm',
-  components: {
-    Button,
-    Icon,
-    Modal,
-    Renderer,
-    Xmark
+defineOptions({ name: 'Confirm' })
+
+const _props = defineProps(confirmProps)
+const props = useProps('confirm', _props, {
+  locale: null,
+  width: {
+    default: 420,
+    validator: positionValidator,
   },
-  props: confirmProps,
-  setup(_props) {
-    const props = useProps('confirm', _props, {
-      top: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      left: {
-        default: 'auto',
-        validator: positionValidator
-      },
-      width: {
-        default: 420,
-        validator: positionValidator
-      },
-      maskClose: false,
-      confirmType: {
-        default: 'default',
-        validator: value => confirmTypes.includes(value)
-      },
-      confirmText: null,
-      cancelText: null,
-      icon: null,
-      className: null,
-      style: null,
-      renderer: {
-        default: null,
-        isFunc: true,
-        static: true
-      },
-      iconColor: '',
-      closable: false,
-      parseHtml: false,
-      contentAlign: 'center',
-      actionsAlign: 'center'
-    })
+  height: positionProp,
+  top: positionProp,
+  left: positionProp,
+  right: positionProp,
+  bottom: positionProp,
+  maskClose: false,
+  confirmType: {
+    default: 'primary',
+    validator: value => confirmButtonTypes.includes(value),
+  },
+  cancelType: {
+    default: 'default',
+    validator: value => confirmButtonTypes.includes(value),
+  },
+  confirmText: null,
+  cancelText: null,
+  icon: {
+    isFunc: true,
+    default: false,
+  },
+  className: null,
+  style: null,
+  renderer: {
+    default: null,
+    isFunc: true,
+    static: true,
+  },
+  iconProps: () => ({}),
+  closable: false,
+  parseHtml: false,
+  contentAlign: 'left',
+  actionsAlign: 'right',
+  cancelable: true,
+  xOffset: 0,
+  yOffset: 0,
+  loadingLock: false,
+})
 
-    const visible = ref(false)
-    const loading = ref(false)
-    const title = ref('')
-    const content = ref('')
-    const iconColorR = ref(props.iconColor)
-    const classR = ref(props.className)
-    const styleR = ref(props.style || ({} as any))
-    const confirmTypeR = ref(props.confirmType)
-    const confirmTextR = ref(props.confirmText)
-    const cancelTextR = ref(props.cancelText)
-    const maskCloseR = ref(props.maskClose)
-    const parseHtmlR = ref(props.parseHtml)
-    const closableR = ref(props.closable)
-    const contentAlignR = ref(props.contentAlign)
-    const actionsAlignR = ref(props.actionsAlign)
-    const iconR = ref(props.icon)
-    const rendererR = ref<ConfirmRenderFn | null>(props.renderer)
-    const onBeforeConfirm = ref<(() => unknown) | null>(null)
+const nh = useNameHelper('confirm')
+const icons = useIcons()
+const locale = useLocale('confirm', toRef(props, 'locale'))
 
-    const onConfirm = ref<(() => void) | null>(null)
-    const onCancel = ref<(() => void) | null>(null)
+const commonProps = [
+  'className',
+  'style',
+  'icon',
+  'iconProps',
+  'maskClose',
+  'confirmType',
+  'cancelType',
+  'confirmText',
+  'cancelText',
+  'parseHtml',
+  'closable',
+  'contentAlign',
+  'actionsAlign',
+  'cancelable',
+  'width',
+  'height',
+  'top',
+  'right',
+  'bottom',
+  'left',
+  'xOffset',
+  'yOffset',
+  'loadingLock',
+] as const
 
-    const mounted = new Promise<void>(resolve => {
-      onMounted(() => {
-        nextTick(resolve)
-      })
-    })
+const state = reactive<ConfirmState>({
+  ...commonProps.reduce((prev, current) => ((prev[current] = props[current]), prev), {} as any),
+  visible: false,
+  loading: false,
+  title: '',
+  content: '',
+  raw: {},
+})
 
-    async function openConfirm(options: ConfirmOptions) {
-      await mounted
+const rendererR = ref<ConfirmRenderFn | null>(props.renderer)
 
-      return await new Promise<boolean>(resolve => {
-        title.value = options.title ?? ''
-        content.value = options.content ?? ''
-        classR.value = options.className ?? props.className
-        styleR.value = options.style ?? props.style
-        iconColorR.value = options.iconColor ?? props.iconColor
-        maskCloseR.value = options.maskClose ?? props.maskClose
-        confirmTypeR.value = options.confirmType ?? props.confirmType
-        confirmTextR.value = options.confirmText ?? props.confirmText
-        cancelTextR.value = options.cancelText ?? props.cancelText
-        parseHtmlR.value = options.parseHtml ?? props.parseHtml
-        closableR.value = options.closable ?? props.closable
-        contentAlignR.value = options.contentAlign ?? props.contentAlign
-        actionsAlignR.value = options.actionsAlign ?? props.actionsAlign
-        iconR.value = options.icon ?? props.icon
-        rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
-        onBeforeConfirm.value = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
+let beforeConfirmR: (() => unknown) | null = null
 
-        if (isFunction(rendererR.value)) {
-          rendererR.value = () => rendererR.value!(options, handleConfirm, handleCancel)
-        }
+let onConfirm: (() => void) | null = null
+let onCancel: (() => void) | null = null
 
-        visible.value = true
+const mountedPromise = new Promise<void>(resolve => {
+  onMounted(() => {
+    nextTick(resolve)
+  })
+})
 
-        onConfirm.value = () => {
-          resolve(true)
-          onBeforeConfirm.value = null
-        }
-        onCancel.value = () => {
-          resolve(false)
-          onBeforeConfirm.value = null
-        }
-      })
+defineExpose({ state, openConfirm, closeConfirm: handleCancel, handleReset })
+
+async function openConfirm(options: ConfirmOptions) {
+  await mountedPromise
+
+  return await new Promise<boolean>(resolve => {
+    for (const prop of commonProps) {
+      ;(state as any)[prop] = options[prop] ?? props[prop]
     }
 
-    async function handleConfirm() {
-      loading.value = true
+    state.title = options.title ?? ''
+    state.content = options.content ?? ''
 
-      if (isFunction(onBeforeConfirm.value)) {
-        let result = onBeforeConfirm.value()
+    state.raw = options
 
-        if (isPromise(result)) {
-          result = await result
-        }
+    rendererR.value = isFunction(options.renderer) ? options.renderer : props.renderer
+    beforeConfirmR = isFunction(options.onBeforeConfirm) ? options.onBeforeConfirm : null
 
-        if (result === false) {
-          loading.value = false
+    if (isFunction(rendererR.value)) {
+      const render = rendererR.value
 
-          return
-        }
-      }
-
-      visible.value = false
-      loading.value = false
-
-      if (isFunction(onConfirm.value)) {
-        onConfirm.value()
-        onConfirm.value = null
-      }
+      rendererR.value = () => render(state, handleConfirm, handleCancel)
     }
 
-    function handleCancel() {
-      visible.value = false
+    state.visible = true
 
-      if (isFunction(onCancel.value)) {
-        onCancel.value()
-        onCancel.value = null
-      }
+    let resolved = false
+
+    onConfirm = () => {
+      !resolved && resolve(true)
+      resolved = true
+      beforeConfirmR = null
+    }
+    onCancel = () => {
+      !resolved && resolve(false)
+      resolved = true
+      beforeConfirmR = null
+    }
+  })
+}
+
+async function handleConfirm() {
+  if (state.loading) return
+
+  state.loading = true
+
+  if (isFunction(beforeConfirmR)) {
+    let result = beforeConfirmR()
+
+    if (isPromise(result)) {
+      result = await result
     }
 
-    function handleReset() {
-      visible.value = false
-      title.value = ''
-      content.value = ''
-      iconColorR.value = props.iconColor
-      classR.value = props.className
-      styleR.value = props.style
-      maskCloseR.value = props.maskClose
-      confirmTypeR.value = props.confirmType
-      confirmTextR.value = props.confirmText
-      cancelTextR.value = props.cancelText
-      parseHtmlR.value = props.parseHtml
-      closableR.value = props.closable
-      contentAlignR.value = props.contentAlign
-      actionsAlignR.value = props.actionsAlign
-      iconR.value = props.icon
-      rendererR.value = props.renderer
-    }
+    if (result === false) {
+      state.loading = false
 
-    return {
-      CircleQuestion,
-
-      props,
-      nh: useNameHelper('confirm'),
-      locale: useLocale('confirm'),
-      visible,
-      loading,
-      title,
-      content,
-
-      classR,
-      styleR,
-      iconColorR,
-      maskCloseR,
-      confirmTypeR,
-      confirmTextR,
-      cancelTextR,
-      parseHtmlR,
-      closableR,
-      contentAlignR,
-      actionsAlignR,
-      iconR,
-      rendererR,
-
-      isFunction,
-      openConfirm,
-      handleConfirm,
-      handleCancel,
-      handleReset
+      return
     }
   }
-})
+
+  state.visible = false
+  state.loading = false
+
+  if (isFunction(onConfirm)) {
+    onConfirm()
+    onConfirm = null
+  }
+}
+
+function handleCancel(force = false) {
+  if (!force && state.loadingLock && state.loading) return
+
+  state.visible = false
+
+  if (isFunction(onCancel)) {
+    onCancel()
+    onCancel = null
+  }
+}
+
+function handleReset() {
+  for (const prop of commonProps) {
+    ;(state as any)[prop] = props[prop]
+  }
+
+  state.visible = false
+  state.loading = false
+  state.title = ''
+  state.content = ''
+
+  state.raw = {}
+
+  rendererR.value = props.renderer
+}
 </script>
+
+<template>
+  <!-- eslint-disable vue/no-v-html -->
+  <div :class="[nh.b(), nh.bs('vars')]">
+    <Modal
+      no-footer
+      :auto-remove="false"
+      :transfer="false"
+      :closable="false"
+      :active="state.visible"
+      :modal-class="state.className"
+      :modal-style="state.style"
+      :width="state.width"
+      :height="state.height"
+      :top="state.top"
+      :left="state.left"
+      :right="state.right"
+      :bottom="state.bottom"
+      :x-offset="state.xOffset"
+      :y-offset="state.yOffset"
+      :mask-close="state.maskClose"
+      @hide="handleReset"
+      @close="handleCancel"
+    >
+      <Renderer v-if="isFunction(rendererR)" :renderer="rendererR"></Renderer>
+      <template v-else>
+        <div v-if="state.title" :class="nh.be('header')">
+          <div :class="nh.be('title')">
+            <Renderer v-if="typeof state.title === 'function'" :renderer="state.title"></Renderer>
+            <template v-else>
+              {{ state.title }}
+            </template>
+          </div>
+          <button
+            v-if="state.closable"
+            type="button"
+            :class="[
+              nh.be('close'),
+              state.loadingLock && state.loading && nh.bem('close', 'disabled'),
+            ]"
+            :disabled="state.loadingLock && state.loading"
+            @mousedown.stop
+            @click="handleCancel()"
+          >
+            <slot name="close">
+              <Icon
+                v-bind="icons.close"
+                :scale="+(icons.close.scale || 1) * 1.2"
+                label="close"
+              ></Icon>
+            </slot>
+          </button>
+        </div>
+        <div
+          :class="[
+            nh.be('body'),
+            nh.bem('body', state.contentAlign),
+            !state.title && nh.bem('body', 'no-title'),
+          ]"
+        >
+          <div v-if="state.icon !== false" :class="nh.be('icon')">
+            <Icon
+              v-if="typeof state.icon !== 'boolean'"
+              v-bind="state.iconProps"
+              :icon="state.icon"
+            ></Icon>
+            <Icon
+              v-else
+              :scale="2.2"
+              v-bind="{
+                ...(state.cancelable ? icons.question : icons.warning),
+                ...state.iconProps,
+              }"
+              :icon="(state.cancelable ? icons.question : icons.warning).icon"
+            ></Icon>
+          </div>
+          <Renderer v-if="typeof state.content === 'function'" :renderer="state.content"></Renderer>
+          <template v-else>
+            <div v-if="state.parseHtml" :class="nh.be('content')" v-html="state.content"></div>
+            <div v-else :class="nh.be('content')">
+              {{ state.content }}
+            </div>
+          </template>
+        </div>
+        <div :class="[nh.be('footer'), nh.bem('footer', state.actionsAlign)]">
+          <Button
+            v-if="state.cancelable"
+            :class="[nh.be('button'), nh.bem('button', 'cancel')]"
+            inherit
+            no-pulse
+            :type="state.cancelType"
+            :disabled="state.loadingLock && state.loading"
+            @click="handleCancel"
+          >
+            {{ state.cancelText || locale.cancel }}
+          </Button>
+          <Button
+            :class="[nh.be('button'), nh.bem('button', 'confirm')]"
+            inherit
+            no-pulse
+            :type="state.confirmType"
+            :loading="state.loading"
+            @click="handleConfirm"
+          >
+            {{ state.confirmText || locale.confirm }}
+          </Button>
+        </div>
+      </template>
+    </Modal>
+  </div>
+</template>

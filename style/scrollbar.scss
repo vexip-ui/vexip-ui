@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $scrollbar: () !default;
@@ -8,8 +9,8 @@ $scrollbar: map.merge(
     move-duration: 140ms,
     move-timing: cubic-bezier(0.165, 0.84, 0.44, 1),
     width: 6px,
-    bar-bg-color: get-css-var('color-primary-opacity-6'),
-    track-bg-color: get-css-var('color-primary-opacity-8')
+    bar-bg-color: value('color-primary-opacity-6'),
+    track-bg-color: value('color-primary-opacity-8')
   ),
   $scrollbar
 );
@@ -19,13 +20,15 @@ $scrollbar: map.merge(
     @include define-preset-values('scrollbar', $scrollbar);
   }
 
-  @include basis;
+  @include basis {
+    position: absolute;
+    z-index: 10;
+    background-color: transparent;
+  }
+
+  @include inherit-color;
 
   $bar: #{&}__bar;
-
-  position: absolute;
-  z-index: 10;
-  background-color: transparent;
 
   &--disabled {
     pointer-events: none;
@@ -34,12 +37,12 @@ $scrollbar: map.merge(
 
   &--top,
   &--bottom {
-    right: 0;
-    left: 0;
-    height: get-css-var('scrollbar-width');
+    inset-inline: 0;
+    height: value('scrollbar-width');
 
     #{$bar} {
       height: 100%;
+      will-change: width;
     }
   }
 
@@ -47,10 +50,11 @@ $scrollbar: map.merge(
   &--left {
     top: 0;
     bottom: 0;
-    width: get-css-var('scrollbar-width');
+    width: value('scrollbar-width');
 
     #{$bar} {
       width: 100%;
+      will-change: height;
     }
   }
 
@@ -59,7 +63,7 @@ $scrollbar: map.merge(
   }
 
   &--right {
-    right: 0;
+    inset-inline-end: 0;
   }
 
   &--bottom {
@@ -67,19 +71,19 @@ $scrollbar: map.merge(
   }
 
   &--left {
-    left: 0;
+    inset-inline-start: 0;
   }
 
   &__track {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     cursor: pointer;
-    background-color: get-css-var('scrollbar-track-bg-color');
-    border-radius: calc(get-css-var('scrollbar-width') * 0.5);
-    transition: get-css-var('transition-opacity');
+    background-color: value('scrollbar-track-bg-color');
+    border-radius: calc(value('scrollbar-width') * 0.5);
+    transition: value('transition-opacity');
 
     &--disabled {
       pointer-events: none;
@@ -103,14 +107,14 @@ $scrollbar: map.merge(
   &__bar {
     position: absolute;
     cursor: pointer;
-    background-color: get-css-var('scrollbar-bar-bg-color');
-    border-radius: calc(get-css-var('scrollbar-width') * 0.5);
-    will-change: transform;
+    background-color: value('scrollbar-bar-bg-color');
+    border-radius: calc(value('scrollbar-width') * 0.5);
     transition:
-      width get-css-var('transition-base'),
-      height get-css-var('transition-base'),
-      get-css-var('transition-opacity'),
-      transform get-css-var('scrollbar-move-duration') get-css-var('scrollbar-move-timing');
+      width value('transition-base'),
+      height value('transition-base'),
+      value('transition-opacity'),
+      transform value('scrollbar-move-duration') value('scrollbar-move-timing');
+    will-change: transform;
   }
 
   &--fade &__bar {

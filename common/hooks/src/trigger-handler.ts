@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 
-export function useTriggerHandler(trigger: Ref<string>, currentVisible: Ref<boolean>, delay = 250) {
+export function useTriggerHandler(trigger: Ref<string>, currentVisible: Ref<boolean>, delay = 100) {
   let timer: ReturnType<typeof setTimeout>
 
   function handleTriggerEnter() {
@@ -32,6 +32,6 @@ export function useTriggerHandler(trigger: Ref<string>, currentVisible: Ref<bool
   return {
     handleTriggerEnter,
     handleTriggerLeave,
-    handleTriggerClick
+    handleTriggerClick,
   }
 }

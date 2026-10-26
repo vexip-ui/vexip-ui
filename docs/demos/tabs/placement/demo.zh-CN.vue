@@ -5,13 +5,13 @@
   </p>
   <Tabs :placement="placement">
     <TabPanel label="标签页1">
-      <span>标签页一的内容。</span>
+      <span>标签页 1 的内容。</span>
     </TabPanel>
     <TabPanel label="标签页2">
-      <span>标签页二的内容。</span>
+      <span>标签页 2 的内容。</span>
     </TabPanel>
     <TabPanel label="标签页3">
-      <span>标签页三的内容。</span>
+      <span>标签页 3 的内容。</span>
     </TabPanel>
   </Tabs>
 </template>

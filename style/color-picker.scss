@@ -1,35 +1,34 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './button.scss';
-@use './input.scss' as input;
+@use './input' as input;
 
 $color-picker: () !default;
 $color-picker: map.merge(
   (
-    marker-color: get-css-var('content-color-humble'),
-    marker-b-color: get-css-var('border-color-base'),
-    marker-border: get-css-var('border-shape') get-css-var('color-picker-marker-b-color'),
-    marker-radius: get-css-var('radius-small'),
+    marker-color: value('content-color-humble'),
+    marker-b-color: value('border-color-base'),
+    marker-border: value('border-shape') value('color-picker-marker-b-color'),
+    marker-radius: value('radius-small'),
     marker-bg-image:
-    url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
-    arrow-color: get-css-var('content-color-secondary'),
-    popper-z-index: get-css-var('z-index-popper'),
-    pane-bg-color: get-css-var('bg-color-base'),
-    pane-radius: get-css-var('radius-base'),
-    pane-shadow: get-css-var('shadow-base'),
-    unit-s-color: get-css-var('color-primary-opacity-6'),
-    d-color: get-css-var('border-color-light-2'),
-    divider: get-css-var('border-shape') get-css-var('color-picker-d-color'),
+      url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg=='),
+    arrow-color: value('content-color-secondary'),
+    pane-bg-color: value('bg-color-base'),
+    pane-radius: value('radius-base'),
+    pane-shadow: value('shadow-base'),
+    unit-s-color: value('color-primary-opacity-6'),
+    d-color: value('border-color-light-2'),
+    divider: value('border-shape') value('color-picker-d-color'),
     pointer-size: 6px,
     handler-size: 6px,
-    handler-bg-color: get-css-var('color-white'),
-    handler-b-color: get-css-var('border-color-base'),
-    handler-border: get-css-var('border-shape') get-css-var('color-picker-handler-b-color'),
+    handler-bg-color: value('color-white'),
+    handler-b-color: value('border-color-base'),
+    handler-border: value('border-shape') value('color-picker-handler-b-color'),
     handler-radius: 3px,
-    shortcut-b-color: get-css-var('border-color-base'),
-    shortcut-b-color-hover: get-css-var('color-primary-base'),
-    shortcut-radius: get-css-var('radius-base'),
+    shortcut-b-color: value('border-color-base'),
+    shortcut-b-color-hover: value('color-primary-base'),
+    shortcut-radius: value('radius-base'),
     shortcut-width: 20px,
     shortcut-height: 16px
   ),
@@ -41,20 +40,24 @@ $color-picker: map.merge(
     @include define-preset-values('color-picker', $color-picker);
   }
 
-  @include basis;
-
-  display: inline-flex;
+  @include basis {
+    display: inline-flex;
+  }
 
   @include input.handler(#{&}__selector);
 
   &__selector {
     width: auto;
+    cursor: pointer;
+  }
+
+  &--disabled &__selector {
+    cursor: not-allowed;
   }
 
   &__control {
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 
   &__marker {
@@ -64,18 +67,31 @@ $color-picker: map.merge(
     width: calc(100% - 8px);
     min-width: 40px;
     height: 100%;
-    margin-right: 8px;
-    color: get-css-var('color-picker-marker-color');
-    border: get-css-var('color-picker-marker-border');
-    border-radius: get-css-var('color-picker-marker-radius');
+    margin-inline-end: 8px;
+    overflow: hidden;
+    color: value('color-picker-marker-color');
+    border: value('color-picker-marker-border');
+    border-radius: value('color-picker-marker-radius');
+
+    &--with-label {
+      width: 24px;
+      min-width: 24px;
+    }
   }
 
   &--alpha &__marker {
-    background-image: get-css-var('color-picker-marker-bg-image');
+    background-image: value('color-picker-marker-bg-image');
   }
 
   &--empty &__marker {
     background-image: none;
+  }
+
+  &__label {
+    display: flex;
+    margin-inline-end: 6px;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   &__arrow {
@@ -83,27 +99,19 @@ $color-picker: map.merge(
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: get-css-var('color-picker-arrow-color');
-    transition: get-css-var('transition-transform');
+    color: value('color-picker-arrow-color');
+    transition: value('transition-transform');
   }
 
-  &--focused &__arrow .#{$namespace}-icon {
+  &--focused &__arrow {
     transform: rotate(180deg);
-  }
-
-  &__popper {
-    @include basis;
-
-    z-index: get-css-var('color-picker-popper-z-index');
-    display: flex;
-    padding: 5px 0;
   }
 
   &__panel {
     width: 270px;
-    background-color: get-css-var('color-picker-pane-bg-color');
-    border-radius: get-css-var('color-picker-pane-radius');
-    box-shadow: get-css-var('color-picker-pane-shadow');
+    background-color: value('color-picker-pane-bg-color');
+    border-radius: value('color-picker-pane-radius');
+    box-shadow: value('color-picker-pane-shadow');
   }
 
   &__section {
@@ -117,10 +125,10 @@ $color-picker: map.merge(
     height: 188px;
     cursor: crosshair;
     outline: 0;
-    transition: get-css-var('transition-shadow');
+    transition: value('transition-shadow');
 
     &:focus {
-      box-shadow: get-css-var('shadow-focus') get-css-var('color-picker-unit-s-color');
+      box-shadow: value('shadow-focus') value('color-picker-unit-s-color');
     }
   }
 
@@ -128,10 +136,7 @@ $color-picker: map.merge(
   &__value,
   &__opacity {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
   }
@@ -152,29 +157,28 @@ $color-picker: map.merge(
     margin-top: 10px;
     cursor: pointer;
     outline: 0;
-    transition: get-css-var('transition-shadow');
+    transition: value('transition-shadow');
 
     &:focus {
-      box-shadow: get-css-var('shadow-focus') get-css-var('color-picker-unit-s-color');
+      box-shadow: value('shadow-focus') value('color-picker-unit-s-color');
     }
   }
 
   &__hue {
-    background:
-      linear-gradient(
-        90deg,
-        red 0,
-        #ff0 17%,
-        #0f0 33%,
-        #0ff 50%,
-        #00f 67%,
-        #f0f 83%,
-        red
-      );
+    background: linear-gradient(
+      90deg,
+      red 0,
+      #ff0 17%,
+      #0f0 33%,
+      #0ff 50%,
+      #00f 67%,
+      #f0f 83%,
+      red
+    );
   }
 
   &__alpha {
-    background-image: get-css-var('color-picker-marker-bg-image');
+    background-image: value('color-picker-marker-bg-image');
   }
 
   &__action {
@@ -183,10 +187,10 @@ $color-picker: map.merge(
     justify-content: flex-end;
     padding: 8px;
     margin-top: 10px;
-    border-top: get-css-var('color-picker-divider');
+    border-top: value('color-picker-divider');
 
     .#{$namespace}-button {
-      margin-left: 4px !important;
+      margin-inline-start: 4px !important;
     }
 
     .#{$namespace}-input {
@@ -197,15 +201,15 @@ $color-picker: map.merge(
   &__palette-handler {
     position: absolute;
     user-select: none;
-    border: get-css-var('border-shape') get-css-var('color-black');
+    border: value('border-shape') value('color-black');
     border-radius: 50%;
     transform: translate(-50%, -50%);
   }
 
   &__palette-pointer {
-    width: get-css-var('color-picker-pointer-size');
-    height: get-css-var('color-picker-pointer-size');
-    border: get-css-var('border-shape') get-css-var('color-white');
+    width: value('color-picker-pointer-size');
+    height: value('color-picker-pointer-size');
+    border: value('border-shape') value('color-white');
     border-radius: 50%;
   }
 
@@ -214,10 +218,10 @@ $color-picker: map.merge(
     position: absolute;
     top: 0;
     bottom: 0;
-    width: get-css-var('color-picker-handler-size');
-    background-color: get-css-var('color-picker-handler-bg-color');
-    border: get-css-var('color-picker-handler-border');
-    border-radius: get-css-var('color-picker-handler-radius');
+    width: value('color-picker-handler-size');
+    background-color: value('color-picker-handler-bg-color');
+    border: value('color-picker-handler-border');
+    border-radius: value('color-picker-handler-radius');
     transform: translateX(-50%);
   }
 
@@ -231,20 +235,20 @@ $color-picker: map.merge(
   }
 
   &__shortcut-item {
-    width: get-css-var('color-picker-shortcut-width');
-    height: get-css-var('color-picker-shortcut-height');
+    width: value('color-picker-shortcut-width');
+    height: value('color-picker-shortcut-height');
     margin: 4px;
     cursor: pointer;
-    border-radius: get-css-var('color-picker-shortcut-radius');
-    box-shadow: get-css-var('shadow-border') get-css-var('color-picker-shortcut-b-color');
+    border-radius: value('color-picker-shortcut-radius');
+    box-shadow: value('shadow-border') value('color-picker-shortcut-b-color');
     transition: box-shadow 200ms;
 
     &:hover {
-      box-shadow: 0 0 2px 2px get-css-var('color-picker-shortcut-b-color-hover');
+      box-shadow: 0 0 2px 2px value('color-picker-shortcut-b-color-hover');
     }
 
     &--hitting {
-      box-shadow: 0 0 2px 2px get-css-var('color-picker-shortcut-b-color-hover');
+      box-shadow: 0 0 2px 2px value('color-picker-shortcut-b-color-hover');
     }
   }
 
@@ -252,5 +256,9 @@ $color-picker: map.merge(
     flex: 1 0 0;
     width: auto;
     min-width: 0;
+  }
+
+  &__clear {
+    @include clean-button;
   }
 }

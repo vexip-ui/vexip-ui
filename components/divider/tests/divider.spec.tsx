@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Divider } from '..'
 
 const TEXT = 'Text'
@@ -21,8 +22,8 @@ describe('Divider', () => {
   it('with text', async () => {
     const wrapper = mount(Divider, {
       slots: {
-        default: () => TEXT
-      }
+        default: () => TEXT,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-divider--with-text')
@@ -32,18 +33,33 @@ describe('Divider', () => {
   })
 
   it('text position', () => {
-    (['center', 'left', 'right'] as const).forEach(position => {
+    ;(['center', 'left', 'right'] as const).forEach(position => {
       const wrapper = mount(() => <Divider text-position={position}>{TEXT}</Divider>)
 
       if (position === 'center') {
         expect(wrapper.find('.vxp-divider').classes()).not.toContain(
-          'vxp-divider--with-text-center'
+          'vxp-divider--with-text-center',
         )
       } else {
         expect(wrapper.find('.vxp-divider').classes()).toContain(
-          `vxp-divider--with-text-${position}`
+          `vxp-divider--with-text-${position}`,
         )
       }
     })
+  })
+
+  it('margin', async () => {
+    const wrapper = mount(Divider, {
+      props: { margin: 10 },
+    })
+
+    expect(wrapper.attributes('style')).toContain('margin-top: 10px;')
+    expect(wrapper.attributes('style')).toContain('margin-bottom: 10px;')
+
+    await wrapper.setProps({ vertical: true })
+    expect(wrapper.attributes('style')).not.toContain('margin-top')
+    expect(wrapper.attributes('style')).not.toContain('margin-bottom')
+    expect(wrapper.attributes('style')).toContain('margin-right: 10px;')
+    expect(wrapper.attributes('style')).toContain('margin-left: 10px;')
   })
 })

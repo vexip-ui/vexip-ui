@@ -1,13 +1,14 @@
-import { describe, it, expect, vi, test, beforeEach, afterEach } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { CountTo } from '..'
 
-import type { SpyInstance } from 'vitest'
+import type { MockInstance } from 'vitest'
 
 describe('CountTo', () => {
   let timestamp = -16
-  let rafMock: SpyInstance | undefined
+  let rafMock: MockInstance | undefined
 
   beforeEach(() => {
     rafMock = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(cb => {
@@ -73,7 +74,7 @@ describe('CountTo', () => {
             <button onClick={() => (end.value = 2024)}></button>
           </div>
         )
-      }
+      },
     })
     await nextTick()
     expect(wrapper.find('.vxp-count-to').text()).toBe('2023')

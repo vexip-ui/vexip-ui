@@ -5,9 +5,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import type { UploadFileState } from 'vexip-ui'
+
 const fileIds = ref<string[]>([])
 
-function handleSuccess(response: { id: string | null }) {
+function handleSuccess(file: UploadFileState, response: { id: string | null }) {
   if (response.id && !fileIds.value.includes(response.id)) {
     fileIds.value.push(response.id)
   }

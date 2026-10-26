@@ -19,20 +19,23 @@ export interface PopupItemState extends Record<string, unknown> {
   type?: string,
   className?: any,
   style?: any,
-  icon?:
-  | string
-  | ({
-    name: string,
-    scale?: number | string,
-    title?: string,
-    label?: string,
-    spin?: boolean | string,
-    pulse?: boolean | string,
-    flip?: string
-  } & Record<string, unknown>),
+  icon?: Record<string, any> | (() => any),
   iconColor?: string,
   onOpen: (key: Key) => void,
-  onClose: (result: boolean) => void
+  onClose: (result: boolean) => void,
+  onEnter: () => void,
+  onLeave: () => void,
 }
 
-export const DELETE_HANDLER: InjectionKey<(key: Key) => void> = Symbol('DELETE_HANDLER')
+export const DELETE_HANDLER = '__VXP_POPUP_DELETE_HANDLER' as unknown as InjectionKey<
+  (key: Key) => void
+>
+
+export const popupPlacements = Object.freeze<PopupPlacement[]>([
+  'top-right',
+  'top-center',
+  'top-left',
+  'bottom-right',
+  'bottom-center',
+  'bottom-left',
+])

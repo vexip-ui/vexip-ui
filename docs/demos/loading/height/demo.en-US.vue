@@ -6,25 +6,26 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { Loading } from 'vexip-ui'
 
 export default defineComponent({
   data() {
     return {
       loading: false,
-      timer: undefined! as ReturnType<typeof setTimeout>
+      timer: undefined! as ReturnType<typeof setTimeout>,
     }
   },
   methods: {
     doLoading() {
       clearTimeout(this.timer)
       this.loading = true
-      this.$loading.open({ percent: 20, strokeWidth: 5 })
+      Loading.open({ percent: 20, strokeWidth: 5 })
 
       this.timer = setTimeout(() => {
-        this.$loading.open({ percent: 100, strokeWidth: 5 })
+        Loading.open({ percent: 100, strokeWidth: 5 })
         this.loading = false
       }, 5000)
-    }
-  }
+    },
+  },
 })
 </script>

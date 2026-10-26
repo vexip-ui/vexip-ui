@@ -1,1 +1,2 @@
-import '@/style/button.scss'
+import '@/components/preset/style'
+import '@/components/button/style'

@@ -1,169 +1,157 @@
-<template>
-  <div
-    ref="wrapper"
-    :class="className"
-    :style="ellipsisStyle"
-    v-bind="$attrs"
-    @mouseenter="handleTriggerEnter"
-    @mouseleave="handleTriggerLeave"
-  >
-    <slot></slot>
-  </div>
-  <Portal v-if="visible" :to="transferTo">
-    <transition :name="props.transitionName" appear @after-leave="visible = false">
-      <div
-        v-show="active"
-        ref="popper"
-        :class="{
-          [tooltipNh.be('popper')]: true,
-          [tooltipNh.bs('vars')]: true,
-          [tooltipNh.bem('popper', 'inherit')]: transferTo !== 'body',
-          [tooltipNh.bem('popper', props.tooltipTheme)]: true,
-          [tooltipNh.bem('popper', 'no-hover')]: props.noHover
-        }"
-        @click.stop
-        @mouseenter="handleTriggerEnter"
-        @mouseleave="handleTriggerLeave"
-      >
-        <div :class="[nh.be('tip'), tooltipNh.be('tip'), props.tipClass]" :style="tipStyle">
-          <div :class="tooltipNh.be('arrow')"></div>
-          {{ content }}
-        </div>
-      </div>
-    </transition>
-  </Portal>
-</template>
+<script setup lang="ts">
+import { Tooltip } from '@/components/tooltip'
+import { Renderer } from '@/components/renderer'
 
-<script lang="ts">
-import { defineComponent, ref, computed, watch, toRef, nextTick } from 'vue'
-import { Portal } from '@/components/portal'
-import { useNameHelper, useProps } from '@vexip-ui/config'
-import { placementWhileList, usePopper, useSetTimeout } from '@vexip-ui/hooks'
+import { computed, ref } from 'vue'
+
+import { useHoverDelay, useNameHelper, useProps } from '@vexip-ui/config'
+import { placementWhileList, useSetTimeout } from '@vexip-ui/hooks'
 import { getRangeWidth } from '@vexip-ui/utils'
 import { ellipsisProps } from './props'
 
-export default defineComponent({
-  name: 'Ellipsis',
-  components: {
-    Portal
+import type { EllipsisSlots } from './symbol'
+
+defineOptions({ name: 'Ellipsis' })
+
+const nh = useNameHelper('ellipsis')
+
+const _props = defineProps(ellipsisProps)
+const props = useProps('ellipsis', _props, {
+  placement: {
+    default: 'top',
+    validator: value => placementWhileList.includes(value),
   },
-  props: ellipsisProps,
-  setup(_props) {
-    const nh = useNameHelper('ellipsis')
-    const props = useProps('ellipsis', _props, {
-      placement: {
-        default: 'top',
-        validator: value => placementWhileList.includes(value)
-      },
-      transfer: 'body',
-      noHover: false,
-      transitionName: () => nh.ns('fade'),
-      tooltipTheme: {
-        default: 'dark',
-        validator: value => ['light', 'dark'].includes(value)
-      },
-      tipClass: null,
-      maxLines: null,
-      tipMaxWidth: 500
-    })
+  transfer: 'body',
+  noHover: false,
+  transitionName: () => nh.ns('fade'),
+  tooltipTheme: {
+    default: 'dark',
+    validator: value => ['light', 'dark'].includes(value),
+  },
+  tipClass: null,
+  maxLines: null,
+  tipMaxWidth: 500,
+  tipDisabled: false,
+  tipShift: false,
+  tipDelay: null,
+  slots: () => ({}),
+})
 
-    const tooltipNh = useNameHelper('tooltip')
-    const visible = ref(false)
-    const active = ref(false)
-    const placement = toRef(props, 'placement')
-    const transfer = toRef(props, 'transfer')
-    const content = ref('')
+defineSlots<EllipsisSlots>()
 
-    const wrapper = ref<HTMLElement>()
+const hoverDelay = useHoverDelay()
+const visible = ref(false)
+const content = ref('')
 
-    const { popper, transferTo, updatePopper } = usePopper({
-      placement,
-      transfer,
-      wrapper,
-      reference: wrapper
-    })
+const { timer } = useSetTimeout()
 
-    const className = computed(() => {
-      return {
-        [nh.b()]: true,
-        [nh.bm('inherit')]: props.inherit,
-        [nh.bm('multiple')]: props.maxLines
-      }
-    })
-    const ellipsisStyle = computed(() => {
-      return props.maxLines > 0 ? { '-webkit-line-clamp': props.maxLines } : ''
-    })
-    const tipStyle = computed(() => {
-      return {
-        maxWidth:
-          typeof props.tipMaxWidth === 'string'
-            ? parseFloat(props.tipMaxWidth) || props.tipMaxWidth
-            : `${props.tipMaxWidth}px`
-      }
-    })
+const wrapper = ref<HTMLElement>()
 
-    watch(visible, value => {
-      if (value) {
-        updatePopper()
-      }
-    })
-
-    const { timer } = useSetTimeout()
-
-    function handleTriggerEnter() {
-      clearTimeout(timer.hover)
-
-      timer.hover = setTimeout(() => {
-        if (!wrapper.value || !wrapper.value.childNodes.length) {
-          visible.value = false
-          return
-        }
-
-        // In the case of multiple lines, use visual height and real content height to control whether to display
-        if (props.maxLines > 0) {
-          const scrollHeight = wrapper.value.scrollHeight
-          const clientHeight = wrapper.value.clientHeight
-
-          visible.value = scrollHeight > clientHeight
-        } else {
-          visible.value = getRangeWidth(wrapper.value) > wrapper.value.getBoundingClientRect().width
-        }
-
-        content.value = visible.value ? wrapper.value.textContent ?? '' : ''
-
-        nextTick(() => {
-          active.value = true
-        })
-      }, 250)
-    }
-
-    function handleTriggerLeave() {
-      clearTimeout(timer.hover)
-
-      timer.hover = setTimeout(() => {
-        active.value = false
-      })
-    }
-
-    return {
-      props,
-      nh,
-      tooltipNh,
-      visible,
-      active,
-      content,
-      transferTo,
-
-      className,
-      ellipsisStyle,
-      tipStyle,
-
-      wrapper,
-      popper,
-
-      handleTriggerEnter,
-      handleTriggerLeave
-    }
+const className = computed(() => {
+  return {
+    [nh.b()]: true,
+    [nh.bm('inherit')]: props.inherit,
+    [nh.bm('multiple')]: props.maxLines,
   }
 })
+const ellipsisStyle = computed(() => {
+  return props.maxLines > 0 ? { '-webkit-line-clamp': props.maxLines } : ''
+})
+const tipStyle = computed(() => {
+  return {
+    maxWidth:
+      typeof props.tipMaxWidth === 'string'
+        ? parseFloat(props.tipMaxWidth) || props.tipMaxWidth
+        : `${props.tipMaxWidth}px`,
+  }
+})
+
+const delay = computed(() => {
+  if (props.tipDelay === null) {
+    return [hoverDelay.value, hoverDelay.value]
+  }
+
+  return typeof props.tipDelay === 'number'
+    ? new Array<number>(2).fill(props.tipDelay)
+    : props.tipDelay
+})
+
+defineExpose({
+  visible,
+  wrapper,
+})
+
+function handleTriggerEnter() {
+  clearTimeout(timer.hover)
+
+  if (props.tipDisabled) return
+
+  timer.hover = setTimeout(() => {
+    if (!wrapper.value || !wrapper.value.childNodes.length) {
+      visible.value = false
+      return
+    }
+
+    // In the case of multiple lines, use visual height and
+    // real content height to control whether to display
+    if (props.maxLines > 0) {
+      const scrollHeight = wrapper.value.scrollHeight
+      const clientHeight = wrapper.value.clientHeight
+
+      visible.value = scrollHeight > clientHeight
+    } else {
+      visible.value = getRangeWidth(wrapper.value) > wrapper.value.getBoundingClientRect().width
+    }
+
+    content.value = visible.value ? (wrapper.value.textContent ?? '') : ''
+  }, delay.value[0])
+}
+
+function handleTriggerLeave() {
+  clearTimeout(timer.hover)
+
+  if (props.tipDisabled) return
+
+  timer.hover = setTimeout(() => {
+    visible.value = false
+  }, delay.value[1])
+}
 </script>
+
+<template>
+  <Tooltip
+    :visible="visible"
+    trigger="custom"
+    :disabled="props.tipDisabled"
+    :transfer="props.transfer"
+    :placement="props.placement"
+    :no-hover="props.noHover"
+    :transition-name="props.transitionName"
+    :tip-class="props.tipClass"
+    :tip-style="tipStyle"
+    :reverse="props.tooltipTheme === 'dark'"
+    :shift="props.tipShift"
+    @tip-enter="handleTriggerEnter"
+    @tip-leave="handleTriggerLeave"
+  >
+    <template #trigger>
+      <div
+        ref="wrapper"
+        v-bind="$attrs"
+        :class="className"
+        :style="ellipsisStyle"
+        @mouseenter="handleTriggerEnter"
+        @mouseleave="handleTriggerLeave"
+      >
+        <slot>
+          <Renderer :renderer="props.slots.default"></Renderer>
+        </slot>
+      </div>
+    </template>
+    <slot name="content" :content="content">
+      <Renderer :renderer="props.slots.content" :data="{ content }">
+        {{ content }}
+      </Renderer>
+    </slot>
+  </Tooltip>
+</template>

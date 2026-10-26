@@ -1,9 +1,10 @@
-import { resolve, basename } from 'node:path'
+import { basename, resolve } from 'node:path'
 import { readFile, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
+
 import fs from 'fs-extra'
 import { execa } from 'execa'
-import { red, cyan, green } from 'kolorist'
+import { cyan, green, red } from 'kolorist'
 import glob from 'fast-glob'
 import { format } from 'prettier'
 
@@ -23,19 +24,19 @@ async function main() {
   await writeFile(resolve(rootDir, 'vue/index.ts'), exports, 'utf-8')
 
   console.log()
-  console.log(green('start building cjs and es packages...'))
+  console.log(green('Start building cjs and es packages...'))
   console.log()
 
   await execa('vite', ['build', '--config', 'vite.config.ts'], { stdio: 'inherit' })
 
   console.log()
-  console.log(green('start building full package...'))
+  console.log(green('Start building full package...'))
   console.log()
 
   await execa('vite', ['build', '--config', 'vite.full.config.ts'], { stdio: 'inherit' })
 
   console.log()
-  console.log(green('start generating types...'))
+  console.log(green('Start generating types...'))
 
   const types = `
     declare module '@vexip-ui/icons' {
@@ -69,12 +70,12 @@ async function main() {
 
   await writeFile(
     resolve(rootDir, 'types', 'index.d.ts'),
-    format(types, { parser: 'typescript', semi: false, singleQuote: true }),
-    'utf-8'
+    await format(types, { parser: 'typescript', semi: false, singleQuote: true }),
+    'utf-8',
   )
 
   console.log()
-  console.log(green('all builds completed successfully'))
+  console.log(green('All builds completed successfully'))
   console.log()
 }
 
@@ -87,7 +88,7 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
 
   const svgFiles = await glob('*.svg', {
     cwd: resolve(rootDir, 'src', dir),
-    absolute: true
+    absolute: true,
   })
 
   suffix = suffix.toLocaleUpperCase()
@@ -95,17 +96,18 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
   let exports = ''
   let types = ''
 
-  await Promise.all(svgFiles.map(async svgFile => {
-    const fileName = basename(svgFile, '.svg')
-    const svg = (await readFile(svgFile, 'utf-8'))
-      .replace(/<!--[\s\S]*-->/, '')
-      .replace(/xmlns=".*?"/, 'style="transform: scale(0.85)"')
+  await Promise.all(
+    svgFiles.map(async svgFile => {
+      const fileName = basename(svgFile, '.svg')
+      const svg = (await readFile(svgFile, 'utf-8'))
+        .replace(/<!--[\s\S]*-->/, '')
+        .replace(/xmlns=".*?"/, 'style="transform: scale(0.85)"')
 
-    let name = toCapitalCase(fileName)
-    name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
-    name += suffix
+      let name = toCapitalCase(fileName)
+      name = name.replace(/^(\d)/, 'I$1').replace(/-(\d)/g, '$1')
+      name += suffix
 
-    const vue = `
+      const vue = `
       <template>${svg}</template>
       <script lang="ts">
         import { defineComponent, markRaw } from 'vue'
@@ -113,17 +115,18 @@ async function generateVueIcons(dir: string, out: string, suffix: string) {
       </script>
     `
 
-    await writeFile(
-      resolve(outDir, `${fileName}.vue`),
-      format(vue, { parser: 'vue', semi: false, singleQuote: true }),
-      'utf-8'
-    )
+      await writeFile(
+        resolve(outDir, `${fileName}.vue`),
+        await format(vue, { parser: 'vue', semi: false, singleQuote: true }),
+        'utf-8',
+      )
 
-    exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
-    types += `export const ${name}: SvgIcon\n`
-  }))
+      exports += `export { default as ${name} } from '.${out ? `/${out}` : ''}/${fileName}.vue'\n`
+      types += `export const ${name}: SvgIcon\n`
+    }),
+  )
 
-  console.log(cyan(`generated icon vue components for: ${dir}`))
+  console.log(cyan(`Generated icon Vue components for: ${dir}`))
 
   return { exports, types }
 }

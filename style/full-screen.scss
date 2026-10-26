@@ -1,0 +1,31 @@
+@use 'sass:map';
+@use './shared' as *;
+@use './design' as *;
+
+$full-screen: () !default;
+$full-screen: map.merge(
+  (
+    z-index: value(z-index-full),
+    inset: 0,
+    width: 100vw,
+    height: 100vh
+  ),
+  $full-screen
+);
+
+.#{$namespace}-full-screen {
+  &-vars {
+    @include define-preset-values('full-screen', $full-screen);
+  }
+
+  @include basis;
+  @include inherit-color;
+
+  &--full {
+    position: fixed !important;
+    inset: value(full-screen-inset) !important;
+    z-index: value(full-screen-z-index) !important;
+    width: value(full-screen-width) !important;
+    height: value(full-screen-height) !important;
+  }
+}

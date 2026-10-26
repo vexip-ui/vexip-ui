@@ -1,8 +1,8 @@
-import { buildProps, booleanProp } from '@vexip-ui/config'
+import { booleanProp, buildProps } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { LayoutProp, GridJustify, GridAlign, CellFlex, CellOptions } from './symbol'
+import type { CellFlex, CellOptions, GridAlign, GridJustify, LayoutProp } from './symbol'
 
 const layoutProp = [Number, String, Array] as PropType<LayoutProp>
 
@@ -18,8 +18,8 @@ export const gridProps = buildProps({
   align: String as PropType<GridAlign>,
   cellFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type GridProps = ExtractPropTypes<typeof gridProps>
@@ -43,8 +43,8 @@ export const cellProps = buildProps({
   xxl: mediaProp,
   useFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<CellFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type CellProps = ExtractPropTypes<typeof cellProps>

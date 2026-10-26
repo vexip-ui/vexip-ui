@@ -1,17 +1,33 @@
-import { unref, watch, getCurrentScope, onScopeDispose } from 'vue'
+import { computed, getCurrentScope, onScopeDispose, unref, watch } from 'vue'
+
 import { noop } from '@vexip-ui/utils'
 
-import type { MaybeRef } from './shared/types'
+import type { MaybeRef } from 'vue'
+
+export interface UseListenerOptions extends AddEventListenerOptions {
+  /**
+   * 是否禁用整个 hook 的事件处理
+   */
+  disabled?: MaybeRef<boolean>,
+}
 
 export function useListener<E = Event>(
   target: MaybeRef<EventTarget | null | undefined>,
   event: string,
   listener: (event: E) => any,
-  options?: AddEventListenerOptions | boolean
+  options?: UseListenerOptions | boolean,
 ) {
   if (!target) {
     return noop
   }
+
+  const normalizedOptions = computed(() => {
+    if (typeof options === 'boolean') {
+      return { capture: options }
+    }
+
+    return options || {}
+  })
 
   let remove = noop
 
@@ -24,14 +40,21 @@ export function useListener<E = Event>(
         return
       }
 
-      el.addEventListener(event, listener as any, options)
+      const { disabled, ...opts } = normalizedOptions.value
+      const handler = (event: Event) => {
+        if (!unref(disabled)) {
+          listener(event as E)
+        }
+      }
+
+      el.addEventListener(event, handler, opts)
 
       remove = () => {
-        el.removeEventListener(event, listener as any, options)
+        el.removeEventListener(event, handler, opts)
         remove = noop
       }
     },
-    { immediate: true, flush: 'post' }
+    { immediate: true, flush: 'post' },
   )
 
   const stop = () => {

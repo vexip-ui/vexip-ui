@@ -14,7 +14,7 @@ function showToast1() {
   Toast.error({
     content: 'With Mask',
     closable: true,
-    showMask: true
+    showMask: true,
   })
 }
 
@@ -23,7 +23,7 @@ function showToast2() {
     content: 'Click Outside to Close',
     showMask: true,
     maskClose: true,
-    duration: 5000
+    duration: 5000,
   })
 }
 </script>

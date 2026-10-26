@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { BreadcrumbItem } from '@/components/breadcrumb-item'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Breadcrumb } from '..'
 
 describe('Breadcrumb', () => {
@@ -14,8 +16,8 @@ describe('Breadcrumb', () => {
   it('items', () => {
     const wrapper = mount(() => (
       <Breadcrumb>
-        <BreadcrumbItem>item1</BreadcrumbItem>
-        <BreadcrumbItem>item2</BreadcrumbItem>
+        <BreadcrumbItem>{'item1'}</BreadcrumbItem>
+        <BreadcrumbItem>{'item2'}</BreadcrumbItem>
       </Breadcrumb>
     ))
 
@@ -25,8 +27,8 @@ describe('Breadcrumb', () => {
   it('separator', () => {
     const wrapper = mount(() => (
       <Breadcrumb separator={'-'}>
-        <BreadcrumbItem>item1</BreadcrumbItem>
-        <BreadcrumbItem>item2</BreadcrumbItem>
+        <BreadcrumbItem>{'item1'}</BreadcrumbItem>
+        <BreadcrumbItem>{'item2'}</BreadcrumbItem>
       </Breadcrumb>
     ))
 
@@ -37,8 +39,8 @@ describe('Breadcrumb', () => {
     const wrapper = mount(() => (
       <Breadcrumb>
         {{
-          default: () => <BreadcrumbItem>item</BreadcrumbItem>,
-          separator: () => <span class={'sep'}>666</span>
+          default: () => <BreadcrumbItem>{'item'}</BreadcrumbItem>,
+          separator: () => <span class={'sep'}>{'666'}</span>,
         }}
       </Breadcrumb>
     ))
@@ -52,11 +54,11 @@ describe('Breadcrumb', () => {
     const onSelect = vi.fn()
     const wrapper = mount(Breadcrumb, {
       props: {
-        onSelect
+        onSelect,
       },
       slots: {
-        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
-      }
+        default: () => <BreadcrumbItem label={'item'}>{'item'}</BreadcrumbItem>,
+      },
     })
 
     await wrapper.find('.vxp-breadcrumb__label').trigger('click')
@@ -68,11 +70,11 @@ describe('Breadcrumb', () => {
     const onSelect = vi.fn()
     const wrapper = mount(Breadcrumb, {
       props: {
-        onSelect
+        onSelect,
       },
       slots: {
-        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
-      }
+        default: () => <BreadcrumbItem label={'item'}>{'item'}</BreadcrumbItem>,
+      },
     })
 
     await wrapper.find('.vxp-breadcrumb__label').trigger('keydown.enter')
@@ -84,11 +86,11 @@ describe('Breadcrumb', () => {
     const onSeparatorClick = vi.fn()
     const wrapper = mount(Breadcrumb, {
       props: {
-        onSeparatorClick
+        onSeparatorClick,
       },
       slots: {
-        default: () => <BreadcrumbItem label={'item'}>item</BreadcrumbItem>
-      }
+        default: () => <BreadcrumbItem label={'item'}>{'item'}</BreadcrumbItem>,
+      },
     })
 
     await wrapper.find('.vxp-breadcrumb__separator').trigger('click')

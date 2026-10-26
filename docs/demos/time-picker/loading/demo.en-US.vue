@@ -2,7 +2,7 @@
   <TimePicker
     :loading="loading"
     placeholder="loading and editable"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
   <br />
   <br />
@@ -10,7 +10,7 @@
     :loading="loading"
     loading-lock
     placeholder="loading and readonly"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></TimePicker>
   <p>
     Loading:

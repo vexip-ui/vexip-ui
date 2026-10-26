@@ -14,7 +14,7 @@
 <script setup lang="ts">
 const options = Array.from({ length: 12 }, (_, i) => ({
   label: `Option ${i + 1}`,
-  value: i + 1
+  value: i + 1,
 }))
 </script>
 

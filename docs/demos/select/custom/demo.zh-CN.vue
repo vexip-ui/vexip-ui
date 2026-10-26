@@ -1,7 +1,10 @@
 <template>
-  <Select v-model:value="value" :options="options">
+  <Select v-model:value="value" :options="options" clearable>
     <template #default="{ option, index }">
       {{ `${index + 1}、${option.label}` }}
+    </template>
+    <template #selected="{ option, preview }">
+      {{ `${preview ? '预览中' : '已选择'}：${option.label}` }}
     </template>
   </Select>
 </template>
@@ -14,16 +17,16 @@ const value = ref('')
 const options = [
   {
     label: '选项1',
-    value: 1
+    value: 1,
   },
   {
     label: '选项2',
-    value: 2
+    value: 2,
   },
   {
     label: '选项3',
-    value: 3
-  }
+    value: 3,
+  },
 ]
 </script>
 

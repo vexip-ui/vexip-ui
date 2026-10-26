@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
 import { ButtonGroup } from '@/components/button-group'
-import { User } from '@vexip-ui/icons'
-import { parseColorToRgba } from '@vexip-ui/utils'
+
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { User } from 'lucide-vue-next'
+import { parseColorToRgba } from '@vexip-ui/utils'
 import { Button } from '..'
 import { buttonTypes } from '../symbol'
 
@@ -42,7 +44,7 @@ describe('Button', () => {
 
   it('simple', async () => {
     const wrapper = mount(Button, {
-      props: { simple: true }
+      props: { simple: true },
     })
 
     expect(wrapper.find('.vxp-button').classes()).toContain('vxp-button--simple')
@@ -85,7 +87,7 @@ describe('Button', () => {
   it('click', async () => {
     const handleClick = vi.fn()
     const wrapper = mount(Button, {
-      props: { onClick: handleClick }
+      props: { onClick: handleClick },
     })
 
     wrapper.element.dispatchEvent(new MouseEvent('click'))
@@ -124,7 +126,7 @@ describe('Button', () => {
     const wrapper = mount(() => (
       <Button loading>
         {{
-          loading: () => <span class={'loading'}>{TEXT}</span>
+          loading: () => <span class={'loading'}>{TEXT}</span>,
         }}
       </Button>
     ))
@@ -150,21 +152,21 @@ describe('Button', () => {
     const rgbColor = parseColorToRgba('orange')
 
     expect(wrapper.find('.vxp-button').attributes('style')).toContain(
-      `--vxp-button-bg-color: ${rgbColor};`
+      `--vxp-button-bg-color: ${rgbColor};`,
     )
     expect(wrapper.find('.vxp-button').attributes('style')).toContain(
-      `--vxp-button-b-color: ${rgbColor};`
+      `--vxp-button-b-color: ${rgbColor};`,
     )
   })
 
   it('badge', async () => {
     const wrapper = mount(Button, {
       props: {
-        badge: 12
+        badge: 12,
       },
       slots: {
-        default: () => TEXT
-      }
+        default: () => TEXT,
+      },
     })
 
     expect(wrapper.find('.vxp-button__badge').exists()).toBe(true)

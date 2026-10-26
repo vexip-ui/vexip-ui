@@ -1,10 +1,11 @@
+import { beforeEach, vi } from 'vitest'
 import { config } from '@vue/test-utils'
-import { vi, beforeEach } from 'vitest'
+
 import { ResizeObserver } from '@juggle/resize-observer'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-function */
-class IntersctionObserver {
+
+class IntersectionObserver {
   readonly root: Element | Document | null = null
   readonly rootMargin = ''
   readonly thresholds: ReadonlyArray<number> = Object.freeze([])
@@ -32,18 +33,18 @@ config.global.stubs = {
     inheritAttrs: false,
     setup(_, { slots }) {
       return () => slots.default?.()
-    }
+    },
   },
   TransitionGroup: {
     inheritAttrs: false,
     setup(_, { slots }) {
       return () => slots.default?.()
-    }
-  }
+    },
+  },
 }
 
 vi.stubGlobal('ResizeObserver', ResizeObserver)
-vi.stubGlobal('IntersctionObserver', IntersctionObserver)
+vi.stubGlobal('IntersectionObserver', IntersectionObserver)
 
 beforeEach(() => {
   if (typeof document !== 'undefined') {

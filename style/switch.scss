@@ -1,25 +1,26 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
 
 $switch: () !default;
 $switch: map.merge(
   (
-    bg-color: get-css-var('fill-color-secondary'),
-    bg-color-open: get-css-var('color-primary-base'),
-    bg-color-disabled: get-css-var('fill-color-disabled'),
+    bg-color: value('fill-color-secondary'),
+    bg-color-open: value('color-primary-base'),
+    bg-color-disabled: value('fill-color-disabled'),
     opacity-disabled: 60%,
-    opacity-loading: get-css-var('switch-opacity-disabled'),
-    s-color-focus: get-css-var('color-primary-opacity-6'),
-    label-color: get-css-var('color-white'),
+    opacity-loading: value('switch-opacity-disabled'),
+    s-color-focus: value('color-primary-opacity-6'),
+    label-color: value('color-white'),
     height: 22px,
-    signal-size: calc(get-css-var('switch-height') - 4px),
-    signal-bg-color: get-css-var('color-white'),
+    signal-size: calc(value('switch-height') - 4px),
+    signal-bg-color: value('color-white'),
     series-span: 8px,
-    icon-color: get-css-var('color-black'),
-    icon-color-loading: get-css-var('color-primary-base'),
-    circle-opacity: 0
+    icon-color: value('color-black'),
+    icon-color-loading: value('color-primary-base'),
+    circle-opacity: 0,
+    radius-rectangle: value('radius-base')
   ),
   $switch
 );
@@ -33,20 +34,22 @@ $switch: map.merge(
     @include define-preset-style('switch', $style-map);
   }
 
-  @include basis;
+  $height: value('switch-height');
+  $signal: value('switch-signal-size');
 
-  position: relative;
-  display: inline-flex;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  background-color: get-css-var('switch-bg-color');
-  border-radius: 30px;
-  transition:
-    get-css-var('transition-background'),
-    get-css-var('transition-border'),
-    get-css-var('transition-shadow'),
-    get-css-var('transition-opacity');
+  @include basis {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: value('switch-bg-color');
+    border-radius: $height;
+    transition:
+      value('transition-background'), value('transition-border'), value('transition-shadow'),
+      value('transition-opacity');
+  }
 
   &--small {
     @include define-preset-values(
@@ -67,31 +70,28 @@ $switch: map.merge(
   }
 
   & + & {
-    margin-left: get-css-var('switch-series-span');
+    margin-inline-start: value('switch-series-span');
   }
 
   &:focus-within {
-    box-shadow: get-css-var('shadow-focus') get-css-var('switch-s-color-focus');
+    box-shadow: value('shadow-focus') value('switch-s-color-focus');
   }
 
   &--loading {
     cursor: default;
-    opacity: get-css-var('switch-opacity-loading');
+    opacity: value('switch-opacity-loading');
   }
 
   &--open {
-    background-color: get-css-var('switch-bg-color-open');
+    background-color: value('switch-bg-color-open');
   }
-
-  $height: get-css-var('switch-height');
-  $signal: get-css-var('switch-signal-size');
 
   &__placeholder {
     display: flex;
     flex-direction: column;
     min-width: calc(#{$height} * 2);
     height: $height;
-    padding-left: calc(#{$height} * 1.5 + 1px);
+    padding-inline-start: calc(#{$height} * 1.5 + 1px);
     overflow: hidden;
     white-space: nowrap;
     pointer-events: none;
@@ -100,24 +100,19 @@ $switch: map.merge(
 
   &__label {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-right: calc(#{$height} * 0.5 - 1px);
-    padding-left: calc(#{$height} + 2px);
+    padding-inline: calc(#{$height} + 2px) calc(#{$height} * 0.5 - 1px);
     line-height: 1;
-    color: get-css-var('switch-label-color');
+    color: value('switch-label-color');
     border-radius: $height;
-    transition: padding get-css-var('transition-base');
+    transition: padding value('transition-base');
   }
 
   &--open &__label {
-    padding-right: calc(#{$height} + 2px);
-    padding-left: calc(#{$height} * 0.5 - 1px);
+    padding-inline: calc(#{$height} * 0.5 - 1px) calc(#{$height} + 2px);
   }
 
   &__open-text,
@@ -128,30 +123,36 @@ $switch: map.merge(
 
   &__signal {
     position: absolute;
-    top: 50%;
-    left: calc((#{$height} - #{$signal}) * 0.5);
+    inset-inline-start: calc((#{$height} - #{$signal}) * 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     width: $signal;
     height: $signal;
-    background-color: get-css-var('switch-signal-bg-color');
+    background-color: value('switch-signal-bg-color');
     border-radius: 50%;
-    transition: left get-css-var('transition-base'), get-css-var('transition-transform');
-    transform: translateY(-50%);
+    transition:
+      inset-inline-start value('transition-base'),
+      value('transition-transform');
+    will-change: inset-inline-start;
 
     .#{$namespace}-icon {
-      color: get-css-var('switch-icon-color');
+      color: value('switch-icon-color');
     }
   }
 
   &--open &__signal {
-    left: calc(100% - (#{$height} - #{$signal}) * 0.5);
-    transform: translate(-100%, -50%);
+    inset-inline-start: calc(100% - #{$signal} - (#{$height} - #{$signal}) * 0.5);
   }
 
   &--loading &__signal .#{$namespace}-icon {
-    color: get-css-var('switch-icon-color-loading');
+    color: value('switch-icon-color-loading');
+  }
+
+  &--rectangle,
+  &--rectangle &__label,
+  &--rectangle &__signal {
+    border-radius: value('switch-radius-rectangle');
   }
 
   $states: success, error, warning;
@@ -171,8 +172,8 @@ $switch: map.merge(
 
   &--disabled {
     cursor: not-allowed;
-    background-color: get-css-var('switch-bg-color-disabled');
-    opacity: get-css-var('switch-opacity-disabled');
+    background-color: value('switch-bg-color-disabled');
+    opacity: value('switch-opacity-disabled');
   }
 
   &--disabled &__signal {

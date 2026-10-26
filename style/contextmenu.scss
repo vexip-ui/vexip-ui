@@ -1,13 +1,14 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './dropdown.scss';
 
 $contextmenu: () !default;
 $contextmenu: map.merge(
   (
-    icon-color: get-css-var('content-color-secondary'),
-    shortcut-color: get-css-var('content-color-disabled'),
+    z-index: value('z-index-popper'),
+    icon-color: value('content-color-secondary'),
+    shortcut-color: value('content-color-disabled'),
     shortcut-offset: 30px
   ),
   $contextmenu
@@ -18,9 +19,10 @@ $contextmenu: map.merge(
     @include define-preset-values('contextmenu', $contextmenu);
   }
 
-  @include basis;
-
-  position: fixed;
+  @include basis {
+    position: fixed;
+    z-index: value('contextmenu-z-index');
+  }
 
   & &__item {
     position: relative;
@@ -33,38 +35,37 @@ $contextmenu: map.merge(
   }
 
   &__list--icons &__item {
-    padding-left: 28px;
+    padding-inline-start: 28px;
   }
 
   &__list--no-icon &__item {
-    padding-left: 10px;
+    padding-inline-start: 10px;
   }
 
   &__list--arrows &__item {
-    padding-right: 28px;
+    padding-inline-end: 28px;
   }
 
   &__list--no-arrow &__item {
-    padding-right: 10px;
+    padding-inline-end: 10px;
   }
 
   &__icon {
     position: absolute;
-    left: 8px;
+    inset-inline-start: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 16px;
-    color: get-css-var('contextmenu-icon-color');
+    color: value('contextmenu-icon-color');
   }
 
   &__shortcut {
-    margin-left: get-css-var('contextmenu-shortcut-offset');
-    color: get-css-var('contextmenu-shortcut-color');
+    margin-inline-start: value('contextmenu-shortcut-offset');
+    color: value('contextmenu-shortcut-color');
   }
 
   &__arrow {
-    right: 6px;
-    left: auto;
+    inset-inline: auto 6px;
   }
 }

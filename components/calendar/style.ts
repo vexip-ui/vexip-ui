@@ -1,1 +1,5 @@
+import '@/components/preset/style'
+import '@/components/column/style'
+import '@/components/number-input/style'
+import '@/components/row/style'
 import '@/style/calendar.scss'

@@ -23,7 +23,7 @@
       :appear="true"
     >
       <template #suffix>
-        <ArrowDown style="fill: red;"></ArrowDown>
+        <ArrowDown style="fill: red"></ArrowDown>
       </template>
     </CountTo>
   </div>
@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { CountTo } from 'vexip-ui'
-import { ArrowUp, ArrowDown } from '@vexip-ui/icons'
+import { ArrowDown, ArrowUp } from '@vexip-ui/icons'
 </script>
 
 <style scoped>

@@ -1,9 +1,9 @@
-import { ref, isRef, computed } from 'vue'
+import { computed, isRef, ref } from 'vue'
+
 import { throttle } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
-import type { Ref } from 'vue'
-import type { MaybeRef } from './shared/types'
+import type { MaybeRef, Ref } from 'vue'
 
 export interface MovingState {
   xStart: number,
@@ -15,7 +15,7 @@ export interface MovingState {
   deltaX: number,
   deltaY: number,
   lazy: boolean,
-  [custom: string]: unknown
+  [custom: string]: unknown,
 }
 
 export interface UseMovingOptions {
@@ -35,6 +35,10 @@ export interface UseMovingOptions {
    * 为否为懒加载，开启后会在 End 事件再更新位置状态
    */
   lazy?: MaybeRef<boolean>,
+  /**
+   * 是否禁用整个 hook 的事件处理
+   */
+  disabled?: MaybeRef<boolean>,
   /**
    * 事件的 capture 选项
    *
@@ -64,7 +68,7 @@ export interface UseMovingOptions {
   /**
    * 移动结束时的回调函数
    */
-  onEnd?: (state: MovingState, event: PointerEvent) => void
+  onEnd?: (state: MovingState, event: PointerEvent) => void,
 }
 
 function disableEvent<E extends Event>(event: E) {
@@ -78,7 +82,8 @@ export function useMoving(options: UseMovingOptions) {
   const target = options.target || ref(null)
   const x = isRef(options.x) ? options.x : ref(0)
   const y = isRef(options.y) ? options.y : ref(0)
-  const lazy = isRef(options.lazy) ? options.lazy : ref(false)
+  const lazy = isRef(options.lazy) ? options.lazy : ref(options.lazy || false)
+  const disabled = isRef(options.disabled) ? options.disabled : ref(options.disabled || false)
 
   const { capture = true, stopMouse = true, stopTouch = true } = options
 
@@ -92,21 +97,18 @@ export function useMoving(options: UseMovingOptions) {
     clientY: 0,
     deltaX: 0,
     deltaY: 0,
-    lazy: false
+    lazy: false,
   }
 
+  let current = 0
+  let record = 0
+
   const throttleMove = throttle((event: PointerEvent) => {
-    const { clientX, clientY } = event
-    const { xStart, yStart, clientX: clientXStart, clientY: clientYStart, lazy } = internalState
-    const deltaX = clientX - clientXStart
-    const deltaY = clientY - clientYStart
+    if (record < current) return
 
-    internalState.deltaX = deltaX
-    internalState.deltaY = deltaY
-    internalState.xEnd = xStart + deltaX
-    internalState.yEnd = yStart + deltaY
+    updateState(event)
 
-    if (!lazy) {
+    if (!internalState.lazy) {
       x.value = internalState.xEnd
       y.value = internalState.yEnd
     }
@@ -115,6 +117,8 @@ export function useMoving(options: UseMovingOptions) {
   })
 
   function start(event: PointerEvent) {
+    if (disabled.value) return
+
     Object.assign(internalState, {
       xStart: x.value,
       yStart: y.value,
@@ -122,7 +126,7 @@ export function useMoving(options: UseMovingOptions) {
       yEnd: y.value,
       clientX: event.clientX,
       clientY: event.clientY,
-      lazy: lazy.value
+      lazy: lazy.value,
     })
 
     if (options.onStart?.(internalState, event) === false) {
@@ -132,10 +136,13 @@ export function useMoving(options: UseMovingOptions) {
     document.addEventListener('pointermove', move, { capture })
     document.addEventListener('pointerup', end, { capture })
 
+    record = current
     moving.value = true
   }
 
   function move(event: PointerEvent) {
+    if (disabled.value) return
+
     disableEvent(event)
     throttleMove(event)
   }
@@ -144,14 +151,31 @@ export function useMoving(options: UseMovingOptions) {
     document.removeEventListener('pointermove', move, { capture })
     document.removeEventListener('pointerup', end, { capture })
 
+    if (disabled.value) return
+
+    updateState(event)
+
     if (internalState.lazy) {
       x.value = internalState.xEnd
       y.value = internalState.yEnd
     }
 
     moving.value = false
+    ++current
 
     options.onEnd?.(internalState, event)
+  }
+
+  function updateState(event: PointerEvent) {
+    const { clientX, clientY } = event
+    const { xStart, yStart, clientX: clientXStart, clientY: clientYStart } = internalState
+    const deltaX = clientX - clientXStart
+    const deltaY = clientY - clientYStart
+
+    internalState.deltaX = deltaX
+    internalState.deltaY = deltaY
+    internalState.xEnd = xStart + deltaX
+    internalState.yEnd = yStart + deltaY
   }
 
   useListener(target, 'pointerdown', start, { capture })
@@ -164,6 +188,7 @@ export function useMoving(options: UseMovingOptions) {
     moving: computed(() => moving.value),
     x,
     y,
-    lazy
+    lazy,
+    disabled,
   }
 }

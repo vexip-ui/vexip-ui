@@ -1,5 +1,6 @@
 declare const __VERSION__: string
 declare const __VUE_VERSION__: string
+declare const __TS_VERSION__: string
 declare const __REPL_VERSION__: string
 
 declare module '*.vue' {
@@ -9,3 +10,4 @@ declare module '*.vue' {
 }
 
 declare module '@/dist/vexip-ui.es.js'
+declare module '@vue/repl/monaco-editor'

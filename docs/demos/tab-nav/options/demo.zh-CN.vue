@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { City } from '@vexip-ui/icons'
 
 import type { TabNavOptions } from 'vexip-ui'
@@ -13,12 +14,12 @@ const options: TabNavOptions[] = [
   '标签页1',
   {
     label: '标签页2',
-    disabled: true
+    disabled: true,
   },
   {
     label: '标签页3',
     content: '标签页3',
-    icon: City
-  }
+    icon: City,
+  },
 ]
 </script>

@@ -1,0 +1,67 @@
+name: Publish Package
+
+on:
+  push:
+    tags:
+      - v*
+      - bem-helper*
+      - config*
+      - icons*
+      - hooks*
+      - plugins*
+      - scripts*
+      - utils*
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    # prevents this action from running on forks
+    if: github.repository == 'vexip-ui/vexip-ui'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+
+      - name: Install deps
+        run: pnpm install
+
+      - name: Build common packages
+        run: pnpm run build:common
+
+      - name: Build plugins
+        if: startsWith(github.ref_name, 'plugins')
+        run: pnpm run build:plugins
+
+      - name: Build scripts
+        if: startsWith(github.ref_name, 'scripts')
+        run: pnpm run build:scripts
+
+      - name: Build meta
+        if: startsWith(github.ref_name, 'v')
+        run: pnpm run build:meta
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        if: startsWith(github.ref_name, 'v')
+        run: pnpm run build
+
+      - name: Publish package
+        run: pnpm run publish:ci ${{ github.ref_name }}
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096

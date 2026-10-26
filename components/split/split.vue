@@ -16,13 +16,15 @@
       <div ref="handler" :class="nh.be('handler')">
         <template v-if="props.canFull">
           <button
+            type="button"
             :class="[nh.be('button'), nh.bem('button', `${props.vertical ? 'top' : 'left'}-full`)]"
             @pointerdown.stop
             @click.left="handleFull(-1)"
           >
-            <Icon :icon="fullIcons[0]" :scale="0.6"></Icon>
+            <Icon v-bind="fullIcons[0]" :scale="+(fullIcons[0].scale || 1) * 0.6"></Icon>
           </button>
           <button
+            type="button"
             :class="[
               nh.be('button'),
               nh.bem('button', `${props.vertical ? 'bottom' : 'right'}-full`)
@@ -30,7 +32,7 @@
             @pointerdown.stop
             @click.left="handleFull(1)"
           >
-            <Icon :icon="fullIcons[1]" :scale="0.6"></Icon>
+            <Icon v-bind="fullIcons[1]" :scale="+(fullIcons[1].scale || 1) * 0.6"></Icon>
           </button>
         </template>
         <template v-else>
@@ -45,17 +47,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
 import { Icon } from '@/components/icon'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, ref, watch } from 'vue'
+
+import { emitEvent, useIcons, useNameHelper, useProps } from '@vexip-ui/config'
 import { useMoving } from '@vexip-ui/hooks'
-import { ChevronUp, ChevronRight, ChevronDown, ChevronLeft } from '@vexip-ui/icons'
 import { splitProps } from './props'
 
 export default defineComponent({
   name: 'Split',
   components: {
-    Icon
+    Icon,
   },
   props: splitProps,
   emits: ['update:value'],
@@ -64,23 +67,31 @@ export default defineComponent({
       value: {
         default: 0.5,
         validator: (value: number) => value > 0 && value < 1,
-        static: true
+        static: true,
       },
       min: 0.1,
       max: 0.9,
       vertical: false,
       noTransition: false,
       lazy: false,
-      canFull: false
+      canFull: false,
     })
 
     const nh = useNameHelper('split')
+    const icons = useIcons()
     const currentValue = ref(props.value)
     const currentFull = ref<0 | 1 | -1>(0)
     const transition = ref(false)
 
     const wrapper = ref<HTMLElement>()
     const guide = ref<HTMLElement>()
+
+    const offset = computed(() => {
+      return props.vertical ? 'offsetHeight' : 'offsetWidth'
+    })
+    const position = computed<['top', 'bottom'] | ['left', 'right']>(() => {
+      return props.vertical ? ['top', 'bottom'] : ['left', 'right']
+    })
 
     const { target: handler, moving } = useMoving({
       lazy: true,
@@ -125,7 +136,7 @@ export default defineComponent({
 
           state.target = value
         } else {
-          currentValue.value = value
+          handleChange(value)
         }
 
         emitEvent(props.onMove, value)
@@ -135,18 +146,18 @@ export default defineComponent({
           guide.value.style.display = ''
         }
 
-        const target = state.target as number
-
         if (state.splitLazy) {
+          const target = state.target as number
+
           if (Math.abs(target - currentValue.value) > 0.01) {
             setTransition()
           }
 
-          currentValue.value = target
+          handleChange(target)
         }
 
         emitEvent(props.onMoveEnd, currentValue.value)
-      }
+      },
     })
 
     const className = computed(() => {
@@ -167,14 +178,8 @@ export default defineComponent({
         [nh.bm(props.vertical ? 'vertical' : 'horizontal')]: true,
         [nh.bm('moving')]: moving.value,
         [nh.bm(`${fullType}-full`)]: !!fullType,
-        [nh.bm('transition')]: transition.value
+        [nh.bm('transition')]: transition.value,
       }
-    })
-    const offset = computed(() => {
-      return props.vertical ? 'offsetHeight' : 'offsetWidth'
-    })
-    const position = computed<['top', 'bottom'] | ['left', 'right']>(() => {
-      return props.vertical ? ['top', 'bottom'] : ['left', 'right']
     })
     const leftPaneStyle = computed(() => {
       return {
@@ -183,7 +188,7 @@ export default defineComponent({
             ? '0'
             : currentFull.value > 0
               ? '100%'
-              : `${(1 - currentValue.value) * 100}%`
+              : `${(1 - currentValue.value) * 100}%`,
       }
     })
     const rightPaneStyle = computed(() => {
@@ -193,7 +198,7 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `${currentValue.value * 100}%`
+              : `${currentValue.value * 100}%`,
       }
     })
     const triggerStyle = computed(() => {
@@ -203,11 +208,13 @@ export default defineComponent({
             ? '100%'
             : currentFull.value > 0
               ? '0'
-              : `calc(${currentValue.value * 100}% - var(${nh.cv('handler-size')}) * 0.5)`
+              : `calc(${currentValue.value * 100}% - var(${nh.cv('handler-size')}) * 0.5)`,
       }
     })
     const fullIcons = computed(() => {
-      return props.vertical ? [ChevronDown, ChevronUp] : [ChevronRight, ChevronLeft]
+      return props.vertical
+        ? [icons.value.angleDown, icons.value.angleUp]
+        : [icons.value.angleRight, icons.value.angleLeft]
     })
 
     watch(
@@ -217,12 +224,9 @@ export default defineComponent({
           currentValue.value = value
           setTransition()
         }
-      }
+      },
     )
     watch(currentValue, value => {
-      emitEvent(props.onChange, value)
-      emit('update:value', value)
-
       if (guide.value) {
         guide.value.style[position.value[0]] = `${value * 100}%`
       }
@@ -265,6 +269,15 @@ export default defineComponent({
       }
     }
 
+    function handleChange(value: number) {
+      if (value.toFixed(5) !== currentValue.value.toFixed(5)) {
+        currentValue.value = value
+
+        emitEvent(props.onChange, value)
+        emit('update:value', value)
+      }
+    }
+
     return {
       props,
       nh,
@@ -281,8 +294,8 @@ export default defineComponent({
       handler,
 
       removeTransition,
-      handleFull
+      handleFull,
     }
-  }
+  },
 })
 </script>

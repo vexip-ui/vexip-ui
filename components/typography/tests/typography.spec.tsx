@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { Text, Title, Blockquote, OL, UL } from '..'
+
+import { Blockquote, OL, Text, Title, UL } from '..'
 
 const TEXT = 'Text'
 const TYPES = ['primary', 'info', 'success', 'warning', 'error'] as const
@@ -71,7 +72,7 @@ describe('Typography', () => {
   })
 
   it('title level', () => {
-    ([1, 2, 3, 4, 5, 6] as const).forEach(level => {
+    ;([1, 2, 3, 4, 5, 6] as const).forEach(level => {
       const wrapper = mount(() => <Title level={level}></Title>)
 
       expect(wrapper.find('.vxp-title').element.tagName).toEqual(`H${level}`)
@@ -98,7 +99,7 @@ describe('Typography', () => {
     const wrapper = mount(() => <Title marker marker-type={'pink'}></Title>)
 
     expect(wrapper.find('.vxp-title').attributes('style')).toContain(
-      '--vxp-title-marker-color: pink;'
+      '--vxp-title-marker-color: pink;',
     )
   })
 

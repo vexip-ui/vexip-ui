@@ -1,49 +1,38 @@
+import { resolve } from 'node:path'
+
 import minimist from 'minimist'
-import { logger, run, getPackageInfo } from './utils'
+import { logger, publish } from '@vexip-ui/scripts'
+import { rootDir } from './constant'
+import { getPackageName } from './utils'
 
 const args = minimist<{
   d?: boolean,
   dry?: boolean,
   t?: string,
-  tag?: string
+  tag?: string,
 }>(process.argv.slice(2))
 
-const inputPkg = args._[0]
+const target = args._[0]
 const isDryRun = args.dry || args.d
 const releaseTag = args.tag || args.t
 
 async function main() {
-  const { pkgDir, currentVersion } = await getPackageInfo(inputPkg)
+  let inputPkg = ''
 
-  logger.withStartLn(() => logger.infoText('Publishing package...'))
+  if (target?.startsWith('v')) {
+    inputPkg = 'vexip-ui'
+  } else if (target?.includes('@')) {
+    ;[inputPkg] = target.split('@')
 
-  const publishArgs = [
-    'publish',
-    '--access',
-    'public',
-    '--registry',
-    'https://registry.npmjs.org/',
-    '--no-git-checks'
-  ]
-
-  if (isDryRun) {
-    publishArgs.push('--dry-run')
-  }
-
-  if (releaseTag) {
-    publishArgs.push('--tag', releaseTag)
-  }
-
-  try {
-    await run('pnpm', publishArgs, { stdio: 'pipe', cwd: pkgDir })
-    logger.successText(`Successfully published v${currentVersion}'`)
-  } catch (error) {
-    if (error.stderr?.match(/previously published/)) {
-      logger.errorText(`Skipping already published v'${currentVersion}'`)
-    } else {
-      throw error
+    if (['hooks', 'icons', 'plugins', 'scripts', 'utils'].includes(inputPkg)) {
+      inputPkg = `common/${inputPkg}`
     }
   }
+
+  const pkgName = await getPackageName(inputPkg)
+  const pkgDir = pkgName === 'vexip-ui' ? rootDir : resolve(rootDir, pkgName)
+
+  await publish({ pkgDir, isDryRun, releaseTag })
 }
 
 main().catch(error => {

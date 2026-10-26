@@ -1,6 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
 import { RadioGroup } from '@/components/radio-group'
+
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Radio } from '..'
 
 const TEXT = 'Text'
@@ -9,7 +11,7 @@ const OPTIONS = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
 describe('Radio', () => {
   it('render', () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).toContain('vxp-radio-vars')
@@ -19,22 +21,24 @@ describe('Radio', () => {
     expect(wrapper.find('input[type="radio"]').exists()).toBe(true)
   })
 
-  it('slot', () => {
+  it('slots', () => {
     const wrapper = mount(() => (
       <Radio label={TEXT}>
         {{
-          default: () => <span class={'label'}></span>
+          default: () => <span class={'label'}></span>,
+          extra: () => <span class={'extra'}></span>,
         }}
       </Radio>
     ))
 
     expect(wrapper.find('.label').exists()).toBe(true)
+    expect(wrapper.find('.extra').exists()).toBe(true)
     expect(wrapper.find('.vxp-radio__label').text()).toEqual('')
   })
 
   it('size', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT, size: 'large' }
+      props: { label: TEXT, size: 'large' },
     })
 
     expect(wrapper.find('.vxp-radio').classes()).toContain('vxp-radio--large')
@@ -45,7 +49,7 @@ describe('Radio', () => {
 
   it('toggle checked', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--checked')
@@ -71,8 +75,8 @@ describe('Radio', () => {
     const wrapper = mount(Radio, {
       props: {
         label: TEXT,
-        onChange
-      }
+        onChange,
+      },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--disabled')
@@ -85,19 +89,19 @@ describe('Radio', () => {
     expect(onChange).not.toHaveBeenCalled()
   })
 
-  it('border', async () => {
+  it('shape border', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-radio--border')
 
-    await wrapper.setProps({ border: true })
+    await wrapper.setProps({ shape: 'border' })
     expect(wrapper.classes()).toContain('vxp-radio--border')
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Radio label={TEXT} state={state}></Radio>)
 
       expect(wrapper.find('.vxp-radio').classes()).toContain(`vxp-radio--${state}`)
@@ -106,7 +110,7 @@ describe('Radio', () => {
 
   it('loading', async () => {
     const wrapper = mount(Radio, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.find('.vxp-radio__signal--active').exists()).toBe(false)
@@ -153,7 +157,8 @@ describe('Radio', () => {
     const onChange = vi.fn()
     const wrapper = mount(() => (
       <RadioGroup disabled onChange={onChange}>
-        <Radio label={'1'}></Radio>,<Radio label={'2'} disabled></Radio>,
+        <Radio label={'1'}></Radio>
+        <Radio label={'2'} disabled></Radio>
         <Radio label={'3'} disabled={false}></Radio>
       </RadioGroup>
     ))
@@ -176,20 +181,21 @@ describe('Radio', () => {
         default: () => [
           <Radio label={'1'}></Radio>,
           <Radio label={'2'} loading={false}></Radio>,
-          <Radio label={'3'} loading></Radio>
-        ]
-      }
+          <Radio label={'3'} loading></Radio>,
+        ],
+      },
     })
 
     const items = wrapper.findAllComponents(Radio)
 
     items.forEach(item => {
-      expect(item.classes()).not.toContain('vxp-radio--loading')
+      expect(item.classes()).not.toContain('vxp-radio--readonly')
     })
 
     await wrapper.setProps({ loading: true, loadingLock: true })
     items.forEach(item => {
       expect(item.classes()).toContain('vxp-radio--loading')
+      expect(item.classes()).toContain('vxp-radio--readonly')
     })
 
     await wrapper.find('input[type="radio"]').trigger('change')
@@ -197,7 +203,7 @@ describe('Radio', () => {
   })
 
   it('group state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => (
         <RadioGroup state={state}>
           <Radio label={'1'}></Radio>
@@ -232,15 +238,36 @@ describe('Radio', () => {
     expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--vertical')
   })
 
-  it('group border', () => {
-    const wrapper = mount(() => <RadioGroup border></RadioGroup>)
+  it('group shape border', () => {
+    const wrapper = mount(() => (
+      <RadioGroup shape={'border'}>
+        <Radio label={'1'}></Radio>
+      </RadioGroup>
+    ))
 
     expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--border')
+    expect(wrapper.find('.vxp-radio').classes()).toContain('vxp-radio--border')
   })
 
-  it('group button', () => {
-    const wrapper = mount(() => <RadioGroup button></RadioGroup>)
+  it('group shape button', () => {
+    const wrapper = mount(() => (
+      <RadioGroup shape={'button'}>
+        <Radio label={'1'}></Radio>
+      </RadioGroup>
+    ))
 
     expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--button')
+    expect(wrapper.find('.vxp-radio').classes()).toContain('vxp-radio--button')
+  })
+
+  it('group shape button group', () => {
+    const wrapper = mount(() => (
+      <RadioGroup shape={'button-group'}>
+        <Radio label={'1'}></Radio>
+      </RadioGroup>
+    ))
+
+    expect(wrapper.find('.vxp-radio-group').classes()).toContain('vxp-radio-group--button-group')
+    expect(wrapper.find('.vxp-radio').classes()).not.toContain('vxp-radio--button-group')
   })
 })

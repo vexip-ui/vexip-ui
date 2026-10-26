@@ -6,7 +6,7 @@
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
@@ -20,10 +20,10 @@
     "paths": {
       "@/*": ["../*"],
       "@docs/*": ["./*"],
-      "vexip-ui/es/*": ["../components/*"],
-      "vexip-ui": ["../components"]
+      "@vexip-ui/*": ["../common/*/src"],
+      "vexip-ui": ["../index"]
     },
     "lib": ["esnext", "dom"]
   },
-  "include": [".", "../types.d.ts"]
+  "include": ["**/*", ".vitepress/**/*", "../types.d.ts"]
 }

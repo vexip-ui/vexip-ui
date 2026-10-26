@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-import { FaceSurpriseR, FaceGrinBeamR } from '@vexip-ui/icons'
+import { FaceGrinBeamR, FaceSurpriseR } from '@vexip-ui/icons'
 </script>

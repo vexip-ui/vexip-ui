@@ -1,16 +1,19 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB, ChevronDown, Spinner } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Cascader } from '..'
 
 interface CascaderOption {
   value: string,
   label: string,
   disabled: boolean,
-  children: CascaderOption[] | null
+  children: CascaderOption[] | null,
 }
 
+const icons = globalIcons.value
 const TEXT = 'Text'
 
 function createOptions(depth = 3, prefix = '', iterator = 1) {
@@ -22,7 +25,7 @@ function createOptions(depth = 3, prefix = '', iterator = 1) {
       value: `l${prefix}-${i}`,
       label: `v${prefix}-${i}`,
       disabled: i % 4 === 0,
-      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1),
     })
   }
 
@@ -65,7 +68,7 @@ function getData(options: CascaderOption[], indexs: number[]) {
 describe('Cascader', () => {
   it('render', () => {
     const wrapper = mount(Cascader, {
-      props: { visible: true }
+      props: { visible: true },
     })
 
     expect(wrapper.classes()).toContain('vxp-cascader-vars')
@@ -78,7 +81,7 @@ describe('Cascader', () => {
 
   it('has empty', async () => {
     const wrapper = mount(Cascader, {
-      props: { visible: true, options: createOptions() }
+      props: { visible: true, options: createOptions() },
     })
 
     expect(wrapper.find('.vxp-cascader__empty').exists()).toBe(false)
@@ -89,7 +92,7 @@ describe('Cascader', () => {
 
   it('transfer', async () => {
     const wrapper = mount(Cascader, {
-      props: { visible: true, transfer: true, options: createOptions() }
+      props: { visible: true, transfer: true, options: createOptions() },
     })
 
     await nextTick()
@@ -104,12 +107,12 @@ describe('Cascader', () => {
       props: {
         visible: true,
         value: getValues(options, [2, 2, 2]),
-        options
-      }
+        options,
+      },
     })
 
     expect(wrapper.find('.vxp-cascader__control').text()).toEqual(
-      getLabels(options, [2, 2, 2]).join('/')
+      getLabels(options, [2, 2, 2]).join('/'),
     )
     expect(wrapper.findAll('.vxp-option--selected').length).toBe(3)
   })
@@ -169,7 +172,7 @@ describe('Cascader', () => {
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(Cascader, {
-      props: { onToggle }
+      props: { onToggle },
     })
 
     await wrapper.trigger('click')
@@ -189,9 +192,22 @@ describe('Cascader', () => {
     expect(wrapper.emitted('update:visible')!.length).toBe(2)
   })
 
-  it('options show', async () => {
+  it('popper show', async () => {
     const wrapper = mount(Cascader, {
-      props: { options: createOptions() }
+      props: { options: createOptions() },
+    })
+
+    expect(wrapper.find('.vxp-cascader__popper').attributes('style')).toContain('display: none;')
+
+    await wrapper.trigger('click')
+    expect(wrapper.find('.vxp-cascader__popper').attributes('style') || '').not.toContain(
+      'display: none;',
+    )
+  })
+
+  it('popper will be removed when alive false', async () => {
+    const wrapper = mount(Cascader, {
+      props: { popperAlive: false, options: createOptions() },
     })
 
     expect(wrapper.find('.vxp-cascader__popper').exists()).toBe(false)
@@ -231,29 +247,29 @@ describe('Cascader', () => {
   })
 
   it('prefix', () => {
-    const wrapper = mount(() => <Cascader prefix={GithubB}></Cascader>)
+    const wrapper = mount(() => <Cascader prefix={Github}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('prefix color', async () => {
-    const wrapper = mount(() => <Cascader prefix={GithubB} prefix-color={'red'}></Cascader>)
+    const wrapper = mount(() => <Cascader prefix={Github} prefix-color={'red'}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__prefix').attributes('style')).toContain('color: red;')
   })
 
   it('prefix slot', async () => {
     const wrapper = mount(() => (
-      <Cascader prefix={GithubB}>
+      <Cascader prefix={Github}>
         {{
-          prefix: () => <span class={'prefix'}></span>
+          prefix: () => <span class={'prefix'}></span>,
         }}
       </Cascader>
     ))
 
     expect(wrapper.find('.vxp-cascader__prefix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.prefix').exists()).toBe(true)
   })
 
@@ -261,30 +277,30 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader)
 
     expect(wrapper.find('.vxp-cascader__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(true)
 
-    await wrapper.setProps({ suffix: GithubB })
-    expect(wrapper.findComponent(ChevronDown).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    await wrapper.setProps({ suffix: Github })
+    expect(wrapper.findComponent(icons.angleDown.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('suffix color', async () => {
-    const wrapper = mount(() => <Cascader suffix={GithubB} suffix-color={'red'}></Cascader>)
+    const wrapper = mount(() => <Cascader suffix={Github} suffix-color={'red'}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__suffix').attributes('style')).toContain('color: red;')
   })
 
   it('suffix slot', async () => {
     const wrapper = mount(() => (
-      <Cascader suffix={GithubB}>
+      <Cascader suffix={Github}>
         {{
-          suffix: () => <span class={'suffix'}></span>
+          suffix: () => <span class={'suffix'}></span>,
         }}
       </Cascader>
     ))
 
     expect(wrapper.find('.vxp-cascader__suffix').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(false)
     expect(wrapper.find('.suffix').exists()).toBe(true)
   })
 
@@ -292,16 +308,16 @@ describe('Cascader', () => {
     const wrapper = mount(() => <Cascader size={'large'}></Cascader>)
 
     expect(wrapper.find('.vxp-cascader__selector').classes()).toContain(
-      'vxp-cascader__selector--large'
+      'vxp-cascader__selector--large',
     )
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Cascader state={state}></Cascader>)
 
       expect(wrapper.find('.vxp-cascader__selector').classes()).toContain(
-        `vxp-cascader__selector--${state}`
+        `vxp-cascader__selector--${state}`,
       )
     })
   })
@@ -310,11 +326,11 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader)
 
     expect(wrapper.find('.vxp-cascader__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-cascader__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -328,10 +344,10 @@ describe('Cascader', () => {
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Cascader loading loading-icon={GithubB}></Cascader>)
+    const wrapper = mount(() => <Cascader loading loading-icon={Github}></Cascader>)
 
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(icons.loading.icon).exists()).toBe(false)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('select options', async () => {
@@ -340,9 +356,10 @@ describe('Cascader', () => {
     const wrapper = mount(Cascader, {
       props: {
         visible: true,
+        popperAlive: false,
         options,
-        onChange
-      }
+        onChange,
+      },
     })
     const getPanels = () => wrapper.findAll('.vxp-cascader__panel')
 
@@ -358,7 +375,7 @@ describe('Cascader', () => {
     expect(onChange).toHaveBeenCalledTimes(1)
     expect(onChange).toHaveBeenLastCalledWith(
       getValues(options, [0, 0, 0]),
-      getData(options, [0, 0, 0])
+      getData(options, [0, 0, 0]),
     )
     expect(getPanels().length).toEqual(0)
 
@@ -374,8 +391,8 @@ describe('Cascader', () => {
         clearable: true,
         placeholder: TEXT,
         options,
-        onClear
-      }
+        onClear,
+      },
     })
     const selector = wrapper.find('.vxp-cascader__selector')
 
@@ -403,18 +420,18 @@ describe('Cascader', () => {
             c: [
               {
                 l: 'l-1-1',
-                v: 'v-1-1'
-              }
-            ]
-          }
+                v: 'v-1-1',
+              },
+            ],
+          },
         ],
         value: ['v-1', 'v-1-1'],
         keyConfig: {
           label: 'l',
           value: 'v',
-          children: 'c'
-        }
-      }
+          children: 'c',
+        },
+      },
     })
 
     expect(wrapper.find('.vxp-cascader__control').text()).toEqual('l-1/l-1-1')

@@ -1,4 +1,5 @@
-@use '../design/variables.scss' as *;
+@use '../design/variables' as *;
+@use '../shared/variables' as *;
 
 $-name: '#{$namespace}-fade';
 
@@ -15,14 +16,14 @@ $-name: '#{$namespace}-fade';
     &-enter-active {
       animation: {
         name: #{$-name}-in;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
 
     &-leave-active {
       animation: {
         name: #{$-name}-out;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
   }

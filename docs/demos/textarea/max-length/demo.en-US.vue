@@ -1,14 +1,16 @@
 <template>
-  <Textarea :max-length="10"></Textarea>
-  <br />
-  <br />
-  <Textarea value="Almost" :max-length="10">
-    <template #count="{ value }">
-      <span :style="{ color: value.length > 5 ? 'var(--vxp-color-warning-base)' : undefined }">
-        {{ `${value.length}/10` }}
-      </span>
-    </template>
-  </Textarea>
+  <Space vertical>
+    <Textarea :max-length="10"></Textarea>
+    <Textarea value="Hide Count" :max-length="10" hide-count></Textarea>
+    <Textarea value="Count Only" :max-length="Infinity"></Textarea>
+    <Textarea value="Almost" :max-length="10">
+      <template #count="{ value }">
+        <span :style="{ color: value.length > 5 ? 'var(--vxp-color-warning-base)' : undefined }">
+          {{ `${value.length}/10` }}
+        </span>
+      </template>
+    </Textarea>
+  </Space>
 </template>
 
 <style scoped>

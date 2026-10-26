@@ -1,4 +1,5 @@
-import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+
 import { noop } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
@@ -11,7 +12,7 @@ import type { Ref } from 'vue'
  */
 export function useDisplay(
   displayInit = noop,
-  element: Ref<HTMLElement | null | undefined> = ref(null)
+  element: Ref<HTMLElement | null | undefined> = ref(null),
 ) {
   let observer: MutationObserver | null
 
@@ -35,7 +36,7 @@ export function useDisplay(
           attributes: true,
           childList: true,
           characterData: true,
-          attributeFilter: ['style']
+          attributeFilter: ['style'],
         })
       } else {
         typeof displayInit === 'function' && displayInit()

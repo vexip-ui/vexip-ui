@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Upload } from '..'
-import { getXhr, triggerUploadFiles, FormData, FileReader } from './mock'
+import { FileReader, FormData, getXhr, triggerUploadFiles } from './mock'
 
 vi.useFakeTimers()
 
@@ -30,8 +31,8 @@ describe('Upload', () => {
     const fileList = [
       {
         id: 1,
-        name: 'file1.txt'
-      }
+        name: 'file1.txt',
+      },
     ]
     const wrapper = mount(() => <Upload file-list={fileList}></Upload>)
     expect(wrapper.find('.vxp-upload__files').exists()).toBe(true)
@@ -60,13 +61,13 @@ describe('Upload', () => {
 
     listType = 'thumbnail'
     await wrapper.setProps({
-      listType
+      listType,
     })
     expect(wrapper.findAll('.vxp-upload__file--thumbnail').length).toBe(1)
 
     listType = 'card'
     await wrapper.setProps({
-      listType
+      listType,
     })
     expect(wrapper.findAll('.vxp-upload__file--card').length).toBe(1)
   })
@@ -83,7 +84,7 @@ describe('Upload', () => {
 
     accept = ['test', 'test2']
     await wrapper.setProps({
-      accept
+      accept,
     })
     expect(wrapper.find('input').attributes('accept')).toBe(accept.join(','))
   })
@@ -101,8 +102,8 @@ describe('Upload', () => {
           if (file.status === 'pending') {
             done()
           }
-        }
-      }
+        },
+      },
     })
 
     const input = wrapper.find('input')
@@ -114,12 +115,12 @@ describe('Upload', () => {
     expect(done).toHaveBeenCalled()
 
     await wrapper.setProps({
-      filter: ['png', 'jpg']
+      filter: ['png', 'jpg'],
     })
 
     await triggerUploadFiles(input, [
       new File(['index'], 'file.svg'),
-      new File(['index'], 'image.jpg')
+      new File(['index'], 'image.jpg'),
     ])
     await input.trigger('change')
     await nextTick()
@@ -134,8 +135,8 @@ describe('Upload', () => {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
         maxSize: 1,
-        onSizeError
-      }
+        onSizeError,
+      },
     })
 
     const input = wrapper.find('input')
@@ -150,8 +151,8 @@ describe('Upload', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onChange
-      }
+        onChange,
+      },
     })
 
     const input = wrapper.find('input')
@@ -166,8 +167,8 @@ describe('Upload', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onBeforeUpload
-      }
+        onBeforeUpload,
+      },
     })
 
     const input = wrapper.find('input')
@@ -182,8 +183,8 @@ describe('Upload', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onBeforeSelect
-      }
+        onBeforeSelect,
+      },
     })
 
     const input = wrapper.find('input')
@@ -196,8 +197,8 @@ describe('Upload', () => {
   it('should work with delete event', async () => {
     const wrapper = mount(Upload, {
       props: {
-        url: '//jsonplaceholder.typicode.com/posts/'
-      }
+        url: '//jsonplaceholder.typicode.com/posts/',
+      },
     })
 
     const input = wrapper.find('input')
@@ -217,8 +218,8 @@ describe('Upload', () => {
     const wrapper = mount(Upload, {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
-        onProgress
-      }
+        onProgress,
+      },
     })
 
     const input = wrapper.find('input')
@@ -233,11 +234,11 @@ describe('Upload', () => {
     const triggerItem = wrapper.find('.vxp-upload__control')
     const hasDargOver = () =>
       expect(wrapper.find('.vxp-upload__control').classes()).toContain(
-        'vxp-upload__control--drag-over'
+        'vxp-upload__control--drag-over',
       )
     const notDragOver = () =>
       expect(wrapper.find('.vxp-upload__control').classes()).not.toContain(
-        'vxp-upload__control--drag-over'
+        'vxp-upload__control--drag-over',
       )
 
     notDragOver()
@@ -246,7 +247,7 @@ describe('Upload', () => {
     hasDargOver()
 
     await triggerItem.trigger('dragleave')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     notDragOver()
 
@@ -263,8 +264,8 @@ describe('Upload', () => {
       props: {
         url: '//jsonplaceholder.typicode.com/posts/',
         onPreview,
-        listType: 'card'
-      }
+        listType: 'card',
+      },
     })
 
     const input = wrapper.find('input')

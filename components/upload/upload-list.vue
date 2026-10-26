@@ -1,9 +1,59 @@
+<script setup lang="ts">
+import { Renderer } from '@/components/renderer'
+import { UploadFile } from '@/components/upload-file'
+
+import { computed } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { uploadListProps } from './props'
+import { uploadListTypes } from './symbol'
+
+import type { UploadFileState, UploadListSlots } from './symbol'
+
+defineOptions({ name: 'UploadList' })
+
+const _props = defineProps(uploadListProps)
+const props = useProps('uploadList', _props, {
+  files: {
+    default: () => [],
+    static: true,
+  },
+  selectToAdd: false,
+  iconRenderer: {
+    default: null,
+    isFunc: true,
+  },
+  type: {
+    default: 'name',
+    validator: value => uploadListTypes.includes(value),
+  },
+  loadingText: null,
+  style: null,
+  precision: 2,
+  // 'canPreview' using UploadFile default
+  slots: () => ({}),
+})
+
+const slots = defineSlots<UploadListSlots>()
+
+const nh = useNameHelper('upload')
+const transitionName = computed(() => nh.ns('fade'))
+
+function handleDelete(file: UploadFileState) {
+  emitEvent(props.onDelete, file)
+}
+
+function handlePreview(file: UploadFileState) {
+  emitEvent(props.onPreview, file)
+}
+</script>
+
 <template>
   <ul
     :class="[nh.be('files'), nh.bs('vars'), props.inherit && nh.bem('files', 'inherit')]"
     :style="props.style"
   >
-    <transition
+    <Transition
       v-for="item in props.files"
       :key="item.id"
       appear
@@ -21,79 +71,37 @@
         @delete="handleDelete"
         @preview="handlePreview"
       >
-        <template #default="{ file, status, percentage }">
+        <template v-if="slots.item || props.slots.item" #default="{ file, status, percentage }">
           <slot
             name="item"
             :file="file"
             :status="status"
             :percentage="percentage"
-          ></slot>
+          >
+            <Renderer
+              :renderer="props.slots.item"
+              :data="{
+                file,
+                status,
+                percentage
+              }"
+            ></Renderer>
+          </slot>
         </template>
-        <template #icon="{ file }">
-          <slot name="icon" :file="file"></slot>
+        <template v-if="slots.icon || props.slots.icon" #icon="{ file, status, percentage }">
+          <slot
+            name="icon"
+            :file="file"
+            :status="status"
+            :percentage="percentage"
+          >
+            <Renderer :renderer="props.slots.icon" :data="{ file, status, percentage }"></Renderer>
+          </slot>
         </template>
       </UploadFile>
-    </transition>
-    <slot name="suffix"></slot>
+    </Transition>
+    <slot name="suffix">
+      <Renderer :renderer="props.slots.suffix"></Renderer>
+    </slot>
   </ul>
 </template>
-
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { UploadFile } from '@/components/upload-file'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { uploadListProps } from './props'
-import { uploadListTypes } from './symbol'
-
-import type { FileState } from './symbol'
-
-export default defineComponent({
-  name: 'UploadList',
-  components: {
-    UploadFile
-  },
-  props: uploadListProps,
-  emits: [],
-  setup(_props) {
-    const props = useProps('uploadList', _props, {
-      files: {
-        default: () => [],
-        static: true
-      },
-      selectToAdd: false,
-      iconRenderer: {
-        default: null,
-        isFunc: true
-      },
-      type: {
-        default: 'name',
-        validator: value => uploadListTypes.includes(value)
-      },
-      loadingText: null,
-      style: null,
-      precision: 2
-      // 'canPreview' using UploadFile default
-    })
-
-    const nh = useNameHelper('upload')
-    const transitionName = computed(() => nh.ns('fade'))
-
-    function handleDelete(file: FileState) {
-      emitEvent(props.onDelete, file)
-    }
-
-    function handlePreview(file: FileState) {
-      emitEvent(props.onPreview, file)
-    }
-
-    return {
-      props,
-      nh,
-      transitionName,
-
-      handleDelete,
-      handlePreview
-    }
-  }
-})
-</script>

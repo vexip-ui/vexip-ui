@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { AnchorLink } from '@/components/anchor-link'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Anchor } from '..'
 
 describe('Anchor', () => {
@@ -44,7 +46,7 @@ describe('Anchor', () => {
                 <AnchorLink to={'#2'}>{'2'}</AnchorLink>
                 <AnchorLink to={'#3'}>{'3'}</AnchorLink>
               </>
-            )
+            ),
           }}
         </AnchorLink>
         <AnchorLink to={'#4'}></AnchorLink>
@@ -64,7 +66,7 @@ describe('Anchor', () => {
       Object.defineProperty(el, 'offsetTop', {
         configurable: true,
         get: () => top,
-        set: v => (top = v)
+        set: v => (top = v),
       })
 
       if (id) el.setAttribute('id', id)
@@ -75,11 +77,11 @@ describe('Anchor', () => {
     const viewer = createEl(0, 'viewer')
     viewer.appendChild(createEl(20, 'a'))
     viewer.appendChild(createEl(40, 'b'))
-    document.appendChild(viewer)
+    document.body.appendChild(viewer)
 
     Object.defineProperty(viewer, 'scrollHeight', {
       configurable: true,
-      get: () => 60
+      get: () => 60,
     })
 
     const scrollToMock = vi

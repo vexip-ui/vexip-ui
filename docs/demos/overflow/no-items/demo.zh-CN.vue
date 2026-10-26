@@ -23,7 +23,7 @@
 
 .item {
   padding: 4px 10px;
-  margin-right: 4px;
+  margin-inline-end: 4px;
   white-space: nowrap;
   border: var(--vxp-border-base);
   border-radius: var(--vxp-radius-base);

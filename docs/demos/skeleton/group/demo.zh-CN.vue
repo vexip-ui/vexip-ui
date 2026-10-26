@@ -21,17 +21,17 @@
     ></Skeleton>
   </SkeletonGroup>
   <template v-else>
-    <div style="margin-bottom: 14px;">
+    <div style="margin-bottom: 14px">
       标题
     </div>
     <br />
-    <Avatar src="/qmhc.jpg" size="large" circle></Avatar>
+    <Avatar src="https://www.vexipui.com/qmhc.jpg" size="large" circle></Avatar>
     <div>一些内容</div>
     <div>一些内容</div>
     <div>一些内容</div>
     <div>一些内容</div>
     <br />
-    <img src="/qmhc.jpg" width="64" height="64" />
+    <img src="https://www.vexipui.com/qmhc.jpg" width="64" height="64" />
   </template>
 </template>
 

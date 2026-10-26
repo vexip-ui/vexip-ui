@@ -1,14 +1,6 @@
-import { ref, unref, watch, getCurrentScope, onScopeDispose } from 'vue'
-import {
-  CLICK_TYPE,
-  isClient,
-  noop,
-  createEvent,
-  getObservers,
-  observe,
-  disconnect,
-  dispatchEvent
-} from '@vexip-ui/utils'
+import { getCurrentScope, onScopeDispose, ref, unref, watch } from 'vue'
+
+import { CLICK_TYPE, dispatchEvent, isClient, noop } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
 import type { Ref } from 'vue'
@@ -16,24 +8,60 @@ import type { TransferNode } from '@vexip-ui/utils'
 
 export const CLICK_OUTSIDE = 'clickoutside'
 
-createEvent(CLICK_OUTSIDE)
+const elements = new Set<TransferNode>()
+let downTarget: EventTarget | null = null
+
+function isInside(target: EventTarget | null, el: TransferNode) {
+  if (!(target instanceof Node)) return false
+
+  return (
+    el === target ||
+    el.contains(target) ||
+    (!!el.__transferElement &&
+      (el.__transferElement === target || el.__transferElement.contains(target)))
+  )
+}
 
 if (isClient) {
-  document.addEventListener(CLICK_TYPE, (event: Event) => {
-    const target = event.target
-    const path = event.composedPath && event.composedPath()
+  // 桌面端使用 'click' 作为触发器，但滚动条拖拽时 mouseup 在组件外会误判。
+  // pointerdown 在 mousedown 之前触发，且不受 scrollbar 内部 preventDefault 的影响，
+  // 用它来记录用户开始按压时的真实目标。
+  if (CLICK_TYPE === 'click') {
+    document.addEventListener(
+      'pointerdown',
+      (event: Event) => {
+        downTarget = event.target
+      },
+      true,
+    )
+  }
 
-    getObservers(CLICK_OUTSIDE).forEach((el: TransferNode) => {
-      if (
-        el !== target &&
-        (path ? !path.includes(el) : !el.contains(target as Node)) &&
-        (!el.__transferElement ||
-          (el.__transferElement !== target && !el.__transferElement.contains(target as Node)))
-      ) {
-        dispatchEvent(el, { type: CLICK_OUTSIDE })
-      }
-    })
-  })
+  document.addEventListener(
+    CLICK_TYPE,
+    (event: Event) => {
+      const currentDownTarget = downTarget
+      downTarget = null
+
+      elements.forEach(el => {
+        if (currentDownTarget && isInside(currentDownTarget, el)) {
+          return
+        }
+
+        const target = event.target as Node | null
+        const path = event.composedPath && event.composedPath()
+
+        if (
+          el !== target &&
+          (path ? !path.includes(el) : !el.contains(target)) &&
+          (!el.__transferElement ||
+            (el.__transferElement !== target && !el.__transferElement.contains(target)))
+        ) {
+          dispatchEvent(el, { type: CLICK_OUTSIDE })
+        }
+      })
+    },
+    true,
+  )
 }
 
 /**
@@ -44,7 +72,7 @@ if (isClient) {
  */
 export function useClickOutside(
   handler: () => void,
-  target: Ref<HTMLElement | null | undefined> = ref(null)
+  target: Ref<HTMLElement | null | undefined> = ref(null),
 ) {
   let remove = noop
 
@@ -57,14 +85,14 @@ export function useClickOutside(
         return
       }
 
-      observe(target.value as TransferNode, CLICK_OUTSIDE)
+      elements.add(el)
 
       remove = () => {
-        disconnect(target.value as TransferNode, CLICK_OUTSIDE)
+        elements.delete(el)
         remove = noop
       }
     },
-    { immediate: true, flush: 'post' }
+    { immediate: true, flush: 'post' },
   )
 
   const stop = () => {

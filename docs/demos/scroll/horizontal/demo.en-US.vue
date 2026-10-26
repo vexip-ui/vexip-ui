@@ -1,5 +1,5 @@
 <template>
-  <div style="display: inline-flex; border: var(--vxp-border-base);">
+  <div style="display: inline-flex; border: var(--vxp-border-base)">
     <Scroll :mode="`horizontal${exact ? '-exact' : ''}`" use-x-bar width="25em">
       <p>Scroll mouse wheel here</p>
       <p>

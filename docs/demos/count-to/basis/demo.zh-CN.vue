@@ -5,7 +5,7 @@
         <ArrowUp></ArrowUp>
       </template>
     </CountTo>
-    <Form :model="propsModel" style="max-width: 300px;">
+    <Form :model="propsModel" style="max-width: 300px">
       <FormItem prop="start" label="start">
         <NumberInput></NumberInput>
       </FormItem>
@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { ArrowUp } from '@vexip-ui/icons'
 import type { CountTo, CountToTimingName } from 'vexip-ui'
 
@@ -65,7 +65,7 @@ const propsModel = reactive({
   separator: ',',
   prefix: '',
   suffix: '%',
-  timing: timingOptions[0]
+  timing: timingOptions[0],
 })
 
 function start() {

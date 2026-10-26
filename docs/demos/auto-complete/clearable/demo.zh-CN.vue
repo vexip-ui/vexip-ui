@@ -3,7 +3,7 @@
     v-model:value="value"
     filter
     ignore-case
-    style="max-width: 400px;"
+    style="max-width: 400px"
     :options="options"
     clearable
   ></AutoComplete>
@@ -27,6 +27,6 @@ const options = [
   'Switch',
   'TimePicker',
   'Upload',
-  'Wheel'
+  'Wheel',
 ]
 </script>

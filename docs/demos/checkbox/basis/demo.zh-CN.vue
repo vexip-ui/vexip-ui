@@ -3,7 +3,7 @@
     Checkbox
   </Checkbox>
   <br />
-  <p style="margin-top: 10px;">
+  <p style="margin-top: 10px">
     checked: {{ checked }}
   </p>
 </template>

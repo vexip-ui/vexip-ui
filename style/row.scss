@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $row: () !default;
@@ -17,14 +18,15 @@ $row: map.merge(
     @include define-preset-values('row', $row);
   }
 
-  @include basis;
+  @include basis {
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    row-gap: value('row-v-gap');
+    margin-inline: calc(-0.5 * value('row-h-gap'));
+  }
 
-  position: relative;
-  display: flex;
-  flex-flow: row wrap;
-  row-gap: get-css-var('row-v-gap');
-  margin-right: calc(-0.5 * get-css-var('row-h-gap'));
-  margin-left: calc(-0.5 * get-css-var('row-h-gap'));
+  @include inherit-color;
 
   &--start {
     justify-content: flex-start;

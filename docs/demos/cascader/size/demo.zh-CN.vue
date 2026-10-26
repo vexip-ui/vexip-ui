@@ -29,7 +29,7 @@
     :options="options"
     multiple
     clearable
-    style="--vxp-input-height: 48px;"
+    style="--vxp-input-height: 48px"
     placeholder="大过头的"
   ></Cascader>
 </template>
@@ -46,7 +46,7 @@ function createOptions(depth: number, prefix = 'Op', iterator = 1) {
       value: `${prefix}-${i}`,
       label: `${prefix}-${i}`,
       disabled: i % 4 === 0,
-      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1),
     })
   }
 

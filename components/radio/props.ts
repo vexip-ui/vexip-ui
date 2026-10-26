@@ -1,53 +1,50 @@
 import {
-  buildProps,
   booleanProp,
+  buildProps,
+  classProp,
+  eventProp,
+  iconProp,
   sizeProp,
   stateProp,
-  classProp,
-  eventProp
+  valueProp,
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
+import type { ChangeEvent, RadioGroupShape, RadioRawOption, RadioShape } from './symbol'
 
 export const radioProps = buildProps({
   size: sizeProp,
   state: stateProp,
-  value: [String, Number],
-  label: [String, Number],
+  value: valueProp,
+  label: valueProp,
   labelClass: classProp,
   disabled: booleanProp,
-  border: booleanProp,
   tabIndex: [String, Number],
   loading: booleanProp,
   loadingLock: booleanProp,
-  onChange: eventProp<(value: string | number) => void>()
+  name: String,
+  shape: String as PropType<RadioShape>,
+  onChange: eventProp<EventListener<ChangeEvent>>(),
 })
 
 export type RadioProps = ExtractPropTypes<typeof radioProps>
 export type RadioCProps = ConfigurableProps<RadioProps>
 
-export type RawOption =
-  | string
-  | {
-    label: string | number,
-    content?: string
-  }
-
 export const radioGroupProps = buildProps({
   size: sizeProp,
   state: stateProp,
-  value: [String, Number],
+  value: valueProp,
   vertical: booleanProp,
   disabled: booleanProp,
-  button: booleanProp,
-  border: booleanProp,
-  options: Array as PropType<RawOption[]>,
+  options: Array as PropType<RadioRawOption[]>,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
-  onChange: eventProp<(value: string | number) => void>()
+  loadingEffect: String as PropType<IconEffect>,
+  shape: String as PropType<RadioGroupShape>,
+  onChange: eventProp<EventListener<ChangeEvent>>(),
 })
 
 export type RadioGroupProps = ExtractPropTypes<typeof radioGroupProps>

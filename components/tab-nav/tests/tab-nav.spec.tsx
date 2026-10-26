@@ -1,8 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { TabNavItem } from '@/components/tab-nav-item'
-import { GithubB } from '@vexip-ui/icons'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
 import { TabNav } from '..'
 
 describe('TabNav', () => {
@@ -29,26 +31,26 @@ describe('TabNav', () => {
             <TabNavItem label={'1'}>{'1'}</TabNavItem>
             <TabNavItem label={'2'}>{'2'}</TabNavItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-tab-nav__item')
 
     await nextTick()
     await nextTick()
     expect(items[0].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(items[1].find('.vxp-tab-nav__content').classes()).not.toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
 
     await wrapper.setProps({ active: '2' })
     expect(items[0].find('.vxp-tab-nav__content').classes()).not.toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(items[1].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
   })
 
@@ -65,14 +67,14 @@ describe('TabNav', () => {
     await nextTick()
     await items[1].find('.vxp-tab-nav__content').trigger('click')
     expect(items[1].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(onChange).toHaveBeenCalled()
     expect(onChange).toHaveBeenCalledWith('2')
 
     await items[0].find('.vxp-tab-nav__content').trigger('click')
     expect(items[0].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
   })
 
@@ -90,11 +92,11 @@ describe('TabNav', () => {
 
     await nextTick()
     expect(items[1].find('.vxp-tab-nav__content').classes()).toContain(
-      'vxp-tab-nav__content--disabled'
+      'vxp-tab-nav__content--disabled',
     )
     await items[1].find('.vxp-tab-nav__content').trigger('click')
     expect(items[1].find('.vxp-tab-nav__content').classes()).not.toContain(
-      'vxp-tab-nav__content--active'
+      'vxp-tab-nav__content--active',
     )
     expect(onChange).not.toHaveBeenCalled()
   })
@@ -102,12 +104,12 @@ describe('TabNav', () => {
   it('icon', () => {
     const wrapper = mount(() => (
       <TabNav>
-        <TabNavItem icon={GithubB}>{'content'}</TabNavItem>
+        <TabNavItem icon={Github}>{'content'}</TabNavItem>
       </TabNav>
     ))
 
     expect(wrapper.find('.vxp-tab-nav__icon').exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(Github).exists()).toBe(true)
   })
 
   it('card', () => {
@@ -121,7 +123,7 @@ describe('TabNav', () => {
   })
 
   it('align', () => {
-    (['left', 'center', 'right'] as const).forEach(align => {
+    ;(['left', 'center', 'right'] as const).forEach(align => {
       const wrapper = mount(() => (
         <TabNav align={align}>
           <TabNavItem>{'tab'}</TabNavItem>
@@ -133,7 +135,7 @@ describe('TabNav', () => {
   })
 
   it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const wrapper = mount(() => (
         <TabNav placement={placement}>
           <TabNavItem>{'tab'}</TabNavItem>

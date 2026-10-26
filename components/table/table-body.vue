@@ -1,114 +1,99 @@
-<template>
-  <div :class="nh.be('body')" role="rowgroup" :style="style">
-    <div v-if="renderData.length" :class="nh.be('row-list')" :style="listStyle">
-      <TableRow
-        v-for="row in renderData"
-        :key="row.index"
-        :row="row"
-        :index="row.index"
-        :is-fixed="!!fixed"
-      >
-        <TableCell
-          v-for="(column, columnIndex) in currentColumns"
-          :key="columnIndex"
-          :row="row"
-          :row-index="row.index"
-          :column="column"
-          :column-index="columnIndex"
-        ></TableCell>
-      </TableRow>
-    </div>
-    <div v-else :class="nh.be('empty')" :style="emptyStyle">
-      <slot name="empty" :is-fixed="!!fixed">
-        <template v-if="!fixed">
-          {{ emptyText }}
-        </template>
-      </slot>
-    </div>
-  </div>
-</template>
+<script setup lang="ts">
+import { computed, inject, toRef } from 'vue'
 
-<script lang="ts">
-import { defineComponent, computed, inject, toRef } from 'vue'
 import TableCell from './table-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
+import { getLast } from '@vexip-ui/utils'
 import { TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 
-export default defineComponent({
-  name: 'TableBody',
-  components: {
-    TableCell,
-    TableRow
+defineOptions({ name: 'TableBody' })
+
+const props = defineProps({
+  fixed: {
+    type: String as PropType<'left' | 'right' | undefined>,
+    default: null,
   },
-  props: {
-    fixed: {
-      type: String as PropType<'left' | 'right'>,
-      default: null,
-      validator: (value: string) => {
-        return value === 'left' || value === 'right'
-      }
-    }
-  },
-  setup(props) {
-    const { state, getters } = inject(TABLE_STORE)!
+})
 
-    const currentColumns = computed(() => {
-      if (props.fixed === 'left') {
-        return state.leftFixedColumns
-      }
+const { state, getters } = inject(TABLE_STORE)!
 
-      if (props.fixed === 'right') {
-        return state.rightFixedColumns
-      }
+const nh = useNameHelper('table')
+const locale = toRef(state, 'locale')
 
-      return state.columns
-    })
-    const renderData = computed(() => (state.virtual ? state.virtualData : getters.processedData))
-    const style = computed(() => {
-      const { widths, totalHeight } = state
-      const columns = currentColumns.value
+const columns = computed(() => {
+  return props.fixed === 'left'
+    ? state.leftFixedColumns
+    : props.fixed === 'right'
+      ? state.rightFixedColumns
+      : state.normalColumns
+})
+const data = computed(() => (state.virtual ? state.virtualData : getters.processedData))
+const hasEmpty = computed(() => {
+  if (state.rightFixedColumns.length) return props.fixed === 'right'
+  if (state.leftFixedColumns.length) return props.fixed === 'left'
+  return true
+})
+const style = computed(() => {
+  const width =
+    props.fixed === 'left'
+      ? getLast(getters.leftFixedWidths)
+      : props.fixed === 'right'
+        ? getLast(getters.rightFixedWidths)
+        : getLast(getters.normalWidths)
+  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
+  const showEmpty = hasEmpty.value && data.value.length === 0
 
-      let width = 0
+  return {
+    [nh.cv('right-fixed-width')]:
+      props.fixed === 'right' && width ? `${width + padLeft + padRight}px` : '0px',
+    [showEmpty ? 'width' : 'minWidth']: width && `${width + padLeft + padRight}px`,
+    minHeight: `${state.totalHeight}px`,
+  }
+})
+const emptyStyle = computed(() => {
+  const { rowHeight, rowMinHeight } = state
 
-      for (let i = 0, len = columns.length; i < len; ++i) {
-        const column = columns[i]
-        const key = column.key
-        const columnWidth = widths[key]
-
-        width += columnWidth
-      }
-
-      return {
-        minWidth: `${width}px`,
-        minHeight: `${totalHeight}px`
-      }
-    })
-    const listStyle = computed(() => {
-      return {
-        transform: state.virtual ? `translate3d(0, ${state.padTop}px, 0)` : undefined
-      }
-    })
-    const emptyStyle = computed(() => {
-      const { rowHeight, rowMinHeight } = state
-
-      return {
-        minHeight: `${rowHeight || rowMinHeight}px`
-      }
-    })
-
-    return {
-      nh: useNameHelper('table'),
-      emptyText: toRef(state, 'emptyText'),
-
-      currentColumns,
-      style,
-      listStyle,
-      emptyStyle,
-      renderData
-    }
+  return {
+    minHeight: `${rowHeight || rowMinHeight}px`,
   }
 })
 </script>
+
+<template>
+  <div :class="nh.be('body')" role="rowgroup" :style="style">
+    <template v-if="data.length">
+      <TableRow
+        v-for="(row, index) in data"
+        :key="index"
+        :row="row"
+        :index="row.listIndex"
+        :fixed="fixed"
+        :aria-rowindex="row.index"
+      >
+        <TableCell
+          v-for="(column, colIndex) in columns"
+          :key="colIndex"
+          :row="row"
+          :row-index="row.listIndex"
+          :column="column"
+          :col-index="colIndex"
+          :fixed="fixed"
+          :aria-colindex="colIndex"
+        ></TableCell>
+      </TableRow>
+    </template>
+    <div
+      v-else-if="hasEmpty"
+      :class="[nh.be('empty'), fixed === 'right' && nh.bem('empty', 'right')]"
+      :style="emptyStyle"
+    >
+      <slot name="empty">
+        {{ locale.empty }}
+      </slot>
+    </div>
+  </div>
+</template>

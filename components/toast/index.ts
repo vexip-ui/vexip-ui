@@ -1,10 +1,14 @@
-import { createVNode, render, markRaw } from 'vue'
-import Component from './toast.vue'
-import { isClient, noop, toNumber, destroyObject } from '@vexip-ui/utils'
-import { Check, Exclamation, Xmark, Spinner } from '@vexip-ui/icons'
+import { createApp, createVNode, markRaw, render } from 'vue'
 
-import type { App } from 'vue'
-import type { ToastType, ToastOptions, ToastInstance } from './symbol'
+import Component from './toast.vue'
+import { proxyExposed, unrefElement } from '@vexip-ui/hooks'
+import { destroyObject, isClient, noop, toNumber } from '@vexip-ui/utils'
+
+import type { App, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
+import type { ToastInstance, ToastOptions, ToastType } from './symbol'
+
+export { toastProps } from './props'
 
 export type { ToastProps, ToastCProps } from './props'
 export type { ToastType, ToastOptions }
@@ -15,26 +19,16 @@ interface AipMethod {
   (options: ToastOptions): () => void,
   (content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const conveniences: Record<ToastType, Record<string, any>> = {
-  success: {
-    icon: Check
-  },
-  warning: {
-    icon: Exclamation
-  },
-  error: {
-    icon: Xmark
-  },
+  success: {},
+  warning: {},
+  error: {},
   loading: {
-    icon: Spinner,
     showMask: true,
-    iconProps: {
-      pulse: true
-    }
-  }
+  },
 }
 
 export class ToastManager {
@@ -49,19 +43,25 @@ export class ToastManager {
 
   private _mountedApp: App<unknown> | null
   private _instance: ToastInstance | null
+  private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
   private _timer: ReturnType<typeof setTimeout> | null
+  private _wrapper: HTMLElement | SVGElement | null
+  private _mountedEl: HTMLElement | null
 
   constructor(options: Partial<ToastOptions> = {}) {
     options = {
       ...options,
-      duration: options.duration ? toNumber(options.duration) : 2000
+      duration: options.duration ? toNumber(options.duration) : 2000,
     }
 
     this._mountedApp = null
     this._instance = null
+    this._innerApp = null
     this._container = null
     this._timer = null
+    this._wrapper = null
+    this._mountedEl = null
     this.name = 'Toast'
     this.defaults = {}
 
@@ -90,7 +90,7 @@ export class ToastManager {
 
   close() {
     this._timer && clearTimeout(this._timer)
-    this._getInstance()?.cloasToast()
+    this._getInstance()?.closeToast()
   }
 
   config(options: Record<string, unknown>) {
@@ -98,10 +98,16 @@ export class ToastManager {
   }
 
   clone() {
-    return new ToastManager(this.defaults)
+    const manager = new ToastManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+
+    return manager
   }
 
   destroy() {
+    this._mountedEl && this._wrapper?.removeChild(this._mountedEl)
+    this._innerApp?.unmount()
     this._container && render(null, this._container)
     destroyObject(this)
   }
@@ -114,26 +120,50 @@ export class ToastManager {
     const { property, ...others } = options
 
     this.config(others)
-    app.config.globalProperties[property || '$toast'] = this
     this._mountedApp = app
+
+    if (property || !app.config.globalProperties.$toast) {
+      app.config.globalProperties[property || '$toast'] = this
+    }
+  }
+
+  transferTo(target: MaybeRef<string | MaybeInstance>) {
+    if (!isClient) return
+
+    const el = unrefElement(target)
+
+    if (el) {
+      this._wrapper = el
+
+      if (this._instance) {
+        this._mountedEl && this._wrapper.appendChild(this._mountedEl)
+      } else {
+        this._getInstance()
+      }
+    }
   }
 
   private _getInstance() {
-    if (!this._mountedApp) {
-      console.warn('[vexip-ui:Toast]: App missing, the plugin maybe not installed.')
-      return null
-    }
+    if (!this._instance && isClient) {
+      if (!this._mountedApp) {
+        console.warn('[vexip-ui:Toast]: App missing, the plugin maybe not installed.')
 
-    if (!this._instance) {
-      const vnode = createVNode(Component, null, null)
+        this._container = document.createElement('div')
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as ToastInstance
+      } else {
+        const vnode = createVNode(Component, null, null)
 
-      this._container = document.createElement('div')
-      vnode.appContext = this._mountedApp._context
+        this._container = document.createElement('div')
+        vnode.appContext = this._mountedApp._context
 
-      render(vnode, this._container, false)
-      document.body.appendChild(this._container.firstElementChild!)
+        render(vnode, this._container)
 
-      this._instance = vnode.component!.proxy as ToastInstance
+        this._instance = proxyExposed<ToastInstance>(vnode)
+      }
+
+      this._mountedEl = this._container.firstElementChild as HTMLElement
+      ;(this._wrapper || document.body).appendChild(this._mountedEl)
     }
 
     return this._instance
@@ -147,7 +177,7 @@ export class ToastManager {
     this._timer && clearTimeout(this._timer)
 
     const options = typeof content === 'string' ? { content, duration: _duration } : content
-    const convenienceOptions = type ? conveniences[type] ?? {} : {}
+    const convenienceOptions = type ? (conveniences[type] ?? {}) : {}
 
     const userCloseFn = options.onClose
     const onClose = () => {
@@ -158,26 +188,32 @@ export class ToastManager {
       }
     }
 
-    const toast = this._getInstance()
-    const item: ToastOptions = { ...this.defaults, ...convenienceOptions, ...options, onClose }
+    const toast = this._getInstance()!
+    const item: ToastOptions = {
+      ...this.defaults,
+      ...convenienceOptions,
+      ...options,
+      type: type ?? options.type,
+      onClose,
+    }
 
     if (item.icon && typeof item.icon !== 'function') {
       item.icon = markRaw(item.icon)
     }
 
-    toast?.openToast(item)
+    toast.openToast(item)
 
     const duration = typeof item.duration === 'number' ? item.duration : 2000
 
     if (duration >= 500) {
       this._timer = setTimeout(() => {
-        toast?.cloasToast()
+        toast.closeToast()
       }, duration)
     }
 
     return () => {
       this._timer && clearTimeout(this._timer)
-      toast?.cloasToast()
+      toast.closeToast()
     }
   }
 }

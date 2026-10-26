@@ -6,7 +6,7 @@ export type ToastType = 'success' | 'warning' | 'error' | 'loading'
 export type ToastPosition = 'top' | 'center' | 'bottom'
 
 export interface ToastOptions extends Record<string, any> {
-  type?: ToastType,
+  type?: ToastType | null,
   content?: string,
   icon?: Record<string, any> | (() => any) | null,
   iconProps?: IconMinorProps,
@@ -18,10 +18,12 @@ export interface ToastOptions extends Record<string, any> {
   maskClass?: ClassType,
   maskStyle?: StyleType,
   parseHtml?: boolean,
-  onClose?: () => void
+  onClose?: () => void,
 }
 
 export interface ToastInstance extends ComponentPublicInstance {
   openToast: (options: ToastOptions) => Promise<void>,
-  cloasToast: () => void
+  closeToast: () => void,
 }
+
+export const effectiveTypes = Object.freeze(['success', 'warning', 'error', 'loading'])

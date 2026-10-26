@@ -1,5 +1,5 @@
 <template>
-  <Icon spin>
+  <Icon effect="spin-in">
     <CircleNotch></CircleNotch>
   </Icon>
 </template>

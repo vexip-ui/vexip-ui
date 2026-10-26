@@ -1,6 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
 import { Bubble } from '@/components/bubble'
+
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Progress } from '..'
 
 describe('Progress', () => {
@@ -17,9 +19,7 @@ describe('Progress', () => {
   it('percentage', () => {
     const wrapper = mount(() => <Progress percentage={30}></Progress>)
 
-    expect(wrapper.find('.vxp-progress__filler').attributes('style')).toContain(
-      'transform: translateX(-35%) scaleX(0.3);'
-    )
+    expect(wrapper.attributes('style')).toContain('--vxp-progress-percentage: 30;')
     expect(wrapper.find('.vxp-progress__percentage').text()).toEqual('30%')
   })
 
@@ -33,13 +33,13 @@ describe('Progress', () => {
   })
 
   it('info type', () => {
-    (['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'] as const).forEach(
+    ;(['outside', 'inside', 'bubble', 'bubble-top', 'bubble-bottom', 'none'] as const).forEach(
       type => {
         const wrapper = mount(() => <Progress info-type={type}></Progress>)
 
         expect(wrapper.classes()).toContain(`vxp-progress--info-${type}`)
         expect(wrapper.find('.vxp-progress__percentage').exists()).toBe(type !== 'none')
-      }
+      },
     )
   })
 
@@ -59,20 +59,21 @@ describe('Progress', () => {
     const strokeColor = vi.fn()
     const wrapper = mount(Progress, {
       props: {
-        strokeColor: 'red'
-      }
+        strokeColor: 'red',
+      },
     })
 
     expect(wrapper.find('.vxp-progress__filler').attributes('style')).toContain(
-      'background-color: red;'
+      'background-color: red;',
     )
 
     await wrapper.setProps({
-      strokeColor: ['red', 'yellow']
+      strokeColor: ['red', 'yellow'],
     })
-    expect(wrapper.find('.vxp-progress__filler').attributes('style')).toContain(
-      'background-image: linear-gradient(to right, red 0%, yellow 100%);'
-    )
+
+    expect(wrapper.vm.fillerStyle).toMatchObject({
+      backgroundImage: 'linear-gradient(to right, red 0%, yellow 100%)',
+    })
 
     await wrapper.setProps({ strokeColor })
     expect(strokeColor).toHaveBeenCalled()
@@ -83,5 +84,13 @@ describe('Progress', () => {
     const wrapper = mount(() => <Progress activated></Progress>)
 
     expect(wrapper.find('.vxp-progress').classes()).toContain('vxp-progress--activated')
+  })
+
+  it('state', () => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
+      const wrapper = mount(() => <Progress state={state}></Progress>)
+
+      expect(wrapper.find('.vxp-progress').classes()).toContain(`vxp-progress--${state}`)
+    })
   })
 })

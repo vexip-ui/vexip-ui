@@ -26,7 +26,7 @@ const active = ref(1)
 const tabs = ref([
   { label: 1, name: '标签页1', static: true },
   { label: 2, name: '标签页2' },
-  { label: 3, name: '标签页3' }
+  { label: 3, name: '标签页3' },
 ])
 
 function addTab() {

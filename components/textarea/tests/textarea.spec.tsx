@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { Spinner } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { globalIcons } from '@vexip-ui/config'
 import { Textarea } from '..'
 
 import type { DOMWrapper } from '@vue/test-utils'
@@ -35,7 +36,7 @@ describe('Textarea', () => {
 
   it('value', async () => {
     const wrapper = mount(Textarea, {
-      props: { value: TEXT }
+      props: { value: TEXT },
     })
 
     expect(getValue(wrapper.find('textarea'))).toEqual(TEXT)
@@ -57,7 +58,7 @@ describe('Textarea', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Textarea state={state}></Textarea>)
 
       expect(wrapper.find('.vxp-textarea').classes()).toContain(`vxp-textarea--${state}`)
@@ -68,11 +69,11 @@ describe('Textarea', () => {
     const wrapper = mount(Textarea)
 
     expect(wrapper.find('.vxp-textarea__loading').exists()).toBe(false)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.find('.vxp-textarea__loading').exists()).toBe(true)
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading lock', async () => {
@@ -87,7 +88,7 @@ describe('Textarea', () => {
   it('change event', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onChange }
+      props: { onChange },
     })
     const textarea = wrapper.find('textarea').element
 
@@ -100,12 +101,12 @@ describe('Textarea', () => {
   it('input event', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onInput }
+      props: { onInput },
     })
     const textarea = wrapper.find('textarea').element
 
     emitInput(textarea, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(onInput).toHaveBeenCalled()
   })
@@ -113,7 +114,7 @@ describe('Textarea', () => {
   it('input throttle', async () => {
     const onInput = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onInput }
+      props: { onInput },
     })
     const textarea = wrapper.find('textarea').element
 
@@ -122,17 +123,17 @@ describe('Textarea', () => {
     emitInput(textarea, TEXT)
     emitInput(textarea, TEXT)
     emitInput(textarea, TEXT)
-    expect(onInput).toHaveBeenCalledTimes(0)
-    vi.runAllTimers()
-    await nextTick()
     expect(onInput).toHaveBeenCalledTimes(1)
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    expect(onInput).toHaveBeenCalledTimes(2)
   })
 
   it('focus/blur event', async () => {
     const onFocus = vi.fn()
     const onBlur = vi.fn()
     const wrapper = mount(Textarea, {
-      props: { onFocus, onBlur }
+      props: { onFocus, onBlur },
     })
     const textarea = wrapper.find('textarea')
 
@@ -143,7 +144,7 @@ describe('Textarea', () => {
     expect(onFocus).toHaveBeenCalled()
 
     await textarea.trigger('blur')
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-textarea--focused')
     expect(onBlur).toHaveBeenCalled()
@@ -158,14 +159,21 @@ describe('Textarea', () => {
   })
 
   it('max length', async () => {
-    const wrapper = mount(() => <Textarea max-length={2}></Textarea>)
+    const wrapper = mount(Textarea, {
+      props: { maxLength: 2 },
+    })
     const textarea = wrapper.find('textarea').element
 
     expect(wrapper.find('.vxp-textarea__count').exists()).toBe(true)
+    expect(wrapper.find('.vxp-textarea__count').text()).toEqual('0/2')
 
     emitChange(textarea, TEXT)
     await nextTick()
     expect(getValue(wrapper.find('textarea'))).toEqual(TEXT.slice(0, 2))
+    expect(wrapper.find('.vxp-textarea__count').text()).toEqual('2/2')
+
+    await wrapper.setProps({ maxLength: Infinity })
+    expect(wrapper.find('.vxp-textarea__count').text()).toEqual('2')
   })
 
   it('rows', () => {
@@ -185,12 +193,12 @@ describe('Textarea', () => {
 
   it('sync', async () => {
     const wrapper = mount(Textarea, {
-      props: { sync: true }
+      props: { sync: true },
     })
     const textarea = wrapper.find('textarea').element
 
     emitInput(textarea, TEXT)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(wrapper.emitted()).toHaveProperty('update:value')
     expect(wrapper.emitted()['update:value'][0]).toEqual([TEXT])

@@ -32,6 +32,6 @@ const colors = [
   'cyan',
   'navy',
   'gold',
-  'purple'
+  'purple',
 ] as const
 </script>

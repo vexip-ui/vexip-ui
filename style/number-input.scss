@@ -1,58 +1,76 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
-@use './input.scss' as input;
+@use './input' as input;
+
+$number-input: () !default;
+$number-input: map.merge(
+  (
+    control-color-out: value('color-error-base')
+  ),
+  $number-input
+);
 
 .#{$namespace}-number-input {
+  &-vars {
+    @include define-preset-values('number-input', $number-input);
+  }
+
   @include basis;
   @include input.handler;
 
-  padding-right: calc(get-css-var('input-h-padding') + 20px);
+  @at-root {
+    & {
+      padding-inline-end: calc(value('input-h-padding') + 20px);
+    }
+  }
 
-  // @at-root {
-  //   & {
-  //     padding-right: calc(get-css-var('input-h-padding') + 20px);
+  &--out-of-range &__control {
+    color: value('number-input-control-color-out');
+  }
 
-  //     &--action-left {
-  //       padding: get-css-var('input-h-padding');
-  //       padding-left: calc(get-css-var('input-h-padding') + 20px);
-  //     }
-
-  //     &--action-none {
-  //       padding: get-css-var('input-h-padding');
-  //     }
-  //   }
-  // }
+  &__clear {
+    @include clean-button;
+  }
 
   &__clear,
   &__loading {
-    right: calc(get-css-var('input-h-padding') + 20px);
+    inset-inline-end: calc(value('input-h-padding') + 20px);
   }
 
   &__plus,
   &__minus {
     position: absolute;
-    right: 0;
+    inset-inline-end: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 20px;
     height: 50%;
-    color: get-css-var('input-icon-color');
+    color: value('input-icon-color');
     cursor: pointer;
     user-select: none;
-    border: get-css-var('input-border');
+    border: value('input-border');
     border-width: 0;
-    border-left-width: get-css-var('border-width');
-    transition: get-css-var('transition-color');
+    border-inline-start-width: value('border-width');
+    transition: value('transition-color');
 
     .#{$namespace}-icon {
       pointer-events: none;
     }
 
-    &:hover {
-      color: get-css-var('input-icon-color-hover');
+    &:hover,
+    &--holding {
+      color: value('input-icon-color-hover');
+    }
+
+    &--disabled {
+      &,
+      &:hover {
+        color: value('input-control-color-disabled');
+        cursor: not-allowed;
+      }
     }
 
     @extend %disabled-item;
@@ -73,26 +91,26 @@
   $plus: #{&}__plus;
   $minus: #{&}__minus;
 
-  $padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+  $padding: value('input-v-padding') value('input-h-padding');
 
   &--control-fade {
     padding: $padding;
     transition:
-      padding get-css-var('transition-base'),
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow');
+      padding value('transition-base'),
+      value('transition-background'),
+      value('transition-border'),
+      value('transition-shadow');
 
     #{$plus},
     #{$minus} {
       opacity: 0%;
-      transition: get-css-var('transition-color'), get-css-var('transition-opacity');
+      transition: value('transition-color'), value('transition-opacity');
     }
 
     &:hover,
     &:focus,
     &#{$focused} {
-      padding-right: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-end: calc(value('input-h-padding') + 20px);
 
       #{$plus},
       #{$minus} {
@@ -103,20 +121,18 @@
 
   &--control-left {
     padding: $padding;
-    padding-left: calc(get-css-var('input-h-padding') + 20px);
+    padding-inline-start: calc(value('input-h-padding') + 20px);
 
     #{$clear},
     #{$loading} {
-      right: auto;
-      left: calc(get-css-var('input-h-padding') + 20px);
+      inset-block-end: auto;
+      inset-inline-start: calc(value('input-h-padding') + 20px);
     }
 
     #{$plus},
     #{$minus} {
-      right: auto;
-      left: 0;
-      border-right-width: get-css-var('border-width');
-      border-left-width: 0;
+      inset-inline: 0 auto;
+      border-inline-width: 0 value('border-width');
     }
   }
 
@@ -126,7 +142,7 @@
     &:hover,
     &:focus,
     &#{$focused} {
-      padding-left: calc(get-css-var('input-h-padding') + 20px);
+      padding-inline-start: calc(value('input-h-padding') + 20px);
     }
   }
 
@@ -135,8 +151,7 @@
 
     #{$clear},
     #{$loading} {
-      right: auto;
-      left: auto;
+      inset-inline: auto;
     }
 
     #{$plus},

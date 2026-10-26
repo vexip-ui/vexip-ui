@@ -12,7 +12,7 @@ async function confirm() {
     content: '看我这么可怜，真的要卸载我吗？',
     confirmType: 'success',
     confirmText: '残忍卸载',
-    cancelText: '容我三思'
+    cancelText: '容我三思',
   })
 
   if (isConfirm) {

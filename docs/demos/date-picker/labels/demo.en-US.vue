@@ -7,7 +7,7 @@
       month: 'M',
       date: 'D'
     }"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
 </template>
 

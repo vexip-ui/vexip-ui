@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Pagination } from '..'
 
 describe('Pagination', () => {
@@ -23,7 +24,7 @@ describe('Pagination', () => {
 
   it('size', async () => {
     const wrapper = mount(Pagination, {
-      props: { size: 'small' }
+      props: { size: 'small' },
     })
 
     expect(wrapper.classes()).toContain('vxp-pagination--small')
@@ -37,8 +38,8 @@ describe('Pagination', () => {
       props: {
         active: 3,
         total: 50,
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     })
     await nextTick()
     await nextTick()
@@ -123,7 +124,7 @@ describe('Pagination', () => {
   })
 
   it('plugins', () => {
-    const wrapper = mount(() => <Pagination page-jump page-total page-count></Pagination>)
+    const wrapper = mount(() => <Pagination plugins={['total', , 'size', 'jump']}></Pagination>)
 
     expect(wrapper.find('.vxp-pagination__total').exists()).toBe(true)
     expect(wrapper.find('.vxp-pagination__size').exists()).toBe(true)

@@ -6,7 +6,7 @@
     v-model:active="active"
     transfer
     title="标题"
-    :width="500"
+    width="30vw"
   >
     <p>一些内容</p>
     <p>一些内容</p>

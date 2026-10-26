@@ -1,19 +1,11 @@
 <template>
   <Timeline>
-    <TimelineItem>
-      <span>Timeline node 1</span>
-    </TimelineItem>
-    <TimelineItem type="success">
-      <span>Timeline node 2</span>
-    </TimelineItem>
-    <TimelineItem type="warning">
-      <span>Timeline node 3</span>
-    </TimelineItem>
-    <TimelineItem type="error">
-      <span>Timeline node 4</span>
-    </TimelineItem>
-    <TimelineItem type="disabled">
-      <span>Timeline node 5</span>
+    <TimelineItem v-for="(itemType, index) in types" :key="index" :type="itemType">
+      <span>{{ `Timeline node ${index + 1}` }}</span>
     </TimelineItem>
   </Timeline>
 </template>
+
+<script setup lang="ts">
+const types = ['primary', 'info', 'success', 'warning', 'error', 'disabled'] as const
+</script>

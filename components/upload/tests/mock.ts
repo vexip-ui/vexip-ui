@@ -1,17 +1,11 @@
 import { nextTick } from 'vue'
+import { vi } from 'vitest'
 
 import type { DOMWrapper } from '@vue/test-utils'
-import type { SourceFile } from '../symbol'
+import type { UploadSourceFile } from '../symbol'
 
-const getMockFile = (element: Element, files: File[]) => {
-  Object.defineProperty(element, 'files', {
-    get() {
-      return files
-    },
-    set() {
-      return true
-    }
-  })
+const getMockFile = (element: HTMLInputElement, files: File[]) => {
+  vi.spyOn(element, 'files', 'get').mockReturnValue(files as unknown as FileList)
 }
 
 export const getXhr = (type: 'success' | 'error' | 'abort') => {
@@ -24,7 +18,7 @@ export const getXhr = (type: 'success' | 'error' | 'abort') => {
     upload = {
       onprogress(event: { loaded: number, total: number }) {
         return event
-      }
+      },
     }
 
     open() {
@@ -50,7 +44,7 @@ export const getXhr = (type: 'success' | 'error' | 'abort') => {
       this.onload()
       this.upload.onprogress({
         loaded: 50,
-        total: 100
+        total: 100,
       })
     }
 
@@ -87,7 +81,7 @@ export class FormData {
 export class FileReader {
   result = ''
 
-  readAsDataURL(source: SourceFile) {
+  readAsDataURL(source: UploadSourceFile) {
     this.result = `data:image/svg+xml;base64,${source.name}`
     nextTick(() => {
       this.onload()

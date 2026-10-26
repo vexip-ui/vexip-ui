@@ -2,7 +2,7 @@
   <RadioGroup v-model:value="currentAlign" button :options="aligns"></RadioGroup>
   <br />
   <br />
-  <Form :model="formModel" :label-align="currentAlign" style="max-width: 400px;">
+  <Form :model="formModel" :label-align="currentAlign" style="max-width: 400px">
     <FormItem label="Input" prop="input">
       <Input></Input>
     </FormItem>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 import type { FormLabelAlign } from 'vexip-ui'
 
@@ -24,7 +24,7 @@ const currentAlign = ref<FormLabelAlign>('right')
 const aligns: Array<{ label: FormLabelAlign, content: string }> = [
   { label: 'left', content: 'Left' },
   { label: 'right', content: 'Right' },
-  { label: 'top', content: 'Top' }
+  { label: 'top', content: 'Top' },
 ]
 
 const formModel = reactive({})

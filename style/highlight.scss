@@ -1,11 +1,12 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 $highlight: () !default;
 $highlight: map.merge(
   (
-    color: get-css-var('color-warning-base'),
+    color: value('color-warning-base'),
     bg-color: transparent
   ),
   $highlight
@@ -17,12 +18,13 @@ $highlight: map.merge(
   }
 
   @include basis;
+  @include inherit-color;
 
   &__key-word {
     padding: 0 1px;
     margin: 0 1px;
-    color: get-css-var('highlight-color');
+    color: value('highlight-color');
     text-indent: 0;
-    background-color: get-css-var('highlight-bg-color');
+    background-color: value('highlight-bg-color');
   }
 }

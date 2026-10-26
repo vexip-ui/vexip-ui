@@ -7,20 +7,25 @@
     :no-aside="!showAside"
   >
     <template #header-right>
-      <div style="margin-right: 24px;">
+      <div style="margin-inline-end: 24px">
         <Switch v-model:value="showAside" open-text="显示侧边栏" close-text="隐藏侧边栏"></Switch>
       </div>
     </template>
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; padding: 0 20px">
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
+      </div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
 import { createRouter, createWebHistory } from 'vue-router'
+
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 import type { RouteLocationRaw } from 'vue-router'
 
@@ -28,7 +33,7 @@ const showAside = ref(false)
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const router = createRouter({
@@ -40,7 +45,7 @@ const router = createRouter({
       meta: {
         label: '1',
         name: '菜单 1',
-        icon: EnvelopesBulk
+        icon: EnvelopesBulk,
       },
       children: [
         {
@@ -48,18 +53,18 @@ const router = createRouter({
           component: {},
           meta: {
             label: '1-1',
-            name: '子菜单 1'
-          }
+            name: '子菜单 1',
+          },
         },
         {
           path: 'c2',
           component: {},
           meta: {
             label: '1-2',
-            name: '子菜单 2'
-          }
-        }
-      ]
+            name: '子菜单 2',
+          },
+        },
+      ],
     },
     {
       path: '/m2',
@@ -67,8 +72,8 @@ const router = createRouter({
       meta: {
         label: '2',
         name: '菜单 2',
-        icon: City
-      }
+        icon: City,
+      },
     },
     {
       path: '/m3',
@@ -76,8 +81,8 @@ const router = createRouter({
       meta: {
         label: '3',
         name: '菜单 3',
-        icon: ChartPie
-      }
+        icon: ChartPie,
+      },
     },
     {
       path: '/m4',
@@ -85,17 +90,17 @@ const router = createRouter({
       meta: {
         label: '4',
         name: '菜单 4',
-        icon: User
-      }
+        icon: User,
+      },
     },
     {
       path: '/m5',
       component: {},
       meta: {
-        menu: false
-      }
-    }
-  ]
+        menu: false,
+      },
+    },
+  ],
 })
 
 // 模拟 push 方法

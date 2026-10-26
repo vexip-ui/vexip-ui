@@ -1,8 +1,8 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { BadgeType } from './symbol'
+import type { BadgeSlots, BadgeType } from './symbol'
 
 export const badgeProps = buildProps({
   content: [Number, String],
@@ -11,7 +11,8 @@ export const badgeProps = buildProps({
   isDot: booleanProp,
   type: String as PropType<BadgeType>,
   color: String,
-  onBadgeClick: eventProp<(event: MouseEvent) => void>()
+  slots: Object as PropType<BadgeSlots>,
+  onBadgeClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type BadgeProps = ExtractPropTypes<typeof badgeProps>

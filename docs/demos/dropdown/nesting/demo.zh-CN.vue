@@ -10,7 +10,7 @@
         <Dropdown trigger="click">
           <DropdownItem>
             选项三
-            <Icon :scale="0.8">
+            <Icon :scale="0.8" style="position: relative; inset-inline-start: 6px">
               <AngleRight></AngleRight>
             </Icon>
           </DropdownItem>

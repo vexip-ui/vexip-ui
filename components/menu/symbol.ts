@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { ComponentPublicInstance, InjectionKey, VNode } from 'vue'
 import type { RouteLocationRaw } from 'vue-router'
 import type { IconMinorProps } from '@/components/icon'
 
@@ -14,7 +14,7 @@ export interface MenuOptions {
   group?: boolean,
   meta?: Record<string, any>,
   route?: RouteLocationRaw,
-  children?: MenuOptions[]
+  children?: MenuOptions[],
 }
 
 export interface MenuItemState {
@@ -27,14 +27,14 @@ export interface MenuItemState {
   parentState: MenuItemState | null,
   transfer: Readonly<boolean | string>,
   cachedExpanded: boolean,
-  updateSonSelected(selected: boolean): void,
-  toggleGroupExpanded(expanded: boolean, upword?: boolean): void,
+  updateSonSelected(selected: boolean, upstream?: boolean): void,
+  toggleGroupExpanded(expanded: boolean, upward?: boolean): void,
   handleMouseEnter(): void,
-  handleMouseLeave(): void
+  handleMouseLeave(): void,
 }
 
 export interface MenuGroupState {
-  indent: number
+  indent: number,
 }
 
 export interface MenuState {
@@ -47,18 +47,58 @@ export interface MenuState {
   transfer: boolean | string,
   trigger: 'hover' | 'click',
   markerType: MenuMarkerType,
+  arrow: Record<string, any> | (() => any),
   handleSelect(label: string, meta: Record<string, any>, route?: RouteLocationRaw): void,
   handleExpand(label: string, expanded: boolean, meta: Record<string, any>): void,
   increaseItem(state: MenuItemState): void,
   decreaseItem(state: MenuItemState): void,
-  beforeExpand(): void
+  doForEachItem(cb: (item: MenuItemState) => void): void,
+  renderItemArrow: (params: MenuArrowSlotParams, renderDefault: () => VNode) => void,
 }
 
-export interface MenuExposed {
-  expandItemByLabel: (label: string) => void
+export interface MenuArrowSlotParams {
+  groupExpanded: boolean,
+  sonSelected: boolean,
 }
 
-export const baseIndentWidth = 20 // px
-export const MENU_ITEM_STATE: InjectionKey<MenuItemState> = Symbol('MENU_ITEM_STATE')
-export const MENU_GROUP_STATE: InjectionKey<MenuGroupState> = Symbol('MENU_GROUP_STATE')
-export const MENU_STATE: InjectionKey<MenuState> = Symbol('MENU_STATE')
+export interface MenuSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  arrow?: (params: MenuArrowSlotParams) => any,
+}
+
+export interface MenuItemSlots {
+  /**
+   * @internal
+   */
+  default?: () => any,
+  /**
+   * @internal
+   */
+  icon?: () => any,
+  /**
+   * @internal
+   */
+  group?: () => any,
+  arrow?: (params: MenuArrowSlotParams) => any,
+}
+
+export interface MenuExposed extends ComponentPublicInstance {
+  expandItemByLabel: (label: string) => void,
+}
+
+export interface MenuItemExposed extends ComponentPublicInstance {
+  groupExpanded: boolean,
+  isGroup: boolean,
+  showGroup: boolean,
+  isUsePopper: boolean,
+  handleSelect: () => void,
+  handleMouseEnter: () => void,
+  handleMouseLeave: () => void,
+}
+
+export const MENU_ITEM_STATE = '__VXP_MENU_ITEM_STATE' as unknown as InjectionKey<MenuItemState>
+export const MENU_GROUP_STATE = '__VXP_MENU_GROUP_STATE' as unknown as InjectionKey<MenuGroupState>
+export const MENU_STATE = '__VXP_MENU_STATE' as unknown as InjectionKey<MenuState>

@@ -3,25 +3,29 @@
     <template #aside-main="{ reduced }">
       <Menu transfer :options="menus" :reduced="reduced"></Menu>
     </template>
-    <template #aside-bottom="{ reduced, toggleReduce }">
-      <div style="padding: 16px; cursor: pointer;" @click="toggleReduce()">
+    <template #aside-bottom="{ reduced, toggleReduced }">
+      <div style="padding: 16px; cursor: pointer" @click="toggleReduced()">
         {{ reduced ? 'Expand Menu' : 'Collapse Menu' }}
       </div>
     </template>
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; padding: 0 20px">
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
+      </div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const menus: MenuOptions[] = [
@@ -32,25 +36,25 @@ const menus: MenuOptions[] = [
     children: [
       { label: '1-1', name: 'Child Menu 1' },
       { label: '1-2', name: 'Child Menu 2' },
-      { label: '1-3', name: 'Child Menu 3' }
-    ]
+      { label: '1-3', name: 'Child Menu 3' },
+    ],
   },
   {
     label: '2',
     name: 'Menu 2',
     icon: City,
-    disabled: true
+    disabled: true,
   },
   {
     label: '3',
     name: 'Menu 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: 'Menu 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 </script>
 

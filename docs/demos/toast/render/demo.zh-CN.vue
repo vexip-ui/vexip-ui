@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
+
 import { Icon, Toast } from 'vexip-ui'
 import { Lightbulb } from '@vexip-ui/icons'
 
@@ -19,8 +20,8 @@ function showCustomizedToast() {
         style: {
           marginBottom: '5px',
           color: '#339af0',
-          scale: 1.6
-        }
+          scale: 1.6,
+        },
       }),
       '自定义',
       h(
@@ -28,12 +29,12 @@ function showCustomizedToast() {
         {
           style: {
             color: '#fab005',
-            fontStyle: 'italic'
-          }
+            fontStyle: 'italic',
+          },
         },
-        '消息'
-      )
-    ]
+        '消息',
+      ),
+    ],
   })
 }
 </script>

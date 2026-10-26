@@ -4,7 +4,7 @@
       ref="form"
       :model="formModel"
       label-align="top"
-      style="max-width: 1000px;"
+      style="max-width: 1000px"
     >
       <FormItem label="Input" prop="input">
         <Input></Input>
@@ -70,8 +70,8 @@ const providedProps = {
   formItem: {
     required: true,
     span: 24,
-    lg: 12
-  }
+    lg: 12,
+  },
 }
 
 const formModel = reactive({})
@@ -88,7 +88,7 @@ function createOptions(depth: number, prefix = 'Op', iterator = 1) {
       value: `${prefix}-${i}`,
       label: `${prefix}-${i}`,
       disabled: i % 4 === 0,
-      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1)
+      children: isLeaf ? null : createOptions(depth, `${prefix}-${i}`, iterator + 1),
     })
   }
 

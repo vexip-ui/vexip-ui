@@ -20,8 +20,8 @@ import { ref } from 'vue'
 
 const provideProps = ref({
   grid: {
-    cellFlex: () => ({ justify: 'center', align: 'middle' })
-  }
+    cellFlex: () => ({ justify: 'center', align: 'middle' }),
+  },
 })
 </script>
 

@@ -1,6 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { GithubB, Spinner } from '@vexip-ui/icons'
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
+import { User } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Transfer } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'
@@ -10,18 +12,18 @@ vi.useFakeTimers()
 function getValue() {
   return Array.from({ length: 20 }, (_, index) => index)
 }
-function createOptions(includeDisbaled = false) {
+function createOptions(includeDisabled = false) {
   return Array.from({ length: 40 }, (_, index) => ({
     value: index,
     label: `选项${index + 1}`,
-    disabled: includeDisbaled && index % 6 === 0
+    disabled: includeDisabled && index % 6 === 0,
   }))
 }
 
 function getPanels(wrapper: VueWrapper<any>) {
   return {
     source: wrapper.find('.vxp-transfer__panel--source'),
-    target: wrapper.find('.vxp-transfer__panel--target')
+    target: wrapper.find('.vxp-transfer__panel--target'),
   }
 }
 
@@ -60,7 +62,7 @@ describe('Transfer', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Transfer state={state}></Transfer>)
 
       expect(wrapper.find('.vxp-transfer').classes()).toContain(`vxp-transfer--${state}`)
@@ -81,7 +83,7 @@ describe('Transfer', () => {
     expect(onSelect).toHaveBeenCalledWith(
       'source',
       { source: [options[20].value], target: [] },
-      { source: [options[20]], target: [] }
+      { source: [options[20]], target: [] },
     )
 
     await target.find('.vxp-transfer__option').trigger('click')
@@ -89,7 +91,7 @@ describe('Transfer', () => {
     expect(onSelect).toHaveBeenCalledWith(
       'target',
       { source: [options[20].value], target: [options[0].value] },
-      { source: [options[20]], target: [options[0]] }
+      { source: [options[20]], target: [options[0]] },
     )
   })
 
@@ -119,14 +121,14 @@ describe('Transfer', () => {
     const { source, target } = getPanels(wrapper)
     const buttons = wrapper.findAll('.vxp-button')
 
-    expect(buttons[0].attributes('disabled')).toEqual('true')
-    expect(buttons[1].attributes('disabled')).toEqual('true')
+    expect(buttons[0].attributes('disabled')).toEqual('')
+    expect(buttons[1].attributes('disabled')).toEqual('')
 
     await source.find('.vxp-transfer__option').trigger('click')
-    expect(buttons[0].attributes('disabled')).toEqual('false')
+    expect(buttons[0].attributes('disabled')).toBeUndefined()
 
     await target.find('.vxp-transfer__option').trigger('click')
-    expect(buttons[1].attributes('disabled')).toEqual('false')
+    expect(buttons[1].attributes('disabled')).toBeUndefined()
   })
 
   it('change', async () => {
@@ -181,24 +183,24 @@ describe('Transfer', () => {
     const { source, target } = getPanels(wrapper)
 
     expect(source.find('.vxp-transfer__loading').exists()).toBe(false)
-    expect(source.findComponent(Spinner).exists()).toBe(false)
+    expect(source.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
     expect(target.find('.vxp-transfer__loading').exists()).toBe(false)
-    expect(target.findComponent(Spinner).exists()).toBe(false)
+    expect(target.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(source.find('.vxp-transfer__loading').exists()).toBe(true)
-    expect(source.findComponent(Spinner).exists()).toBe(true)
+    expect(source.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
     expect(target.find('.vxp-transfer__loading').exists()).toBe(true)
-    expect(target.findComponent(Spinner).exists()).toBe(true)
+    expect(target.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('loading icon', () => {
-    const wrapper = mount(() => <Transfer loading loading-icon={GithubB}></Transfer>)
+    const wrapper = mount(() => <Transfer loading loading-icon={User}></Transfer>)
     const { source, target } = getPanels(wrapper)
 
-    expect(source.findComponent(Spinner).exists()).toBe(false)
-    expect(source.findComponent(GithubB).exists()).toBe(true)
-    expect(target.findComponent(Spinner).exists()).toBe(false)
-    expect(target.findComponent(GithubB).exists()).toBe(true)
+    expect(source.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(source.findComponent(User).exists()).toBe(true)
+    expect(target.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
+    expect(target.findComponent(User).exists()).toBe(true)
   })
 })

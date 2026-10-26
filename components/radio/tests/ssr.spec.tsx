@@ -2,16 +2,18 @@
  * @vitest-environment node
  */
 
-import { describe, it, expect } from 'vitest'
-import { createSSRApp } from 'vue'
 import { RadioGroup } from '@/components/radio-group'
+
+import { describe, expect, it } from 'vitest'
+import { createSSRApp } from 'vue'
+
 import { renderToString } from 'vue/server-renderer'
 import { Radio } from '..'
 
 describe('SSR for Radio', () => {
   it('render', async () => {
     try {
-      await renderToString(createSSRApp(() => <Radio></Radio>))
+      await renderToString(createSSRApp(() => <Radio label={'1'}></Radio>))
     } catch (error) {
       expect(error).toBeFalsy()
     }
@@ -25,7 +27,7 @@ describe('SSR for Radio', () => {
             <Radio label={'1'}></Radio>
             <Radio label={'2'}></Radio>
           </RadioGroup>
-        ))
+        )),
       )
     } catch (error) {
       expect(error).toBeFalsy()

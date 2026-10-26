@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { olProps } from './props'
 
@@ -8,7 +9,7 @@ export default defineComponent({
   emits: [],
   setup(_props, { slots }) {
     const props = useProps('ol', _props, {
-      type: '1'
+      type: '1',
     })
 
     const nh = useNameHelper('ol')
@@ -18,5 +19,5 @@ export default defineComponent({
         {slots.default?.()}
       </ol>
     )
-  }
+  },
 })

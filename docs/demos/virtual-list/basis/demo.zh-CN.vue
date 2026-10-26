@@ -1,5 +1,10 @@
 <template>
-  <VirtualList :items="items" use-bar-track style="height: 200px;">
+  <VirtualList
+    ref="virtualList"
+    :items="items"
+    use-bar-track
+    style="height: 200px"
+  >
     <template #default="{ item }">
       <li class="virtual-list__item" :style="{ minHeight: `${item.height}px` }">
         {{ item.value }}
@@ -16,9 +21,9 @@ const items = ref(
     return {
       id: index,
       value: `元素${index}`,
-      height: Math.round(Math.random() * 36 + 36)
+      height: Math.round(Math.random() * 36 + 36),
     }
-  })
+  }),
 )
 </script>
 

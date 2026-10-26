@@ -1,8 +1,14 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ConfigurableProps } from '@vexip-ui/config'
-import type { TabNavAlign, TabNavPlacement, TabNavOptions } from './symbol'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
+import type {
+  ChangeEvent,
+  TabNavAlign,
+  TabNavOptions,
+  TabNavPlacement,
+  TabNavSlots,
+} from './symbol'
 
 export const tabNavProps = buildProps({
   active: [String, Number],
@@ -12,10 +18,21 @@ export const tabNavProps = buildProps({
   placement: String as PropType<TabNavPlacement>,
   closable: booleanProp,
   showAdd: booleanProp,
-  onChange: eventProp<(label: string | number) => void>(),
+  slots: Object as PropType<TabNavSlots>,
+  onChange: eventProp<EventListener<ChangeEvent>>(),
   onAdd: eventProp(),
-  onClose: eventProp<(label: string | number) => void>()
+  onClose: eventProp<EventListener<ChangeEvent>>(),
 })
 
 export type TabNavProps = ExtractPropTypes<typeof tabNavProps>
 export type TabNavCProps = ConfigurableProps<TabNavProps>
+
+export const tabNavItemProps = buildProps({
+  label: [String, Number],
+  disabled: booleanProp,
+  icon: iconProp,
+  closable: booleanProp,
+  onToggle: eventProp<(active: boolean) => void>(),
+})
+
+export type TabNavItemProps = ExtractPropTypes<typeof tabNavItemProps>

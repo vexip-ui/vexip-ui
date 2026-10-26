@@ -14,7 +14,7 @@ function showToast1() {
   Toast.error({
     content: '包含遮罩',
     closable: true,
-    showMask: true
+    showMask: true,
   })
 }
 
@@ -23,7 +23,7 @@ function showToast2() {
     content: '点击外部关闭',
     showMask: true,
     maskClose: true,
-    duration: 5000
+    duration: 5000,
   })
 }
 </script>

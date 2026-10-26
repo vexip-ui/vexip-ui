@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs'
-import { toKebabCase, isNull } from '@vexip-ui/utils'
-import { resolveModule } from 'local-pkg'
+
+import { isNull, toKebabCase, warnOnce } from '@vexip-ui/utils'
+import { getPackageInfoSync, resolveModule } from 'local-pkg'
+import { compare } from 'compare-versions'
 
 import type { ComponentInfo, ComponentResolver } from 'unplugin-vue-components/types'
 
@@ -17,6 +19,12 @@ export interface VexipUIResolverOptions {
    * @default false
    */
   importDarkTheme?: boolean,
+  /**
+   * whether import all styles at once
+   *
+   * @default false
+   */
+  fullStyle?: boolean,
   /**
    * prefix for name of components
    *
@@ -40,7 +48,38 @@ export interface VexipUIResolverOptions {
    *
    * @default undefined
    */
-  iconPrefix?: string
+  iconPrefix?: string,
+}
+
+function throwLoadError() {
+  throw new Error('[vexip-ui:plugins] failed to load vexip-ui, have you installed it?')
+}
+
+let version: string | undefined
+let lowerVersion = false
+let supportFullStyle = false
+
+function queryVersion() {
+  try {
+    version =
+      getPackageInfoSync('vexip-ui')?.version ??
+      getPackageInfoSync('vexip-ui', { paths: [resolveModule('vexip-ui') || process.cwd()] })
+        ?.version
+
+    if ((lowerVersion = compare(version!, '2.1.10', '<'))) {
+      warnOnce(
+        "[vexip-ui:plugins] style has been refactored in vexip-ui@2.1.10, you'd better " +
+          'upgrade vexip-ui to support import style via esm.',
+      )
+    }
+
+    supportFullStyle = compare(version!, '2.2.8', '>=')
+  } catch (e) {
+    console.error(e)
+    throwLoadError()
+  }
+
+  if (!version) throwLoadError()
 }
 
 let components: string[] | undefined
@@ -50,9 +89,10 @@ let directives: Record<string, string[]> | undefined
 function queryMetaData() {
   try {
     const root = resolveModule('vexip-ui') || process.cwd()
-    const path =
-      resolveModule('vexip-ui/meta-data.json') ||
-      resolveModule('vexip-ui/meta-data.json', { paths: [root] })
+    const metaPath = compare(version!, '2.1.18', '<')
+      ? 'vexip-ui/meta-data.json'
+      : 'vexip-ui/meta-data/components.json'
+    const path = resolveModule(metaPath) || resolveModule(metaPath, { paths: [root] })
     const metaData = JSON.parse(readFileSync(path!, 'utf-8'))
 
     components = metaData.components
@@ -60,14 +100,31 @@ function queryMetaData() {
     directives = metaData.directives
   } catch (e) {
     console.error(e)
-    throw new Error('[vexip-ui:plugins] failed to load vexip-ui, have you installed it?')
+    throwLoadError()
   }
 }
 
 function getSideEffects(name: string, options: VexipUIResolverOptions) {
-  const { importStyle, importDarkTheme } = options
+  const { importStyle, importDarkTheme, fullStyle } = options
 
   if (!importStyle) return
+
+  if (fullStyle) {
+    if (supportFullStyle) {
+      if (importStyle === 'sass') {
+        return [...(importDarkTheme ? ['vexip-ui/es/style/dark'] : []), 'vexip-ui/es/style/index']
+      } else if (importStyle === true || importStyle === 'css') {
+        return [...(importDarkTheme ? ['vexip-ui/es/css/dark'] : []), 'vexip-ui/es/css/index']
+      }
+
+      return
+    }
+
+    warnOnce(
+      "[vexip-ui:plugins] 'fullStyle' requires vexip-ui@2.2.8 or newer, you'd better " +
+        'upgrade vexip-ui to support the feature.',
+    )
+  }
 
   if (styleAlias && styleAlias[name]) {
     name = styleAlias[name]
@@ -75,24 +132,34 @@ function getSideEffects(name: string, options: VexipUIResolverOptions) {
 
   name = toKebabCase(name)
 
+  if (lowerVersion) {
+    if (importStyle === 'sass') {
+      return [
+        'vexip-ui/style/preset.scss',
+        ...(importDarkTheme ? ['vexip-ui/style/dark/preset.scss'] : []),
+        `vexip-ui/style/${name}.scss`,
+      ]
+    } else if (importStyle === true || importStyle === 'css') {
+      return [
+        'vexip-ui/css/preset.css',
+        ...(importDarkTheme ? ['vexip-ui/themes/dark/index.css'] : []),
+        `vexip-ui/css/${name}.css`,
+      ]
+    }
+
+    return
+  }
+
   if (importStyle === 'sass') {
-    return [
-      'vexip-ui/style/preset.scss',
-      ...(importDarkTheme ? ['vexip-ui/style/dark/preset.scss'] : []),
-      `vexip-ui/style/${name}.scss`
-    ]
+    return [...(importDarkTheme ? ['vexip-ui/es/style/dark'] : []), `vexip-ui/es/style/${name}`]
   } else if (importStyle === true || importStyle === 'css') {
-    return [
-      'vexip-ui/css/preset.css',
-      ...(importDarkTheme ? ['vexip-ui/theme/dark/index.css'] : []),
-      `vexip-ui/css/${name}.css`
-    ]
+    return [...(importDarkTheme ? ['vexip-ui/es/css/dark'] : []), `vexip-ui/es/css/${name}`]
   }
 }
 
 function resolveComponent(
   name: string,
-  options: VexipUIResolverOptions
+  options: VexipUIResolverOptions,
 ): ComponentInfo | undefined {
   if (!components) return
 
@@ -109,13 +176,13 @@ function resolveComponent(
   return {
     name,
     from: 'vexip-ui',
-    sideEffects: getSideEffects(name, options)
+    sideEffects: getSideEffects(name, options),
   }
 }
 
 function resolveDirective(
   name: string,
-  options: VexipUIResolverOptions
+  options: VexipUIResolverOptions,
 ): ComponentInfo | undefined {
   if (!options.directives || !directives) return
 
@@ -129,11 +196,11 @@ function resolveDirective(
     from: 'vexip-ui',
     sideEffects: relatedComponents.length
       ? [
-          ...new Set(
-            relatedComponents.map(component => getSideEffects(component, options) || []).flat()
-          )
-        ]
-      : undefined
+        ...new Set(
+          relatedComponents.map(component => getSideEffects(component, options) || []).flat(),
+        ),
+      ]
+      : undefined,
   }
 }
 
@@ -142,7 +209,7 @@ const firstNumberRE = /^I[0-9].*/
 
 function resolveIconComponent(
   name: string,
-  options: VexipUIResolverOptions
+  options: VexipUIResolverOptions,
 ): ComponentInfo | undefined {
   if (!options.resolveIcon) return
 
@@ -162,7 +229,7 @@ function resolveIconComponent(
 
   return {
     name,
-    from: '@vexip-ui/icons'
+    from: '@vexip-ui/icons',
   }
 }
 
@@ -180,26 +247,24 @@ export function VexipUIResolver(options: VexipUIResolverOptions = {}): Component
     {
       type: 'component',
       resolve: name => {
-        if (!components) {
-          queryMetaData()
-        }
+        !version && queryVersion()
+        !components && queryMetaData()
 
         return resolveComponent(name, options)
-      }
+      },
     },
     {
       type: 'directive',
       resolve: name => {
-        if (!directives) {
-          queryMetaData()
-        }
+        !version && queryVersion()
+        !directives && queryMetaData()
 
         return resolveDirective(name, options)
-      }
+      },
     },
     {
       type: 'component',
-      resolve: name => resolveIconComponent(name, options)
-    }
+      resolve: name => resolveIconComponent(name, options),
+    },
   ]
 }

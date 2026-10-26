@@ -1,5 +1,13 @@
-import { defineComponent, onMounted, onBeforeUnmount, getCurrentInstance, renderSlot } from 'vue'
-import { useProps, emitEvent } from '@vexip-ui/config'
+import {
+  defineComponent,
+  getCurrentInstance,
+  onBeforeUnmount,
+  onMounted,
+  renderSlot,
+  watch,
+} from 'vue'
+
+import { emitEvent, useProps } from '@vexip-ui/config'
 import { useResize } from '@vexip-ui/hooks'
 import { throttle } from '@vexip-ui/utils'
 import { resizeObserverProps } from './props'
@@ -11,8 +19,9 @@ export default defineComponent({
     const props = useProps('resizeObserver', _props, {
       throttle: {
         default: false,
-        validator: (value: boolean | number) => typeof value === 'boolean' || value > 0
-      }
+        validator: value => typeof value === 'boolean' || value > 0,
+      },
+      disabled: false,
     })
 
     const { observeResize, unobserveResize } = useResize()
@@ -27,29 +36,55 @@ export default defineComponent({
       ? throttle(handleResize, typeof props.throttle === 'boolean' ? 16 : props.throttle)
       : handleResize
 
+    const instance = getCurrentInstance()
+
     onMounted(() => {
-      const el = getCurrentInstance()?.proxy?.$el as Element | null
-
-      if (el?.nextElementSibling) {
-        if (el.nextElementSibling !== el.nextSibling && el.nodeType === 3 && el.nodeValue !== '') {
-          return
-        }
-
-        observeResize(el.nextElementSibling, throttleResize)
-        observed = true
-      }
+      watch(
+        () => props.disabled,
+        value => {
+          value ? unobserve() : observe()
+        },
+        { immediate: true, flush: 'post' },
+      )
     })
+
+    let targetEl: Element | null = null
 
     onBeforeUnmount(() => {
-      if (observed) {
-        const el = getCurrentInstance()?.proxy?.$el as Element | null
-
-        if (el?.nextElementSibling) {
-          unobserveResize(el.nextElementSibling)
-        }
+      if (observed && targetEl) {
+        unobserveResize(targetEl)
       }
     })
 
+    function observe() {
+      if (observed) return
+
+      const el = instance?.proxy?.$el as Element | null
+      let target: Element | null = null
+
+      if (el) {
+        if (el.nodeType === 1) {
+          target = el
+        } else if (el.nextElementSibling) {
+          target = el.nextElementSibling
+        }
+      }
+
+      if (target) {
+        observeResize(target, throttleResize)
+        targetEl = target
+        observed = true
+      }
+    }
+
+    function unobserve() {
+      if (observed && targetEl) {
+        unobserveResize(targetEl)
+        targetEl = null
+        observed = false
+      }
+    }
+
     return () => renderSlot(slots, 'default')
-  }
+  },
 })

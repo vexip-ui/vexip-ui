@@ -1,4 +1,4 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
 import type { ExtractPropTypes } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
@@ -16,7 +16,7 @@ export const splitProps = buildProps({
   onReset: eventProp(),
   onMoveStart: eventProp<(value: number) => void>(),
   onMove: eventProp<(value: number) => void>(),
-  onMoveEnd: eventProp<(value: number) => void>()
+  onMoveEnd: eventProp<(value: number) => void>(),
 })
 
 export type SplitProps = ExtractPropTypes<typeof splitProps>

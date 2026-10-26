@@ -1,1 +1,2 @@
-import '@/style/avatar.scss'
+import '@/components/preset/style'
+import '@/components/avatar/style'

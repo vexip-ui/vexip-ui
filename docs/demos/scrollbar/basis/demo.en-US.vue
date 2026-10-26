@@ -10,13 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
 import { boundRange, multipleFixed } from '@vexip-ui/utils'
 
-import type { Scrollbar } from 'vexip-ui'
+import type { ScrollbarExposed } from 'vexip-ui'
 
 const pane = ref<HTMLElement>()
-const bar = ref<InstanceType<typeof Scrollbar>>()
+const bar = ref<ScrollbarExposed>()
 const barLength = ref(35)
 
 onMounted(() => {
@@ -25,7 +26,7 @@ onMounted(() => {
   barLength.value = boundRange(
     (pane.value.offsetHeight / (pane.value.scrollHeight || 1)) * 100,
     5,
-    99
+    99,
   )
 })
 

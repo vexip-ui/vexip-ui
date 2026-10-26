@@ -1,10 +1,20 @@
-import { buildProps, booleanProp, booleanStringProp, classProp, eventProp } from '@vexip-ui/config'
+import {
+  booleanProp,
+  booleanStringProp,
+  buildProps,
+  classProp,
+  eventProp,
+  localeProp,
+  sizeProp,
+} from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { DrawerPlacement } from './symbol'
+import type { ButtonProps, ButtonType } from '@/components/button'
+import type { DrawerPlacement, DrawerSlots } from './symbol'
 
 export const drawerProps = buildProps({
+  locale: localeProp('drawer'),
   transfer: booleanStringProp,
   active: booleanProp,
   width: [Number, String],
@@ -23,6 +33,14 @@ export const drawerProps = buildProps({
   confirmText: String,
   cancelText: String,
   loading: booleanProp,
+  confirmType: String as PropType<ButtonType>,
+  confirmProps: Object as PropType<ButtonProps>,
+  cancelType: String as PropType<ButtonType>,
+  cancelProps: Object as PropType<ButtonProps>,
+  actionSize: sizeProp,
+  undivided: booleanProp,
+  disableEsc: booleanProp,
+  slots: Object as PropType<DrawerSlots>,
   onToggle: eventProp<(active: boolean) => void>(),
   onClose: eventProp(),
   onShow: eventProp(),
@@ -31,7 +49,7 @@ export const drawerProps = buildProps({
   onResizeMove: eventProp<(rect: { width: number, height: number }) => void>(),
   onResizeEnd: eventProp<(rect: { width: number, height: number }) => void>(),
   onConfirm: eventProp(),
-  onCancel: eventProp()
+  onCancel: eventProp(),
 })
 
 export type DrawerProps = ExtractPropTypes<typeof drawerProps>

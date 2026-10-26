@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
 import { Viewer } from '..'
 
 vi.useFakeTimers()
@@ -18,7 +19,7 @@ async function toggleMove(el: HTMLElement, value = 40) {
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 
   const upEvent = new CustomEvent('pointerup') as any
@@ -49,7 +50,7 @@ describe('Viewer', () => {
   })
 
   it('toolbar placement', () => {
-    (
+    ;(
       [
         'top',
         'top-start',
@@ -62,18 +63,18 @@ describe('Viewer', () => {
         'left-end',
         'right',
         'right-start',
-        'right-end'
+        'right-end',
       ] as const
     ).forEach(placement => {
       const wrapper = mount(() => <Viewer toolbar-placement={placement}></Viewer>)
 
       expect(wrapper.find('.vxp-viewer__toolbar').classes()).toContain(
-        `vxp-viewer__toolbar--${placement}`
+        `vxp-viewer__toolbar--${placement}`,
       )
 
       if (placement.startsWith('left') || placement.startsWith('right')) {
         expect(wrapper.find('.vxp-viewer__toolbar').classes()).toContain(
-          'vxp-viewer__toolbar--vertical'
+          'vxp-viewer__toolbar--vertical',
         )
       }
     })
@@ -90,7 +91,7 @@ describe('Viewer', () => {
     await nextTick()
     await toggleMove(container)
     expect(wrapper.find('.vxp-viewer__content').attributes('style')).toContain(
-      'translate3d(40px, 40px, 0)'
+      'translate3d(40px, 40px, 0)',
     )
   })
 
@@ -110,15 +111,29 @@ describe('Viewer', () => {
     expect(wrapper.find('.vxp-viewer__content').attributes('style')).toContain('scale(1)')
   })
 
+  it('action layout', async () => {
+    const layout = [['flip-x'], ['flip-y']]
+    const wrapper = mount(() => <Viewer action-layout={layout}></Viewer>)
+
+    await nextTick()
+
+    const els = wrapper.findAll('.vxp-viewer__toolbar > *')
+
+    expect(els.length).toBe(3)
+    expect(els[0].classes()).toContain('vxp-viewer__flip-x')
+    expect(els[1].classes()).toContain('vxp-divider')
+    expect(els[2].classes()).toContain('vxp-viewer__flip-y')
+  })
+
   it('custom actions', async () => {
     const process = vi.fn()
     const actions = [
       {
         name: 'test',
         title: 'Title',
-        icon: GithubB,
-        process
-      }
+        icon: Github,
+        process,
+      },
     ]
     const wrapper = mount(() => (
       <Viewer actions={actions}>
@@ -128,7 +143,7 @@ describe('Viewer', () => {
     const toolbar = wrapper.find('.vxp-viewer__toolbar')
 
     expect(toolbar.find('button[title="Title"]').exists()).toBe(true)
-    expect(toolbar.findComponent(GithubB).exists()).toBe(true)
+    expect(toolbar.findComponent(Github).exists()).toBe(true)
 
     toolbar.find('button[title="Title"]').trigger('click')
     expect(process).toHaveBeenCalled()

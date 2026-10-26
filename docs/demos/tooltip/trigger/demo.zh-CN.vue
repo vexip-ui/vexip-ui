@@ -18,5 +18,11 @@
       </template>
       一些提示的内容
     </Tooltip>
+    <Tooltip trigger="hover-focus" placement="bottom">
+      <template #trigger>
+        <Button> 悬停聚焦均触发 </Button>
+      </template>
+      一些提示的内容
+    </Tooltip>
   </Space>
 </template>

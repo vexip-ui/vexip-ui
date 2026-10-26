@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Linker } from '..'
 
 describe('Linker', () => {
@@ -11,7 +12,7 @@ describe('Linker', () => {
   })
 
   it('type', () => {
-    (['primary', 'success', 'error', 'warning', 'info'] as const).forEach(type => {
+    ;(['primary', 'success', 'error', 'warning', 'info'] as const).forEach(type => {
       const wrapper = mount(() => <Linker type={type}></Linker>)
 
       expect(wrapper.find('.vxp-linker').classes()).toContain(`vxp-linker--${type}`)

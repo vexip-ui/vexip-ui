@@ -6,7 +6,7 @@
     :model="formModel"
     :size="currentSize"
     label-align="top"
-    style="max-width: 400px;"
+    style="max-width: 400px"
   >
     <FormItem label="Input" prop="input">
       <Input></Input>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 import type { ComponentSize } from 'vexip-ui'
 
@@ -29,7 +29,7 @@ const currentSize = ref<ComponentSize>('default')
 const sizes: Array<{ label: ComponentSize, content: string }> = [
   { label: 'small', content: 'Small' },
   { label: 'default', content: 'Default' },
-  { label: 'large', content: 'Large' }
+  { label: 'large', content: 'Large' },
 ]
 
 const formModel = reactive({})

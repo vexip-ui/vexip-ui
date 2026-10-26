@@ -1,1 +1,2 @@
-import '@/style/breadcrumb.scss'
+import '@/components/preset/style'
+import '@/components/breadcrumb/style'

@@ -1,6 +1,6 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-. "$(dirname "$0")/common.sh"
+huskyDir=$(dirname "$0")
+
+. "$huskyDir/scripts/common.sh"
 
 [ -n "$CI" ] && exit 0
 

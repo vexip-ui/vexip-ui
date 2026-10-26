@@ -7,5 +7,5 @@ import { ref } from 'vue'
 
 import type { Color } from 'vexip-ui'
 
-const color = ref<Color | null>('rgba(51, 154, 240, 0.6)')
+const color = ref<Color>('rgba(51, 154, 240, 0.6)')
 </script>

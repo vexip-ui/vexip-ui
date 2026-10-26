@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Drawer } from '..'
 
 vi.useFakeTimers()
@@ -22,7 +23,7 @@ describe('Drawer', () => {
     const wrapper = mount(() => (
       <Drawer title={TEXT}>
         {{
-          title: () => <span class={'title'}></span>
+          title: () => <span class={'title'}></span>,
         }}
       </Drawer>
     ))
@@ -36,7 +37,7 @@ describe('Drawer', () => {
     const wrapper = mount(() => (
       <Drawer title={TEXT}>
         {{
-          close: () => <span class={'close'}></span>
+          close: () => <span class={'close'}></span>,
         }}
       </Drawer>
     ))
@@ -71,8 +72,8 @@ describe('Drawer', () => {
       props: {
         active: true,
         onToggle,
-        onClose
-      }
+        onClose,
+      },
     })
     const mask = wrapper.find('.vxp-masker__mask')
 
@@ -90,11 +91,11 @@ describe('Drawer', () => {
   })
 
   it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
+    ;(['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
       const wrapper = mount(() => <Drawer placement={placement}></Drawer>)
 
       expect(wrapper.find('.vxp-drawer__wrapper').classes()).toContain(
-        `vxp-drawer__wrapper--${placement}`
+        `vxp-drawer__wrapper--${placement}`,
       )
     })
   })
@@ -139,7 +140,7 @@ describe('Drawer', () => {
     moveEvent.clientX = 40
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onResizeMove).toHaveBeenCalled()
     expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 160 }))
     await nextTick()
@@ -152,5 +153,86 @@ describe('Drawer', () => {
 
     await nextTick()
     expect(drawer.classes()).not.toContain('vxp-drawer__wrapper--resizing')
+  })
+
+  it('footer', () => {
+    const wrapper = mount(() => <Drawer footer></Drawer>)
+
+    expect(wrapper.find('.vxp-drawer__footer').exists()).toBe(true)
+    expect(wrapper.findAllComponents('.vxp-button').length).toBe(2)
+  })
+
+  it('render', () => {
+    const wrapper = mount(() => (
+      <Drawer footer confirm-type={'success'} cancel-type={'error'} action-size={'large'}>
+        {TEXT}
+      </Drawer>
+    ))
+    const buttons = wrapper.findAllComponents('.vxp-button')
+
+    expect(buttons[0].classes()).toContain('vxp-button--error')
+    expect(buttons[0].classes()).toContain('vxp-button--large')
+    expect(buttons[1].classes()).toContain('vxp-button--success')
+    expect(buttons[1].classes()).toContain('vxp-button--large')
+  })
+
+  it('undivided', () => {
+    const wrapper = mount(() => <Drawer undivided>{TEXT}</Drawer>)
+
+    expect(wrapper.find('.vxp-drawer').classes()).toContain('vxp-drawer--undivided')
+  })
+
+  it('mask close', async () => {
+    const onToggle = vi.fn()
+    const onClose = vi.fn()
+    const wrapper = mount(Drawer, {
+      props: {
+        active: true,
+        onToggle,
+        onClose,
+      },
+    })
+
+    await wrapper.find('.vxp-masker__mask').trigger('click')
+
+    expect(onToggle).toHaveBeenCalledWith(false)
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('before close', async () => {
+    const onBeforeClose = vi.fn()
+    const wrapper = mount(Drawer, {
+      props: { closable: true, onBeforeClose },
+    })
+
+    const openAndClose = async () => {
+      wrapper.vm.currentActive = true
+      await nextTick()
+      await wrapper.find('.vxp-masker__mask').trigger('click')
+      await nextTick()
+    }
+
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(false)
+    expect(onBeforeClose).toHaveBeenCalled()
+
+    onBeforeClose.mockReturnValue(false)
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+
+    let resolveRef: (value: boolean) => void
+    onBeforeClose.mockReset()
+    onBeforeClose.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          resolveRef = resolve
+        }),
+    )
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+    resolveRef!(true)
+    await nextTick()
+    await nextTick()
+    expect(wrapper.vm.currentActive).toBe(false)
   })
 })

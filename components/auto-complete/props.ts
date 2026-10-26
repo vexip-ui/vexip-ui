@@ -1,36 +1,41 @@
 import {
-  buildProps,
   booleanProp,
   booleanStringProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  localeProp,
   sizeProp,
   stateProp,
-  eventProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
+import type { ConfigurableProps, EventListener } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type {
+  AutoCompleteFilter,
   AutoCompleteKeyConfig,
-  AutoCompleteOptionState,
-  AutoCompleteRawOption
+  AutoCompleteRawOption,
+  AutoCompleteSlots,
+  ChangeEvent,
+  EnterEvent,
 } from './symbol'
 
 export const autoCompleteProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('input'),
   transfer: booleanStringProp,
   value: [String, Number],
   options: Array as PropType<AutoCompleteRawOption[]>,
   filter: {
-    type: [Boolean, Function] as PropType<
-      boolean | ((value: string | number, options: AutoCompleteOptionState) => boolean)
-    >,
-    default: null
+    type: [Boolean, Function] as PropType<boolean | AutoCompleteFilter>,
+    default: null,
   },
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   placeholder: String,
   disabled: booleanProp,
@@ -42,17 +47,26 @@ export const autoCompleteProps = buildProps({
   autofocus: booleanProp,
   spellcheck: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   transparent: booleanProp,
+  debounce: booleanProp,
+  delay: Number,
   keyConfig: Object as PropType<Omit<AutoCompleteKeyConfig, 'label'>>,
-  onSelect: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
+  showEmpty: booleanProp,
+  name: String,
+  popperAlive: booleanProp,
+  slots: Object as PropType<AutoCompleteSlots>,
+  shift: booleanProp,
+  onFocus: eventProp<(event: FocusEvent) => void>(),
+  onBlur: eventProp<(event: FocusEvent) => void>(),
+  onSelect: eventProp<EventListener<ChangeEvent>>(),
   onInput: eventProp<(value: string) => void>(),
-  onChange: eventProp<(value: string | number, data: AutoCompleteRawOption) => void>(),
+  onChange: eventProp<EventListener<ChangeEvent>>(),
   onToggle: eventProp<(visible: boolean) => void>(),
-  onEnter: eventProp<(value: string | number) => void>(),
-  onClear: eventProp()
+  onEnter: eventProp<EventListener<EnterEvent>>(),
+  onClear: eventProp(),
 })
 
 export type AutoCompleteProps = ExtractPropTypes<typeof autoCompleteProps>

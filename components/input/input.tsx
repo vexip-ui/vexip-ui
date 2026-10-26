@@ -1,24 +1,28 @@
-import { defineComponent, ref, computed, watch, Transition, nextTick } from 'vue'
 import { Icon } from '@/components/icon'
 import { useFieldStore } from '@/components/form'
+import { Renderer } from '@/components/renderer'
+
+import { Transition, computed, defineComponent, nextTick, ref, renderSlot, toRef, watch } from 'vue'
+
 import { useHover } from '@vexip-ui/hooks'
 import {
-  useNameHelper,
-  useProps,
-  useLocale,
+  createIconProp,
   createSizeProp,
   createStateProp,
-  emitEvent
+  emitEvent,
+  useIcons,
+  useLocale,
+  useNameHelper,
+  useProps,
 } from '@vexip-ui/config'
-import { isNull, noop, throttle, debounce } from '@vexip-ui/utils'
-import { EyeSlashR, EyeR, CircleXmark, Spinner } from '@vexip-ui/icons'
+import { debounce, isNull, noop, throttle, toNumber } from '@vexip-ui/utils'
 import { inputProps } from './props'
 
-import type { InputType } from './symbol'
+import type { ChangeEvent, InputType } from './symbol'
 
 type InputEventType = 'input' | 'change'
 
-const inputTypes = Object.freeze<InputType>(['text', 'password', 'date', 'datetime', 'time'])
+const inputTypes = Object.freeze<InputType[]>(['text', 'password', 'date', 'datetime', 'time'])
 
 function toNotNullString(value: any) {
   return isNull(value) ? '' : String(value)
@@ -26,14 +30,12 @@ function toNotNullString(value: any) {
 
 export default defineComponent({
   name: 'Input',
-  components: {
-    Icon
-  },
   props: inputProps,
   emits: ['update:value'],
   setup(_props, { slots, emit, expose }) {
     const {
       idFor,
+      labelId,
       state,
       disabled,
       loading,
@@ -41,27 +43,28 @@ export default defineComponent({
       validateField,
       clearField,
       getFieldValue,
-      setFieldValue
+      setFieldValue,
     } = useFieldStore<string | number>(() => inputControl.value?.focus())
 
     const props = useProps('input', _props, {
       size: createSizeProp(size),
       state: createStateProp(state),
+      locale: null,
       type: {
         default: 'text',
-        validator: value => inputTypes.includes(value)
+        validator: value => inputTypes.includes(value),
       },
-      prefix: null,
+      prefix: createIconProp(),
       prefixColor: '',
-      suffix: null,
+      suffix: createIconProp(),
       suffixColor: '',
       formatter: {
         default: null,
-        isFunc: true
+        isFunc: true,
       },
       value: {
-        default: () => getFieldValue(''),
-        static: true
+        default: () => getFieldValue(),
+        static: true,
       },
       placeholder: null,
       autofocus: false,
@@ -69,52 +72,77 @@ export default defineComponent({
       autocomplete: false,
       readonly: false,
       disabled: () => disabled.value,
-      inputClass: '',
+      controlClass: null,
       debounce: false,
+      delay: null,
       maxLength: 0,
+      hideCount: false,
       before: '',
       after: '',
       plainPassword: false,
       clearable: false,
       loading: () => loading.value,
-      loadingIcon: Spinner,
+      loadingIcon: createIconProp(),
       loadingLock: false,
-      loadingSpin: false,
+      loadingEffect: null,
       transparent: false,
-      sync: false
+      sync: false,
+      controlAttrs: null,
+      name: {
+        default: '',
+        static: true,
+      },
+      slots: () => ({}),
     })
 
     const initValue = toNotNullString(props.value)
 
     const nh = useNameHelper('input')
+    const icons = useIcons()
     const focused = ref(false)
     const currentValue = ref(initValue)
     const showPassword = ref(false)
     const currentLength = ref(initValue.length)
     const beforeHover = ref(false)
     const afterHover = ref(false)
+    const composing = ref(false)
 
-    const inputControl = ref<HTMLElement>()
+    const inputControl = ref<HTMLInputElement>()
 
     const { wrapper: control, isHover } = useHover()
-    const locale = useLocale('input')
+    const locale = useLocale('input', toRef(props, 'locale'))
 
     let lastValue = props.value
 
     const hasBefore = computed(() => {
-      return !!(slots.before || slots.beforeAction || slots['before-action'] || props.before)
+      return !!(
+        slots.before ||
+        slots.beforeAction ||
+        slots['before-action'] ||
+        props.before ||
+        props.slots.before ||
+        props.slots.beforeAction
+      )
     })
     const hasAfter = computed(() => {
-      return !!(slots.after || slots.afterAction || slots['after-action'] || props.after)
+      return !!(
+        slots.after ||
+        slots.afterAction ||
+        slots['after-action'] ||
+        props.after ||
+        props.slots.after ||
+        props.slots.afterAction
+      )
     })
     const basisClass = computed(() => {
       return {
         [nh.bs('wrapper')]: true,
         [nh.bs('vars')]: true,
         [nh.bm('inherit')]: props.inherit,
-        [nh.bm(props.size)]: props.size !== 'default'
+        [nh.bm(props.size)]: props.size !== 'default',
       }
     })
+    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const className = computed(() => {
       return [
         nh.b(),
@@ -123,13 +151,14 @@ export default defineComponent({
         {
           [nh.bm('focused')]: focused.value,
           [nh.bm('disabled')]: props.disabled,
-          [nh.bm('loading')]: props.loading && props.loadingLock,
-          [nh.bm(props.state)]: props.state !== 'default',
-          [nh.bm('before')]: slots.beforeAction || slots['before-action'],
-          [nh.bm('after')]: slots.afterAction || slots['after-action'],
+          [nh.bm('readonly')]: readonly.value,
           [nh.bm('loading')]: props.loading,
-          [nh.bm('transparent')]: props.transparent
-        }
+          [nh.bm(props.state)]: props.state !== 'default',
+          [nh.bm('before')]: slots.beforeAction || slots['before-action'] || props.slots.before,
+          [nh.bm('after')]: slots.afterAction || slots['after-action'] || props.slots.after,
+          [nh.bm('transparent')]: props.transparent,
+          [nh.bm('plain-password')]: props.plainPassword,
+        },
       ]
     })
     const wrapperClass = computed(() => {
@@ -138,11 +167,11 @@ export default defineComponent({
         [nh.bm(`wrapper--${props.size}`)]: props.size !== 'default',
         [nh.bs('wrapper--before-only')]: hasBefore.value && !hasAfter.value,
         [nh.bs('wrapper--after-only')]: !hasBefore.value && hasAfter.value,
-        [nh.bm('transparent')]: props.transparent
+        [nh.bm('transparent')]: props.transparent,
       }
     })
-    const hasPrefix = computed(() => !!(slots.prefix || props.prefix))
-    const hasSuffix = computed(() => !!(slots.suffix || props.suffix))
+    const hasPrefix = computed(() => !!(slots.prefix || props.prefix || props.slots.prefix))
+    const hasSuffix = computed(() => !!(slots.suffix || props.suffix || props.slots.suffix))
     const inputType = computed(() => {
       const type = props.type
 
@@ -161,35 +190,66 @@ export default defineComponent({
         ? toNotNullString(props.formatter(currentValue.value))
         : currentValue.value
     })
-    const passwordIcon = computed(() => (showPassword.value ? EyeR : EyeSlashR))
+    const passwordIcon = computed(() =>
+      showPassword.value ? icons.value.plainText : icons.value.cipherText,
+    )
     const hasValue = computed(() => {
       return !(isNull(currentValue.value) || currentValue.value === '')
     })
-    const readonly = computed(() => (props.loading && props.loadingLock) || props.readonly)
     const showClear = computed(() => {
-      return !props.disabled && props.clearable && hasValue.value && isHover.value
+      return (
+        !props.disabled && !readonly.value && props.clearable && hasValue.value && isHover.value
+      )
+    })
+    const autoComplete = computed(() => {
+      return typeof props.autocomplete === 'boolean'
+        ? props.autocomplete
+          ? 'on'
+          : 'off'
+        : props.autocomplete
     })
 
     watch(
       () => props.value,
       value => {
         currentValue.value = toNotNullString(value)
-        limitValueLength()
         lastValue = currentValue.value
-      }
+        limitValueLength()
+      },
+    )
+    watch(
+      [formattedValue, inputControl],
+      () => {
+        if (inputControl.value) {
+          inputControl.value.value = formattedValue.value
+        }
+      },
+      { immediate: true, flush: 'post' },
     )
 
     // Expose api methods.
     // Need to define some same name methods in 'methods' option to support infer types.
     expose({
+      idFor,
+      labelId,
+      focused,
+      currentValue,
+      showPassword,
+      currentLength,
+      composing,
       input: inputControl,
-      focus: () => {
-        inputControl.value?.focus()
+      copyValue,
+      focus: (options?: FocusOptions) => {
+        inputControl.value?.focus(options)
       },
       blur: () => {
         inputControl.value?.blur()
-      }
+      },
     })
+
+    function getLatestValue() {
+      return typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+    }
 
     function handleFocus(event: FocusEvent) {
       if (!focused.value) {
@@ -205,7 +265,7 @@ export default defineComponent({
         setTimeout(() => {
           if (!focused.value) {
             emitEvent(props.onBlur, event)
-            emitChangeEvent('change')
+            lastValue !== getLatestValue() && emitChangeEvent('change')
           }
         }, 120)
       }
@@ -213,6 +273,12 @@ export default defineComponent({
 
     function handleChange(event: Event) {
       const type = event.type as InputEventType
+
+      if (composing.value) {
+        if (type === 'input') return
+
+        composing.value = false
+      }
 
       currentValue.value = (event.target as HTMLInputElement).value
       limitValueLength()
@@ -222,34 +288,38 @@ export default defineComponent({
       setValue(value, type)
     }
 
-    function setValue(value: string, type: InputEventType) {
+    function setValue(value: string, type: InputEventType, sync = props.sync) {
       currentValue.value = value
-      emitChangeEvent(type)
+      emitChangeEvent(type, sync)
     }
 
-    function emitChangeEvent(type: InputEventType) {
+    function emitChangeEvent(type: InputEventType, sync = props.sync) {
       type = type === 'input' ? 'input' : 'change'
 
-      const value =
-        typeof props.value === 'number' ? parseFloat(currentValue.value) : currentValue.value
+      const value = getLatestValue()
 
       if (type === 'change') {
-        if (lastValue === value) return
-
         lastValue = value
 
-        setFieldValue(value)
-        emitEvent(props.onChange, value)
-
-        if (!props.sync) {
+        if (!sync) {
           emit('update:value', value)
+          setFieldValue(value)
+        }
+
+        emitEvent(props.onChange as ChangeEvent, value)
+
+        if (!sync) {
           validateField()
         }
       } else {
-        emitEvent(props.onInput, value)
-
-        if (props.sync) {
+        if (sync) {
           emit('update:value', value)
+          setFieldValue(value)
+        }
+
+        emitEvent(props.onInput as ChangeEvent, value)
+
+        if (sync) {
           validateField()
         }
       }
@@ -280,20 +350,20 @@ export default defineComponent({
       }
 
       showPassword.value = !showPassword.value
-      inputControl.value?.focus()
+      nextTick(() => {
+        inputControl.value?.focus()
+      })
     }
 
     function handleClear(event: MouseEvent) {
+      if (props.disabled || readonly.value) return
+
       event.stopPropagation()
-      setValue('', 'change')
-
-      if (props.sync) {
-        emit('update:value', currentValue.value)
-        validateField()
-      }
-
+      setValue('', 'change', false)
       emitEvent(props.onClear)
-      nextTick(clearField)
+      nextTick(() => clearField(''))
+      currentLength.value = 0
+      inputControl.value?.focus()
     }
 
     function handleEnter() {
@@ -324,7 +394,47 @@ export default defineComponent({
       emitEvent(props.onKeyUp, event)
     }
 
-    const handleInput = props.debounce ? debounce(handleChange) : throttle(handleChange)
+    function handleCompositionStart(event: CompositionEvent) {
+      composing.value = true
+      emitEvent(props.onCompositionStart, event)
+    }
+
+    function handleCompositionEnd(event: CompositionEvent) {
+      if (composing.value) {
+        composing.value = false
+
+        if (inputControl.value) {
+          inputControl.value.dispatchEvent(new Event('input'))
+        }
+      }
+
+      emitEvent(props.onCompositionEnd, event)
+    }
+
+    function copyValue() {
+      const input = document.createElement('input')
+
+      input.style.height = '0'
+      input.setAttribute('readonly', 'readonly')
+      input.value = currentValue.value
+      document.body.appendChild(input)
+      input.select()
+
+      const isSuccess = document.execCommand('copy')
+
+      document.body.removeChild(input)
+
+      return isSuccess
+    }
+
+    function preventDefault(event: Event) {
+      event.preventDefault()
+    }
+
+    const delay = toNumber(props.delay)
+    const handleInput = props.debounce
+      ? debounce(handleChange, delay || 100)
+      : throttle(handleChange, delay || 16)
 
     function renderPrefix() {
       return (
@@ -333,7 +443,11 @@ export default defineComponent({
           style={{ color: props.prefixColor }}
           onClick={handlePrefixClick}
         >
-          {slots.prefix ? slots.prefix() : <Icon icon={props.prefix}></Icon>}
+          {renderSlot(slots, 'prefix', undefined, () => [
+            <Renderer renderer={props.slots.prefix}>
+              <Icon icon={props.prefix}></Icon>
+            </Renderer>,
+          ])}
         </div>
       )
     }
@@ -346,27 +460,15 @@ export default defineComponent({
             class={[nh.be('icon'), nh.be('suffix')]}
             style={{
               color: props.suffixColor,
-              opacity: showClear.value || props.loading ? '0%' : ''
+              opacity: showClear.value || props.loading ? '0%' : '',
             }}
             onClick={handleSuffixClick}
           >
-            {slots.suffix ? slots.suffix() : <Icon icon={props.suffix}></Icon>}
-          </div>
-        )
-      }
-
-      if (props.type === 'password' && props.plainPassword) {
-        return (
-          <div
-            key={'password'}
-            class={[nh.be('icon'), nh.be('password')]}
-            style={{
-              color: props.suffixColor,
-              opacity: showClear.value || props.loading ? '0%' : ''
-            }}
-            onClick={toggleShowPassword}
-          >
-            <Icon icon={passwordIcon.value}></Icon>
+            {renderSlot(slots, 'suffix', undefined, () => [
+              <Renderer renderer={props.slots.suffix}>
+                <Icon icon={props.suffix}></Icon>
+              </Renderer>,
+            ])}
           </div>
         )
       }
@@ -383,9 +485,16 @@ export default defineComponent({
     function renderSuffixAction() {
       if (showClear.value) {
         return (
-          <div key={'clear'} class={[nh.be('icon'), nh.be('clear')]} onClick={handleClear}>
-            <Icon icon={CircleXmark}></Icon>
-          </div>
+          <button
+            key={'clear'}
+            class={[nh.be('icon'), nh.be('clear')]}
+            type={'button'}
+            tabindex={-1}
+            aria-label={locale.value.ariaLabel.clear}
+            onClick={handleClear}
+          >
+            <Icon {...icons.value.clear} label={'clear'}></Icon>
+          </button>
         )
       }
 
@@ -393,9 +502,10 @@ export default defineComponent({
         return (
           <div key={'loading'} class={[nh.be('icon'), nh.be('loading')]}>
             <Icon
-              spin={props.loadingSpin}
-              pulse={!props.loadingSpin}
-              icon={props.loadingIcon}
+              {...icons.value.loading}
+              effect={props.loadingEffect || icons.value.loading.effect}
+              icon={props.loadingIcon || icons.value.loading.icon}
+              label={'loading'}
             ></Icon>
           </div>
         )
@@ -418,11 +528,38 @@ export default defineComponent({
     function renderCount() {
       return (
         <div class={nh.be('count')}>
-          {slots.count
-            ? slots.count({ value: currentValue.value })
-            : `${currentLength.value}/${props.maxLength}`}
+          {renderSlot(slots, 'count', { value: currentValue.value }, () => [
+            <Renderer renderer={props.slots.count} data={{ value: currentValue.value }}>
+              {props.maxLength === Infinity
+                ? currentLength.value
+                : `${currentLength.value}/${props.maxLength}`}
+            </Renderer>,
+          ])}
         </div>
       )
+    }
+
+    function renderPlainPassword() {
+      if (props.type === 'password' && props.plainPassword) {
+        return (
+          <div
+            key={'password'}
+            class={[nh.be('icon'), nh.be('password')]}
+            style={{
+              color: props.suffixColor,
+            }}
+            onClick={toggleShowPassword}
+          >
+            {renderSlot(slots, 'password', { plain: showPassword.value }, () => [
+              <Renderer renderer={props.slots.password} data={{ plain: showPassword.value }}>
+                <Icon {...passwordIcon.value}></Icon>
+              </Renderer>,
+            ])}
+          </div>
+        )
+      }
+
+      return null
     }
 
     function renderControl() {
@@ -435,17 +572,19 @@ export default defineComponent({
         >
           {hasPrefix.value && renderPrefix()}
           <input
+            {...props.controlAttrs}
             ref={inputControl}
-            class={[nh.be('control'), props.inputClass]}
+            class={[nh.be('control'), props.controlAttrs?.class, props.controlClass]}
             type={inputType.value}
-            value={formattedValue.value}
             autofocus={props.autofocus}
-            autocomplete={props.autocomplete ? 'on' : 'off'}
+            autocomplete={autoComplete.value}
             spellcheck={props.spellcheck}
             disabled={props.disabled}
-            readonly={readonly.value}
+            readonly={readonly.value || undefined}
             placeholder={props.placeholder ?? locale.value.placeholder}
             maxlength={props.maxLength > 0 ? props.maxLength : undefined}
+            name={props.name || props.controlAttrs?.name}
+            aria-labelledby={labelId.value}
             onBlur={handleBlur}
             onFocus={handleFocus}
             onInput={handleInput}
@@ -453,15 +592,20 @@ export default defineComponent({
             onKeypress={handleKeyPress}
             onKeydown={handleKeyDown}
             onKeyup={handleKeyUp}
+            onSubmit={preventDefault}
+            onCompositionstart={handleCompositionStart}
+            onCompositionend={handleCompositionEnd}
           />
           {renderSuffix()}
-          {props.maxLength > 0 ? renderCount() : null}
+          {props.maxLength > 0 && !props.hideCount ? renderCount() : null}
+          {renderPlainPassword()}
         </div>
       )
     }
 
     function renderAside(type: 'before' | 'after') {
-      const buttonSlot = slots[`${type}Action`] || slots[`${type}-action`]
+      const buttonSlot =
+        slots[`${type}Action`] || slots[`${type}-action`] || props.slots[`${type}Action`]
 
       if (buttonSlot) {
         return (
@@ -475,7 +619,15 @@ export default defineComponent({
         )
       }
 
-      return <div class={nh.be(type)}>{slots[type] ? slots[type]!() : props[type]}</div>
+      return (
+        <div class={nh.be(type)}>
+          {slots[type] ? (
+            slots[type]!()
+          ) : (
+            <Renderer renderer={props.slots[type]}>{props[type]}</Renderer>
+          )}
+        </div>
+      )
     }
 
     return () => {
@@ -493,7 +645,7 @@ export default defineComponent({
     }
   },
   methods: {
-    focus: noop as () => void,
-    blur: noop as () => void
-  }
+    focus: noop as (options?: FocusOptions) => void,
+    blur: noop as () => void,
+  },
 })

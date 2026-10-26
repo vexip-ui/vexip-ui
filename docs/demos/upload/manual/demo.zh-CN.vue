@@ -13,7 +13,7 @@
       <Button
         type="success"
         :icon="Check"
-        style="margin-left: 6px;"
+        style="margin-inline-start: 6px"
         @click.stop="doUpload"
       >
         手动上传
@@ -24,9 +24,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Upload as IUpload, Check } from '@vexip-ui/icons'
 
-import type { UploadExposed } from 'vexip-ui'
+import { Check, Upload as IUpload } from '@vexip-ui/icons'
+
+import type { UploadExposed, UploadFileState } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
 const upload = ref<UploadExposed>()
@@ -49,7 +50,7 @@ async function doUpload() {
 }
 
 // 未设置 url 时，可以通过 change 事件记录选择的文件，后续自行操作，如放入 FormData 中
-function handleChange(files: File[]) {
+function handleChange(files: UploadFileState[]) {
   console.info(files)
 }
 </script>

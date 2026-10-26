@@ -1,8 +1,8 @@
 import { buildProps } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { RowGridJustify, RowGridAlign, ColumnFlex, ColumnOptions } from './symbol'
+import type { ColumnFlex, ColumnOptions, RowGridAlign, RowGridJustify } from './symbol'
 
 export const rowProps = buildProps({
   tag: String,
@@ -11,8 +11,8 @@ export const rowProps = buildProps({
   align: String as PropType<RowGridAlign>,
   columnFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type RowProps = ExtractPropTypes<typeof rowProps>
@@ -36,8 +36,8 @@ export const columnProps = buildProps({
   flex: [Number, String],
   useFlex: {
     type: [Boolean, Object] as PropType<boolean | Partial<ColumnFlex>>,
-    default: null
-  }
+    default: null,
+  },
 })
 
 export type ColumnProps = ExtractPropTypes<typeof columnProps>

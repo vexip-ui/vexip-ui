@@ -1,17 +1,9 @@
 <template>
-  <Button type="primary" @click="sendMessage">
+  <Button type="primary" @click="Message.open('一条消息')">
     打开消息
   </Button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  methods: {
-    sendMessage() {
-      this.$message.open('一条消息')
-    }
-  }
-})
+<script setup lang="ts">
+import { Message } from 'vexip-ui'
 </script>

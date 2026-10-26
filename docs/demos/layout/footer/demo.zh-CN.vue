@@ -5,12 +5,15 @@
     sign-name="Vexip UI"
     :user="user"
     :menus="menus"
-    copyright="Vexip UI - by qmhc"
+    copyright="Vexip UI - made with ❤️ by qmhc"
     :links="links"
   >
     <template #main>
-      <div style="width: 100%; height: 800px; padding: 20px;">
-        滚动到最下方
+      <div style="width: 100%; padding: 0 20px">
+        <p>滚动到最下方</p>
+        <p v-for="n in 20" :key="n">
+          ↓
+        </p>
       </div>
     </template>
   </Layout>
@@ -18,44 +21,44 @@
 
 <script setup lang="ts">
 import {
-  EnvelopesBulk,
-  City,
-  ChartPie,
-  User,
-  GithubB,
-  ClockRotateLeft,
   Bug,
-  Chalkboard
+  Chalkboard,
+  ChartPie,
+  City,
+  ClockRotateLeft,
+  EnvelopesBulk,
+  GithubB,
+  User,
 } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const menus: MenuOptions[] = [
   {
     label: '1',
     name: '菜单 1',
-    icon: EnvelopesBulk
+    icon: EnvelopesBulk,
   },
   {
     label: '2',
     name: '菜单 2',
-    icon: City
+    icon: City,
   },
   {
     label: '3',
     name: '菜单 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: '菜单 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 
 const links = [
@@ -63,46 +66,46 @@ const links = [
     name: '资源',
     children: [
       {
-        name: '设计资源'
+        name: '设计资源',
       },
       {
-        name: '图标库'
+        name: '图标库',
       },
       {
         name: '社区资源',
-        subname: '还没有'
-      }
-    ]
+        subname: '还没有',
+      },
+    ],
   },
   {
     name: '帮助',
     children: [
       {
         name: 'GitHub',
-        icon: GithubB
+        icon: GithubB,
       },
       {
         name: '更新日志',
-        icon: ClockRotateLeft
+        icon: ClockRotateLeft,
       },
       {
         name: '报告 Bug',
-        icon: Bug
+        icon: Bug,
       },
       {
         name: '贡献指南',
-        icon: Chalkboard
-      }
-    ]
+        icon: Chalkboard,
+      },
+    ],
   },
   {
     name: '分组',
-    children: [{ name: '链接' }, { name: '链接' }, { name: '链接' }]
+    children: [{ name: '链接' }, { name: '链接' }, { name: '链接' }],
   },
   {
     name: '分组',
-    children: [{ name: '链接' }, { name: '链接' }, { name: '链接' }]
-  }
+    children: [{ name: '链接' }, { name: '链接' }, { name: '链接' }],
+  },
 ]
 </script>
 

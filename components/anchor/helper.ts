@@ -1,6 +1,6 @@
 export interface ScrollElement {
   scrollTo(x: number, y: number): void,
-  [prop: string]: any
+  [prop: string]: any,
 }
 
 export function animateScrollTo(
@@ -8,14 +8,23 @@ export function animateScrollTo(
   from: number,
   to: number,
   duration: number,
-  callback: unknown
+  callback: unknown,
 ): void {
   const distance = to - from
   const step = Math.ceil((distance / duration) * 16)
 
-  if (!distance) return
+  const end = () => {
+    typeof callback === 'function' && callback()
+  }
+
+  if (!distance) {
+    end()
+    return
+  }
+
   if (duration <= 0) {
     el.scrollTo(0, to)
+    end()
     return
   }
 
@@ -33,7 +42,7 @@ export function animateScrollTo(
     el.scrollTo(0, current)
 
     if (current === to) {
-      typeof callback === 'function' && callback()
+      end()
     } else {
       requestAnimationFrame(scroll)
     }

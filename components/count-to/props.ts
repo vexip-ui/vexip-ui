@@ -2,7 +2,7 @@ import { buildProps } from '@vexip-ui/config'
 
 import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { CountToTimingName, CountToTiming } from './symbol'
+import type { CountToTiming, CountToTimingName } from './symbol'
 
 export const countToProps = buildProps({
   start: Number,
@@ -15,7 +15,7 @@ export const countToProps = buildProps({
   suffix: String,
   autoplay: Boolean,
   appear: Boolean,
-  timing: [String, Function] as PropType<CountToTimingName | CountToTiming>
+  timing: [String, Function] as PropType<CountToTimingName | CountToTiming>,
 })
 
 export type CountToProps = ExtractPropTypes<typeof countToProps>

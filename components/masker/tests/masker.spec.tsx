@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Masker } from '..'
 
 describe('Masker', () => {
@@ -17,8 +18,8 @@ describe('Masker', () => {
       slots: {
         default: (payload: { show: boolean }) => (
           <span class={'content'} data-show={payload.show}></span>
-        )
-      }
+        ),
+      },
     })
 
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toContain('display: none;')
@@ -38,8 +39,8 @@ describe('Masker', () => {
         active: true,
         closable: true,
         onToggle,
-        onClose
-      }
+        onClose,
+      },
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')
@@ -69,7 +70,7 @@ describe('Masker', () => {
   it('before close', async () => {
     const onBeforeClose = vi.fn()
     const wrapper = mount(Masker, {
-      props: { closable: true, onBeforeClose }
+      props: { closable: true, onBeforeClose },
     })
 
     const openAndClose = async () => {
@@ -87,14 +88,19 @@ describe('Masker', () => {
     await openAndClose()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
 
+    let resolveRef: (value: boolean) => void
+    onBeforeClose.mockReset()
     onBeforeClose.mockImplementation(
       () =>
         new Promise(resolve => {
-          nextTick(() => resolve(true))
-        })
+          resolveRef = resolve
+        }),
     )
     await openAndClose()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toBeUndefined()
+    resolveRef!(true)
+    await nextTick()
+    await nextTick()
     await nextTick()
     expect(wrapper.find('.vxp-masker__mask').attributes('style')).toContain('display: none;')
   })
@@ -114,11 +120,11 @@ describe('Masker', () => {
 
   it('auto remove', async () => {
     const wrapper = mount(Masker, {
-      props: { active: true, autoRemove: true }
+      props: { active: true, autoRemove: true },
     })
 
     await wrapper.find('.vxp-masker__mask').trigger('click')
-    wrapper.vm.wrapShow = false
+    wrapper.vm.wrapperShow = false
     await nextTick()
 
     expect(wrapper.find('.vxp-masker').exists()).toBe(false)

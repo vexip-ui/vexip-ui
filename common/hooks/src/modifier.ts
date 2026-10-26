@@ -1,13 +1,14 @@
-import { ref, unref, reactive, computed } from 'vue'
+import { computed, isRef, reactive, ref, unref } from 'vue'
+
 import { noop } from '@vexip-ui/utils'
 import { useListener } from './listener'
 
-import type { Ref } from 'vue'
+import type { MaybeRef, Ref } from 'vue'
 
 export type ModifierState = Readonly<
   Omit<Record<string, boolean>, 'activeKeys'> & {
     activeKeys: Set<string>,
-    resetAll: () => void
+    resetAll: () => void,
   }
 >
 
@@ -16,6 +17,10 @@ export interface UseModifierOptions {
    * 作用的目标元素的 Ref
    */
   target?: Ref<HTMLElement | null | undefined>,
+  /**
+   * 是否禁用整个 hook 的事件处理
+   */
+  disabled?: MaybeRef<boolean>,
   /**
    * 配置键名的别名，会与默认别名动态合并
    */
@@ -39,13 +44,17 @@ export interface UseModifierOptions {
    */
   passive?: boolean,
   /**
+   * 是否严格匹配目标元素
+   */
+  strictTarget?: boolean,
+  /**
    * 键按下的事件回调函数
    */
   onKeyDown?: (event: KeyboardEvent, modifier: ModifierState) => void,
   /**
    * 键抬起的时间回调函数
    */
-  onKeyUp?: (event: KeyboardEvent, modifier: ModifierState) => void
+  onKeyUp?: (event: KeyboardEvent, modifier: ModifierState) => void,
 }
 
 const defaultAliasMap: Record<string, string> = {
@@ -56,7 +65,7 @@ const defaultAliasMap: Record<string, string> = {
   up: 'arrowup',
   down: 'arrowdown',
   left: 'arrowleft',
-  right: 'arrowright'
+  right: 'arrowright',
 }
 
 const separatorRE = /[+_-]/
@@ -69,11 +78,13 @@ export function useModifier(options: UseModifierOptions = {}) {
     autoReset = true,
     capture = false,
     passive = true,
+    strictTarget = false,
     onKeyDown = noop,
-    onKeyUp = noop
+    onKeyUp = noop,
   } = options
 
   const target = options.target || ref(null)
+  const disabled = isRef(options.disabled) ? options.disabled : ref(options.disabled || false)
   const aliasMap = { ...defaultAliasMap, ...(options.aliasMap || {}) }
   const activeKeys = reactive(new Set<string>())
   const metaDeps = new Set<string>()
@@ -145,30 +156,38 @@ export function useModifier(options: UseModifierOptions = {}) {
       }
 
       return unref(Reflect.get(target, prop, receiver))
-    }
+    },
   })
 
   useListener(
     target,
     'keydown',
     (event: KeyboardEvent) => {
+      if (strictTarget && event.target !== unref(target)) {
+        return
+      }
+
       updateModifier(event, true)
       onKeyDown(event, modifierProxy)
     },
-    { capture, passive }
+    { capture, passive, disabled },
   )
   useListener(
     target,
     'keyup',
     (event: KeyboardEvent) => {
+      if (strictTarget && event.target !== unref(target)) {
+        return
+      }
+
       updateModifier(event, false)
       onKeyUp(event, modifierProxy)
     },
-    { capture, passive }
+    { capture, passive, disabled },
   )
 
   if (autoReset) {
-    useListener(target, 'blur', resetAll, { capture, passive })
+    useListener(target, 'blur', resetAll, { capture, passive, disabled })
   }
 
   return { target, modifier: modifierProxy as ModifierState }

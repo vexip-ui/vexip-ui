@@ -1,17 +1,19 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { getCurrentInstance, nextTick } from 'vue'
-import { Check, Exclamation, Xmark, Spinner, GithubB } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { globalIcons } from '@vexip-ui/config'
+import { Github } from 'lucide-vue-next'
 import Toast from '../toast.vue'
 import { ToastManager } from '..'
 
 vi.useFakeTimers()
 
 const typeIconMap = {
-  success: Check,
-  warning: Exclamation,
-  error: Xmark,
-  loading: Spinner
+  success: globalIcons.value.success.icon,
+  warning: globalIcons.value.warning.icon,
+  error: globalIcons.value.error.icon,
+  loading: globalIcons.value.loading.icon,
 }
 
 const TEXT = 'Text'
@@ -27,7 +29,7 @@ function createToast() {
       app?.use(Toast)
 
       return () => <div></div>
-    }
+    },
   })
 
   return Toast
@@ -62,7 +64,7 @@ describe('Toast', () => {
     await toastOpened()
     expect(document.querySelector('.vxp-toast__wrapper')).toBeTruthy()
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     expect(document.querySelector('.vxp-toast__wrapper')).toBeFalsy()
   })
@@ -81,7 +83,7 @@ describe('Toast', () => {
 
       const icon = mount(typeIconMap[type])
       expect(document.querySelector('.vxp-toast__icon')!.querySelector('svg')?.innerHTML).toEqual(
-        icon.find('svg').element.innerHTML
+        icon.find('svg').element.innerHTML,
       )
     })
   })
@@ -91,24 +93,24 @@ describe('Toast', () => {
 
     Toast.open({
       content: TEXT,
-      position: 'top'
+      position: 'top',
     })
     await toastOpened()
     expect(
-      document.querySelector('.vxp-toast__wrapper')?.classList.contains('vxp-toast__wrapper--top')
+      document.querySelector('.vxp-toast__wrapper')?.classList.contains('vxp-toast__wrapper--top'),
     ).toBe(true)
 
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     await nextTick()
     Toast.open({
       content: TEXT,
-      position: 'bottom'
+      position: 'bottom',
     })
     await toastOpened()
     expect(
       document
         .querySelector('.vxp-toast__wrapper')
-        ?.classList.contains('vxp-toast__wrapper--bottom')
+        ?.classList.contains('vxp-toast__wrapper--bottom'),
     ).toBe(true)
   })
 
@@ -117,7 +119,7 @@ describe('Toast', () => {
 
     Toast.open({
       content: TEXT,
-      closable: true
+      closable: true,
     })
     await toastOpened()
 
@@ -131,14 +133,14 @@ describe('Toast', () => {
 
     Toast.open({
       content: TEXT,
-      icon: GithubB
+      icon: Github,
     })
     await toastOpened()
     expect(document.querySelector('.vxp-toast__icon')).toBeTruthy()
 
-    const icon = mount(GithubB)
+    const icon = mount(Github)
     expect(document.querySelector('.vxp-toast__icon')!.querySelector('svg')?.innerHTML).toEqual(
-      icon.find('svg').element.innerHTML
+      icon.find('svg').element.innerHTML,
     )
   })
 
@@ -147,9 +149,18 @@ describe('Toast', () => {
 
     Toast.open({
       content: '<div class="test"></div>',
-      parseHtml: true
+      parseHtml: true,
     })
     await toastOpened()
     expect(document.querySelector('.test')).toBeTruthy()
+  })
+
+  it('transferTo', async () => {
+    const Toast = createToast()
+    const el = document.createElement('div')
+    Toast.transferTo(el)
+
+    await nextTick()
+    expect(el.querySelector('.vxp-toast')).toBeTruthy()
   })
 })

@@ -1,23 +1,27 @@
 import {
-  buildProps,
   booleanProp,
   booleanStringProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  localeProp,
   sizeProp,
   stateProp,
-  eventProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
-import type { Color, HSVAColor, RGBAColor, HSLAColor } from '@vexip-ui/utils'
-import type { ColorFormat } from './symbol'
+import type { Color, HSLAColor, HSVAColor, RGBAColor } from '@vexip-ui/utils'
+import type { ColorFormat, ColorPrickerSlots } from './symbol'
 
 type FormattedColor = string | RGBAColor | HSLAColor | HSVAColor
 
 export const colorPickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('colorPicker'),
   value: [String, Object] as PropType<Color | null>,
   visible: booleanProp,
   format: String as PropType<ColorFormat>,
@@ -27,7 +31,7 @@ export const colorPickerProps = buildProps({
   noInput: booleanProp,
   shortcut: {
     type: [Boolean, Array] as PropType<boolean | string[]>,
-    default: null
+    default: null,
   },
   placement: String as PropType<Placement>,
   transfer: booleanStringProp,
@@ -35,22 +39,26 @@ export const colorPickerProps = buildProps({
   clearable: booleanProp,
   cancelText: String,
   confirmText: String,
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   noSuffix: booleanProp,
   staticSuffix: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
+  popperAlive: booleanProp,
+  showLabel: booleanProp,
+  labelFormat: String as PropType<ColorFormat>,
+  slots: Object as PropType<ColorPrickerSlots>,
   onToggle: eventProp<(visible: boolean) => void>(),
   onClickOutside: eventProp(),
   onOutsideClose: eventProp(),
   onClear: eventProp(),
   onChange: eventProp<(color: FormattedColor) => void>(),
-  onShortcut: eventProp<(color: FormattedColor) => void>()
+  onShortcut: eventProp<(color: FormattedColor) => void>(),
 })
 
 export type ColorPickerProps = ExtractPropTypes<typeof colorPickerProps>

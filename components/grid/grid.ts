@@ -1,22 +1,23 @@
-import { defineComponent, reactive, computed, toRef, h, provide } from 'vue'
+import { computed, defineComponent, h, provide, reactive, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { gridProps } from './props'
 import { GRID_STATE } from './symbol'
 
 import type { CSSProperties } from 'vue'
-import type { LayoutProp, GridJustify, GridAlign } from './symbol'
+import type { GridAlign, GridJustify, LayoutProp } from './symbol'
 
 const numberRE = /^\d+$/
 
-const justifyList = Object.freeze<GridJustify>([
+const justifyList = Object.freeze<GridJustify[]>([
   'start',
   'end',
   'center',
   'space-around',
   'space-between',
-  'space-evenly'
+  'space-evenly',
 ])
-const alignList = Object.freeze<GridAlign>(['top', 'middle', 'bottom', 'stretch'])
+const alignList = Object.freeze<GridAlign[]>(['top', 'middle', 'bottom', 'stretch'])
 
 export default defineComponent({
   name: 'Grid',
@@ -32,13 +33,13 @@ export default defineComponent({
       dense: false,
       justify: {
         default: 'start',
-        validator: value => justifyList.includes(value)
+        validator: value => justifyList.includes(value),
       },
       align: {
         default: 'stretch',
-        validator: value => alignList.includes(value)
+        validator: value => alignList.includes(value),
       },
-      cellFlex: false
+      cellFlex: false,
     })
 
     const nh = useNameHelper('grid')
@@ -49,7 +50,7 @@ export default defineComponent({
         [nh.bm(props.justify)]: true,
         [nh.bm('inherit')]: props.inherit,
         [nh.bm(props.align)]: props.align !== 'stretch',
-        [nh.bm('dense')]: props.dense
+        [nh.bm('dense')]: props.dense,
       }
     })
     const style = computed(() => {
@@ -81,14 +82,14 @@ export default defineComponent({
       if (props.cellFlex === true) {
         return {
           justify: 'start',
-          align: 'top'
-        }
+          align: 'top',
+        } as const
       } else if (props.cellFlex) {
         return {
           justify: 'start',
           align: 'top',
-          ...props.cellFlex
-        }
+          ...props.cellFlex,
+        } as const
       }
 
       return false
@@ -157,11 +158,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default?.()
-        }
+          default: () => slots.default?.(),
+        },
       )
-  }
+  },
 })

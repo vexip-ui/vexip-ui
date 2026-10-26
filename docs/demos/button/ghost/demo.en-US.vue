@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 20px; background-color: #212a2b;">
+  <div style="padding: 20px; background-color: #212a2b">
     <Button ghost>
       Default
     </Button>

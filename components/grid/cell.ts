@@ -1,12 +1,14 @@
-import { defineComponent, reactive, computed, watch, h, inject, provide } from 'vue'
+import { computed, defineComponent, h, inject, provide, reactive, watch } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
-import { isDefined, has } from '@vexip-ui/utils'
+import { has, isDefined } from '@vexip-ui/utils'
 import { cellProps } from './props'
-import { breakPoints, currentBreakPoint } from './helpler'
+import { breakPoints, currentBreakPoint } from './helper'
 import { GRID_STATE } from './symbol'
 
 import type { CSSProperties } from 'vue'
-import type { BreakPoint } from './helpler'
+import type { ClassType } from '@vexip-ui/config'
+import type { BreakPoint } from './helper'
 
 export default defineComponent({
   name: 'Cell',
@@ -26,13 +28,13 @@ export default defineComponent({
       lg: null,
       xl: null,
       xxl: null,
-      useFlex: null
+      useFlex: null,
     })
 
     const gridState = inject(GRID_STATE, null)
     const nh = useNameHelper('cell')
 
-    provide(GRID_STATE, null)
+    provide(GRID_STATE, null!)
 
     const layoutState = reactive({
       top: props.top,
@@ -40,9 +42,9 @@ export default defineComponent({
       bottom: props.bottom,
       left: props.left,
       width: props.width,
-      height: props.height
+      height: props.height,
     })
-    const leyoutKeys = Object.keys(layoutState) as (
+    const layoutKeys = Object.keys(layoutState) as (
       | 'top'
       | 'right'
       | 'bottom'
@@ -66,48 +68,48 @@ export default defineComponent({
 
         if (matchSize) {
           if (typeof matchSize === 'number') {
-            leyoutKeys.forEach(key => {
+            layoutKeys.forEach(key => {
               layoutState[key] = props[key] as any
             })
 
             layoutState.width = matchSize
           } else {
-            leyoutKeys.forEach(key => {
+            layoutKeys.forEach(key => {
               layoutState[key] = has(matchSize, key) ? matchSize[key] : (props[key] as any)
             })
 
             layoutState.width = layoutState.width ?? defaultWidth.value
           }
         } else {
-          leyoutKeys.forEach(key => {
+          layoutKeys.forEach(key => {
             layoutState[key] = props[key] as any
           })
 
           layoutState.width = defaultWidth.value
         }
       },
-      { immediate: true }
+      { immediate: true },
     )
 
     const className = computed(() => {
-      const cellFelx = props.useFlex !== false &&
+      const cellFlex = props.useFlex !== false &&
         (props.useFlex || gridState?.cellFlex) && {
         ...(gridState?.cellFlex || {}),
         ...(props.useFlex
           ? props.useFlex === true
             ? { justify: 'start', align: 'top' }
             : props.useFlex
-          : {})
+          : {}),
       }
-      const className = {
+      const className: ClassType = {
         [nh.b()]: true,
         [nh.bm('inherit')]: gridState || props.inherit,
-        [nh.bm('flex')]: cellFelx
+        [nh.bm('flex')]: cellFlex,
       }
 
-      if (cellFelx) {
-        if (cellFelx.justify) className[nh.bm(cellFelx.justify)] = true
-        if (cellFelx.align) className[nh.bm(cellFelx.align)] = true
+      if (cellFlex) {
+        if (cellFlex.justify) className[nh.bm(cellFlex.justify)] = true
+        if (cellFlex.align) className[nh.bm(cellFlex.align)] = true
       }
 
       return className
@@ -176,11 +178,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default?.()
-        }
+          default: () => slots.default?.(),
+        },
       )
-  }
+  },
 })

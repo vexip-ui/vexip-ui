@@ -1,221 +1,316 @@
+<script setup lang="ts">
+import { Portal } from '@/components/portal'
+import { ResizeObserver } from '@/components/resize-observer'
+
+import { computed, nextTick, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps, useZIndex } from '@vexip-ui/config'
+import { getLast, isPromise, queryTabables } from '@vexip-ui/utils'
+import { maskerProps } from './props'
+
+defineOptions({ name: 'Masker' })
+
+const nh = useNameHelper('masker')
+const _props = defineProps(maskerProps)
+const props = useProps('masker', _props, {
+  active: {
+    default: false,
+    static: true,
+  },
+  closable: false,
+  inner: false,
+  maskTransition: () => nh.ns('fade'),
+  transitionName: () => nh.ns('fade'),
+  disabled: false,
+  onBeforeClose: {
+    default: null,
+    isFunc: true,
+  },
+  transfer: false,
+  autoRemove: false,
+  permeable: false,
+  disableEsc: false,
+})
+
+const emit = defineEmits(['update:active'])
+
+const slots = defineSlots<{
+  mask?: () => any,
+  default?: (params: { show: boolean }) => any,
+}>()
+
+const getIndex = useZIndex()
+
+const currentActive = ref(props.active)
+// If initial active, we should set a valid index as initial value
+const zIndex = ref(props.active ? getIndex() : 0)
+const wrapperShow = ref(props.active)
+
+const wrapper = ref<HTMLElement>()
+const topTrap = ref<HTMLElement>()
+const bottomTrap = ref<HTMLElement>()
+
+let maskShow = false
+let contentShow = false
+let stable = false
+let prevFocusedEl: HTMLElement | null = null
+
+const transferTo = computed(() => {
+  return props.inner
+    ? ''
+    : typeof props.transfer === 'boolean'
+      ? props.transfer
+        ? 'body'
+        : ''
+      : props.transfer
+})
+const className = computed(() => {
+  return [
+    nh.b(),
+    nh.bs('vars'),
+    {
+      [nh.bm('inherit')]: transferTo.value !== 'body' && props.inherit,
+      [nh.bm('inner')]: props.inner,
+      [nh.bm('disabled')]: props.disabled,
+    },
+  ]
+})
+
+watch(
+  () => props.active,
+  value => {
+    currentActive.value = value
+
+    if (value) {
+      wrapperShow.value = value
+    }
+  },
+)
+watch(currentActive, value => {
+  if (!value) {
+    stable = false
+
+    if (prevFocusedEl) {
+      prevFocusedEl.focus()
+      prevFocusedEl = null
+    }
+  } else {
+    prevFocusedEl = document.activeElement as HTMLElement
+    zIndex.value = getIndex()
+  }
+
+  if ((!props.maskTransition || props.disabled) && !props.transitionName) {
+    value ? afterOpen() : afterClose()
+  }
+})
+watch(
+  [() => props.permeable, wrapper],
+  () => {
+    if (wrapper.value) {
+      wrapper.value.removeEventListener('wheel', disableWheel)
+
+      if (!props.permeable) {
+        wrapper.value.addEventListener('wheel', disableWheel)
+      }
+    }
+  },
+  { immediate: true, flush: 'post' },
+)
+
+defineExpose({
+  currentActive,
+  zIndex,
+  wrapperShow,
+  wrapper,
+  topTrap,
+  bottomTrap,
+})
+
+function disableWheel(event: WheelEvent) {
+  event.preventDefault()
+  event.stopPropagation()
+}
+
+function toggleActive(active: boolean) {
+  if (currentActive.value === active) return
+
+  currentActive.value = active
+
+  emit('update:active', active)
+  emitEvent(props.onToggle, active)
+}
+
+async function handleClose() {
+  if (!props.closable) return
+
+  let result: unknown = true
+
+  if (typeof props.onBeforeClose === 'function') {
+    result = props.onBeforeClose()
+
+    if (isPromise(result)) {
+      result = await result
+    }
+  }
+
+  if (result !== false) {
+    nextTick(() => {
+      toggleActive(false)
+      emitEvent(props.onClose)
+    })
+  }
+}
+
+function afterOpen() {
+  if (!currentActive.value) return
+
+  const activeEl = document && document.activeElement
+
+  if (!activeEl || !wrapper.value || !wrapper.value.contains(activeEl)) {
+    topTrap.value?.focus()
+  }
+
+  nextTick(() => {
+    stable = true
+    emitEvent(props.onShow)
+  })
+}
+
+function afterClose() {
+  if (currentActive.value) return
+
+  nextTick(() => {
+    wrapperShow.value = false
+    emitEvent(props.onHide)
+  })
+}
+
+function afterMaskOpen() {
+  if (!currentActive.value) return
+
+  maskShow = true
+  ;(!props.transitionName || !slots.default || contentShow) && afterOpen()
+}
+
+function afterMaskClose() {
+  if (currentActive.value) return
+
+  maskShow = false
+  ;(!props.transitionName || !slots.default || !contentShow) && afterClose()
+}
+
+function afterContentOpen() {
+  if (!currentActive.value) return
+
+  contentShow = true
+  ;(!props.maskTransition || props.disabled || maskShow) && afterOpen()
+}
+
+function afterContentClose() {
+  if (currentActive.value) return
+
+  contentShow = false
+  ;(!props.maskTransition || props.disabled || !maskShow) && afterClose()
+}
+
+function handleMaskClick(event: MouseEvent) {
+  emitEvent(props.onMaskClick, event)
+  handleClose()
+}
+
+function handleFocusIn(event: FocusEvent) {
+  const target = event.target as HTMLElement
+
+  if (!stable || !wrapper.value || !target || !topTrap.value || !bottomTrap.value) {
+    return
+  }
+
+  const tabables = queryTabables(wrapper.value)
+
+  if (!tabables.length) {
+    return
+  }
+
+  if (topTrap.value === target) {
+    getLast(tabables)!.focus()
+  } else if (bottomTrap.value === target) {
+    tabables[0].focus()
+  }
+}
+
+function handleResize(entry: ResizeObserverEntry) {
+  emitEvent(props.onResize, entry)
+}
+
+function handleEscape(event: KeyboardEvent) {
+  if (!props.disableEsc) {
+    event.preventDefault()
+    handleClose()
+  }
+}
+</script>
+
 <template>
-  <Portal v-if="!props.autoRemove || wrapShow" :to="transferTo">
+  <Portal v-if="!props.autoRemove || wrapperShow" :to="transferTo">
     <div
+      v-bind="$attrs"
       ref="wrapper"
-      :class="className"
+      :class="[className, $attrs.class]"
       tabindex="-1"
       :style="{
-        pointerEvents: wrapShow ? undefined : 'none',
-        visibility: wrapShow ? undefined : 'hidden'
+        zIndex,
+        ...($attrs.style || {}),
+        pointerEvents: wrapperShow ? undefined : 'none',
+        visibility: wrapperShow ? undefined : 'hidden',
       }"
-      v-bind="$attrs"
       @focusin="handleFocusIn"
-      @keydown.escape.prevent="handleClose"
+      @keydown.escape="handleEscape"
     >
-      <transition
-        v-if="!props.disabled"
-        :appear="props.autoRemove"
-        :name="props.maskTransition"
-        @after-enter="afterOpen"
-        @after-leave="afterClose"
-      >
-        <div v-show="currentActive" :class="nh.be('mask')" @click="handleClose">
-          <div :class="nh.be('mask-inner')"></div>
-        </div>
-      </transition>
-      <span
+      <ResizeObserver @resize="handleResize">
+        <Transition
+          v-if="!props.disabled"
+          appear
+          :name="props.maskTransition"
+          @after-enter="afterMaskOpen"
+          @after-leave="afterMaskClose"
+        >
+          <div v-show="currentActive" :class="nh.be('mask')" @click="handleMaskClick">
+            <slot name="mask">
+              <div :class="nh.be('mask-inner')"></div>
+            </slot>
+          </div>
+        </Transition>
+        <div
+          v-else
+          :class="nh.be('placeholder')"
+          role="none"
+          aria-hidden
+        ></div>
+      </ResizeObserver>
+      <div
         ref="topTrap"
         tabindex="0"
-        aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none;"
-      ></span>
-      <transition :appear="props.autoRemove" :name="props.transitionName">
-        <slot :show="currentActive"></slot>
-      </transition>
-      <span
+        role="none"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
+      ></div>
+      <div :class="nh.be('content')" @wheel.stop.prevent>
+        <Transition
+          v-if="props.transitionName"
+          appear
+          :name="props.transitionName"
+          @after-enter="afterContentOpen"
+          @after-leave="afterContentClose"
+        >
+          <slot :show="currentActive"></slot>
+        </Transition>
+        <slot v-else :show="currentActive"></slot>
+      </div>
+      <div
         ref="bottomTrap"
         tabindex="0"
-        aria-hidden="true"
-        style="width: 0; height: 0; overflow: hidden; outline: none;"
-      ></span>
+        role="none"
+        style="width: 0; height: 0; overflow: hidden; outline: none"
+      ></div>
     </div>
   </Portal>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref, computed, watch, nextTick } from 'vue'
-import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { isPromise, queryTabables } from '@vexip-ui/utils'
-import { maskerProps } from './props'
-
-export default defineComponent({
-  name: 'Masker',
-  components: {
-    Portal
-  },
-  props: maskerProps,
-  emits: ['update:active'],
-  setup(_props, { emit }) {
-    const nh = useNameHelper('masker')
-    const props = useProps('masker', _props, {
-      active: {
-        default: false,
-        static: true
-      },
-      closable: false,
-      inner: false,
-      maskTransition: () => nh.ns('fade'),
-      transitionName: () => nh.ns('fade'),
-      disabled: false,
-      onBeforeClose: {
-        default: null,
-        isFunc: true
-      },
-      transfer: false,
-      autoRemove: false
-    })
-
-    const currentActive = ref(props.active)
-    const wrapShow = ref(props.active)
-
-    const wrapper = ref<HTMLElement>()
-    const topTrap = ref<HTMLElement>()
-    const bottomTrap = ref<HTMLElement>()
-
-    let showing = false
-    let prevFocusdEl: HTMLElement | null = null
-
-    const transferTo = computed(() => {
-      return props.inner
-        ? ''
-        : typeof props.transfer === 'boolean'
-          ? props.transfer
-            ? 'body'
-            : ''
-          : props.transfer
-    })
-    const className = computed(() => {
-      return [
-        nh.b(),
-        nh.bs('vars'),
-        {
-          [nh.bm('inherit')]: transferTo.value !== 'body' && props.inherit,
-          [nh.bm('inner')]: props.inner,
-          [nh.bm('disabled')]: props.disabled
-        }
-      ]
-    })
-
-    watch(
-      () => props.active,
-      value => {
-        currentActive.value = value
-
-        if (value) {
-          wrapShow.value = value
-        }
-      }
-    )
-    watch(currentActive, value => {
-      if (!value) {
-        showing = false
-
-        if (prevFocusdEl) {
-          prevFocusdEl.focus()
-          prevFocusdEl = null
-        }
-      } else {
-        prevFocusdEl = document.activeElement as HTMLElement
-      }
-
-      emitEvent(props.onToggle, value)
-      emit('update:active', value)
-    })
-
-    function toggleActive(value: boolean) {
-      currentActive.value = value
-    }
-
-    async function handleClose() {
-      if (!props.closable) return
-
-      let result: unknown = true
-
-      if (typeof props.onBeforeClose === 'function') {
-        result = props.onBeforeClose()
-
-        if (isPromise(result)) {
-          result = await result
-        }
-      }
-
-      if (result !== false) {
-        nextTick(() => {
-          toggleActive(false)
-          emitEvent(props.onClose)
-        })
-      }
-    }
-
-    function afterClose() {
-      nextTick(() => {
-        wrapShow.value = false
-        emitEvent(props.onHide)
-      })
-    }
-
-    function afterOpen() {
-      const activeEl = document && document.activeElement
-
-      if (!activeEl || !wrapper.value || !wrapper.value.contains(activeEl)) {
-        topTrap.value?.focus()
-      }
-
-      nextTick(() => {
-        showing = true
-        emitEvent(props.onShow)
-      })
-    }
-
-    function handleFocusIn(event: FocusEvent) {
-      const target = event.target as HTMLElement
-
-      if (!showing || !wrapper.value || !target || !topTrap.value || !bottomTrap.value) {
-        return
-      }
-
-      const tabables = queryTabables(wrapper.value)
-
-      if (!tabables.length) {
-        return
-      }
-
-      if (topTrap.value === target) {
-        tabables.at(-1)!.focus()
-      } else if (bottomTrap.value === target) {
-        tabables[0].focus()
-      }
-    }
-
-    return {
-      props,
-      nh,
-      currentActive,
-      wrapShow,
-
-      className,
-      transferTo,
-
-      wrapper,
-      topTrap,
-      bottomTrap,
-
-      handleClose,
-      afterClose,
-      afterOpen,
-      handleFocusIn
-    }
-  }
-})
-</script>

@@ -1,6 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
-import { noop } from '@vexip-ui/utils'
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
+import { noop } from '@vexip-ui/utils'
 import { Scrollbar } from '..'
 
 vi.useFakeTimers()
@@ -18,23 +20,27 @@ describe('Scrollbar', () => {
     expect(wrapper.find('.vxp-scrollbar__bar').exists()).toBe(true)
   })
 
-  it('placement', () => {
-    (['top', 'right', 'bottom', 'left'] as const).forEach(placement => {
-      const wrapper = mount(() => <Scrollbar placement={placement}></Scrollbar>)
+  it('placement', async () => {
+    await Promise.all(
+      (['top', 'right', 'bottom', 'left'] as const).map(async placement => {
+        const wrapper = mount(() => <Scrollbar placement={placement}></Scrollbar>)
 
-      expect(wrapper.find('.vxp-scrollbar').classes()).toContain(`vxp-scrollbar--${placement}`)
+        await nextTick()
+        expect(wrapper.find('.vxp-scrollbar').classes()).toContain(`vxp-scrollbar--${placement}`)
 
-      if (placement === 'right' || placement === 'left') {
-        expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('height: 35%;')
-      } else {
-        expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('width: 35%;')
-      }
-    })
+        if (placement === 'right' || placement === 'left') {
+          expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('height: 35%;')
+        } else {
+          expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('width: 35%;')
+        }
+      }),
+    )
   })
 
-  it('bar length', () => {
+  it('bar length', async () => {
     const wrapper = mount(() => <Scrollbar bar-length={20}></Scrollbar>)
 
+    await nextTick()
     expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain('height: 20%;')
   })
 
@@ -44,16 +50,17 @@ describe('Scrollbar', () => {
     expect(wrapper.find('.vxp-scrollbar').classes()).toContain('vxp-scrollbar--disabled')
   })
 
-  it('init value', () => {
+  it('init value', async () => {
     const wrapper = mount(Scrollbar, {
       props: {
         barLength: 20,
-        scroll: 20
-      }
+        scroll: 20,
+      },
     })
 
+    await nextTick()
     expect(wrapper.find('.vxp-scrollbar__bar').attributes('style')).toContain(
-      'transform: translate3d(0, 80%, 0);'
+      'transform: translate3d(0, 80%, 0);',
     )
   })
 
@@ -66,8 +73,8 @@ describe('Scrollbar', () => {
         barLength: 20,
         onScrollStart,
         onScroll,
-        onScrollEnd
-      }
+        onScrollEnd,
+      },
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -81,7 +88,7 @@ describe('Scrollbar', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -92,7 +99,7 @@ describe('Scrollbar', () => {
       height: 20,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any
@@ -107,7 +114,7 @@ describe('Scrollbar', () => {
     moveEvent.clientX = 40
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onScroll).toHaveBeenCalled()
     expect(onScroll).toHaveBeenCalledWith(50)
 
@@ -121,6 +128,8 @@ describe('Scrollbar', () => {
   })
 
   it('track', async () => {
+    vi.useRealTimers()
+
     const onScrollStart = vi.fn()
     const onScroll = vi.fn()
     const onScrollEnd = vi.fn()
@@ -130,8 +139,8 @@ describe('Scrollbar', () => {
         trackSpeed: 2,
         onScrollStart,
         onScroll,
-        onScrollEnd
-      }
+        onScrollEnd,
+      },
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -145,7 +154,7 @@ describe('Scrollbar', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -156,7 +165,7 @@ describe('Scrollbar', () => {
       height: 20,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any
@@ -191,5 +200,6 @@ describe('Scrollbar', () => {
 
     trackMock.mockRestore()
     barMock.mockRestore()
+    vi.useFakeTimers()
   })
 })

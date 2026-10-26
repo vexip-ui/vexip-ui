@@ -1,4 +1,4 @@
-import type { Ref, ComputedRef, InjectionKey } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 import type { ComponentSize, ComponentState } from '@vexip-ui/config'
 import type { EventEmitter } from '@vexip-ui/utils'
 import type { Rule } from './validator'
@@ -21,7 +21,7 @@ export interface FormProps {
   disabled: boolean,
   loading: boolean,
   size: ComponentSize,
-  inline: boolean
+  inline: boolean,
 }
 
 export interface FormItemProps {
@@ -35,25 +35,34 @@ export interface FormItemProps {
   defaultValue: unknown,
   hideErrorTip: boolean,
   validateAll: boolean,
-  hideAsterisk: boolean
+  hideAsterisk: boolean,
+}
+
+export interface FormItemSlots {
+  default?: (parmas: { isError: boolean }) => any,
+  help?: () => any,
+  label?: () => any,
+  error?: (params: { tip: string }) => any,
 }
 
 export interface FieldOptions {
-  prop: ComputedRef<string>,
-  idFor: ComputedRef<string>,
-  state: ComputedRef<ComponentState>,
-  disabled: ComputedRef<boolean>,
-  loading: ComputedRef<boolean>,
-  size: ComputedRef<ComponentSize>,
+  prop: Ref<string>,
+  idFor: Ref<string>,
+  labelId: Ref<string>,
+  state: Ref<ComponentState>,
+  disabled: Ref<boolean>,
+  loading: Ref<boolean>,
+  size: Ref<ComponentSize>,
   emitter: EventEmitter,
   labelWidth: Ref<number>,
   validate: () => Promise<string[] | null>,
   reset: () => boolean,
+  setError: (error: string) => void,
   clearError: () => void,
   getValue: (defaultValue?: unknown) => unknown,
   setValue: (value: unknown, strict?: boolean) => void,
   sync: (instance: any) => void,
-  unsync: (instance: any) => void
+  unSync: (instance: any) => void,
 }
 
 export interface FormActions {
@@ -63,13 +72,16 @@ export interface FormActions {
   reset: () => void,
   resetFields: (props: string | string[]) => void,
   clearError: () => void,
-  clearFieldsError: (props: string | string[]) => void
+  clearFieldsError: (props: string | string[]) => void,
 }
 
 // form
-export const FORM_PROPS: InjectionKey<Partial<FormProps>> = Symbol('FORM_PROPS')
-export const FORM_FIELDS: InjectionKey<Set<FieldOptions>> = Symbol('FORM_FIELDS')
-export const FORM_ACTIONS: InjectionKey<FormActions> = Symbol('FORM_ACTIONS')
+export const FORM_PROPS = '__VXP_FORM_PROPS' as unknown as InjectionKey<Partial<FormProps>>
+export const FORM_FIELDS = '__VXP_FORM_FIELDS' as unknown as InjectionKey<Set<FieldOptions>>
+export const FORM_ACTIONS = '__VXP_FORM_ACTIONS' as unknown as InjectionKey<FormActions>
 
 // form-item
-export const FIELD_OPTIONS: InjectionKey<FieldOptions> = Symbol('FIELD_OPTIONS')
+export const FIELD_OPTIONS = '__VXP_FIELD_OPTIONS' as unknown as InjectionKey<FieldOptions | null>
+
+export const submitMethods = Object.freeze<SubmitMethod[]>(['get', 'post', 'put', 'delete'])
+export const labelAligns = Object.freeze<FormLabelAlign[]>(['right', 'top', 'left'])

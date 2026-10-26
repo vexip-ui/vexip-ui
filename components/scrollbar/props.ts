@@ -1,6 +1,6 @@
-import { buildProps, booleanProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { ScrollbarPlacement } from './symbol'
 
@@ -20,7 +20,7 @@ export const scrollbarProps = buildProps({
   trackSpeed: Number,
   onScrollStart: eventProp<(percent: number) => void>(),
   onScroll: eventProp<(percent: number) => void>(),
-  onScrollEnd: eventProp<(percent: number) => void>()
+  onScrollEnd: eventProp<(percent: number) => void>(),
 })
 
 export type ScrollbarProps = ExtractPropTypes<typeof scrollbarProps>

@@ -1,6 +1,0 @@
-### ColorPicker Props
-
-| Name   | Type                  | Description                                                                                                                                                                                                                                     | Default | Since |
-| ------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----- |
-| props  | `Record<string, any>` | The component props configuration to be injected, the key value is the camel case name of the component, the value is the props configuration of the component, the injected values will override the component's original props default values | `{}`    | -     |
-| locale | `LocaleOptions`       | internationalization configuration to be injected                                                                                                                                                                                               | `{}`    | -     |

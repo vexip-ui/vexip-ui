@@ -1,6 +1,7 @@
 <template>
   <Collapse v-model:expanded="expanded">
     <CollapsePanel title="Panel 1">
+      <Input></Input>
       <p>Some content to fill</p>
       <p>Some content to fill</p>
     </CollapsePanel>
@@ -18,7 +19,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const expanded = ref(0)
+const expanded = ref(1)
 </script>
 
 <style scoped>

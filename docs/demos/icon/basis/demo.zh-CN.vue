@@ -8,5 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import { DiceOne, DiceTwo, DiceThree, DiceFour, DiceFive, DiceSix } from '@vexip-ui/icons'
+import { DiceFive, DiceFour, DiceOne, DiceSix, DiceThree, DiceTwo } from '@vexip-ui/icons'
 </script>

@@ -1,5 +1,6 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
 
 /* stylelint-disable length-zero-no-unit */
@@ -8,17 +9,18 @@ $timeline: map.merge(
   (
     item-span: 20px,
     item-span-pending: 36px,
-    pointer-color: get-css-var('color-primary-base'),
-    pointer-bg-color: get-css-var('color-white'),
+    pointer-color: value('color-primary-base'),
+    pointer-bg-color: value('color-white'),
     pointer-b-width: 2px,
-    pointer-b-color: get-css-var('color-primary-base'),
-    pointer-b-color-disabled: get-css-var('content-color-disabled'),
+    pointer-b-color: value('color-primary-base'),
+    pointer-b-color-disabled: value('content-color-disabled'),
     pointer-size: 12px,
     line-width: 2px,
     line-style: solid,
     line-style-pending: dashed,
-    line-color: get-css-var('border-color-light-2'),
-    line-inset: 0px
+    line-color: value('border-color-light-2'),
+    line-inset-start: 0px,
+    line-inset-end: 0px
   ),
   $timeline
 );
@@ -33,31 +35,32 @@ $timeline: map.merge(
     @include define-preset-style('timeline', $style-map);
   }
 
-  @include basis;
+  $side-pad: calc(#{value('timeline-pointer-size')} * 0.5);
 
-  display: inline-flex;
-  flex-direction: column;
-  padding-left: 6px;
+  @include basis {
+    display: inline-flex;
+    flex-direction: column;
+    padding-inline-start: $side-pad;
+  }
 
   &--horizontal {
     flex-direction: row;
-    padding-top: 6px;
-    padding-left: 0;
+    padding-inline-start: 0;
+    padding-top: $side-pad;
   }
 
   &--flip {
-    padding-right: 6px;
-    padding-left: 0;
+    padding-inline: 0 $side-pad;
   }
 
   &--horizontal#{&}--flip {
+    padding-inline-end: 0;
     padding-top: 0;
-    padding-right: 0;
-    padding-bottom: 6px;
+    padding-bottom: $side-pad;
   }
 
-  &--both-sides,
-  &--both-sides#{&}--flip {
+  &--alternate,
+  &--alternate#{&}--flip {
     padding: 0;
   }
 
@@ -65,59 +68,59 @@ $timeline: map.merge(
     position: relative;
     display: flex;
     align-items: flex-start;
-    padding-bottom: get-css-var('timeline-item-span');
+    padding-bottom: value('timeline-item-span');
 
     &:last-child {
       padding-bottom: 0;
     }
 
-    $types: success error warning;
-
     @each $type in $types {
-      &--#{$type} {
-        @include define-timeline-style(
-          (
-            pointer-color: 'color' $type 'base',
-            pointer-b-color: 'color' $type 'base'
-          )
-        );
+      @if $type != 'primary' {
+        &--#{$type} {
+          @include define-timeline-style(
+            (
+              pointer-color: 'color' $type 'base',
+              pointer-b-color: 'color' $type 'base'
+            )
+          );
+        }
       }
     }
   }
 
   &--horizontal &__item {
-    padding-right: get-css-var('timeline-item-span');
+    padding-inline-end: value('timeline-item-span');
     padding-bottom: 0;
   }
 
-  &--both-sides &__item {
+  &--alternate &__item {
     align-self: flex-end;
     width: 50%;
   }
 
-  &--horizontal#{&}--both-sides &__item {
+  &--horizontal#{&}--alternate &__item {
     width: 100%;
     height: 50%;
   }
 
-  &--both-sides:not(&--flip) &__item {
+  &--alternate:not(&--flip) &__item {
     &:nth-child(even) {
       align-self: flex-start;
     }
   }
 
-  &--both-sides#{&}--flip &__item {
+  &--alternate#{&}--flip &__item {
     &:nth-child(odd) {
       align-self: flex-start;
     }
   }
 
-  $pointer-size: get-css-var('timeline-pointer-size');
+  $pointer-size: value('timeline-pointer-size');
 
   &__signal {
     position: absolute;
+    inset-inline-start: calc($pointer-size * -0.5);
     top: 0;
-    left: calc($pointer-size * -0.5);
     z-index: 1;
     display: inline-flex;
     align-items: center;
@@ -127,35 +130,35 @@ $timeline: map.merge(
   }
 
   &--horizontal &__signal {
+    inset-inline-start: 0;
     top: calc($pointer-size * -0.5);
-    left: 0;
   }
 
   &--flip &__signal {
-    left: calc($pointer-size * -0.5 + 100%);
+    inset-inline-start: calc($pointer-size * -0.5 + 100%);
   }
 
   &--horizontal#{&}--flip &__signal {
+    inset-inline-start: 0;
     top: calc($pointer-size * -0.5 + 100%);
-    left: 0;
   }
 
-  &--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
-    left: calc($pointer-size * -0.5 + 100%);
+  &--alternate:not(&--flip) &__item:nth-child(even) &__signal {
+    inset-inline-start: calc($pointer-size * -0.5 + 100%);
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(even) &__signal {
-    left: calc($pointer-size * -0.5);
+  &--alternate#{&}--flip &__item:nth-child(even) &__signal {
+    inset-inline-start: calc($pointer-size * -0.5);
   }
 
-  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__signal {
+  &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__signal {
+    inset-inline-start: 0;
     top: calc($pointer-size * -0.5 + 100%);
-    left: 0;
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__signal {
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__signal {
+    inset-inline-start: 0;
     top: calc($pointer-size * -0.5);
-    left: 0;
   }
 
   &--signal-click &__signal {
@@ -165,80 +168,81 @@ $timeline: map.merge(
   &__pointer {
     width: 100%;
     height: 100%;
-    color: get-css-var('timeline-pointer-color');
-    background-color: get-css-var('timeline-pointer-bg-color');
-    border: get-css-var('timeline-pointer-b-width') solid get-css-var('timeline-pointer-b-color');
+    color: value('timeline-pointer-color');
+    background-color: value('timeline-pointer-bg-color');
+    border: value('timeline-pointer-b-width') solid value('timeline-pointer-b-color');
     border-radius: 50%;
   }
 
   &__item--disabled &__pointer {
-    border-color: get-css-var('timeline-pointer-b-color-disabled');
+    border-color: value('timeline-pointer-b-color-disabled');
   }
 
-  $line-width: get-css-var('timeline-line-width');
+  $line-width: value('timeline-line-width');
 
   &__line {
     position: absolute;
+    inset-inline-start: 0;
     top: 0;
     bottom: 0;
-    left: calc($line-width * -0.5);
     display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 0;
-    padding-top: calc($pointer-size + get-css-var('timeline-line-inset'));
-    padding-bottom: get-css-var('timeline-line-inset');
+    padding-top: calc($pointer-size + value('timeline-line-inset-start'));
+    padding-bottom: value('timeline-line-inset-end');
 
     &::after {
       height: 100%;
       content: '';
-      border: 0 get-css-var('timeline-line-style') get-css-var('timeline-line-color');
-      border-left-width: $line-width;
+      border: 0 value('timeline-line-style') value('timeline-line-color');
+      border-inline-start-width: $line-width;
+      transition: value('transition-border');
     }
   }
 
   &--horizontal &__line {
-    top: calc($line-width * -0.5);
-    right: 0;
     bottom: auto;
-    left: 0;
-    width: auto;
+    flex-direction: row;
+    width: 100%;
     height: 0;
     padding: 0;
-    padding-right: get-css-var('timeline-line-inset');
-    padding-left: calc($pointer-size + get-css-var('timeline-line-inset'));
+    padding-inline: calc($pointer-size + value('timeline-line-inset-start'))
+      value('timeline-line-inset-end');
 
     &::after {
       width: 100%;
       height: 0;
+      border-inline-start-width: 0;
       border-top-width: $line-width;
-      border-left-width: 0;
     }
   }
 
   &--flip &__line {
-    left: calc($line-width * -0.5 + 100%);
+    inset-inline-start: 100%;
   }
 
   &--horizontal#{&}--flip &__line {
-    top: calc($line-width * -0.5 + 100%);
-    left: 0;
+    inset-inline-start: 0;
+    top: 100%;
   }
 
-  &--both-sides:not(&--flip) &__item:nth-child(even) &__line {
-    left: calc($line-width * -0.5 + 100%);
+  &--alternate:not(&--flip) &__item:nth-child(even) &__line {
+    inset-inline-start: 100%;
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(even) &__line {
-    left: calc($line-width * -0.5);
+  &--alternate#{&}--flip &__item:nth-child(even) &__line {
+    inset-inline-start: 0;
   }
 
-  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__line {
-    top: calc($line-width * -0.5 + 100%);
-    left: 0;
+  &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__line {
+    inset-inline-start: 0;
+    top: 100%;
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__line {
-    top: calc($line-width * -0.5);
-    left: 0;
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__line {
+    inset-inline-start: 0;
+    top: 0;
   }
 
   $content-pad: calc($pointer-size * 0.5 + 8px);
@@ -248,92 +252,85 @@ $timeline: map.merge(
     top: -5px;
     display: flex;
     flex-direction: column;
-    padding-left: $content-pad;
+    padding-inline-start: $content-pad;
   }
 
   &--horizontal &__content {
     top: 0;
-    padding: {
-      top: $content-pad;
-      left: 0;
-    }
+    padding-inline-start: 0;
+    padding-top: $content-pad;
   }
 
   &--flip &__content {
     padding: {
-      right: $content-pad;
-      left: 0;
+      inline-end: $content-pad;
+      inline-start: 0;
     }
   }
 
   &--horizontal#{&}--flip &__content {
     padding: {
       top: 0;
-      right: 0;
+      inline-end: 0;
       bottom: $content-pad;
     }
   }
 
-  &--both-sides:not(&--flip) &__item:nth-child(even) &__content {
+  &--alternate:not(&--flip) &__item:nth-child(even) &__content {
     align-items: flex-end;
     padding: {
-      right: $content-pad;
-      left: 0;
+      inline-end: $content-pad;
+      inline-start: 0;
     }
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(even) &__content {
+  &--alternate#{&}--flip &__item:nth-child(even) &__content {
     padding: {
-      right: 0;
-      left: $content-pad;
+      inline-end: 0;
+      inline-start: $content-pad;
     }
   }
 
-  &--both-sides#{&}--flip &__item:nth-child(odd) &__content {
+  &--alternate#{&}--flip &__item:nth-child(odd) &__content {
     align-items: flex-end;
     padding: {
-      right: $content-pad;
+      inline-end: $content-pad;
     }
   }
 
-  &--horizontal#{&}--both-sides:not(&--flip) &__item:nth-child(even) &__content {
+  &--horizontal#{&}--alternate:not(&--flip) &__item:nth-child(even) &__content {
     align-self: flex-end;
     padding: {
       top: 0;
-      right: 0;
+      inline-end: 0;
       bottom: $content-pad;
     }
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(even) &__content {
-    padding: {
-      top: $content-pad;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(even) &__content {
+    padding: $content-pad 0 0;
   }
 
-  &--horizontal#{&}--both-sides#{&}--flip &__item:nth-child(odd) &__content {
-    padding-right: 0;
+  &--horizontal#{&}--alternate#{&}--flip &__item:nth-child(odd) &__content {
+    padding-inline-end: 0;
   }
 
-  &__item:last-child &__line {
+  &__item:last-child &__line::after {
     display: none;
   }
 
   $line: #{&}__line;
 
   &--pending &__item:nth-last-child(2) {
-    padding-bottom: get-css-var('timeline-item-span-pending');
+    padding-bottom: value('timeline-item-span-pending');
 
     #{$line}::after {
-      border-style: get-css-var('timeline-line-style-pending');
+      border-style: value('timeline-line-style-pending');
     }
   }
 
   &--horizontal#{&}--pending &__item:nth-last-child(2) {
-    padding-right: get-css-var('timeline-item-span-pending');
+    padding-inline-end: value('timeline-item-span-pending');
     padding-bottom: 0;
   }
 }

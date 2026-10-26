@@ -4,7 +4,7 @@
     "module": "esnext",
     "allowJs": false,
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,

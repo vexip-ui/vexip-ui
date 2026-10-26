@@ -1,5 +1,5 @@
 <template>
-  <Carousel loop vertical style="display: inline-block;">
+  <Carousel loop vertical style="display: inline-block">
     <CarouselItem v-for="n in 5" :key="n">
       <div class="demo-pane">
         内容{{ n }}

@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 360px; height: 120px; border: var(--vxp-border-base);">
+  <div style="max-width: 360px; height: 120px; border: var(--vxp-border-base)">
     <NativeScroll use-y-bar height="100%">
       <p v-for="n in 9" :key="n">
         {{ n }}、在此处滚动鼠标滚轮

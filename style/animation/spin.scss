@@ -1,13 +1,14 @@
-@use '../design/variables.scss' as *;
+@use '../design/variables' as *;
+@use '../shared/variables' as *;
 
 $-name: '#{$namespace}-spin';
 
 @mixin -start {
-  transform: rotate(0deg);
+  transform: translateZ(0) rotate(0deg);
 }
 
 @mixin -end {
-  transform: rotate(360deg);
+  transform: translateZ(0) rotate(360deg);
 }
 
 .#{$-name} {
@@ -15,14 +16,14 @@ $-name: '#{$namespace}-spin';
     &-enter-active {
       animation: {
         name: #{$-name}-in;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
 
     &-leave-active {
       animation: {
         name: #{$-name}-out;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
   }

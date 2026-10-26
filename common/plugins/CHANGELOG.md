@@ -1,3 +1,81 @@
+## 1.7.0 (2025-01-14)
+
+* build: upgrade dev dependencies ([c4be7dd](https://github.com/vexip-ui/vexip-ui/commit/c4be7dd))
+* build: upgrade sass and vitest ([3fde83d](https://github.com/vexip-ui/vexip-ui/commit/3fde83d))
+
+
+
+# [1.6.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.5.1...plugins@1.6.0) (2023-12-13)
+
+
+### ✨ Features
+
+* **plugins:** add transformLogical postcss plugin ([#447](https://github.com/vexip-ui/vexip-ui/issues/447)) ([de86901](https://github.com/vexip-ui/vexip-ui/commit/de869019f9427bedaf017f7b5c6698c3a714d7cf))
+
+
+
+## [1.5.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.5.0...plugins@1.5.1) (2023-11-03)
+
+
+### ✨ Features
+
+* **cli:** support generate types.d.ts with custom prefix ([982ac80](https://github.com/vexip-ui/vexip-ui/commit/982ac80767350aca4eadfa413b1186c4fb01a43e))
+
+
+
+# [1.5.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.4.0...plugins@1.5.0) (2023-10-27)
+
+
+### ✨ Features
+
+* **plugins:** add fullStyle option for unplugin resolver ([c06e9b0](https://github.com/vexip-ui/vexip-ui/commit/c06e9b0318e29dd408584c5bd78c56d6da91c428))
+
+
+
+# [1.4.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.3.2...plugins@1.4.0) (2023-09-05)
+
+
+
+## [1.3.2](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.3.1...plugins@1.3.2) (2023-03-30)
+
+## [1.3.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.1...plugins@1.3.1) (2023-03-29)
+
+### Bug Fixes
+
+- **plugins:** support vexip-ui version lower than 2.1.10 ([7e747d2](https://github.com/vexip-ui/vexip-ui/commit/7e747d2882e22aa1acc9b36e082a256675911259))
+
+### Code Refactoring
+
+- switch to use es module to export style files ([#290](https://github.com/vexip-ui/vexip-ui/issues/290)) ([26eb0df](https://github.com/vexip-ui/vexip-ui/commit/26eb0dfbd4a3b862fb4b212aa6d20f3010e74357))
+
+### BREAKING CHANGES
+
+- The scss and css style files no longer contains dependent
+  styles for its component. Currently the relationship of styles are included in ts
+  (js) files which are use to import the styles. Change the import way of style like:
+  `vexip-ui/css/button.css` -> `vexip-ui/es/css/button` and unnecessary to import
+  preset style manually.
+
+# [1.3.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.1...plugins@1.3.0) (2023-03-29)
+
+### Code Refactoring
+
+- switch to use es module to export style files ([#290](https://github.com/vexip-ui/vexip-ui/issues/290)) ([26eb0df](https://github.com/vexip-ui/vexip-ui/commit/26eb0dfbd4a3b862fb4b212aa6d20f3010e74357))
+
+### BREAKING CHANGES
+
+- The scss and css style files no longer contains dependent
+  styles for its component. Currently the relationship of styles are included in ts
+  (js) files which are use to import the styles. Change the import way of style like:
+  `vexip-ui/css/button.css` -> `vexip-ui/es/css/button` and unnecessary to import
+  preset style manually.
+
+## [1.2.1](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.2.0...plugins@1.2.1) (2023-02-08)
+
+### Bug Fixes
+
+- **plugins:** correct css file path for dark mode ([#254](https://github.com/vexip-ui/vexip-ui/issues/254)) ([f3aa29b](https://github.com/vexip-ui/vexip-ui/commit/f3aa29b6467fd846c017850e81f588928ac8de8e))
+
 # [1.2.0](https://github.com/vexip-ui/vexip-ui/compare/plugins@1.1.0...plugins@1.2.0) (2022-10-10)
 
 ### Features

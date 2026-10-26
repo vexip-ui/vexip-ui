@@ -1,21 +1,27 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './modal.scss';
 
 $confirm: () !default;
 $confirm: map.merge(
   (
-    title-font-size: get-css-var('font-size-primary'),
+    title-font-size: value('font-size-primary'),
     title-weight: 500,
-    title-color: get-css-var('content-color-primary'),
-    icon-color: get-css-var('color-warning-base'),
-    close-color: get-css-var('content-color-placeholder'),
-    close-color-hover: get-css-var('content-color-base'),
+    title-color: value('content-color-primary'),
+    icon-color: value('color-warning-base'),
+    close-color: value('content-color-placeholder'),
+    close-color-hover: value('content-color-base'),
     header-padding: 8px,
     body-padding: 14px 8px,
     body-padding-with-title: 8px,
-    actions-padding: 14px 8px 8px
+    actions-padding: 14px 8px 8px,
+    header-v-padding: 10px,
+    header-h-padding: 14px,
+    body-v-padding: 10px,
+    body-h-padding: 14px,
+    footer-v-padding: 12px,
+    footer-h-padding: 14px,
   ),
   $confirm
 );
@@ -29,20 +35,21 @@ $confirm: map.merge(
 
   .#{$namespace}-modal__content {
     position: relative;
+    padding: 0;
   }
 
   &__header {
     position: relative;
     display: flex;
     align-items: center;
-    padding: get-css-var('confirm-header-padding');
+    padding: value('confirm-header-v-padding') value('confirm-header-h-padding');
   }
 
   &__title {
     flex: 1 0 0;
-    font-size: get-css-var('modal-title-font-size');
-    font-weight: get-css-var('modal-title-weight');
-    color: get-css-var('modal-title-color');
+    font-size: value('modal-title-font-size');
+    font-weight: value('modal-title-weight');
+    color: value('modal-title-color');
   }
 
   &__body {
@@ -50,10 +57,16 @@ $confirm: map.merge(
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding: get-css-var('confirm-body-padding');
+    padding: value('confirm-body-v-padding') value('confirm-body-h-padding');
 
-    &--with-title {
-      padding: get-css-var('confirm-body-padding-with-title');
+    // &--with-title {
+    //   padding: value('confirm-body-padding-with-title');
+    // }
+
+    &--no-title {
+      padding-top: calc(
+        #{value('confirm-header-v-padding')} * 0.5 + #{value('confirm-body-v-padding')}
+      );
     }
 
     &--left {
@@ -69,15 +82,15 @@ $confirm: map.merge(
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 4px;
-    color: get-css-var('confirm-icon-color');
+    margin-inline-end: 4px;
+    color: value('confirm-icon-color');
   }
 
   &__footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: get-css-var('confirm-actions-padding');
+    padding: value('confirm-footer-v-padding') value('confirm-footer-h-padding');
 
     &--left {
       justify-content: flex-start;
@@ -92,35 +105,37 @@ $confirm: map.merge(
     padding: 0 28px;
 
     &:last-child {
-      margin-left: 14px;
+      margin-inline-start: 14px;
     }
   }
 
   &__close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+    position: relative;
     display: flex;
     align-items: center;
     height: 24px;
     padding: 0;
-    margin-left: 6px;
-    color: get-css-var('confirm-close-color');
+    margin-inline-start: 6px;
+    color: value('confirm-close-color');
     cursor: pointer;
     background-color: transparent;
     border: 0;
     outline: 0;
-    transition: get-css-var('transition-color');
+    transition: value('transition-color');
 
     &:hover,
     &:focus {
-      color: get-css-var('confirm-close-color-hover');
+      color: value('confirm-close-color-hover');
     }
-  }
 
-  &__header &__close {
-    position: relative;
-    top: 0;
-    right: 0;
+    &--disabled {
+      cursor: default;
+
+      &,
+      &:hover,
+      &:focus {
+        color: value('confirm-close-color');
+      }
+    }
   }
 }

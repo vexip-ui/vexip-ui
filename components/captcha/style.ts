@@ -1,0 +1,5 @@
+import '@/components/preset/style'
+import '@/components/button/style'
+import '@/components/spin/style'
+import '@/components/tooltip/style'
+import '@/style/captcha.scss'

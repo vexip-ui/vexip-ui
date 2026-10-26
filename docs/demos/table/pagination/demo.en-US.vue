@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 1000px;">
+  <div style="max-width: 1000px">
     <Table
       :data="data"
       :current-page="currentPage"
@@ -13,11 +13,10 @@
       <TableColumn id-key="found" name="Found"></TableColumn>
       <TableColumn id-key="progress" name="Progress"></TableColumn>
     </Table>
-    <div style="margin: 10px 10px 0; text-align: right;">
+    <div style="margin: 10px 10px 0; text-align: right">
       <Pagination
         v-model:active="currentPage"
-        page-jump
-        page-total
+        :plugins="['total', , 'jump']"
         :total="data.length"
         :page-size="pageSize"
       ></Pagination>
@@ -28,12 +27,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import type { TableRowPayload } from 'vexip-ui'
+
 interface RowData {
   id: number,
   group: string,
   member: number,
   found: string,
-  progress: number
+  progress: number,
 }
 
 const data = ref(mockData())
@@ -49,7 +50,7 @@ function mockData() {
       group: `Group ${i + 1}`,
       member: 3 + Math.round(Math.random() * 7),
       found: randomDate(),
-      progress: 10 + Math.round(Math.random() * 90)
+      progress: 10 + Math.round(Math.random() * 90),
     })
   }
 
@@ -60,7 +61,7 @@ function randomDate() {
   const startDate = new Date('2000-01-01')
   const endDate = new Date()
   const randomDate = new Date(
-    startDate.getTime() + (endDate.getTime() - startDate.getTime()) * Math.random()
+    startDate.getTime() + (endDate.getTime() - startDate.getTime()) * Math.random(),
   )
 
   return formatDate(randomDate)
@@ -68,13 +69,13 @@ function randomDate() {
 
 function formatDate(date: Date) {
   const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
+  const month = `${date.getMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getDate()}`.padStart(2, '0')
 
-  return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`
+  return `${year}-${month}-${day}`
 }
 
-function toggleChecked(row: RowData, checked: boolean) {
+function toggleChecked({ row, checked }: TableRowPayload) {
   console.info(row, checked)
 }
 

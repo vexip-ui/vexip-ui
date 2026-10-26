@@ -1,1 +1,2 @@
-import '@/style/calendar-panel.scss'
+import '@/components/preset/style'
+import '@/components/calendar/style'

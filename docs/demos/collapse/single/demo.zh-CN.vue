@@ -6,7 +6,9 @@
   <br />
   <CollapsePanel card>
     <template #title>
-      <Icon><ChartLine></ChartLine></Icon>
+      <Icon style="margin-inline-end: 6px">
+        <ChartLine></ChartLine>
+      </Icon>
       独立面板二
     </template>
     <p>一些内容一些内容一些内容</p>

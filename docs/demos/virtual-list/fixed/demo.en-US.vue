@@ -3,7 +3,8 @@
     :items="items"
     use-bar-track
     item-fixed
-    style="height: 200px;"
+    :item-size="36"
+    style="height: 200px"
   >
     <template #default="{ item }">
       <li class="virtual-list__item">
@@ -20,9 +21,9 @@ const items = ref(
   Array.from({ length: 10000 }, (_, index) => {
     return {
       id: index,
-      value: `Element ${index}`
+      value: `Element ${index}`,
     }
-  })
+  }),
 )
 </script>
 

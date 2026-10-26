@@ -1,22 +1,9 @@
-<template>
-  <template v-if="!loading">
-    <Header :store="store" :versions="versions"></Header>
-    <Repl
-      show-compile-output
-      auto-resize
-      :clear-console="false"
-      :show-import-map="false"
-      :store="store"
-      :sfc-options="sfcOptions"
-      @keydown="handleKeyDown"
-    ></Repl>
-  </template>
-</template>
-
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue'
+import { computed, ref, useTemplateRef, watch, watchEffect } from 'vue'
 import { Repl } from '@vue/repl'
-import Header from './components/header.vue'
+
+import Monaco from '@vue/repl/monaco-editor'
+import Header from './header.vue'
 import { useReplStore } from './store'
 import { prettierCode } from './format'
 
@@ -26,23 +13,27 @@ const loading = ref(true)
 
 const store = useReplStore({
   serializedState: hash,
-  versions
+  versions,
 })
 
-// enable experimental features
-const sfcOptions = {
-  script: {
-    // refTransform: true,
-    reactivityTransform: true
-  }
-}
+const dark = computed(() => store.dark)
 
 store.init().then(() => {
+  console.info(store)
   loading.value = false
+})
+
+const AUTO_SAVE_KEY = 'vxp-playground-auto-save'
+const autoSave = ref(JSON.parse(localStorage.getItem(AUTO_SAVE_KEY) || 'true'))
+
+watch(autoSave, value => {
+  localStorage.setItem(AUTO_SAVE_KEY, JSON.stringify(value))
 })
 
 // persist state
 watchEffect(() => history.replaceState({}, '', store.serialize()))
+
+const replRef = useTemplateRef<InstanceType<typeof Repl>>('replRef')
 
 function parseVersions() {
   const search = new URLSearchParams(location.search)
@@ -61,28 +52,49 @@ async function handleKeyDown(event: KeyboardEvent) {
   if ((ctrlKey || metaKey) && code === 'KeyS') {
     event.preventDefault()
   } else if ((ctrlKey || metaKey || altKey) && shiftKey && code === 'KeyF') {
-    const file = store.state.activeFile
+    const file = store.activeFile
 
     event.preventDefault()
     file.code = await prettierCode(file.filename, file.code)
   }
 }
+
+function reloadRepl() {
+  replRef.value?.reload()
+}
 </script>
+
+<template>
+  <template v-if="!loading">
+    <Header :store="store" :versions="versions" @reload="reloadRepl"></Header>
+    <Repl
+      ref="replRef"
+      v-model="autoSave"
+      :clear-console="false"
+      :store="store"
+      :editor="Monaco"
+      :theme="dark ? 'dark' : 'light'"
+      @keydown="handleKeyDown"
+    ></Repl>
+  </template>
+</template>
 
 <style lang="scss">
 @use 'sass:map';
-@use './style.scss' as *;
+@use 'sass:meta';
+@use './style' as *;
 
 body {
   --nav-height: 50px;
 
   margin: 0;
+  overflow: hidden;
   font-family: var(--vxp-font-family-base);
   font-size: 13px;
 }
 
 .vue-repl {
-  height: calc(100vh - var(--nav-height));
+  height: calc(100vh - var(--nav-height)) !important;
 }
 
 .vue-repl,
@@ -107,6 +119,13 @@ body {
   background-color: var(--vxp-bg-color-base) !important;
 }
 
+.monaco-editor {
+  &-background,
+  .margin {
+    transition: var(--vxp-transition-background);
+  }
+}
+
 .split-pane {
   $lg: (
     max-width: map.get(map.get($break-point-map, 'lg'), 'min-width') - 0.02px
@@ -119,7 +138,7 @@ body {
     }
   }
 
-  @media #{inspect($lg)} {
+  @media #{meta.inspect($lg)} {
     .left,
     .right {
       width: 100% !important;

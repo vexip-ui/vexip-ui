@@ -1,0 +1,4 @@
+huskyDir=$(dirname "$0")
+
+. "$huskyDir/scripts/common.sh"
+. "$huskyDir/scripts/update-deps.sh"

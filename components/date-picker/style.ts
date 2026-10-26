@@ -1,1 +1,6 @@
+import '@/components/preset/style'
+import '@/components/button/style'
+import '@/components/calendar-panel/style'
+import '@/components/popper/style'
+import '@/components/wheel/style'
 import '@/style/date-picker.scss'

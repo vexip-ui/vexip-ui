@@ -1,47 +1,39 @@
-import { createApp, markRaw } from 'vue'
+import { createApp, createVNode, markRaw, render } from 'vue'
+
 import Component from './notice.vue'
-import { isClient, isNull, isObject, noop, toNumber, destroyObject } from '@vexip-ui/utils'
-import { CircleInfo, CircleCheck, CircleExclamation, CircleXmark } from '@vexip-ui/icons'
+import { proxyExposed, unrefElement } from '@vexip-ui/hooks'
+import { destroyObject, isClient, isNull, isObject, noop, toNumber } from '@vexip-ui/utils'
 
-import type { App } from 'vue'
-import type { Key, NoticeType, NoticePlacement, NoticeOptions, NoticeInstance } from './symbol'
+import type { App, MaybeRef } from 'vue'
+import type { MaybeInstance } from '@vexip-ui/hooks'
+import type {
+  Key,
+  NoticeConfig,
+  NoticeInstance,
+  NoticeOptions,
+  NoticePlacement,
+  NoticeType,
+} from './symbol'
 
-export type { NoticeType, NoticePlacement, NoticeOptions }
+export type { NoticeConfig, NoticeType, NoticePlacement, NoticeOptions }
 
 type FuzzyOptions = string | NoticeOptions
-type ManagerOptions = { marker?: boolean, duration?: number, placement?: NoticePlacement } & Record<
-  string,
-  unknown
->
+type ManagerOptions = { marker?: boolean, duration?: number } & NoticeConfig &
+  Record<string, unknown>
 
 interface AipMethod {
   (options: NoticeOptions): () => void,
   (title: string, duration?: number): () => void,
   (title: string, content: string, duration?: number): () => void,
   /** @internal */
-  (options: FuzzyOptions, duration?: number): () => void
-}
-
-const conveniences: Record<NoticeType, { icon: Record<string, any> }> = {
-  info: {
-    icon: CircleInfo
-  },
-  success: {
-    icon: CircleCheck
-  },
-  warning: {
-    icon: CircleExclamation
-  },
-  error: {
-    icon: CircleXmark
-  }
+  (options: FuzzyOptions, duration?: number): () => void,
 }
 
 const placementWhiteList: NoticePlacement[] = [
   'top-right',
   'top-left',
   'bottom-right',
-  'bottom-left'
+  'bottom-left',
 ]
 
 let count = 1
@@ -55,25 +47,36 @@ export class NoticeManager {
   defaults: Record<string, unknown>
 
   open: AipMethod
+  primary: AipMethod
   info: AipMethod
   success: AipMethod
   warning: AipMethod
   error: AipMethod
 
+  private _mountedApp: App<unknown> | null
   private _instance: NoticeInstance | null
   private _innerApp: App<unknown> | null
   private _container: HTMLElement | null
+  private _wrapper: HTMLElement | SVGElement | null
+  private _mountedEl: HTMLElement | null
+  private _installed: boolean
+  private _configRecord: NoticeConfig | null
 
   constructor(options: ManagerOptions = {}) {
     options = {
       ...options,
       marker: !!options.marker,
-      duration: options.duration ? toNumber(options.duration) : 4000
+      duration: options.duration ? toNumber(options.duration) : 4000,
     }
 
+    this._mountedApp = null
     this._instance = null
     this._innerApp = null
     this._container = null
+    this._wrapper = null
+    this._mountedEl = null
+    this._installed = false
+    this._configRecord = null
     this.name = 'Notice'
     this.defaults = {}
 
@@ -81,6 +84,10 @@ export class NoticeManager {
 
     this.open = (title: FuzzyOptions, content?: string | number, duration?: number) => {
       return this._open(null, title, content, duration)
+    }
+
+    this.primary = (title: FuzzyOptions, content?: string | number, duration?: number) => {
+      return this._open('primary', title, content, duration)
     }
 
     this.info = (title: FuzzyOptions, content?: string | number, duration?: number) => {
@@ -108,7 +115,7 @@ export class NoticeManager {
     state: boolean,
     success: string | NoticeOptions,
     error: string | NoticeOptions,
-    duration?: number
+    duration?: number,
   ) {
     if (state) {
       this.success(success, duration)
@@ -121,30 +128,47 @@ export class NoticeManager {
     if (isNull(key)) {
       this.clear()
     } else {
-      this._getInstance().remove(key)
+      this._getInstance()?.remove(key)
     }
   }
 
-  config({ placement, ...others }: { placement?: NoticePlacement, [x: string]: unknown }) {
-    if (placement) {
-      this._getInstance().placement = placementWhiteList.includes(placement)
-        ? placement
-        : placementWhiteList[0]
-    }
-
+  config({ placement, startOffset, itemGap, ...others }: NoticeConfig & NoticeOptions) {
+    this._configRecord = { placement, startOffset, itemGap }
     this.defaults = { ...this.defaults, ...others }
+
+    if (this._installed) {
+      const instance = this._getInstance()
+
+      if (instance) {
+        if (placement) {
+          instance.config({
+            placement: placementWhiteList.includes(placement) ? placement : placementWhiteList[0],
+          })
+        }
+
+        instance.config({ startOffset, itemGap })
+      }
+    }
   }
 
   clone() {
-    return new NoticeManager(this.defaults)
+    const manager = new NoticeManager(this.defaults)
+
+    manager._mountedApp = this._mountedApp
+    manager._configRecord = this._configRecord
+    manager._installed = this._installed
+
+    return manager
   }
 
   clear() {
-    this._getInstance().clear()
+    this._getInstance()?.clear()
   }
 
   destroy() {
+    this._mountedEl && this._wrapper?.removeChild(this._mountedEl)
     this._innerApp?.unmount()
+    this._container && render(null, this._container)
     destroyObject(this)
   }
 
@@ -155,20 +179,52 @@ export class NoticeManager {
   install(app: App, options: ManagerOptions & { property?: string } = {}) {
     const { property, ...others } = options
 
-    this.config(others)
-    app.config.globalProperties[property || '$notice'] = this
+    this._mountedApp = app
+    this._installed = true
+    this.config({ ...this._configRecord, ...others })
+
+    if (property || !app.config.globalProperties.$notice) {
+      app.config.globalProperties[property || '$notice'] = this
+    }
+  }
+
+  transferTo(target: MaybeRef<string | MaybeInstance>) {
+    if (!isClient) return
+
+    const el = unrefElement(target)
+
+    if (el) {
+      this._wrapper = el
+
+      if (this._instance) {
+        this._mountedEl && this._wrapper.appendChild(this._mountedEl)
+      } else {
+        this._getInstance()
+      }
+    }
   }
 
   private _getInstance() {
-    if (!this._instance) {
-      this._container = document.createElement('div')
-      // 使用 createVNode 和 render 手动控制可以有效降低开销
-      // 然而使用上述方式创建的组件无法被 devTool 正确加载
-      // 因此选择开销更大的 createApp 以保证 devTool 的正常运行
-      this._innerApp = createApp(Component)
-      this._instance = this._innerApp.mount(this._container) as NoticeInstance
+    if (!this._instance && isClient) {
+      if (!this._mountedApp) {
+        console.warn('[vexip-ui:Notice]: App missing, the plugin maybe not installed.')
 
-      document.body.appendChild(this._container.firstElementChild!)
+        this._container = document.createElement('div')
+        this._innerApp = createApp(Component)
+        this._instance = this._innerApp.mount(this._container) as NoticeInstance
+      } else {
+        const vnode = createVNode(Component, null, null)
+
+        this._container = document.createElement('div')
+        vnode.appContext = this._mountedApp._context
+
+        render(vnode, this._container)
+
+        this._instance = proxyExposed<NoticeInstance>(vnode)
+      }
+
+      this._mountedEl = this._container.firstElementChild as HTMLElement
+      ;(this._wrapper || document.body).appendChild(this._mountedEl)
     }
 
     return this._instance
@@ -178,7 +234,7 @@ export class NoticeManager {
     type: null | NoticeType,
     title: FuzzyOptions,
     content?: string | number,
-    _duration?: number
+    _duration?: number,
   ) {
     if (!isClient) {
       return noop
@@ -199,8 +255,7 @@ export class NoticeManager {
     }
 
     const key = options.key ?? getKey()
-    const notice = this._getInstance()
-    const convenienceOptions = type ? conveniences[type] ?? {} : {}
+    const notice = this._getInstance()!
 
     let timer: ReturnType<typeof setTimeout>
 
@@ -213,24 +268,54 @@ export class NoticeManager {
       }
     }
 
-    const item: NoticeOptions = Object.assign({}, this.defaults, convenienceOptions, options, {
+    const userEnterFn = options.onEnter
+    const onEnter = () => {
+      if (options.liveOnEnter) {
+        clearTimeout(timer)
+      }
+
+      if (typeof userEnterFn === 'function') {
+        return userEnterFn()
+      }
+    }
+
+    const userLeaveFn = options.onLeave
+    const onLeave = () => {
+      if (options.liveOnEnter) {
+        clearTimeout(timer)
+        setDelayClose()
+      }
+
+      if (typeof userLeaveFn === 'function') {
+        return userLeaveFn()
+      }
+    }
+
+    const item: NoticeOptions = {
+      ...this.defaults,
+      ...options,
       key,
-      type,
-      onClose
-    })
+      type: type ?? options.type,
+      onClose,
+      onEnter,
+      onLeave,
+    }
 
     if (item.icon && typeof item.icon !== 'function') {
       item.icon = markRaw(item.icon)
     }
 
     notice.add(item)
+    setDelayClose()
 
-    const duration = typeof item.duration === 'number' ? item.duration : 4000
+    function setDelayClose() {
+      const duration = typeof item.duration === 'number' ? item.duration : 4000
 
-    if (duration >= 500) {
-      timer = setTimeout(() => {
-        notice.remove(key)
-      }, duration)
+      if (duration >= 500) {
+        timer = setTimeout(() => {
+          notice.remove(key)
+        }, duration)
+      }
     }
 
     return () => {

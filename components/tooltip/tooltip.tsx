@@ -1,44 +1,47 @@
+import { Popper } from '@/components/popper'
+
 import {
-  defineComponent,
-  ref,
-  toRef,
-  computed,
-  watch,
-  createTextVNode,
-  mergeProps,
   Fragment,
-  Transition
+  computed,
+  createTextVNode,
+  defineComponent,
+  mergeProps,
+  ref,
+  renderSlot,
+  shallowReadonly,
+  toRef,
+  watch,
 } from 'vue'
-import { Portal } from '@/components/portal'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { emitEvent, useHoverDelay, useId, useNameHelper, useProps } from '@vexip-ui/config'
 import {
-  useClickOutside,
   placementWhileList,
+  useClickOutside,
+  useListener,
   usePopper,
   useSetTimeout,
-  useListener
 } from '@vexip-ui/hooks'
 import { isElement } from '@vexip-ui/utils'
 import { tooltipProps } from './props'
 
+import type { PopperExposed } from '@/components/popper'
 import type { VirtualElement } from '@vexip-ui/hooks'
 
 const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Tooltip',
-  components: {
-    Portal
-  },
   inheritAttrs: true,
   props: tooltipProps,
-  emits: ['update:visible'],
+  emits: ['clickoutside', 'update:visible'],
   setup(_props, { attrs, slots, emit, expose }) {
     const nh = useNameHelper('tooltip')
     const props = useProps('tooltip', _props, {
       trigger: {
         default: 'hover',
-        validator: value => ['hover', 'click', 'focus', 'custom'].includes(value)
+        validator: value => {
+          return ['hover', 'click', 'focus', 'hover-focus', 'custom'].includes(value)
+        },
       },
       wrapper: false,
       noArrow: false,
@@ -46,7 +49,7 @@ export default defineComponent({
       visible: false,
       placement: {
         default: 'top',
-        validator: value => placementWhileList.includes(value)
+        validator: value => placementWhileList.includes(value),
       },
       outsideClose: true,
       noHover: false,
@@ -59,14 +62,27 @@ export default defineComponent({
       tipAlive: false,
       reverse: false,
       width: 'auto',
-      virtual: null
+      virtual: null,
+      shift: false,
     })
+
+    const tooltipId = useId()
+
+    const hoverDelay = useHoverDelay()
+    const { timer } = useSetTimeout()
 
     const placement = toRef(props, 'placement')
     const currentVisible = ref(props.visible)
     const rendering = ref(props.visible)
     const transfer = toRef(props, 'transfer')
     const triggerWidth = ref(100)
+
+    let hovered = false
+    let focused = false
+
+    const useHover = computed(() => props.trigger === 'hover' || props.trigger === 'hover-focus')
+    const useFocus = computed(() => props.trigger === 'focus' || props.trigger === 'hover-focus')
+
     const originalTrigger = ref<HTMLElement>()
 
     const reference = computed(() => {
@@ -76,6 +92,7 @@ export default defineComponent({
         if ('getBoundingClientRect' in virtual) {
           return virtual as VirtualElement
         }
+
         if ('x' in virtual && 'y' in virtual) {
           return {
             getBoundingClientRect: () => ({
@@ -84,25 +101,58 @@ export default defineComponent({
               left: virtual.x,
               top: virtual.y,
               width: 0,
-              height: 0
-            })
+              height: 0,
+            }),
           } as VirtualElement
         }
       }
 
       return originalTrigger.value
     })
-    const trigger = computed(() => {
-      return isElement(reference.value) ? reference.value : null
+    const triggerEl = computed(() => (isElement(reference.value) ? reference.value : null))
+    const delay = computed(() => {
+      return typeof props.delay === 'number'
+        ? new Array<number>(2).fill(Math.max(props.delay, 0))
+        : props.delay.map(delay => Math.max(delay, 0))
+    })
+
+    const popper = ref<PopperExposed>()
+    const popperEl = computed(() => popper.value?.wrapper)
+    const arrow = ref<HTMLElement>()
+    const shift = computed<{ mainAxis: boolean, crossAxis: boolean }>(() => {
+      if (!props.shift) {
+        return { mainAxis: false, crossAxis: false }
+      }
+
+      if (props.shift === true || props.shift === 'both') {
+        return { mainAxis: true, crossAxis: true }
+      }
+
+      const side = placement.value.split('-')[0]
+
+      return props.shift === (side === 'top' || side === 'bottom' ? 'vertical' : 'horizontal')
+        ? { mainAxis: false, crossAxis: true }
+        : {
+          mainAxis: true,
+          crossAxis: false,
+        }
+    })
+    const { transferTo, updatePopper } = usePopper({
+      placement,
+      transfer,
+      arrow,
+      reference,
+      shift,
+      wrapper: originalTrigger,
+      popper: popperEl,
     })
 
     useClickOutside(handleClickOutside, originalTrigger)
-    const { popper, transferTo, updatePopper } = usePopper({
-      placement,
-      transfer,
-      reference,
-      wrapper: originalTrigger
-    })
+    useClickOutside(() => {
+      if (currentVisible.value && !originalTrigger.value) {
+        handleClickOutside()
+      }
+    }, popperEl)
 
     const tipStyle = computed(() => {
       if (props.width === 'auto') {
@@ -116,13 +166,15 @@ export default defineComponent({
       return [{ width: `${props.width}px` }, props.tipStyle]
     })
 
-    useListener(trigger, 'mouseenter', handleTriggerEnter)
-    useListener(trigger, 'mouseleave', handleTriggerLeave)
-    useListener(trigger, 'click', handleTriggerClick)
-    useListener(trigger, 'focus', handleTriggerFocus)
-    useListener(trigger, 'blur', handleTriggerBlur)
-    useListener(popper, 'mouseenter', handleTriggerEnter)
-    useListener(popper, 'mouseleave', handleTriggerLeave)
+    const slotParams = shallowReadonly({ toggleVisible, updatePopper })
+
+    useListener(triggerEl, 'mouseenter', handleTriggerEnter)
+    useListener(triggerEl, 'mouseleave', handleTriggerLeave)
+    useListener(triggerEl, 'click', handleTriggerClick)
+    useListener(triggerEl, 'focus', handleTriggerFocus)
+    useListener(triggerEl, 'blur', handleTriggerBlur)
+    useListener(popperEl, 'mouseenter', handleTriggerEnter)
+    useListener(popperEl, 'mouseleave', handleTriggerLeave)
 
     watch(
       () => props.visible,
@@ -133,7 +185,7 @@ export default defineComponent({
           rendering.value = true
           updatePopper()
         }
-      }
+      },
     )
     watch(
       () => props.disabled,
@@ -141,12 +193,14 @@ export default defineComponent({
         if (value) {
           toggleVisible(false)
         }
-      }
+      },
     )
 
-    expose({ toggleVisible, updatePopper })
+    expose({ rendering, trigger: triggerEl, toggleVisible, updatePopper })
 
     function toggleVisible(visible = !currentVisible.value) {
+      if (currentVisible.value === visible) return
+
       currentVisible.value = visible
 
       if (visible) {
@@ -155,27 +209,30 @@ export default defineComponent({
         updatePopper()
       }
 
-      emitEvent(props.onToggle, visible)
       emit('update:visible', visible)
+      emitEvent(props.onToggle, visible)
     }
 
     function computeTriggerWidth() {
-      if (!trigger.value) return
+      if (!triggerEl.value) return
 
-      triggerWidth.value = trigger.value.offsetWidth
+      triggerWidth.value = triggerEl.value.offsetWidth
     }
 
-    const { timer } = useSetTimeout()
+    function getActiveState() {
+      return (useHover.value && hovered) || (useFocus.value && focused)
+    }
 
     function handleTriggerEnter() {
       if (props.disabled) return
 
-      if (props.trigger === 'hover') {
+      if (useHover.value) {
         clearTimeout(timer.hover)
 
         timer.hover = setTimeout(() => {
-          toggleVisible(true)
-        }, 250)
+          hovered = true
+          toggleVisible(getActiveState())
+        }, delay.value[0] ?? hoverDelay.value)
       }
 
       emitEvent(props.onTipEnter)
@@ -184,12 +241,13 @@ export default defineComponent({
     function handleTriggerLeave() {
       if (props.disabled) return
 
-      if (props.trigger === 'hover') {
+      if (useHover.value) {
         clearTimeout(timer.hover)
 
         timer.hover = setTimeout(() => {
-          toggleVisible(false)
-        }, 250)
+          hovered = false
+          toggleVisible(getActiveState())
+        }, delay.value[1] ?? hoverDelay.value)
       }
 
       emitEvent(props.onTipLeave)
@@ -206,16 +264,18 @@ export default defineComponent({
     function handleTriggerFocus() {
       if (props.disabled) return
 
-      if (props.trigger === 'focus') {
-        toggleVisible(true)
+      if (useFocus.value) {
+        focused = true
+        toggleVisible(getActiveState())
       }
     }
 
     function handleTriggerBlur() {
       if (props.disabled) return
 
-      if (props.trigger === 'focus') {
-        toggleVisible(false)
+      if (useFocus.value) {
+        focused = false
+        toggleVisible(getActiveState())
       }
     }
 
@@ -242,25 +302,28 @@ export default defineComponent({
       rendering.value = currentVisible.value
     }
 
+    function stopPropagation(event: MouseEvent) {
+      event.stopPropagation()
+    }
+
     return () => {
-      const CustomTag = props.wrapper
+      const Wrapper = props.wrapper
         ? ((props.wrapper === true ? 'span' : props.wrapper) as any)
         : null
-      const triggers = slots.trigger?.()
+      const triggers = slots.trigger?.(slotParams)
       const triggerVNode = triggers ? triggers[0] : null
 
-      const stopPropagation = (event: MouseEvent) => {
-        event.stopPropagation()
-      }
       const renderTrigger = () => {
         if (!triggerVNode) return null
 
-        if (triggerVNode.type === TEXT_VNODE) {
-          return CustomTag ? <span>{triggerVNode}</span> : <span {...attrs}>{triggerVNode}</span>
+        if (triggerVNode.type === TEXT_VNODE || triggerVNode.type === Fragment) {
+          return Wrapper ? <span>{triggerVNode}</span> : <span {...attrs}>{triggerVNode}</span>
         }
 
-        if (!CustomTag) {
-          triggerVNode.props = mergeProps(triggerVNode.props || {}, attrs)
+        if (!Wrapper) {
+          triggerVNode.props = mergeProps(triggerVNode.props || {}, attrs, {
+            'aria-describedby': tooltipId.value,
+          })
         }
 
         return triggerVNode
@@ -268,54 +331,47 @@ export default defineComponent({
 
       return [
         triggerVNode &&
-          (CustomTag
-            ? (
-            <CustomTag
+          (Wrapper ? (
+            <Wrapper
               {...attrs}
               ref={originalTrigger}
               class={[nh.b(), nh.bs('vars'), props.inherit && nh.bm('inherit')]}
+              aria-describedby={tooltipId.value}
             >
               {triggers}
-            </CustomTag>
-              )
-            : (
+            </Wrapper>
+          ) : (
             <Fragment ref={syncTriggerRef as any}>{renderTrigger()}</Fragment>
-              )),
-        !props.disabled && (
-          <Portal to={transferTo.value}>
-            {(props.tipAlive || rendering.value) && (
-              <Transition appear name={props.transitionName}>
-                <div
-                  v-show={currentVisible.value}
-                  ref={popper}
-                  class={{
-                    [nh.be('popper')]: true,
-                    [nh.bs('vars')]: true,
-                    [nh.bem('popper', 'inherit')]: transferTo.value !== 'body',
-                    [nh.bem('popper', props.reverse ? 'dark' : 'light')]: true,
-                    [nh.bem('popper', 'no-hover')]: props.noHover,
-                    [nh.bem('popper', 'no-arrow')]: props.noArrow
-                  }}
-                  role={'tooltip'}
-                  tabindex={-1}
-                  onClick={stopPropagation}
-                  onAnimationend={syncRendering}
-                  onTransitionend={syncRendering}
-                >
-                  <div
-                    class={[!props.raw && nh.be('tip'), props.tipClass]}
-                    role={'tooltip'}
-                    style={tipStyle.value}
-                  >
-                    {!props.raw && !props.noArrow && <div class={nh.be('arrow')}></div>}
-                    {slots.default?.()}
-                  </div>
-                </div>
-              </Transition>
-            )}
-          </Portal>
-        )
+          )),
+        !props.disabled && (props.tipAlive || rendering.value) && (
+          <Popper
+            ref={popper}
+            id={tooltipId.value}
+            class={{
+              [nh.be('popper')]: true,
+              [nh.bs('vars')]: true,
+              [nh.bem('popper', props.reverse ? 'dark' : 'light')]: true,
+              [nh.bem('popper', 'no-hover')]: props.noHover,
+              [nh.bem('popper', 'no-arrow')]: props.noArrow,
+            }}
+            appear
+            visible={currentVisible.value}
+            alive={props.tipAlive}
+            to={transferTo.value}
+            transition={props.transitionName}
+            role={'tooltip'}
+            tabindex={-1}
+            onClick={stopPropagation}
+            onAnimationend={syncRendering}
+            onTransitionend={syncRendering}
+          >
+            <div class={[!props.raw && nh.be('tip'), props.tipClass]} style={tipStyle.value}>
+              {renderSlot(slots, 'default', slotParams)}
+            </div>
+            {!props.raw && !props.noArrow && <div ref={arrow} class={nh.be('arrow')}></div>}
+          </Popper>
+        ),
       ]
     }
-  }
+  },
 })

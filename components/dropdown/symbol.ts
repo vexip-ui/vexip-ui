@@ -5,10 +5,12 @@ export type DropdownTrigger = 'hover' | 'click' | 'custom'
 type SelectHandler = (labels: (string | number)[], metas: Array<Record<string, any>>) => void
 
 export interface DropdownState {
+  alive: boolean,
+  shift: boolean,
   handleSelect: SelectHandler,
   handleTriggerEnter: () => void,
-  handleTriggerLeave: () => void
+  handleTriggerLeave: () => void,
 }
 
-export const SELECT_HANDLER: InjectionKey<SelectHandler> = Symbol('SELECT_HANDLER')
-export const DROPDOWN_STATE: InjectionKey<DropdownState> = Symbol('DROPDOWN_STATE')
+export const SELECT_HANDLER = '__VXP_SELECT_HANDLER' as unknown as InjectionKey<SelectHandler>
+export const DROPDOWN_STATE = '__VXP_DROPDOWN_STATE' as unknown as InjectionKey<DropdownState>

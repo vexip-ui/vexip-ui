@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Option } from '..'
 
 const TEXT = 'Text'
@@ -7,7 +8,7 @@ const TEXT = 'Text'
 describe('Option', () => {
   it('render', () => {
     const wrapper = mount(Option, {
-      props: { label: TEXT }
+      props: { label: TEXT },
     })
 
     expect(wrapper.classes()).toContain('vxp-option-vars')
@@ -19,14 +20,13 @@ describe('Option', () => {
     const wrapper = mount(() => <Option value={TEXT}></Option>)
 
     expect(wrapper.find('.vxp-option').text()).toEqual(TEXT)
-    expect(wrapper.find('.vxp-option').attributes('title')).toEqual(TEXT)
   })
 
   it('slot', () => {
     const wrapper = mount(() => (
       <Option label={TEXT}>
         {{
-          default: () => <span class="option"></span>
+          default: () => <span class={'option'}></span>,
         }}
       </Option>
     ))
@@ -53,10 +53,10 @@ describe('Option', () => {
     expect(onSelect).not.toHaveBeenCalled()
   })
 
-  it('no title', () => {
-    const wrapper = mount(() => <Option value={TEXT} no-title></Option>)
+  it('title', () => {
+    const wrapper = mount(() => <Option value={TEXT} title={TEXT}></Option>)
 
-    expect(wrapper.find('.vxp-option').attributes('title')).toBeFalsy()
+    expect(wrapper.find('.vxp-option').attributes('title')).toEqual(TEXT)
   })
 
   it('state classes', async () => {
@@ -65,8 +65,8 @@ describe('Option', () => {
         divided: true,
         hitting: true,
         noHover: true,
-        selected: true
-      }
+        selected: true,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-option--divided')

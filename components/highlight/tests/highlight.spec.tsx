@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Highlight } from '..'
 
 describe('Highlight', () => {
@@ -7,8 +8,8 @@ describe('Highlight', () => {
     const wrapper = mount(Highlight, {
       props: {
         content: 'aaaabbaaaaacaaaadddaa',
-        keyWords: ['c', 'bb', 'ddd']
-      }
+        keyWords: ['c', 'bb', 'ddd'],
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-highlight-vars')
@@ -26,8 +27,8 @@ describe('Highlight', () => {
       props: {
         content: 'aaaabBaaaaaCaaaaDddaa',
         keyWords: ['c', 'bb', 'ddd'],
-        ignoreCase: true
-      }
+        ignoreCase: true,
+      },
     })
 
     expect(wrapper.classes()).toContain('vxp-highlight-vars')

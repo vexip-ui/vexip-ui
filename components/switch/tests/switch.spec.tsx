@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { Spinner, GithubB, Vault } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Hammer, User } from 'lucide-vue-next'
+import { globalIcons } from '@vexip-ui/config'
 import { Switch } from '..'
 
 describe('Switch', () => {
@@ -16,7 +18,7 @@ describe('Switch', () => {
 
   it('size', async () => {
     const wrapper = mount(Switch, {
-      props: { size: 'large' }
+      props: { size: 'large' },
     })
 
     expect(wrapper.classes()).toContain('vxp-switch--large')
@@ -40,7 +42,7 @@ describe('Switch', () => {
   it('change event', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Switch, {
-      props: { onChange }
+      props: { onChange },
     })
 
     await wrapper.find('input').trigger('change')
@@ -57,7 +59,7 @@ describe('Switch', () => {
   it('disabled', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Switch, {
-      props: { onChange }
+      props: { onChange },
     })
 
     expect(wrapper.classes()).not.toContain('vxp-switch--disabled')
@@ -71,7 +73,7 @@ describe('Switch', () => {
   })
 
   it('state', () => {
-    (['success', 'warning', 'error'] as const).forEach(state => {
+    ;(['success', 'warning', 'error'] as const).forEach(state => {
       const wrapper = mount(() => <Switch state={state}></Switch>)
 
       expect(wrapper.find('.vxp-switch').classes()).toContain(`vxp-switch--${state}`)
@@ -82,8 +84,8 @@ describe('Switch', () => {
     const wrapper = mount(Switch, {
       props: {
         openColor: 'green',
-        closeColor: 'red'
-      }
+        closeColor: 'red',
+      },
     })
 
     expect(wrapper.attributes('style')).toContain('background-color: red;')
@@ -96,19 +98,19 @@ describe('Switch', () => {
     const wrapper = mount(Switch)
 
     expect(wrapper.classes()).not.toContain('vxp-switch--loading')
-    expect(wrapper.findComponent(Spinner).exists()).toBe(false)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(false)
 
     await wrapper.setProps({ loading: true })
     expect(wrapper.classes()).toContain('vxp-switch--loading')
-    expect(wrapper.findComponent(Spinner).exists()).toBe(true)
+    expect(wrapper.findComponent(globalIcons.value.loading.icon).exists()).toBe(true)
   })
 
   it('inner text', async () => {
     const wrapper = mount(Switch, {
       props: {
         openText: 'open',
-        closeText: 'close'
-      }
+        closeText: 'close',
+      },
     })
     const label = wrapper.find('.vxp-switch__label')
 
@@ -125,27 +127,27 @@ describe('Switch', () => {
   it('icon', async () => {
     const wrapper = mount(Switch, {
       props: {
-        openIcon: GithubB,
-        closeIcon: Vault
-      }
+        openIcon: Hammer,
+        closeIcon: User,
+      },
     })
 
-    expect(wrapper.findComponent(Vault).exists()).toBe(true)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(User).exists()).toBe(true)
+    expect(wrapper.findComponent(Hammer).exists()).toBe(false)
 
     await wrapper.setProps({ value: true })
-    expect(wrapper.findComponent(Vault).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
+    expect(wrapper.findComponent(User).exists()).toBe(false)
+    expect(wrapper.findComponent(Hammer).exists()).toBe(true)
 
     await wrapper.setProps({ loading: true })
-    expect(wrapper.findComponent(Vault).exists()).toBe(false)
-    expect(wrapper.findComponent(GithubB).exists()).toBe(false)
+    expect(wrapper.findComponent(User).exists()).toBe(false)
+    expect(wrapper.findComponent(Hammer).exists()).toBe(false)
   })
 
   it('before change', async () => {
     const onBeforeChange = vi.fn()
     const wrapper = mount(Switch, {
-      props: { onBeforeChange }
+      props: { onBeforeChange },
     })
 
     await wrapper.find('input').trigger('change')
@@ -155,15 +157,19 @@ describe('Switch', () => {
     await wrapper.find('input').trigger('change')
     expect(wrapper.classes()).toContain('vxp-switch--open')
 
+    let resolveRef: (value: boolean) => void
+    onBeforeChange.mockReset()
     onBeforeChange.mockImplementation(
       () =>
         new Promise(resolve => {
-          nextTick(() => resolve(true))
-        })
+          resolveRef = resolve
+        }),
     )
     await wrapper.find('input').trigger('change')
     await nextTick()
     expect(wrapper.classes()).toContain('vxp-switch--open')
+    resolveRef!(true)
+    await nextTick()
     await nextTick()
     expect(wrapper.classes()).not.toContain('vxp-switch--open')
   })

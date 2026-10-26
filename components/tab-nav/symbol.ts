@@ -9,7 +9,7 @@ export interface TabNavItemOptions {
   icon?: Record<string, any>,
   disabled?: boolean,
   closable?: boolean,
-  onToggle?: (active: boolean) => void
+  onToggle?: (active: boolean) => void,
 }
 
 export type TabNavOptions = TabNavItemOptions | string | number
@@ -18,7 +18,7 @@ export interface ItemState {
   el?: HTMLElement | null,
   label: string | number,
   index: number,
-  total: number
+  total: number,
 }
 
 export interface TabNavState {
@@ -28,7 +28,27 @@ export interface TabNavState {
   decreaseItem: (item: ItemState) => void,
   handleActive: (label: string | number) => void,
   handleClose: (label: string | number) => void,
-  refreshLabels: () => void
+  refreshLabels: () => void,
 }
 
-export const TAB_NAV_STATE: InjectionKey<TabNavState> = Symbol('TAB_NAV_STATE')
+export type ChangeEvent = (label: string | number) => void
+
+export interface TabNavSlots {
+  prefix?: () => any,
+  suffix?: () => any,
+  add?: () => any,
+  marker?: () => any,
+  /**
+   * @internal
+   */
+  default?: () => any,
+}
+
+export const TAB_NAV_STATE = '__VXP_TAB_NAV_STATE' as unknown as InjectionKey<TabNavState>
+
+export const trackStyleMap = Object.freeze({
+  top: ['left', 'width'],
+  right: ['top', 'height'],
+  bottom: ['left', 'width'],
+  left: ['top', 'height'],
+} as const)

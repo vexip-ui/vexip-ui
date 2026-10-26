@@ -1,8 +1,13 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { GithubB, City } from '@vexip-ui/icons'
 import { mount } from '@vue/test-utils'
+
+import { Github, Home } from 'lucide-vue-next'
 import { Layout } from '..'
+
+function waitMounted() {
+  return new Promise(resolve => requestAnimationFrame(resolve))
+}
 
 describe('Layout', () => {
   it('render', async () => {
@@ -10,19 +15,19 @@ describe('Layout', () => {
       {
         label: '1',
         name: '菜单 1',
-        icon: GithubB,
+        icon: Github,
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
-        icon: City,
-        disabled: true
-      }
+        icon: Home,
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -30,15 +35,17 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         menus={menus}
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
+
+    await waitMounted()
 
     expect(wrapper.find('.vxp-layout').classes()).toContain('vxp-layout-vars')
     expect(wrapper.find('.vxp-layout__sign').exists()).toBe(true)
@@ -60,14 +67,14 @@ describe('Layout', () => {
     const actions = [
       {
         label: 'action1',
-        icon: GithubB,
-        name: 'Action 1'
+        icon: Github,
+        name: 'Action 1',
       },
       {
         label: 'action2',
-        icon: City,
-        name: 'Action 2'
-      }
+        icon: Home,
+        name: 'Action 2',
+      },
     ]
     const onUserAction = vi.fn()
     const wrapper = mount(() => (
@@ -76,16 +83,18 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         actions={actions}
         onUserAction={onUserAction}
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
+
+    await waitMounted()
 
     const user = wrapper.find('.vxp-layout__header .vxp-layout__user')
     const avatar = user.find('.vxp-avatar')
@@ -99,7 +108,7 @@ describe('Layout', () => {
     expect(profile.querySelector('.vxp-layout__user-name')!.textContent).toEqual('VexipUI')
     expect(profile.querySelector('.vxp-layout__user-email')).not.toBeNull()
     expect(profile.querySelector('.vxp-layout__user-email')!.textContent).toEqual(
-      'email@vexip-ui.com'
+      'email@vexip-ui.com',
     )
 
     const userActions = document.querySelectorAll('.vxp-layout__user-action')
@@ -113,19 +122,19 @@ describe('Layout', () => {
     expect(onUserAction).toHaveBeenCalledWith(actions[0].label, {})
   })
 
-  it('footer', () => {
+  it('footer', async () => {
     const links = [
       {
         name: 'Group',
         children: [
-          { name: 'GithubB', icon: GithubB },
-          { name: 'City', icon: City }
-        ]
+          { name: 'Github', icon: Github },
+          { name: 'City', icon: Home },
+        ],
       },
       {
         name: 'Group',
-        children: [{ name: 'Link' }, { name: 'Link' }]
-      }
+        children: [{ name: 'Link' }, { name: 'Link' }],
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -133,17 +142,19 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         footer
         copyright={'copyright'}
         links={links}
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
+
+    await waitMounted()
 
     expect(wrapper.find('.vxp-layout__footer').exists()).toBe(true)
 
@@ -153,33 +164,33 @@ describe('Layout', () => {
 
     const footerLinks = groups[0].findAll('.vxp-layout__link')
     expect(footerLinks.length).toEqual(2)
-    expect(footerLinks[0].text()).toEqual('GithubB')
-    expect(footerLinks[0].findComponent(GithubB).exists()).toBe(true)
+    expect(footerLinks[0].text()).toEqual('Github')
+    expect(footerLinks[0].findComponent(Github).exists()).toBe(true)
     expect(footerLinks[1].text()).toEqual('City')
-    expect(footerLinks[1].findComponent(City).exists()).toBe(true)
+    expect(footerLinks[1].findComponent(Home).exists()).toBe(true)
 
     expect(wrapper.find('.vxp-layout__copyright').exists()).toBe(true)
     expect(wrapper.find('.vxp-layout__copyright').text()).toEqual('copyright')
   })
 
-  it('no aside', () => {
+  it('no aside', async () => {
     const menus = [
       {
         label: '1',
         name: '菜单 1',
-        icon: GithubB,
+        icon: Github,
         children: [
           { label: '1-1', name: '子菜单 1' },
           { label: '1-2', name: '子菜单 2' },
-          { label: '1-3', name: '子菜单 3' }
-        ]
+          { label: '1-3', name: '子菜单 3' },
+        ],
       },
       {
         label: '2',
         name: '菜单 2',
-        icon: City,
-        disabled: true
-      }
+        icon: Home,
+        disabled: true,
+      },
     ]
     const wrapper = mount(() => (
       <Layout
@@ -187,23 +198,68 @@ describe('Layout', () => {
         sign-name={'Vexip UI'}
         user={{
           name: 'VexipUI',
-          email: 'email@vexip-ui.com'
+          email: 'email@vexip-ui.com',
         }}
         menus={menus}
         no-aside
       >
         {{
-          main: () => <div class={'main'}></div>
+          main: () => <div class={'main'}></div>,
         }}
       </Layout>
     ))
+
+    await waitMounted()
 
     expect(wrapper.find('.vxp-layout__aside').exists()).toBe(false)
     expect(wrapper.find('.vxp-layout__header').exists()).toBe(true)
     expect(wrapper.find('.vxp-layout__header .vxp-menu').exists()).toBe(true)
   })
 
-  it('slots', () => {
+  it('no header', async () => {
+    const menus = [
+      {
+        label: '1',
+        name: '菜单 1',
+        icon: Github,
+        children: [
+          { label: '1-1', name: '子菜单 1' },
+          { label: '1-2', name: '子菜单 2' },
+          { label: '1-3', name: '子菜单 3' },
+        ],
+      },
+      {
+        label: '2',
+        name: '菜单 2',
+        icon: Home,
+        disabled: true,
+      },
+    ]
+    const wrapper = mount(() => (
+      <Layout
+        logo={'logo.png'}
+        sign-name={'Vexip UI'}
+        user={{
+          name: 'VexipUI',
+          email: 'email@vexip-ui.com',
+        }}
+        menus={menus}
+        no-header
+      >
+        {{
+          main: () => <div class={'main'}></div>,
+        }}
+      </Layout>
+    ))
+
+    await waitMounted()
+
+    expect(wrapper.find('.vxp-layout__header').exists()).toBe(false)
+    expect(wrapper.find('.vxp-layout__aside').exists()).toBe(true)
+    expect(wrapper.find('.vxp-layout__aside .vxp-menu').exists()).toBe(true)
+  })
+
+  it('slots', async () => {
     const wrapper = mount(() => (
       <Layout footer>
         {{
@@ -215,10 +271,12 @@ describe('Layout', () => {
           asideBottom: () => <div class={'aside-bottom'}></div>,
           main: () => <div class={'main'}></div>,
           footerLinks: () => <div class={'footer-links'}></div>,
-          footerCopyright: () => <div class={'footer-copyright'}></div>
+          footerCopyright: () => <div class={'footer-copyright'}></div>,
         }}
       </Layout>
     ))
+
+    await waitMounted()
 
     expect(wrapper.find('.header-left').exists()).toBe(true)
     expect(wrapper.find('.header-main').exists()).toBe(true)

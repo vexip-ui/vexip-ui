@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const expanded = ref(0)
+const expanded = ref(1)
 </script>
 
 <style scoped>

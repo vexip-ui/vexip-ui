@@ -6,31 +6,21 @@
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "noUnusedLocals": false,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "jsxImportSource": "vue",
     "sourceMap": false,
-    "baseUrl": ".",
-    "types": [
-      "node",
-      "vite/client"
-    ],
+    "types": ["node", "vite/client"],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@vexip-ui/*": ["common/*/src"],
-      "vexip-ui": ["components"],
-      "vue-router": ["node_modules/vue-router"]
+      "@/*": ["./*"],
+      "@vexip-ui/*": ["./common/*/src"],
+      "vexip-ui": ["./index"]
     },
-    "lib": [
-      "esnext",
-      "dom"
-    ]
+    "lib": ["esnext", "dom"]
   },
   "include": [
     "common/*/src",
@@ -38,9 +28,9 @@
     "dev-server",
     "directives",
     "playground",
+    "index.ts",
+    "full-lib.ts",
     "types.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "./types.d.ts"]
 }

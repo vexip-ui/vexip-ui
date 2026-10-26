@@ -1,13 +1,15 @@
-import { createVNode, render, nextTick } from 'vue'
 import { Spin } from '@/components/spin'
+
+import { createVNode, nextTick, render } from 'vue'
+
 import { isObject } from '@vexip-ui/utils'
 
-import type { VNode, ObjectDirective } from 'vue'
+import type { ObjectDirective, VNode } from 'vue'
 
 interface LoadingRecord {
   spin: VNode,
   props: any,
-  originPosition: string
+  originPosition: string,
 }
 
 export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord }, any> = {
@@ -25,7 +27,7 @@ export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord 
       el.__loading = {
         spin,
         props,
-        originPosition: position
+        originPosition: position,
       }
 
       if (position === 'static') {
@@ -56,5 +58,5 @@ export const loading: ObjectDirective<HTMLElement & { __loading?: LoadingRecord 
 
     render(null, el)
     delete el.__loading
-  }
+  },
 }

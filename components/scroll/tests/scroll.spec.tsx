@@ -1,7 +1,8 @@
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { noop } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
+
+import { noop } from '@vexip-ui/utils'
 import { Scroll } from '..'
 
 vi.useFakeTimers()
@@ -9,9 +10,9 @@ vi.useFakeTimers()
 const TEXT = 'TEXT'
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -42,11 +43,11 @@ describe('Scroll', () => {
         mode: 'both',
         width: 200,
         height: 200,
-        ...props
+        ...props,
       },
       slots: {
-        default: () => <span class={'content'}>{TEXT}</span>
-      }
+        default: () => <span class={'content'}>{TEXT}</span>,
+      },
     })
 
     const contentEl = scroll.find('.vxp-scroll__wrapper').element as HTMLElement
@@ -99,8 +100,8 @@ describe('Scroll', () => {
     expect(wrapper.find('.vxp-scroll__bar--vertical').exists()).toBe(true)
   })
 
-  it('wrapper tag', () => {
-    const wrapper = mount(() => <Scroll wrapper-tag={'ul'}></Scroll>)
+  it('scroll tag', () => {
+    const wrapper = mount(() => <Scroll scroll-tag={'ul'}></Scroll>)
 
     expect(wrapper.find('.vxp-scroll__wrapper').element.tagName).toBe('UL')
   })
@@ -124,7 +125,7 @@ describe('Scroll', () => {
     const onYEnabledChange = vi.fn()
     wrapper = createScroll({
       onXEnabledChange,
-      onYEnabledChange
+      onYEnabledChange,
     })
     const contentEl = wrapper.find('.vxp-scroll__wrapper').element as HTMLElement
 
@@ -148,7 +149,7 @@ describe('Scroll', () => {
     const onScroll = vi.fn()
     wrapper = createScroll({
       onWheel,
-      onScroll
+      onScroll,
     })
     const wrapperEl = wrapper.element as HTMLElement
 
@@ -167,7 +168,7 @@ describe('Scroll', () => {
     wrapper = createScroll({
       deltaX: 50,
       deltaY: 50,
-      onWheel
+      onWheel,
     })
     const wrapperEl = wrapper.element as HTMLElement
 
@@ -187,7 +188,7 @@ describe('Scroll', () => {
       pointer: true,
       onScrollStart,
       onScroll,
-      onScrollEnd
+      onScrollEnd,
     })
     const wrapperEl = wrapper.element as HTMLElement
 
@@ -199,7 +200,15 @@ describe('Scroll', () => {
     downEvent.clientY = 100
     wrapperEl.dispatchEvent(downEvent)
     expect(onScrollStart).toHaveBeenCalled()
-    expect(onScrollStart).toHaveBeenCalledWith(expect.objectContaining({ clientX: 0, clientY: 0 }))
+    try {
+      expect(onScrollStart).toHaveBeenCalledWith(
+        expect.objectContaining({ clientX: 0, clientY: 0 }),
+      )
+    } catch (e) {
+      expect(onScrollStart).toHaveBeenCalledWith(
+        expect.objectContaining({ clientX: -0, clientY: -0 }),
+      )
+    }
 
     const moveEvent = new CustomEvent('mousemove') as any
     moveEvent.clientX = 60
@@ -216,13 +225,17 @@ describe('Scroll', () => {
   })
 
   it('auto play', async () => {
+    const onScroll = vi.fn()
     wrapper = createScroll({
       mode: 'vertical',
-      autoplay: true
+      autoplay: true,
+      onScroll,
     })
 
     await runScrollTimers()
-    expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
+    await runScrollTimers()
+    expect(onScroll).toHaveBeenCalled()
+    expect(wrapper.vm.y !== 0).toBe(true)
   })
 
   it('using bar', async () => {
@@ -234,7 +247,7 @@ describe('Scroll', () => {
       useYBar: true,
       onBarScrollStart,
       onBarScroll,
-      onBarScrollEnd
+      onBarScrollEnd,
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -248,7 +261,7 @@ describe('Scroll', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -259,7 +272,7 @@ describe('Scroll', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     await runScrollTimers()
@@ -276,7 +289,7 @@ describe('Scroll', () => {
     moveEvent.clientX = 20
     moveEvent.clientY = 20
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onBarScroll).toHaveBeenCalled()
     expect(onBarScroll).toHaveBeenCalledWith(expect.objectContaining({ percentY: 40 }))
 

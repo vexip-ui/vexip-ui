@@ -1,12 +1,12 @@
 <template>
-  <Split vertical style="max-width: 300px; height: 320px; box-shadow: 0 0 1px;">
+  <Split vertical style="max-width: 300px; height: 320px; box-shadow: 0 0 1px">
     <template #left>
-      <div style="padding: 10px;">
+      <div style="padding: 10px">
         Top pane
       </div>
     </template>
     <template #right>
-      <div style="padding: 10px;">
+      <div style="padding: 10px">
         Bottom pane
       </div>
     </template>

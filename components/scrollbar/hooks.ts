@@ -1,5 +1,6 @@
 import { ref } from 'vue'
-import { USE_TOUCH, noop, throttle } from '@vexip-ui/utils'
+
+import { USE_TOUCH, noop } from '@vexip-ui/utils'
 import { ScrollbarType } from './symbol'
 
 import type { Ref } from 'vue'
@@ -13,10 +14,10 @@ export function useTrack({
   type = ref(ScrollbarType.VERTICAL),
   barLength = ref(35),
   disabled = ref(false),
-  handleDown = noop,
-  handleMove = noop,
-  handleUp = noop,
-  handleScroll = noop
+  onDown = noop,
+  onMove = noop,
+  onUp = noop,
+  onScroll = noop,
 }: {
   currentScroll: Ref<number>,
   type: Ref<ScrollbarType>,
@@ -26,10 +27,10 @@ export function useTrack({
   tracking?: Ref<boolean>,
   barLength?: Ref<number>,
   disabled?: Ref<boolean>,
-  handleDown?: (scroll: number) => void,
-  handleMove?: (scroll: number) => void,
-  handleUp?: (scroll: number) => void,
-  handleScroll?: (scroll: number) => void
+  onDown?: (scroll: number) => void,
+  onMove?: (scroll: number) => void,
+  onUp?: (scroll: number) => void,
+  onScroll?: (scroll: number) => void,
 }) {
   let length: number
   let startAt: number
@@ -58,7 +59,7 @@ export function useTrack({
 
     if (changed) {
       verifyScroll()
-      handleScroll(currentScroll.value)
+      onScroll(currentScroll.value)
     }
 
     if (
@@ -104,17 +105,25 @@ export function useTrack({
 
     targetScroll = Math.max(
       0,
-      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100)
+      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100),
     )
     forward = targetScroll >= currentScroll.value
 
     tracking.value = true
 
-    handleDown(currentScroll.value)
+    onDown(currentScroll.value)
     animateMoveBar()
   }
 
-  const handleTrackMove = throttle((event: PointerEvent) => {
+  function handleMouseMove(event: PointerEvent) {
+    event.stopPropagation()
+
+    if (!USE_TOUCH) {
+      event.preventDefault()
+    }
+
+    onMove(currentScroll.value)
+
     let position: number
 
     if (type.value === ScrollbarType.VERTICAL) {
@@ -125,21 +134,10 @@ export function useTrack({
 
     targetScroll = Math.max(
       0,
-      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100)
+      Math.min((position / length / (100 - barLength.value / 2)) * 1e4, 100),
     )
 
     !processing && animateMoveBar()
-  })
-
-  function handleMouseMove(event: PointerEvent) {
-    event.stopPropagation()
-
-    if (!USE_TOUCH) {
-      event.preventDefault()
-    }
-
-    handleMove(currentScroll.value)
-    handleTrackMove(event)
   }
 
   function handleMouseUp(event: PointerEvent) {
@@ -150,7 +148,7 @@ export function useTrack({
 
     tracking.value = false
 
-    handleUp(currentScroll.value)
+    onUp(currentScroll.value)
   }
 
   function verifyScroll() {
@@ -158,14 +156,16 @@ export function useTrack({
   }
 
   return {
+    currentScroll,
     trackSpeed,
     track,
     bar,
     tracking,
+    type,
     barLength,
     disabled,
 
-    handleMouseDown
+    handleMouseDown,
   }
 }
 

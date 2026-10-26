@@ -8,12 +8,6 @@
   </Space>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const value = ref<number>()
-</script>
-
 <style scoped>
 .vxp-number-input {
   max-width: 300px;

@@ -1,6 +1,6 @@
 <template>
   <Row tag="nav" class="theme-nav" align="middle">
-    <h2 style="margin: 0 20px 0 0; pointer-events: none;">
+    <h2 style="margin: 0 20px 0 0; pointer-events: none">
       Theme Playground
     </h2>
     <ThemeSwitch></ThemeSwitch>
@@ -45,22 +45,22 @@
           <br />
         </template>
         <template v-for="state in states" :key="state">
-          <Input :state="state" style="margin-right: 20px;"></Input>
+          <Input :state="state" style="margin-inline-end: 20px"></Input>
           <NumberInput :state="state"></NumberInput>
           <br />
           <br />
         </template>
-        <Input disabled style="margin-right: 20px;"></Input>
+        <Input disabled style="margin-inline-end: 20px"></Input>
         <NumberInput disabled></NumberInput>
         <br />
         <br />
         <template v-for="state in states" :key="state">
-          <Select :options="options" :state="state" style="margin-right: 20px;"></Select>
+          <Select :options="options" :state="state" style="margin-inline-end: 20px"></Select>
           <AutoComplete :options="options" :state="state"></AutoComplete>
           <br />
           <br />
         </template>
-        <Select :options="options" disabled style="margin-right: 20px;"></Select>
+        <Select :options="options" disabled style="margin-inline-end: 20px"></Select>
         <AutoComplete :options="options" disabled></AutoComplete>
         <br />
         <br />
@@ -108,7 +108,7 @@
         <br />
         <br />
         <DatePicker
-          is-range
+          range
           clearable
           transfer
           type="datetime"
@@ -116,7 +116,7 @@
         ></DatePicker>
         <br />
         <br />
-        <TimePicker is-range clearable :shortcuts="timeShortcuts"></TimePicker>
+        <TimePicker range clearable :shortcuts="timeShortcuts"></TimePicker>
         <br />
         <br />
         <template v-for="(meta, index) in linkerMeta" :key="index">
@@ -137,12 +137,12 @@
           v-for="(meta, index) in tooltipMeta"
           :key="index"
           :justify="meta.justify"
-          style="max-width: 600px; margin: 0 auto 10px;"
+          style="max-width: 600px; margin: 0 auto 10px"
         >
           <template v-for="placement in meta.placements" :key="placement">
             <Tooltip theme="dark" :placement="placement" transfer>
               <template #trigger>
-                <span style="padding: 0 5px;">
+                <span style="padding: 0 5px">
                   <Button>{{ placement }}</Button>
                 </span>
               </template>
@@ -167,17 +167,17 @@
         <Textarea disabled :max-length="100"></Textarea>
         <br />
         <br />
-        <Collapse style="max-width: 600px;">
+        <Collapse style="max-width: 600px">
           <CollapsePane v-for="n in 3" :key="n" :title="`Title ${n}`">
-            <p>Some Content</p>
-            <p>Some Content</p>
+            <p>Some content</p>
+            <p>Some content</p>
           </CollapsePane>
         </Collapse>
         <br />
-        <Collapse card style="max-width: 600px;">
+        <Collapse card style="max-width: 600px">
           <CollapsePane v-for="n in 3" :key="n" :title="`Title ${n}`">
-            <p>Some Content</p>
-            <p>Some Content</p>
+            <p>Some content</p>
+            <p>Some content</p>
           </CollapsePane>
         </Collapse>
       </NativeScroll>
@@ -207,9 +207,9 @@
           resizable
           title="Title"
         >
-          <p>Some Content</p>
-          <p>Some Content</p>
-          <p>Some Content</p>
+          <p>Some content</p>
+          <p>Some content</p>
+          <p>Some content</p>
         </Drawer>
         <Modal
           v-model:active="modalActive"
@@ -219,17 +219,17 @@
           title="Title"
           :width="500"
         >
-          <p>Some Content</p>
-          <p>Some Content</p>
-          <p>Some Content</p>
+          <p>Some content</p>
+          <p>Some content</p>
+          <p>Some content</p>
         </Modal>
         <br />
         <br />
-        <div style="display: flex;">
-          <Button type="primary" style="margin-right: 20px;" @click="spinActive = !spinActive">
+        <div style="display: flex">
+          <Button type="primary" style="margin-inline-end: 20px" @click="spinActive = !spinActive">
             Switch
           </Button>
-          <Spin :active="spinActive" tip="Loading..." style="width: 600px;">
+          <Spin :active="spinActive" tip="Loading..." style="width: 600px">
             <Alert icon type="success" title="Title">
               Some alert content
             </Alert>
@@ -242,7 +242,7 @@
           allow-drag
           directory
           hidden-files
-          style="max-width: 720px;"
+          style="max-width: 720px"
         ></Upload>
         <TabNav>
           <TabNavItem
@@ -271,13 +271,13 @@
             icon
             closable
             :type="type"
-            style="max-width: 720px;"
+            style="max-width: 720px"
           >
             Some alert content
           </Alert>
         </template>
         <template v-for="n in 2" :key="n">
-          <Breadcrumb :border="n === 2" style="max-width: 720px; margin-bottom: 10px;">
+          <Breadcrumb :border="n === 2" style="max-width: 720px; margin-bottom: 10px">
             <BreadcrumbItem>This Computer</BreadcrumbItem>
             <BreadcrumbItem>Document (D:)</BreadcrumbItem>
             <BreadcrumbItem>ui-library</BreadcrumbItem>
@@ -285,9 +285,9 @@
           </Breadcrumb>
         </template>
         <br />
-        <div style="display: flex;">
+        <div style="display: flex">
           <template v-for="n in 2" :key="n">
-            <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-right: 20px;">
+            <Menu :theme="n === 1 ? 'light' : 'dark'" style="width: 240px; margin-inline-end: 20px">
               <MenuItem
                 v-for="meta in menuMeta"
                 :key="meta.label"
@@ -302,7 +302,7 @@
         </div>
         <br />
         <template v-for="(meta, index) in messageMeta" :key="index">
-          <span style="padding: 0 10px;">
+          <span style="padding: 0 10px">
             Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
           </span>
           <Button
@@ -323,7 +323,7 @@
           <br />
         </template>
         <template v-for="(meta, index) in messageMeta" :key="index">
-          <span style="padding: 0 10px;">
+          <span style="padding: 0 10px">
             Color({{ meta.color ? '√' : '×' }}) Background({{ meta.background ? '√' : '×' }})
           </span>
           <Button
@@ -343,7 +343,7 @@
           <br />
           <br />
         </template>
-        <template v-for="(meta, index) in paginationMeta" :key="index">
+        <template v-for="(meta, _index) in paginationMeta" :key="_index">
           <Pagination
             page-jump
             page-total
@@ -367,7 +367,7 @@
           <TableColumn type="order" id-key="order" fixed></TableColumn>
           <TableColumn type="expand" id-key="expand" fixed>
             <template #default="{ row }">
-              <Grid style="padding: 20px 40px;">
+              <Grid style="padding: 20px 40px">
                 <Cell :width="12">
                   Full Name: {{ `${row.firstName} ${row.lastName}` }}
                 </Cell>
@@ -405,7 +405,6 @@
             name="Age"
             id-key="age"
             :order="2"
-            no-ellipsis
             :width="300"
           ></TableColumn>
           <TableColumn name="Long Text" id-key="longText" :width="300">
@@ -413,20 +412,23 @@
           </TableColumn>
         </Table>
         <br />
-        <div style="display: flex;">
-          <Timeline both-sides style="width: 50%; max-width: 360px;">
+        <div style="display: flex">
+          <Timeline both-sides style="width: 50%; max-width: 360px">
             <TimelineItem v-for="meta in timelineMeta" :key="meta.date" :type="meta.type">
-              <p style="margin: 0 0 6px;">
+              <p style="margin: 0 0 6px">
                 {{ meta.date }}
               </p>
-              <Card style="width: 100%;">
+              <Card style="width: 100%">
                 {{ meta.content }}
               </Card>
             </TimelineItem>
           </Timeline>
-          <Timeline pending style="width: calc(50% - 30px); max-width: 300px; margin-left: 30px;">
+          <Timeline
+            pending
+            style="width: calc(50% - 30px); max-width: 300px; margin-inline-start: 30px"
+          >
             <TimelineItem v-for="meta in timelineMeta" :key="meta.date" :type="meta.type">
-              <p style="margin: 0 0 6px;">
+              <p style="margin: 0 0 6px">
                 {{ meta.date }}
               </p>
               <Card>{{ meta.content }}</Card>
@@ -440,7 +442,7 @@
           loop
           arrow="inside"
           pointer="outside"
-          style="width: 720px;"
+          style="width: 720px"
           :view-size="1"
           :autoplay="5000"
         >
@@ -450,7 +452,7 @@
             </div>
           </CarouselItem>
         </Carousel>
-        <Carousel loop :active-offset="1" style="width: 720px;">
+        <Carousel loop :active-offset="1" style="width: 720px">
           <CarouselItem v-for="n in 5" :key="n">
             <template #default="{ active }">
               <div class="carousel-block" :style="{ transform: `scaleY(${active ? 1 : 0.83})` }">
@@ -468,30 +470,22 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { ArrowUpFromBracket } from '@vexip-ui/icons'
 import ThemeSwitch from '../docs/common/theme-switch.vue'
-import { Message, Notice, Confirm } from '../components'
+import { Confirm, Message, Notice } from '../components'
 import { defineFilter } from '../components/table'
 
 document.title = 'theme dev | Vexip UI'
 
-const buttonTypes = [
-  'default',
-  'primary',
-  'dashed',
-  'text',
-  'info',
-  'success',
-  'warning',
-  'error'
-] as const
+const buttonTypes = ['default', 'primary', 'info', 'success', 'warning', 'error'] as const
 const buttonMeta = [
   { ghost: false, simple: false, disabled: false },
   { ghost: false, simple: false, disabled: true },
   { ghost: false, simple: true, disabled: false },
   { ghost: false, simple: true, disabled: true },
   { ghost: true, simple: false, disabled: false },
-  { ghost: true, simple: false, disabled: true }
+  { ghost: true, simple: false, disabled: true },
 ]
 
 const tagTypes = [
@@ -509,12 +503,12 @@ const tagTypes = [
   'cyan',
   'navy',
   'gold',
-  'purple'
+  'purple',
 ] as const
 const tagMeta = [
   { border: false, simple: false },
   { border: true, simple: false },
-  { border: false, simple: true }
+  { border: false, simple: true },
 ]
 
 const states = ['default', 'success', 'error', 'warning'] as const
@@ -530,14 +524,14 @@ const options = [
   { label: 'Option 9', value: 9 },
   { label: 'Option 10', value: 10 },
   { label: 'Option 11', value: 11 },
-  { label: 'Option 12', value: 12 }
+  { label: 'Option 12', value: 12 },
 ]
 
 const checkItems = ['Beijing', 'Tianjin', 'Shanghai', 'Guangzhou', 'Shenzhen']
 
 const dateShortcuts = [
   { name: 'Current', value: () => Date.now() },
-  { name: 'Noon', value: '2022-05-13 12:00:00' }
+  { name: 'Noon', value: '2022-05-13 12:00:00' },
 ]
 
 const timeShortcuts = [{ name: 'Noon', value: '12:00:00' }]
@@ -547,7 +541,7 @@ const linkerMeta = [
   { disabled: false, underline: false, icon: null },
   { disabled: true, underline: false, icon: null },
   { disabled: false, underline: true, icon: ArrowUpFromBracket },
-  { disabled: true, underline: false, icon: ArrowUpFromBracket }
+  { disabled: true, underline: false, icon: ArrowUpFromBracket },
 ]
 
 const tooltipMeta = [
@@ -555,7 +549,7 @@ const tooltipMeta = [
   { justify: 'space-between' as const, placements: ['left-start', 'right-start'] as const },
   { justify: 'space-between' as const, placements: ['left', 'right'] as const },
   { justify: 'space-between' as const, placements: ['left-end', 'right-end'] as const },
-  { justify: 'center' as const, placements: ['bottom-start', 'bottom', 'bottom-end'] as const }
+  { justify: 'center' as const, placements: ['bottom-start', 'bottom', 'bottom-end'] as const },
 ]
 
 const sliderMeta = states.map(state => ({ state, value: 20 + Math.random() * 40 }))
@@ -565,7 +559,7 @@ const tabMeta = [
   { label: 'Tab 2', icon: null, disabled: false },
   { label: 'Tab 3', icon: null, disabled: true },
   { label: 'Tab 4', icon: ArrowUpFromBracket, disabled: false },
-  { label: 'Tab 5', icon: ArrowUpFromBracket, disabled: true }
+  { label: 'Tab 5', icon: ArrowUpFromBracket, disabled: true },
 ]
 
 const spinActive = ref(true)
@@ -578,33 +572,33 @@ const menuMeta = [
   { label: 'Menu 1', disabled: false },
   { label: 'Menu 2', disabled: false },
   { label: 'Menu 3', disabled: true },
-  { label: 'Menu 4', disabled: false }
+  { label: 'Menu 4', disabled: false },
 ]
 
 const messageTypes = [
   { prefix: 'Normal', type: 'info' as const },
   { prefix: 'Success', type: 'success' as const },
   { prefix: 'Warning', type: 'warning' as const },
-  { prefix: 'Error', type: 'error' as const }
+  { prefix: 'Error', type: 'error' as const },
 ]
 const messageOptions = {
   title: 'Title',
   content: 'A permanent content',
   duration: 0,
   closable: true,
-  marker: true
+  marker: true,
 }
 const messageMeta = [
   { color: false, background: false },
   { color: true, background: false },
-  { color: true, background: true }
+  { color: true, background: true },
 ]
 
 const paginationMeta = [
   { background: false, noBorder: false },
   { background: true, noBorder: false },
   { background: false, noBorder: true },
-  { background: true, noBorder: true }
+  { background: true, noBorder: true },
 ]
 
 const tableData = [
@@ -614,7 +608,7 @@ const tableData = [
     email: 'Angelique_Walsh2268@twace.org',
     firstName: 'Angelique',
     lastName: 'Walsh',
-    age: '58'
+    age: '58',
   },
   {
     id: '2',
@@ -622,7 +616,7 @@ const tableData = [
     email: 'Aeris_Drake5867@gmail.com',
     firstName: 'Aeris',
     lastName: 'Drake',
-    age: '40'
+    age: '40',
   },
   {
     id: '3',
@@ -630,7 +624,7 @@ const tableData = [
     email: 'Elisabeth_Rogers7566@sheye.org',
     firstName: 'Elisabeth',
     lastName: 'Rogers',
-    age: '56'
+    age: '56',
   },
   {
     id: '4',
@@ -638,7 +632,7 @@ const tableData = [
     email: 'Sharon_Tanner5855@nickia.com',
     firstName: 'Sharon',
     lastName: 'Tanner',
-    age: '58'
+    age: '58',
   },
   {
     id: '5',
@@ -646,7 +640,7 @@ const tableData = [
     email: 'Evie_Farmer6650@typill.biz',
     firstName: 'Evie',
     lastName: 'Farmer',
-    age: '26'
+    age: '26',
   },
   {
     id: '6',
@@ -654,7 +648,7 @@ const tableData = [
     email: 'Phillip_Rixon8188@gmail.com',
     firstName: 'Phillip',
     lastName: 'Rixon',
-    age: '37'
+    age: '37',
   },
   {
     id: '7',
@@ -662,7 +656,7 @@ const tableData = [
     email: 'Liam_Pickard9810@ovock.tech',
     firstName: 'Liam',
     lastName: 'Pickard',
-    age: '32'
+    age: '32',
   },
   {
     id: '8',
@@ -670,7 +664,7 @@ const tableData = [
     email: 'Ruth_Mcleod599@naiker.biz',
     firstName: 'Ruth',
     lastName: 'Mcleod',
-    age: '21'
+    age: '21',
   },
   {
     id: '9',
@@ -678,7 +672,7 @@ const tableData = [
     email: 'Marvin_Lakey4748@fuliss.net',
     firstName: 'Marvin',
     lastName: 'Lakey',
-    age: '41'
+    age: '41',
   },
   {
     id: '10',
@@ -686,8 +680,8 @@ const tableData = [
     email: 'Deborah_Santos5515@ubusive.com',
     firstName: 'Deborah',
     lastName: 'Santos',
-    age: '29'
-  }
+    age: '29',
+  },
 ]
 
 const tableFilter = defineFilter({
@@ -696,7 +690,7 @@ const tableFilter = defineFilter({
     { label: 'Starts with D', value: 'D' },
     { label: 'Starts with F', value: 'F' },
     { label: 'Starts with R', value: 'R' },
-    { label: 'Starts with T', value: 'T' }
+    { label: 'Starts with T', value: 'T' },
   ],
   multiple: true,
   method(values, row: { lastName: string }) {
@@ -707,15 +701,15 @@ const tableFilter = defineFilter({
     }
 
     return false
-  }
+  },
 })
 
 const timelineMeta = [
-  { date: '2022-05-24', content: 'Nice Day', type: 'default' as const },
+  { date: '2022-05-24', content: 'Nice Day', type: 'primary' as const },
   { date: '2022-05-25', content: 'Nice Day', type: 'success' as const },
   { date: '2022-05-26', content: 'Nice Day', type: 'warning' as const },
   { date: '2022-05-27', content: 'Nice Day', type: 'error' as const },
-  { date: '2022-05-28', content: 'Nice Day', type: 'disabled' as const }
+  { date: '2022-05-28', content: 'Nice Day', type: 'disabled' as const },
 ]
 </script>
 

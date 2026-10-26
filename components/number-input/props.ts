@@ -1,22 +1,27 @@
 import {
-  buildProps,
   booleanProp,
+  booleanStringProp,
+  buildProps,
+  classProp,
+  eventProp,
+  iconProp,
+  localeProp,
   sizeProp,
   stateProp,
-  classProp,
-  eventProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { NumberInputControlType } from './symbol'
+import type { NumberInputControlType, NumberInputEmptyType, NumberInputSlots } from './symbol'
 
 export const numberInputProps = buildProps({
   size: sizeProp,
   state: stateProp,
-  prefix: Object,
+  locale: localeProp('numberInput'),
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   /**
    * 格式化后显示
@@ -28,7 +33,7 @@ export const numberInputProps = buildProps({
   placeholder: String,
   autofocus: booleanProp,
   spellcheck: booleanProp,
-  autocomplete: booleanProp,
+  autocomplete: booleanStringProp,
   precision: Number,
   readonly: booleanProp,
   step: Number,
@@ -36,15 +41,21 @@ export const numberInputProps = buildProps({
   shiftStep: Number,
   altStep: Number,
   disabled: booleanProp,
-  inputClass: classProp,
+  controlClass: classProp,
   debounce: booleanProp,
+  delay: Number,
   clearable: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   sync: booleanProp,
+  syncStep: booleanProp,
   controlType: String as PropType<NumberInputControlType>,
+  emptyType: String as PropType<NumberInputEmptyType>,
+  controlAttrs: Object as PropType<Record<string, any>>,
+  name: String,
+  slots: Object as PropType<NumberInputSlots>,
   onFocus: eventProp<(event: FocusEvent) => void>(),
   onBlur: eventProp<(event: FocusEvent) => void>(),
   onInput: eventProp<(value: number) => void>(),
@@ -55,7 +66,7 @@ export const numberInputProps = buildProps({
   onSuffixClick: eventProp<(event: MouseEvent) => void>(),
   onKeyDown: eventProp<(event: KeyboardEvent) => void>(),
   onKeyPress: eventProp<(event: KeyboardEvent) => void>(),
-  onKeyUp: eventProp<(event: KeyboardEvent) => void>()
+  onKeyUp: eventProp<(event: KeyboardEvent) => void>(),
 })
 
 export type NumberInputProps = ExtractPropTypes<typeof numberInputProps>

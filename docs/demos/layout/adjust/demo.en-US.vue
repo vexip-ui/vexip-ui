@@ -11,11 +11,14 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px;">
+      <div style="width: 100%; padding: 0 20px">
         <p>Adise width:</p>
         <NumberInput v-model:value="width"></NumberInput>
         <p>Header height:</p>
         <NumberInput v-model:value="height"></NumberInput>
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
       </div>
     </template>
   </Layout>
@@ -23,7 +26,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { EnvelopesBulk, City, ChartPie, User } from '@vexip-ui/icons'
+
+import { ChartPie, City, EnvelopesBulk, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
@@ -32,7 +36,7 @@ const height = ref(55)
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const menus: MenuOptions[] = [
@@ -43,25 +47,25 @@ const menus: MenuOptions[] = [
     children: [
       { label: '1-1', name: 'Child Menu 1' },
       { label: '1-2', name: 'Child Menu 2' },
-      { label: '1-3', name: 'Child Menu 3' }
-    ]
+      { label: '1-3', name: 'Child Menu 3' },
+    ],
   },
   {
     label: '2',
     name: 'Menu 2',
     icon: City,
-    disabled: true
+    disabled: true,
   },
   {
     label: '3',
     name: 'Menu 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: 'Menu 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 
 function handleUserAction(label: string) {

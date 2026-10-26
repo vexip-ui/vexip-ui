@@ -1,9 +1,17 @@
-import { buildProps, booleanProp, sizeProp, eventProp } from '@vexip-ui/config'
+import {
+  booleanProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  localeProp,
+  sizeProp,
+} from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ButtonType, ButtonAttrType } from '@/components/button'
-import type { RowGridJustify, RowGridAlign } from '@/components/row'
+import type { ButtonAttrType, ButtonType } from '@/components/button'
+import type { RowGridAlign, RowGridJustify } from '@/components/row'
 import type { ColumnOptions } from '@/components/column'
 import type { Rule } from './validator'
 import type { FormLabelAlign, SubmitMethod } from './symbol'
@@ -26,7 +34,8 @@ export const formProps = buildProps({
   inline: booleanProp,
   gap: [Number, Array] as PropType<number | number[]>,
   justify: String as PropType<RowGridJustify>,
-  align: String as PropType<RowGridAlign>
+  align: String as PropType<RowGridAlign>,
+  onSubmit: eventProp<(e: SubmitEvent) => void>(),
 })
 
 export type FormProps = ExtractPropTypes<typeof formProps>
@@ -35,14 +44,19 @@ export type FormCProps = ConfigurableProps<FormProps, 'model'>
 const mediaProp = [Number, Object] as PropType<number | ColumnOptions>
 
 export const formItemProps = buildProps({
+  locale: localeProp('form'),
   label: String,
   prop: String,
+  name: String,
   rules: [Object, Array] as PropType<Rule | Rule[]>,
   labelWidth: Number,
   required: booleanProp,
   htmlFor: String,
   errorTransition: String,
-  defaultValue: Object as PropType<unknown>,
+  defaultValue: {
+    type: [String, Number, Boolean, Object, Array, Function] as PropType<any>,
+    default: null,
+  },
   hideErrorTip: booleanProp,
   validateAll: booleanProp,
   hideAsterisk: booleanProp,
@@ -50,6 +64,7 @@ export const formItemProps = buildProps({
   action: booleanProp,
   help: String,
   pure: booleanProp,
+  manual: booleanProp,
   span: Number,
   offset: Number,
   push: Number,
@@ -61,7 +76,7 @@ export const formItemProps = buildProps({
   lg: mediaProp,
   xl: mediaProp,
   xxl: mediaProp,
-  flex: [Number, String]
+  flex: [Number, String],
 })
 
 export type FormItemProps = ExtractPropTypes<typeof formItemProps>
@@ -69,6 +84,7 @@ export type FormItemCProps = ConfigurableProps<FormItemProps, 'prop' | 'htmlFor'
 
 export const formSubmitProps = buildProps({
   size: sizeProp,
+  locale: localeProp('form'),
   type: String as PropType<ButtonType>,
   label: String,
   dashed: booleanProp,
@@ -77,16 +93,16 @@ export const formSubmitProps = buildProps({
   ghost: booleanProp,
   disabled: booleanProp,
   circle: booleanProp,
-  loadingIcon: Object,
-  loadingSpin: booleanProp,
-  icon: Object,
+  loadingIcon: iconProp,
+  loadingEffect: String as PropType<IconEffect>,
+  icon: iconProp,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,
   block: booleanProp,
   tag: String,
   onBeforeSubmit: Function as PropType<() => unknown>,
   onSubmit: eventProp(),
-  onError: eventProp<(errors: string[]) => void>()
+  onError: eventProp<(errors: string[]) => void>(),
 })
 
 export type FormSubmitProps = ExtractPropTypes<typeof formSubmitProps>
@@ -94,6 +110,7 @@ export type FormSubmitCProps = ConfigurableProps<FormSubmitProps, never, 'onBefo
 
 export const formResetProps = buildProps({
   size: sizeProp,
+  locale: localeProp('form'),
   type: String as PropType<ButtonType>,
   label: String,
   dashed: booleanProp,
@@ -103,15 +120,15 @@ export const formResetProps = buildProps({
   disabled: booleanProp,
   loading: booleanProp,
   circle: booleanProp,
-  loadingIcon: Object,
-  loadingSpin: booleanProp,
-  icon: Object,
+  loadingIcon: iconProp,
+  loadingEffect: String as PropType<IconEffect>,
+  icon: iconProp,
   color: String,
   buttonType: String as PropType<ButtonAttrType>,
   block: booleanProp,
   tag: String,
   onBeforeReset: Function as PropType<() => unknown>,
-  onReset: eventProp()
+  onReset: eventProp(),
 })
 
 export type FormResetProps = ExtractPropTypes<typeof formResetProps>

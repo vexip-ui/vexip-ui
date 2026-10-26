@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { useNameHelper } from '@vexip-ui/config'
+import { optionGroupProps } from './props'
+
+defineOptions({ name: 'OptionGroup' })
+
+defineProps(optionGroupProps)
+
+const nh = useNameHelper('option-group')
+</script>
+
 <template>
   <li
     :class="{
@@ -16,27 +27,3 @@
     </ul>
   </li>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { useNameHelper } from '@vexip-ui/config'
-
-export default defineComponent({
-  name: 'OptionGroup',
-  props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    divided: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data() {
-    return {
-      nh: useNameHelper('option-group')
-    }
-  }
-})
-</script>

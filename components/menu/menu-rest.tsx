@@ -1,24 +1,16 @@
-import {
-  defineComponent,
-  ref,
-  reactive,
-  computed,
-  watch,
-  inject,
-  provide,
-  nextTick,
-  Transition
-} from 'vue'
 import { Icon } from '@/components/icon'
 import { MenuItem } from '@/components/menu-item'
-import { Portal } from '@/components/portal'
-import { Ellipsis } from '@vexip-ui/icons'
-import { useNameHelper } from '@vexip-ui/config'
-import { usePopper, useSetTimeout, useClickOutside } from '@vexip-ui/hooks'
+import { Popper } from '@/components/popper'
+
+import { computed, defineComponent, inject, nextTick, provide, reactive, ref, watch } from 'vue'
+
+import { useHoverDelay, useIcons, useNameHelper } from '@vexip-ui/config'
+import { useClickOutside, usePopper, useSetTimeout } from '@vexip-ui/hooks'
 import { callIfFunc } from '@vexip-ui/utils'
-import { MENU_STATE, MENU_ITEM_STATE } from './symbol'
+import { MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
+import type { PopperExposed } from '@/components/popper'
 import type { MenuOptions } from './symbol'
 
 export default defineComponent({
@@ -26,13 +18,16 @@ export default defineComponent({
   props: {
     menus: {
       type: Array as PropType<MenuOptions[]>,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   setup(props) {
     const menuState = inject(MENU_STATE, null)
 
     const nh = useNameHelper('menu')
+    const icons = useIcons()
+    const hoverDelay = useHoverDelay()
+
     const groupExpanded = ref(false)
     const sonSelected = ref(false)
     const popperShow = ref(false)
@@ -41,10 +36,12 @@ export default defineComponent({
     const dropTrigger = computed(() => menuState?.trigger || 'hover')
 
     const wrapper = useClickOutside(handleClickOutside)
-    const { reference, popper, transferTo, updatePopper } = usePopper({
+    const popper = ref<PopperExposed>()
+    const { reference, transferTo, updatePopper } = usePopper({
       placement: ref('bottom'),
       transfer,
-      wrapper
+      wrapper,
+      popper: computed(() => popper.value?.wrapper),
     })
 
     const itemState = reactive({
@@ -60,7 +57,7 @@ export default defineComponent({
       updateSonSelected,
       toggleGroupExpanded,
       handleMouseEnter,
-      handleMouseLeave
+      handleMouseLeave,
     })
 
     provide(MENU_ITEM_STATE, itemState)
@@ -82,24 +79,32 @@ export default defineComponent({
 
     const { timer } = useSetTimeout()
 
+    let mouseInList = false
+    let reproduce = false
+
     function handleMouseEnter() {
       clearTimeout(timer.hover)
 
-      if (dropTrigger.value !== 'hover') return
+      if (mouseInList || dropTrigger.value !== 'hover') return
+
+      if (!groupExpanded.value && popperShow.value) {
+        reproduce = true
+        return
+      }
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = true
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleMouseLeave() {
       clearTimeout(timer.hover)
 
-      if (dropTrigger.value !== 'hover') return
+      if (mouseInList || !popperShow.value || dropTrigger.value !== 'hover') return
 
       timer.hover = setTimeout(() => {
         groupExpanded.value = false
-      }, 250)
+      }, hoverDelay.value)
     }
 
     function handleClick() {
@@ -118,6 +123,12 @@ export default defineComponent({
 
     function handlePopperHide() {
       popperShow.value = false
+      groupExpanded.value = false
+
+      if (reproduce) {
+        reproduce = false
+        groupExpanded.value = true
+      }
     }
 
     function renderMenuItems() {
@@ -127,12 +138,14 @@ export default defineComponent({
 
       return props.menus.map(item => (
         <MenuItem
+          key={item.label}
           label={item.label}
           icon={item.icon}
           icon-props={item.iconProps}
           disabled={item.disabled}
           children={item.children}
           route={item.route}
+          meta={item.meta}
         >
           {item.name ? callIfFunc(item.name) : item.label}
         </MenuItem>
@@ -152,25 +165,23 @@ export default defineComponent({
             class={[nh.be('rest-handler'), sonSelected.value && nh.bem('rest-handler', 'selected')]}
             onClick={handleClick}
           >
-            <Icon>
-              <Ellipsis></Ellipsis>
-            </Icon>
+            <Icon {...icons.value.ellipsis}></Icon>
           </div>
-          <Portal to={transferTo.value}>
-            <Transition name={nh.ns('drop')} appear onAfterLeave={handlePopperHide}>
-              {popperShow.value && (
-                <div
-                  v-show={groupExpanded.value}
-                  ref={popper}
-                  class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', 'drop')]}
-                >
-                  <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
-                </div>
-              )}
-            </Transition>
-          </Portal>
+          <Popper
+            ref={popper}
+            class={[nh.be('popper'), nh.bs('vars'), nh.bem('popper', 'drop')]}
+            visible={popperShow.value && groupExpanded.value}
+            alive={!transferTo.value || popperShow.value}
+            to={transferTo.value}
+            transition={nh.ns('drop')}
+            onAfterLeave={handlePopperHide}
+            onMouseenter={() => ((mouseInList = true), handleMouseEnter())}
+            onMouseleave={() => ((mouseInList = false), handleMouseLeave())}
+          >
+            <ul class={[nh.be('list'), nh.bem('list', 'theme')]}>{renderMenuItems()}</ul>
+          </Popper>
         </div>
       )
     }
-  }
+  },
 })

@@ -1,15 +1,16 @@
-@use '../design/variables.scss' as *;
+@use '../design/variables' as *;
+@use '../shared/variables' as *;
 
 $-name: '#{$namespace}-zoom';
 
 @mixin -start {
   opacity: 0%;
-  transform: scale(0.35);
+  transform: translateZ(0) scale(0.35);
 }
 
 @mixin -end {
   opacity: 100%;
-  transform: scale(1);
+  transform: translateZ(0) scale(1);
 }
 
 .#{$-name} {
@@ -17,14 +18,14 @@ $-name: '#{$namespace}-zoom';
     &-enter-active {
       animation: {
         name: #{$-name}-in;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
 
     &-leave-active {
       animation: {
         name: #{$-name}-out;
-        duration: get-css-var('transition-duration');
+        duration: value('transition-duration');
       }
     }
   }

@@ -1,6 +1,6 @@
-import { buildProps, booleanProp } from '@vexip-ui/config'
+import { booleanProp, buildProps } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 import type { DividerTextPosition } from './symbol'
 
@@ -11,7 +11,8 @@ export const dividerProps = buildProps({
    * 字体增大加粗
    */
   primary: booleanProp,
-  dashed: booleanProp
+  dashed: booleanProp,
+  margin: [String, Number],
 })
 
 export type DividerProps = ExtractPropTypes<typeof dividerProps>

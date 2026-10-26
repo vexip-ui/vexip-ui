@@ -1,9 +1,11 @@
-import { defineComponent, computed, h, inject, provide } from 'vue'
+import { computed, defineComponent, h, inject, provide } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { columnProps } from './props'
 import { ROW_STATE, breakPoints } from './symbol'
 
 import type { CSSProperties } from 'vue'
+import type { ClassType } from '@vexip-ui/config'
 
 type LayerProp = 'span' | 'offset' | 'pull' | 'push' | 'order'
 
@@ -27,13 +29,13 @@ export default defineComponent({
       xl: null,
       xxl: null,
       flex: null,
-      useFlex: null
+      useFlex: null,
     })
 
     const rowState = inject(ROW_STATE, null)
     const nh = useNameHelper('column')
 
-    provide(ROW_STATE, null)
+    provide(ROW_STATE, null!)
 
     const className = computed(() => {
       const columnFlex = (props.useFlex || rowState?.columnFlex) && {
@@ -42,15 +44,15 @@ export default defineComponent({
           ? props.useFlex === true
             ? { justify: 'start', align: 'top' }
             : props.useFlex
-          : {})
+          : {}),
       }
-      const className = [
+      const className: ClassType = [
         nh.b(),
         nh.bs('vars'),
         {
           [nh.bm('flex')]: columnFlex,
-          [nh.bm('inherit')]: rowState || props.inherit
-        }
+          [nh.bm('inherit')]: rowState || props.inherit,
+        },
       ]
 
       if (columnFlex) {
@@ -60,7 +62,9 @@ export default defineComponent({
 
       colProps.forEach(prop => {
         if (typeof props[prop] === 'number') {
-          className.push(prop === 'span' ? nh.bm(props[prop]) : nh.bm(`${prop}-${props[prop]}`))
+          className.push(
+            prop === 'span' ? nh.bm(`${props[prop]}`) : nh.bm(`${prop}-${props[prop]}`),
+          )
         }
       })
 
@@ -77,7 +81,7 @@ export default defineComponent({
 
             if (!value && value !== 0) return
 
-            className.push(prop === 'span' ? nh.bm(value) : nh.bm(`${prop}-${value}`))
+            className.push(prop === 'span' ? nh.bm(`${value}`) : nh.bm(`${prop}-${value}`))
           })
         }
       })
@@ -90,12 +94,9 @@ export default defineComponent({
 
       if (rowState) {
         if (typeof rowState.gap === 'number') {
-          style.paddingRight = style.paddingLeft = `${rowState.gap / 2}px`
+          style.paddingInlineStart = style.paddingInlineEnd = `${rowState.gap / 2}px`
         } else if (Array.isArray(rowState.gap)) {
-          // const [horizontal] = rowState.gap
-
-          // style.padding = `${vertical / 2}px ${horizontal / 2}px`
-          style.paddingRight = style.paddingLeft = `${rowState.gap[0] / 2}px`
+          style.paddingInlineStart = style.paddingInlineEnd = `${rowState.gap[0] / 2}px`
         }
       }
 
@@ -119,11 +120,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default && slots.default()
-        }
+          default: () => slots.default && slots.default(),
+        },
       )
-  }
+  },
 })

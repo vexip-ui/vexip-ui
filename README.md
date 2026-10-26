@@ -1,51 +1,56 @@
 <p align="center">
   <a href="https://www.vexipui.com/" target="_blank" rel="noopener noreferrer">
-    <img src="./docs/public/vexip-ui.svg" width="180" style="width: 180px;" />
+    <img src="./docs/public/vexip-ui.svg" alt="Vexip UI" width="180" style="width: 180px;" />
   </a>
 </p>
 
 <h1 align="center">Vexip UI</h1>
 
 <p align="center">
-  Highly customizable property values, Full TypeScript, Performance pretty good
+  Highly customizability, full TypeScript, performance pretty good
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/vexip-ui" target="_blank">
-    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="npm version"/>
+    <img src="https://img.shields.io/github/package-json/v/vexip-ui/vexip-ui" alt="NPM version"/>
+  </a>
+  <a href="https://github.com/vexip-ui/vexip-ui/commits/main" target="_blank">
+    <img src="https://img.shields.io/github/commit-activity/w/vexip-ui/vexip-ui" alt="commits pre week"/>
   </a>
 </p>
 
 <p align="center">
-  You can contace me if you've written any awesome thing with Vexip UI and want to show it on official website. You are very welcome if you would like to contribute codes!
+  If you have created any awesome thing with Vexip UI and would like to showcase it on the official website, you can contact me. If you would like to contribute code, you are very welcome!
 </p>
 
 **English** | [中文 [含技术支持群]](./README.zh-CN.md)
 
-Vexip UI provides a series of out-of-box components.
+Vexip (pronounced `/ˈvesɪp/`) UI provides a series of out-of-box components.
 
-This library is using base on vue 3.0 with using **composition api**, and design and code components in the traditional way by Vue possible, fully **TypeScript**.
+This library is written using **composition API**, and the components are designed and written in a traditional Vue way possible, with full **TypeScript** support.
 
-Almost all the **default value of props** for each component can be quickly modified by configuration, for easy customization.
+Almost all **default property values** of each component can be easily customized through injected configurations, making it easy to achieve customization.
 
-And, the writing of component codes pay great attention to lowering the threshold of **source codes reading**, and the style of code is as close to the usual business code habits as possible to avoid dazzling encapsulation.
+Meanwhile, the component code pays great attention to reducing the threshold of **source code reading**, and the code layout is as close as possible to the habits of daily business code, avoiding fancy and showy code.
 
-There are currently **70+** components, many you see everywhere are here and are better, and a few may bright your eyes.
+Currently, there are **78** components, some of which may be familiar to you, and even better, while others may brighten your eyes.
 
 ## Features
 
-- 📦 70+ out-of-box high quality Vue 3 components
+- 📦 Out-of-box high quality Vue 3 components
 - 📐 Intuitive, minimalistic Api design
 - 🔧 Configurable default value of props, quickly complete global/local modifications
 - ⚡ Composition Api, good performance base
 - 🔨 With TypeScript, fully types
-- 💪 900+ unit tests to provide good stability
+- 💪 1100+ unit tests to provide good stability
 - 🎨 Support CSS variable, built-in dark theme
 - 🚩 Support i18n
 - 🛫 Provide resolver, support unplugin
 - 🚤 Support SSR
 - 🩹 Good a11n
-- 👀 Close to business code arrangement, low threshold for source code reading
+- 👀 Close to business code arrangement, low source code reading threshold
+
+> The design tokens are base on Open Color, and have some adjustments.
 
 ## Install
 
@@ -59,31 +64,43 @@ pnpm add vexip-ui
 yarn add vexip-ui
 ```
 
-## Document
+## Documentation
 
-[Here](https://www.vexipui.com) The online document.
+[Here](https://www.vexipui.com) you can view the online document.
+
+> Author is not good at English. If you have any advice to improve the English document, you can create an issue or a PR.
 
 ## Help
 
 Open a [issue](https://github.com/vexip-ui/vexip-ui/issues) to request help.
 
-If you take maybe some bugs, please use the [Vexip UI Playground](https://playground.vexipui.com/) to provide a minimal reproduction.
+If you take maybe some bugs, please use the [Vexip UI Playground](https://play.vexipui.com/) to provide a minimal reproduction.
 
 ## Contributing
 
 Welcome to join us! You can check out the [Contributing Guide](./CONTRIBUTING.md) to learn how to get started.
+
+Or you can sponsor us to help the project grow better!
+
+WeChat:
+
+<img src="./docs/public/sponsor-wechat.webp" alt="WeChat payment" style="width: 240px;" />
+
+Alipay:
+
+<img src="./docs/public/sponsor-alipay.webp" alt="Alipay payment" style="width: 240px;" />
 
 ## Contributors
 
 Thanks for all their contributions!
 
 <a href="https://github.com/vexip-ui/vexip-ui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" />
+  <img src="https://contrib.rocks/image?repo=vexip-ui/vexip-ui" alt="contributors" />
 </a>
 
 ## Environment
 
-All components supported in modern browsers, I try to ensure the support of neerly two or three versions.
+All components supported in modern browsers, I try to ensure the support of nearly two or three versions.
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Opera | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24" height="24" />](http://godban.github.io/browsers-support-badges/)<br/>Electron |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

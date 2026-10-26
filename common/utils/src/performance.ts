@@ -1,43 +1,81 @@
-/**
- * 将一个函数或方法进行节流
- *
- * @param method 需要节流的方法，需自行绑定 this
- * @param delay 节流后的触发间隔，默认 16 ms (1 帧/秒)
- */
-export function throttle<T extends (...args: any[]) => any>(method: T, delay = 16) {
-  if (typeof method !== 'function') {
-    return method
+import { isClient, noop } from './common'
+
+export const raf = isClient
+  ? requestAnimationFrame
+  : (cb: FrameRequestCallback) => {
+    setTimeout(cb, 16)
   }
 
-  let start = Date.now()
+/**
+ * 将一个方法进行节流
+ *
+ * @param method 需要节流的方法，需自行绑定 this
+ * @param interval 节流后的触发间隔，默认 16 ms (1 帧)
+ *
+ * @returns 节流后的方法
+ */
+export function throttle<T extends (...args: any[]) => any>(
+  method: T,
+  interval = 16,
+): (...args: Parameters<T>) => void {
+  if (typeof method !== 'function') {
+    return noop
+  }
+
+  const invoke = (...args: Parameters<T>) => {
+    method(...args)
+  }
+
+  if (interval <= 0) {
+    return debounceMinor(invoke)
+  }
+
+  let lastCall = 0
   let timer: ReturnType<typeof setTimeout>
 
   return function (...args: Parameters<T>) {
     const current = Date.now()
-    const remaining = start + delay - current
+    const elapsed = current - lastCall
 
     clearTimeout(timer)
 
-    if (remaining <= 0) {
-      method(...args)
-      start = Date.now()
+    if (elapsed >= interval) {
+      lastCall = current
+      invoke(...args)
     } else {
-      timer = setTimeout(() => {
-        method(...args)
-      }, delay)
+      timer = setTimeout(
+        () => {
+          lastCall = Date.now()
+          invoke(...args)
+        },
+        Math.max(0, interval - elapsed),
+      )
     }
   }
 }
 
 /**
- * 将一个函数或方法进行防抖
+ * 将一个方法进行防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
- * @param delay 防抖的限制时间，默认 300 ms
+ * @param delay 防抖的限制时间，默认 100ms
+ *
+ * @returns 防抖后的方法
  */
-export function debounce<T extends (...args: any[]) => any>(method: T, delay = 100) {
+export function debounce<T extends (...args: any[]) => any>(
+  method: T,
+  delay = 100,
+): (...args: Parameters<T>) => void {
   if (typeof method !== 'function') {
-    return method
+    return noop
+  }
+
+  const invoke = (...args: Parameters<T>) => {
+    method(...args)
+  }
+
+  if (delay <= 0) {
+    return debounceMinor(invoke)
   }
 
   let timer: ReturnType<typeof setTimeout>
@@ -46,15 +84,17 @@ export function debounce<T extends (...args: any[]) => any>(method: T, delay = 1
     clearTimeout(timer)
 
     timer = setTimeout(() => {
-      method(...args)
+      invoke(...args)
     }, delay)
   }
 }
 
 /**
- * 针对每个微任务，将一个函数或方法进行防抖
+ * 对给定的方法进行微任务级别的防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
+ *
+ * @returns 防抖后的方法
  */
 export function debounceMinor<T extends (...args: any[]) => any>(method: T) {
   if (typeof method !== 'function') {
@@ -63,25 +103,31 @@ export function debounceMinor<T extends (...args: any[]) => any>(method: T) {
 
   let called = false
   let lastArgs: Parameters<T>
+  let promise: Promise<Awaited<ReturnType<T>>>
 
   return function (...args: Parameters<T>) {
     lastArgs = args
 
     if (!called) {
       called = true
-
-      Promise.resolve().then(() => {
-        method(...lastArgs)
+      promise = Promise.resolve().then(() => {
         called = false
+        promise = undefined!
+
+        return method(...lastArgs)
       })
     }
+
+    return promise
   }
 }
 
 /**
- * 针对每一帧，将一个函数或方法进行防抖
+ * 对给定的方法进行渲染帧级别的防抖
  *
  * @param method 需要防抖的方法，需自行绑定 this
+ *
+ * @returns 防抖后的方法
  */
 export function debounceFrame<T extends (...args: any[]) => any>(method: T) {
   if (typeof method !== 'function') {
@@ -90,18 +136,24 @@ export function debounceFrame<T extends (...args: any[]) => any>(method: T) {
 
   let called = false
   let lastArgs: Parameters<T>
+  let promise: Promise<Awaited<ReturnType<T>>>
 
   return function (...args: Parameters<T>) {
     lastArgs = args
 
     if (!called) {
       called = true
+      promise = new Promise(resolve =>
+        raf(() => {
+          called = false
+          promise = undefined!
 
-      requestAnimationFrame(() => {
-        method(...lastArgs)
-        called = false
-      })
+          resolve(method(...lastArgs))
+        }),
+      )
     }
+
+    return promise
   }
 }
 
@@ -169,6 +221,42 @@ export function nextFrameOnce<T extends (...args: any[]) => any>(method: T, ...a
   frameCallbacks.add(method)
 
   if (frameCallbacks.size === 1) {
-    requestAnimationFrame(flushFrameCallbacks)
+    raf(flushFrameCallbacks)
   }
+}
+
+/**
+ * 按指定的并发数，并行地为系列源数据执行操作
+ *
+ * @param maxConcurrency 最大的并发数
+ * @param source 源数据
+ * @param iteratorFn 处理操作的异步函数
+ *
+ * @returns 等待所有任务执行完的 Promise 对象
+ */
+export async function runParallel<T>(
+  maxConcurrency: number,
+  source: T[],
+  iteratorFn: (item: T, source: T[]) => Promise<any>,
+) {
+  const ret: Array<Promise<any>> = []
+  const executing: Array<Promise<any>> = []
+
+  for (const item of source) {
+    const p = Promise.resolve().then(() => iteratorFn(item, source))
+
+    ret.push(p)
+
+    if (maxConcurrency <= source.length) {
+      const e: Promise<any> = p.then(() => executing.splice(executing.indexOf(e), 1))
+
+      executing.push(e)
+
+      if (executing.length >= maxConcurrency) {
+        await Promise.race(executing)
+      }
+    }
+  }
+
+  return Promise.all(ret)
 }

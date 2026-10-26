@@ -1,16 +1,19 @@
+@use './shared' as *;
 @use './design' as *;
-@use './tab-nav.scss';
 
 .#{$namespace}-tabs {
-  @include basis;
+  @include basis {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
 
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  @include inherit-color;
 
   &__header {
     display: flex;
+    flex-shrink: 0;
     min-width: 0;
     min-height: 0;
 
@@ -26,11 +29,12 @@
     flex: auto;
     min-width: 0;
     min-height: 0;
-    transition: get-css-var('transition-transform');
+    transition: value('transition-transform');
   }
 
   $header: #{&}__header;
   $main: #{&}__main;
+  $panel: #{&}__panel;
 
   &--top {
     #{$main} {
@@ -42,7 +46,7 @@
     flex-direction: row-reverse;
 
     #{$main} {
-      padding-right: 10px;
+      padding-inline-end: 10px;
     }
   }
 
@@ -58,17 +62,29 @@
     flex-direction: row;
 
     #{$main} {
-      padding-left: 10px;
+      padding-inline-start: 10px;
     }
   }
 
   &__panel {
-    display: none;
+    position: absolute;
     flex-shrink: 0;
     width: 100%;
+    opacity: 0%;
 
     &--active {
-      display: block;
+      position: relative;
+      z-index: 1;
+      opacity: 100%;
+    }
+
+    &--lazy {
+      display: none;
+      opacity: 100%;
+
+      &#{$panel}--active {
+        display: block;
+      }
     }
   }
 }

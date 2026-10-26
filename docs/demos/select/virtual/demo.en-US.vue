@@ -1,5 +1,10 @@
 <template>
-  <Select v-model:value="value" :options="options" :max-list-height="200"></Select>
+  <Select
+    v-model:value="value"
+    clearable
+    :options="options"
+    :max-list-height="200"
+  ></Select>
 </template>
 
 <script setup lang="ts">

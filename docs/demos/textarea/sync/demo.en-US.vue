@@ -1,5 +1,5 @@
 <template>
-  <Textarea v-model:value="value" sync style="max-width: 300px;"></Textarea>
+  <Textarea v-model:value="value" sync style="max-width: 300px"></Textarea>
   <p>Textarea Value: {{ value }}</p>
 </template>
 

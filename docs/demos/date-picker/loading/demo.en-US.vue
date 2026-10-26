@@ -2,7 +2,7 @@
   <DatePicker
     :loading="loading"
     placeholder="loading and editable"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
   <br />
   <br />
@@ -10,7 +10,7 @@
     :loading="loading"
     loading-lock
     placeholder="loading and readonly"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></DatePicker>
   <p>
     Loading:

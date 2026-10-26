@@ -1,29 +1,52 @@
 import {
-  buildProps,
   booleanProp,
   booleanStringProp,
+  buildProps,
+  eventProp,
+  iconProp,
+  localeProp,
   sizeProp,
   stateProp,
-  eventProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
-import type { ConfigurableProps } from '@vexip-ui/config'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
+import type { ConfigurableProps, EventListener, LocaleConfig } from '@vexip-ui/config'
 import type { Placement } from '@vexip-ui/hooks'
 import type { Dateable } from '@vexip-ui/utils'
-import type { TimeType, DateTimeType, DatePickerType, DateShortcut, TimeShortcut } from './symbol'
+import type {
+  DatePickerChangeEvent,
+  DatePickerFormatFn,
+  DatePickerSlots,
+  DatePickerType,
+  DateShortcut,
+  DateShortcutsPlacement,
+  DateTimeType,
+  TimePickerChangeEvent,
+  TimePickerSlots,
+  TimeShortcut,
+  TimeShortcutsPlacement,
+  TimeType,
+} from './symbol'
+
+export interface DatePickerShortcutEvent {
+  (name: string, value: Dateable | Dateable[]): void,
+  (name: string, value: Dateable): void,
+  (name: string, value: Dateable[]): void,
+}
 
 export const datePickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: Object as PropType<Partial<LocaleConfig['calendar'] & LocaleConfig['datePicker']>>,
   type: String as PropType<DatePickerType>,
   visible: booleanProp,
   placement: String as PropType<Placement>,
   transfer: booleanStringProp,
   value: [Number, String, Date, Array] as PropType<Dateable | Dateable[]>,
   format: String,
+  valueFormat: [String, Array, Function] as PropType<string | string[] | DatePickerFormatFn>,
   filler: String,
-  noFiller: booleanProp,
   clearable: booleanProp,
   noAction: booleanProp,
   labels: Object as PropType<Partial<Record<DateTimeType, string>>>,
@@ -33,9 +56,9 @@ export const datePickerProps = buildProps({
   disabledDate: Function as PropType<(date: Date) => boolean>,
   steps: Array as PropType<number[]>,
   ctrlSteps: Array as PropType<number[]>,
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   noSuffix: booleanProp,
   disabled: booleanProp,
@@ -43,34 +66,50 @@ export const datePickerProps = buildProps({
   confirmText: String,
   cancelText: String,
   today: [Number, String, Date] as PropType<Dateable>,
-  isRange: booleanProp,
+  range: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   min: [Number, String, Date] as PropType<Dateable>,
   max: [Number, String, Date] as PropType<Dateable>,
+  outsideClose: booleanProp,
+  outsideCancel: booleanProp,
+  placeholder: [String, Array] as PropType<string | string[]>,
+  unitReadonly: booleanProp,
+  weekStart: Number,
+  popperAlive: booleanProp,
+  shortcutsPlacement: String as PropType<DateShortcutsPlacement>,
+  slots: Object as PropType<DatePickerSlots>,
   onInput: eventProp<(type: DateTimeType, value: number) => void>(),
   onPlus: eventProp<(type: DateTimeType, value: number) => void>(),
   onMinus: eventProp<(type: DateTimeType, value: number) => void>(),
   onEnter: eventProp(),
   onCancel: eventProp(),
-  onChange: eventProp<(value: string | number | string[] | number[] | null) => void>(),
+  onChange: eventProp<EventListener<DatePickerChangeEvent>>(),
   onClear: eventProp(),
-  onShortcut: eventProp<(name: string, value: Dateable | Dateable[]) => void>(),
+  onShortcut: eventProp<DatePickerShortcutEvent>(),
   onToggle: eventProp<(visible: boolean) => void>(),
   onFocus: eventProp(),
   onBlur: eventProp(),
-  onChangeCol: eventProp<(type: DateTimeType, inputType: 'start' | 'end') => void>(),
-  onClickOutside: eventProp()
+  onChangeCol: eventProp<(type: DateTimeType | null, inputType: 'start' | 'end') => void>(),
+  onClickOutside: eventProp(),
+  onOutsideClose: eventProp(),
 })
 
 export type DatePickerProps = ExtractPropTypes<typeof datePickerProps>
 export type DatePickerCProps = ConfigurableProps<DatePickerProps>
 
+export interface TimePickerShortcutEvent {
+  (name: string, value: string | string[]): void,
+  (name: string, value: string): void,
+  (name: string, value: string[]): void,
+}
+
 export const timePickerProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('timePicker'),
   visible: booleanProp,
   placement: String as PropType<Placement>,
   transfer: booleanStringProp,
@@ -78,7 +117,6 @@ export const timePickerProps = buildProps({
   separator: String,
   value: [String, Array] as PropType<string | string[]>,
   filler: String,
-  noFiller: booleanProp,
   clearable: booleanProp,
   noAction: booleanProp,
   noArrow: booleanProp,
@@ -87,37 +125,45 @@ export const timePickerProps = buildProps({
   steps: Array as PropType<number[]>,
   labels: Object as PropType<Partial<Record<TimeType, string>>>,
   shortcuts: Array as PropType<TimeShortcut[]>,
-  isRange: booleanProp,
+  range: booleanProp,
   disabled: booleanProp,
   transitionName: String,
   confirmText: String,
   cancelText: String,
   ctrlSteps: Array as PropType<number[]>,
-  prefix: Object,
+  prefix: iconProp,
   prefixColor: String,
-  suffix: Object,
+  suffix: iconProp,
   suffixColor: String,
   noSuffix: booleanProp,
   exchange: booleanProp,
   loading: booleanProp,
-  loadingIcon: Object,
+  loadingIcon: iconProp,
   loadingLock: booleanProp,
-  loadingSpin: booleanProp,
+  loadingEffect: String as PropType<IconEffect>,
   min: String,
   max: String,
+  outsideClose: booleanProp,
+  outsideCancel: booleanProp,
+  unitReadonly: booleanProp,
+  popperAlive: booleanProp,
+  shortcutsPlacement: String as PropType<TimeShortcutsPlacement>,
+  placeholder: [String, Array] as PropType<string | string[]>,
+  slots: Object as PropType<TimePickerSlots>,
   onInput: eventProp<(type: TimeType, value: number) => void>(),
   onPlus: eventProp<(type: TimeType, value: number) => void>(),
   onMinus: eventProp<(type: TimeType, value: number) => void>(),
   onEnter: eventProp(),
   onCancel: eventProp(),
-  onChange: eventProp<(value: string | string[]) => void>(),
+  onChange: eventProp<EventListener<TimePickerChangeEvent>>(),
   onClear: eventProp(),
-  onShortcut: eventProp<(name: string, value: string | string[]) => void>(),
+  onShortcut: eventProp<TimePickerShortcutEvent>(),
   onToggle: eventProp<(visible: boolean) => void>(),
   onFocus: eventProp(),
   onBlur: eventProp(),
-  onChangeCol: eventProp<(type: TimeType, inputType: 'start' | 'end') => void>(),
-  onClickOutside: eventProp()
+  onChangeCol: eventProp<(type: TimeType | null, inputType: 'start' | 'end') => void>(),
+  onClickOutside: eventProp(),
+  onOutsideClose: eventProp(),
 })
 
 export type TimePickerProps = ExtractPropTypes<typeof timePickerProps>

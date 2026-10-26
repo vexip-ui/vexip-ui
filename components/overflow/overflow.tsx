@@ -1,19 +1,10 @@
-import {
-  defineComponent,
-  ref,
-  computed,
-  watch,
-  onMounted,
-  nextTick,
-  createTextVNode,
-  Fragment
-} from 'vue'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
+
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
 import { isDefined } from '@vexip-ui/utils'
 import { overflowProps } from './props'
-
-const TEXT_VNODE = createTextVNode('').type
 
 export default defineComponent({
   name: 'Overflow',
@@ -24,12 +15,12 @@ export default defineComponent({
     const props = useProps('overflow', _props, {
       items: {
         default: null,
-        static: true
+        static: true,
       },
       tag: 'div',
       attrFlag: false,
       static: false,
-      maxCount: 0
+      maxCount: 0,
     })
 
     const nh = useNameHelper('overflow')
@@ -45,8 +36,8 @@ export default defineComponent({
         nh.bs('vars'),
         {
           [nh.bm('inherit')]: props.inherit,
-          [nh.bm('manual')]: props.maxCount > 0
-        }
+          [nh.bm('manual')]: props.maxCount > 0,
+        },
       ]
     })
     const hiddenFlag = computed(() => {
@@ -81,8 +72,8 @@ export default defineComponent({
       return marginLeft + marginRight
     }
 
-    function computeHorizontalPadding(el: HTMLElement) {
-      const style = getComputedStyle(el)
+    function computeHorizontalPadding(elOrStyle: HTMLElement | CSSStyleDeclaration) {
+      const style = elOrStyle instanceof Element ? getComputedStyle(elOrStyle) : elOrStyle
       const paddingLeft = parseFloat(style.paddingLeft) || 0
       const paddingRight = parseFloat(style.paddingRight) || 0
 
@@ -105,22 +96,24 @@ export default defineComponent({
 
       const children = wrapper.value.children
       const childCount = children.length
+      const suffixEl = suffix.value
+      const length = childCount - (suffixEl ? 2 : 1)
 
       let overflow = false
 
       if (props.maxCount > 0) {
-        for (let i = 0, len = childCount - 1; i < len; ++i) {
+        for (let i = 0; i < length; ++i) {
           const child = children[i] as HTMLElement
 
           child.style.display = i < props.maxCount ? '' : 'none'
         }
 
-        if (props.maxCount > childCount - 1) {
+        if (props.maxCount >= length) {
           toggleDisplay(counterEl, false)
 
           restCount.value = 0
         } else {
-          restCount.value = childCount - 1 - props.maxCount
+          restCount.value = length - props.maxCount
           overflow = restCount.value > 0
         }
 
@@ -128,14 +121,19 @@ export default defineComponent({
         return
       }
 
-      const suffixEl = suffix.value
-      const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(wrapper.value)
+      // Ensure all children are visible before computing wrapper width,
+      // so wrapperWidth is based on the maximum possible content width
+      for (let i = 0; i < length; ++i) {
+        toggleDisplay(children[i] as HTMLElement, true)
+      }
+
+      const style = getComputedStyle(wrapper.value)
+      const wrapperWidth = wrapper.value.offsetWidth - computeHorizontalPadding(style)
+      const gap = parseFloat(style.columnGap) || 0
+      const counterMargin = computeHorizontalMargin(counterEl)
       const childWidths: number[] = []
 
-      let totalWidth = suffixEl ? suffixEl.offsetWidth : 0
-
-      const counterMargin = computeHorizontalMargin(counterEl)
-      const length = childCount - (suffixEl ? 2 : 1)
+      let totalWidth = suffixEl ? suffixEl.offsetWidth + computeHorizontalMargin(suffixEl) + gap : 0
 
       for (let i = 0; i < length; ++i) {
         if (i < 0) continue
@@ -145,11 +143,9 @@ export default defineComponent({
         if (overflow) {
           toggleDisplay(child, false)
           continue
-        } else {
-          toggleDisplay(child, true)
         }
 
-        const childWidth = computeOuterWidth(child)
+        const childWidth = computeOuterWidth(child) + gap
 
         totalWidth += childWidth
         childWidths[i] = childWidth
@@ -171,6 +167,8 @@ export default defineComponent({
               break
             }
           }
+        } else {
+          restCount.value = 0
         }
       }
 
@@ -191,24 +189,14 @@ export default defineComponent({
       }
     }
 
-    function syncCounterRef(el?: HTMLElement | null) {
-      if (el) {
-        counter.value = el.nextElementSibling as HTMLElement | undefined
-      } else {
-        counter.value = undefined
-      }
-    }
-
     return () => {
       const CustomTag = (props.tag || 'div') as any
       const itemSlot = slots.default
       const staticItem = props.static
       const counterVNode = slots.counter?.({ count: restCount.value })[0] || null
 
-      const renderCounter = () =>
-        counterVNode?.type === TEXT_VNODE ? <span>{counterVNode}</span> : counterVNode
       const render = () => (
-        <CustomTag ref={wrapper} {...attrs} class={className.value}>
+        <CustomTag {...attrs} ref={wrapper} class={className.value}>
           {itemSlot && isDefined(props.items)
             ? props.items.map((item, index) => {
               const vnode = itemSlot({ item, index })[0]
@@ -220,28 +208,20 @@ export default defineComponent({
               }
 
               return (
-                  <ResizeObserver key={index} onResize={refresh}>
-                    {() => vnode}
-                  </ResizeObserver>
+                <ResizeObserver key={index} onResize={refresh}>
+                  {() => vnode}
+                </ResizeObserver>
               )
             })
             : itemSlot?.()}
-          {counterVNode
-            ? (
-            <Fragment ref={syncCounterRef as any}>{renderCounter()}</Fragment>
-              )
-            : (
-            <span ref={counter} style={{ display: 'inline-block' }}></span>
-              )}
-          {slots.suffix
-            ? (
+          {<span ref={counter}>{counterVNode}</span>}
+          {slots.suffix ? (
             <ResizeObserver onResize={refresh}>
               <div ref={suffix} class={nh.be('suffix')}>
                 {slots.suffix()}
               </div>
             </ResizeObserver>
-              )
-            : null}
+          ) : null}
         </CustomTag>
       )
 
@@ -252,5 +232,5 @@ export default defineComponent({
 
       return <ResizeObserver onResize={refresh}>{render()}</ResizeObserver>
     }
-  }
+  },
 })

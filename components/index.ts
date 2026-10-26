@@ -1,3 +1,6 @@
+import { installDirectives } from '@/directives'
+
+import { Affix } from './affix'
 import { Alert } from './alert'
 import { Anchor } from './anchor'
 import { AnchorLink } from './anchor-link'
@@ -12,6 +15,8 @@ import { Button } from './button'
 import { ButtonGroup } from './button-group'
 import { Calendar } from './calendar'
 import { CalendarPanel } from './calendar-panel'
+import { Captcha } from './captcha'
+import { CaptchaSlider } from './captcha-slider'
 import { Card } from './card'
 import { Carousel } from './carousel'
 import { CarouselItem } from './carousel-item'
@@ -39,14 +44,19 @@ import { Form } from './form'
 import { FormItem } from './form-item'
 import { FormReset } from './form-reset'
 import { FormSubmit } from './form-submit'
+import { FullScreen } from './full-screen'
 import { Grid } from './grid'
 import { Highlight } from './highlight'
 import { Icon } from './icon'
+import { Image } from './image'
+import { ImageGroup } from './image-group'
+import { ImageViewer } from './image-viewer'
 import { Input } from './input'
 import { Layout } from './layout'
 import { LayoutAside } from './layout-aside'
 import { LayoutFooter } from './layout-footer'
 import { LayoutHeader } from './layout-header'
+import { LayoutMain } from './layout-main'
 import { Linker } from './linker'
 import { Loading } from './loading'
 import { Masker } from './masker'
@@ -62,6 +72,7 @@ import { Option } from './option'
 import { OptionGroup } from './option-group'
 import { Overflow } from './overflow'
 import { Pagination } from './pagination'
+import { Popper } from './popper'
 import { Popup } from './popup'
 import { Portal } from './portal'
 import { Progress } from './progress'
@@ -69,6 +80,7 @@ import { Radio } from './radio'
 import { RadioGroup } from './radio-group'
 import { Renderer } from './renderer'
 import { ResizeObserver } from './resize-observer'
+import { Result } from './result'
 import { Row } from './row'
 import { Scroll } from './scroll'
 import { Scrollbar } from './scrollbar'
@@ -85,6 +97,8 @@ import { TabNavItem } from './tab-nav-item'
 import { TabPanel } from './tab-panel'
 import { Table } from './table'
 import { TableColumn } from './table-column'
+import { TableColumnGroup } from './table-column-group'
+import { TableSummary } from './table-summary'
 import { Tabs } from './tabs'
 import { Tag } from './tag'
 import { Textarea } from './textarea'
@@ -94,32 +108,29 @@ import { Timeline } from './timeline'
 import { TimelineItem } from './timeline-item'
 import { Toast } from './toast'
 import { Tooltip } from './tooltip'
+import { Tour } from './tour'
+import { TourStep } from './tour-step'
 import { Transfer } from './transfer'
 import { Tree } from './tree'
 import { Upload } from './upload'
 import { UploadFile } from './upload-file'
 import { UploadList } from './upload-list'
+import { Video } from './video'
 import { Viewer } from './viewer'
 import { VirtualList } from './virtual-list'
 import { Wheel } from './wheel'
 
-import { Title, Text, Blockquote, OL, UL, H1, H2, H3, H4, H5, H6, P, Strong } from './typography'
+import { Blockquote, H1, H2, H3, H4, H5, H6, OL, P, Strong, Text, Title, UL } from './typography'
 
 import { buildInstall } from './create'
-import { install as installDirectives } from '@/directives'
-
-export type {
-  ComponentSize,
-  ComponentState,
-  LocaleConfig,
-  LocaleNames,
-  LocaleOptions
-} from '@vexip-ui/config'
-export type { PropsOptions } from './props'
 
 export { version } from './version'
+export * from './create'
+
+export type { PropsOptions } from './props'
 
 const components = [
+  Affix,
   Alert,
   Anchor,
   AnchorLink,
@@ -134,6 +145,8 @@ const components = [
   ButtonGroup,
   Calendar,
   CalendarPanel,
+  Captcha,
+  CaptchaSlider,
   Card,
   Carousel,
   CarouselItem,
@@ -159,14 +172,19 @@ const components = [
   FormItem,
   FormReset,
   FormSubmit,
+  FullScreen,
   Grid,
   Highlight,
   Icon,
+  Image,
+  ImageGroup,
+  ImageViewer,
   Input,
   Layout,
   LayoutAside,
   LayoutFooter,
   LayoutHeader,
+  LayoutMain,
   Linker,
   Masker,
   Menu,
@@ -179,6 +197,7 @@ const components = [
   OptionGroup,
   Overflow,
   Pagination,
+  Popper,
   Popup,
   Portal,
   Progress,
@@ -186,6 +205,7 @@ const components = [
   RadioGroup,
   Renderer,
   ResizeObserver,
+  Result,
   Row,
   Scroll,
   Scrollbar,
@@ -202,6 +222,8 @@ const components = [
   TabPanel,
   Table,
   TableColumn,
+  TableColumnGroup,
+  TableSummary,
   Tabs,
   Tag,
   Textarea,
@@ -210,11 +232,14 @@ const components = [
   Timeline,
   TimelineItem,
   Tooltip,
+  Tour,
+  TourStep,
   Transfer,
   Tree,
   Upload,
   UploadFile,
   UploadList,
+  Video,
   Viewer,
   VirtualList,
   Wheel,
@@ -240,12 +265,12 @@ const components = [
   P,
   Strong,
   // directives
-  installDirectives
+  installDirectives,
 ]
 
-export { buildInstall }
 export const install = buildInstall(components)
 
+export * from './affix'
 export * from './alert'
 export * from './anchor'
 export * from './anchor-link'
@@ -260,6 +285,8 @@ export * from './button'
 export * from './button-group'
 export * from './calendar'
 export * from './calendar-panel'
+export * from './captcha'
+export * from './captcha-slider'
 export * from './card'
 export * from './carousel'
 export * from './carousel-item'
@@ -287,14 +314,19 @@ export * from './form'
 export * from './form-item'
 export * from './form-reset'
 export * from './form-submit'
+export * from './full-screen'
 export * from './grid'
 export * from './highlight'
 export * from './icon'
+export * from './image'
+export * from './image-group'
+export * from './image-viewer'
 export * from './input'
 export * from './layout'
 export * from './layout-aside'
 export * from './layout-footer'
 export * from './layout-header'
+export * from './layout-main'
 export * from './linker'
 export * from './loading'
 export * from './masker'
@@ -310,6 +342,7 @@ export * from './option'
 export * from './option-group'
 export * from './overflow'
 export * from './pagination'
+export * from './popper'
 export * from './popup'
 export * from './portal'
 export * from './progress'
@@ -317,6 +350,7 @@ export * from './radio'
 export * from './radio-group'
 export * from './renderer'
 export * from './resize-observer'
+export * from './result'
 export * from './row'
 export * from './scroll'
 export * from './scrollbar'
@@ -333,6 +367,8 @@ export * from './tab-nav-item'
 export * from './tab-panel'
 export * from './table'
 export * from './table-column'
+export * from './table-column-group'
+export * from './table-summary'
 export * from './tabs'
 export * from './tag'
 export * from './textarea'
@@ -342,14 +378,17 @@ export * from './timeline'
 export * from './timeline-item'
 export * from './toast'
 export * from './tooltip'
+export * from './tour'
+export * from './tour-step'
 export * from './transfer'
 export * from './tree'
 export * from './typography'
 export * from './upload'
 export * from './upload-file'
 export * from './upload-list'
+export * from './video'
 export * from './viewer'
 export * from './virtual-list'
 export * from './wheel'
 
-export * from '@/directives/loading'
+export * from '@/directives'

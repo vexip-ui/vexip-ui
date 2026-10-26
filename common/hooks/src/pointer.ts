@@ -1,4 +1,5 @@
-import { ref, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
+
 import { throttle } from '@vexip-ui/utils'
 
 import type { Ref } from 'vue'
@@ -17,12 +18,12 @@ export interface UsePointerOption {
    *
    * @default false
    */
-  manualStop?: boolean
+  manualStop?: boolean,
 }
 
 interface PointerState {
   x: Ref<number>,
-  y: Ref<number>
+  y: Ref<number>,
 }
 
 const registered = new Set<PointerState>()

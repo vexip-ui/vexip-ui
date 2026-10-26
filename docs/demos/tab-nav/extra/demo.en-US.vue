@@ -1,5 +1,9 @@
 <template>
-  <TabNav>
+  <p>
+    Placement:
+    <RadioGroup v-model:value="placement" button :options="placements"></RadioGroup>
+  </p>
+  <TabNav :placement="placement">
     <template #prefix>
       <Button> Prefix Extra Action </Button>
     </template>
@@ -17,3 +21,12 @@
     </template>
   </TabNav>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+import type { TabNavPlacement } from 'vexip-ui'
+
+const placements = ['top', 'left'] as TabNavPlacement[]
+const placement = ref(placements[0])
+</script>

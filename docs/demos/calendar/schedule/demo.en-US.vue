@@ -4,7 +4,7 @@
       <p
         v-for="(item, index) in getData(date)"
         :key="index"
-        style="margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+        style="margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
       >
         <Badge is-dot :type="item.type"></Badge>
         {{ item.content }}
@@ -18,7 +18,7 @@ const badgeTypes = ['primary', 'warning', 'success', 'error', 'info', 'disabled'
 const dataMap: Record<number, ReturnType<typeof randomList>> = {
   5: randomList(2),
   12: randomList(3),
-  21: randomList(7)
+  21: randomList(7),
 }
 
 function randomList(count: number) {

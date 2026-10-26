@@ -1,33 +1,59 @@
 import type { ComponentPublicInstance } from 'vue'
+import type { ButtonType } from '@/components/button'
+import type { IconMinorProps } from '@/components/icon'
 
-export type ConfirmType = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'error'
+export type ConfirmButtonType = ButtonType
 export type ConfirmAlign = 'left' | 'center' | 'right'
+
+export interface ConfirmState {
+  visible: boolean,
+  loading: boolean,
+  loadingLock: boolean,
+  title: string | (() => any),
+  content: string | (() => any),
+  icon: Record<string, any> | (() => any) | null | boolean,
+  iconProps: IconMinorProps,
+  className: string | Record<string, any>,
+  style: string | Record<string, any>,
+  confirmType: ConfirmButtonType,
+  cancelType: ConfirmButtonType,
+  confirmText: string,
+  cancelText: string,
+  maskClose: boolean,
+  parseHtml: boolean,
+  closable: boolean,
+  contentAlign: ConfirmAlign,
+  actionsAlign: ConfirmAlign,
+  cancelable: boolean,
+  width: number | string,
+  height: number | string,
+  top: number | string,
+  right: number | string,
+  bottom: number | string,
+  left: number | string,
+  xOffset: number | string,
+  yOffset: number | string,
+  /**
+   * Record the raw option.
+   */
+  raw: Record<any, any>,
+}
+
 export type ConfirmRenderFn = (
-  options: ConfirmOptions,
-  confirm: () => Promise<void>,
-  cancel: () => void
+  options: ConfirmState,
+  handleConfirm: () => Promise<void>,
+  handleCancel: () => void,
 ) => any
 
-export interface ConfirmOptions extends Record<string, any> {
-  title?: string,
-  content?: string,
-  confirmType?: ConfirmType,
-  confirmText?: string,
-  cancelText?: string,
-  icon?: Record<string, any> | (() => any) | null,
-  iconColor?: string,
-  className?: string | Record<string, any>,
-  style?: string | Record<string, any>,
-  closable?: boolean,
-  maskClose?: boolean,
-  parseHtml?: boolean,
-  contentAlign?: ConfirmAlign,
-  actionsAlign?: ConfirmAlign,
+export interface ConfirmOptions
+  extends Partial<Omit<ConfirmState, 'visible' | 'loading' | 'raw'>>,
+  Record<any, any> {
   renderer?: ConfirmRenderFn,
-  onBeforeConfirm?: () => unknown
+  onBeforeConfirm?: () => unknown,
 }
 
 export interface ConfirmInstance extends ComponentPublicInstance {
   openConfirm: (options: ConfirmOptions) => Promise<boolean>,
-  handleReset: () => void
+  closeConfirm: (force?: boolean) => void,
+  handleReset: () => void,
 }

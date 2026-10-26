@@ -26,7 +26,7 @@ const active = ref(1)
 const tabs = ref([
   { label: 1, name: 'Tab 1', static: true },
   { label: 2, name: 'Tab 2' },
-  { label: 3, name: 'Tab 3' }
+  { label: 3, name: 'Tab 3' },
 ])
 
 function addTab() {

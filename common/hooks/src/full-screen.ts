@@ -1,15 +1,27 @@
-import { ref, computed, getCurrentScope, onScopeDispose } from 'vue'
+import { computed, getCurrentScope, isRef, onScopeDispose, ref, watch } from 'vue'
+
 import { isClient, noop } from '@vexip-ui/utils'
+import { unrefElement } from './shared/utils'
 
-import type { Ref } from 'vue'
+import type { ComputedRef, MaybeRef, Ref } from 'vue'
+import type { MaybeInstance } from './shared/types'
 
-type FunctionMap = [
+export interface UseFullScreenResult {
+  target: Ref<MaybeInstance>,
+  supported: boolean,
+  full: ComputedRef<boolean>,
+  enter: (force?: boolean) => Promise<boolean>,
+  exit: (force?: boolean) => Promise<boolean>,
+  toggle: (force?: boolean) => Promise<boolean>,
+}
+
+type PropertiesMap = [
   'requestFullscreen',
   'exitFullscreen',
   'fullscreenElement',
   'fullscreenEnabled',
   'fullscreenchange',
-  'fullscreenerror'
+  'fullscreenerror',
 ]
 
 const functionsMap = [
@@ -19,7 +31,7 @@ const functionsMap = [
     'fullscreenElement',
     'fullscreenEnabled',
     'fullscreenchange',
-    'fullscreenerror'
+    'fullscreenerror',
   ],
   // New WebKit
   [
@@ -28,7 +40,7 @@ const functionsMap = [
     'webkitFullscreenElement',
     'webkitFullscreenEnabled',
     'webkitfullscreenchange',
-    'webkitfullscreenerror'
+    'webkitfullscreenerror',
   ],
   // Old WebKit
   [
@@ -37,7 +49,7 @@ const functionsMap = [
     'webkitCurrentFullScreenElement',
     'webkitCancelFullScreen',
     'webkitfullscreenchange',
-    'webkitfullscreenerror'
+    'webkitfullscreenerror',
   ],
   [
     'mozRequestFullScreen',
@@ -45,7 +57,7 @@ const functionsMap = [
     'mozFullScreenElement',
     'mozFullScreenEnabled',
     'mozfullscreenchange',
-    'mozfullscreenerror'
+    'mozfullscreenerror',
   ],
   [
     'msRequestFullscreen',
@@ -53,11 +65,11 @@ const functionsMap = [
     'msFullscreenElement',
     'msFullscreenEnabled',
     'MSFullscreenChange',
-    'MSFullscreenError'
-  ]
-] as FunctionMap[]
+    'MSFullscreenError',
+  ],
+] as PropertiesMap[]
 
-let map!: FunctionMap
+let map!: PropertiesMap
 
 if (isClient) {
   for (const m of functionsMap) {
@@ -74,10 +86,11 @@ const notSupportedResult = {
   full: computed(() => false),
   enter: noop,
   exit: noop,
-  toggle: noop
+  toggle: noop,
 }
 
-const subscriptions = new Set<Ref<boolean>>()
+const states = new Set<Ref<boolean>>()
+const subscriptions = new WeakMap<Element, Ref<boolean>>()
 
 if (isClient && map) {
   const ELEMENT = map[2]
@@ -86,57 +99,94 @@ if (isClient && map) {
   document.addEventListener(
     EVENT,
     () => {
-      const full = !!document[ELEMENT]
-      subscriptions.forEach(s => {
-        s.value = full
+      states.forEach(state => {
+        state.value = false
       })
+
+      if (document[ELEMENT]) {
+        const full = subscriptions.get(document[ELEMENT])
+
+        if (full) {
+          full.value = true
+        }
+      }
     },
-    false
+    false,
   )
 }
 
-export function useFullScreen(target: Ref<HTMLElement | null | undefined> = ref(null)) {
+export function useFullScreen(target: MaybeRef<MaybeInstance> = ref(null)): UseFullScreenResult {
+  const targetRef = computed({
+    get: () => unrefElement(target),
+    set: el => {
+      if (isRef(target)) {
+        target.value = el
+      }
+    },
+  })
+
   if (!isClient || !supported) {
-    return { ...notSupportedResult }
+    return { ...notSupportedResult, target: targetRef }
   }
 
   const [REQUEST, EXIT, ELEMENT] = map
   const full = ref(false)
 
-  async function enter(force = false) {
-    await exit()
+  watch(
+    () => unrefElement(target),
+    (el, old) => {
+      old && subscriptions.delete(old)
+      el && subscriptions.set(el, full)
+    },
+    { immediate: true, flush: 'post' },
+  )
 
-    if (target.value) {
-      if (force || !document[ELEMENT]) {
-        await target.value[REQUEST]()
-        full.value = true
-      }
-    }
-  }
-
-  async function exit(force = false) {
-    if (force || (document[ELEMENT] && document[ELEMENT] === target.value)) {
-      await document[EXIT]()
-      full.value = false
-    }
-  }
-
-  async function toggle(force = false) {
-    full.value ? await exit(force) : await enter(force)
-  }
-
-  subscriptions.add(full)
+  states.add(full)
 
   if (getCurrentScope()) {
     onScopeDispose(exit)
   }
 
+  async function enter(force = false) {
+    await exit()
+
+    const el = unrefElement(target)
+
+    if (el) {
+      if (force || !document[ELEMENT]) {
+        await el[REQUEST]()
+        full.value = true
+
+        return document[ELEMENT] === el
+      }
+    }
+
+    return false
+  }
+
+  async function exit(force = false) {
+    const el = unrefElement(target)
+
+    if (force || (document[ELEMENT] && document[ELEMENT] === el)) {
+      await document[EXIT]()
+      full.value = false
+
+      return document[ELEMENT] !== el
+    }
+
+    return false
+  }
+
+  async function toggle(force = false) {
+    return full.value ? await exit(force) : await enter(force)
+  }
+
   return {
     supported,
-    target,
+    target: targetRef,
     full: computed(() => full.value),
     enter,
     exit,
-    toggle
+    toggle,
   }
 }

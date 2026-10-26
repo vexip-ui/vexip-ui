@@ -6,11 +6,11 @@
     v-model:active="active"
     transfer
     title="Title"
-    :width="500"
+    width="30vw"
   >
-    <p>Some Content</p>
-    <p>Some Content</p>
-    <p>Some Content</p>
+    <p>Some content</p>
+    <p>Some content</p>
+    <p>Some content</p>
   </Modal>
 </template>
 

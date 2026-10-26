@@ -1,4 +1,5 @@
-import { defineComponent, computed } from 'vue'
+import { computed, defineComponent, renderSlot } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { textProps } from './props'
 
@@ -15,7 +16,11 @@ export default defineComponent({
       italic: false,
       underline: false,
       code: false,
-      reversed: false
+      mark: false,
+      disabled: false,
+      keyboard: false,
+      thin: false,
+      reversed: false,
     })
 
     const nh = useNameHelper('text')
@@ -35,25 +40,23 @@ export default defineComponent({
         [nh.bm('disabled')]: props.disabled,
         [nh.bm('keyboard')]: props.keyboard,
         [nh.bm('thin')]: props.thin,
-        [nh.bm('reversed')]: props.reversed
+        [nh.bm('reversed')]: props.reversed,
       }
     })
 
     return () => {
       const CustomTag = props.tag || ('span' as any)
-      const children = slots.default?.()
+      const children = renderSlot(slots, 'default')
 
-      return props.code
-        ? (
+      return props.code ? (
         <code class={className.value}>{props.delete ? <del>{children}</del> : children}</code>
-          )
-        : props.delete
-          ? (
+      ) : props.keyboard ? (
+        <kbd class={className.value}>{props.delete ? <del>{children}</del> : children}</kbd>
+      ) : props.delete ? (
         <del class={className.value}>{children}</del>
-            )
-          : (
+      ) : (
         <CustomTag class={className.value}>{children}</CustomTag>
-            )
+      )
     }
-  }
+  },
 })

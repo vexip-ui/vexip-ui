@@ -1,19 +1,20 @@
-import { defineComponent, reactive, computed, h, provide, toRef } from 'vue'
+import { computed, defineComponent, h, provide, reactive, toRef } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { rowProps } from './props'
 import { ROW_STATE } from './symbol'
 
-import type { RowGridJustify, RowGridAlign } from './symbol'
+import type { RowGridAlign, RowGridJustify, RowState } from './symbol'
 
-const justifyList = Object.freeze<RowGridJustify>([
+const justifyList = Object.freeze<RowGridJustify[]>([
   'start',
   'end',
   'center',
   'space-around',
   'space-between',
-  'space-evenly'
+  'space-evenly',
 ])
-const alignList = Object.freeze<RowGridAlign>(['top', 'middle', 'bottom', 'stretch'])
+const alignList = Object.freeze<RowGridAlign[]>(['top', 'middle', 'bottom', 'stretch'])
 
 export default defineComponent({
   name: 'Row',
@@ -24,13 +25,13 @@ export default defineComponent({
       gap: 0,
       justify: {
         default: 'start',
-        validator: value => justifyList.includes(value)
+        validator: value => justifyList.includes(value),
       },
       align: {
         default: 'top',
-        validator: value => alignList.includes(value)
+        validator: value => alignList.includes(value),
       },
-      columnFlex: false
+      columnFlex: false,
     })
 
     const nh = useNameHelper('row')
@@ -42,8 +43,8 @@ export default defineComponent({
         nh.bm(props.justify),
         nh.bm(props.align),
         {
-          [nh.bm('inherit')]: props.inherit
-        }
+          [nh.bm('inherit')]: props.inherit,
+        },
       ]
     })
     const style = computed(() => {
@@ -51,7 +52,7 @@ export default defineComponent({
 
       if (typeof props.gap === 'number') {
         return {
-          [nh.cv('h-gap')]: `${props.gap}px`
+          [nh.cv('h-gap')]: `${props.gap}px`,
         }
       }
 
@@ -60,7 +61,7 @@ export default defineComponent({
 
         return {
           [nh.cv('h-gap')]: `${horizontal}px`,
-          [nh.cv('v-gap')]: `${vertical}px`
+          [nh.cv('v-gap')]: `${vertical}px`,
         }
       }
 
@@ -70,13 +71,13 @@ export default defineComponent({
       if (props.columnFlex === true) {
         return {
           justify: 'start',
-          align: 'top'
+          align: 'top',
         }
       } else if (props.columnFlex) {
         return {
           justify: 'start',
           align: 'top',
-          ...props.columnFlex
+          ...props.columnFlex,
         }
       }
 
@@ -87,8 +88,8 @@ export default defineComponent({
       ROW_STATE,
       reactive({
         columnFlex,
-        gap: toRef(props, 'gap')
-      })
+        gap: toRef(props, 'gap'),
+      }) as RowState,
     )
 
     return () =>
@@ -96,11 +97,11 @@ export default defineComponent({
         props.tag || 'div',
         {
           class: className.value,
-          style: style.value
+          style: style.value,
         },
         {
-          default: () => slots.default && slots.default()
-        }
+          default: () => slots.default && slots.default(),
+        },
       )
-  }
+  },
 })

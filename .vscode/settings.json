@@ -1,0 +1,37 @@
+{
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "npm.packageManager": "pnpm",
+  "stylelint.enable": true,
+  "stylelint.validate": [
+    "css",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "less",
+    "markdown",
+    "postcss",
+    "sass",
+    "scss",
+    "source.css.styled",
+    "source.markdown.math",
+    "styled-css",
+    "sugarss",
+    "svelte",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "vue-html",
+    "vue-postcss",
+    "xml",
+    "xsl"
+  ],
+  "volar.inlayHints.eventArgumentInInlineHandlers": false,
+  "vue.inlayHints.inlineHandlerLeading": false,
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[markdown]": {
+    "editor.wordWrap": "off"
+  },
+  "cSpell.words": ["lucide", "vexip"]
+}

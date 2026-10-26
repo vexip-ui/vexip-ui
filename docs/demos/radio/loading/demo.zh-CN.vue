@@ -3,7 +3,10 @@
   <RadioGroup :loading="loading" :options="options"></RadioGroup>
   <br />
   <br />
-  <RadioGroup :loading="loading" button :options="options"></RadioGroup>
+  <RadioGroup :loading="loading" shape="button" :options="options"></RadioGroup>
+  <br />
+  <br />
+  <RadioGroup :loading="loading" shape="button-group" :options="options"></RadioGroup>
   <p>加载中不可编辑：</p>
   <RadioGroup :loading="loading" loading-lock :options="options"></RadioGroup>
   <br />
@@ -11,7 +14,7 @@
   <RadioGroup
     :loading="loading"
     loading-lock
-    border
+    shape="border"
     :options="options"
   ></RadioGroup>
   <p>

@@ -3,8 +3,9 @@
     v-model:value="value"
     :min="0"
     :max="10"
-    style="max-width: 300px;"
+    style="max-width: 300px"
   ></NumberInput>
+  <p>Number Input Value: {{ value }}</p>
 </template>
 
 <script setup lang="ts">

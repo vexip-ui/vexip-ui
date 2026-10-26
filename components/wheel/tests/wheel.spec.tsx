@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Wheel } from '..'
 
 vi.useFakeTimers()
@@ -8,9 +9,9 @@ vi.useFakeTimers()
 const OPTIONS = Array.from({ length: 20 }, (_, i) => `Option ${i + 1}`)
 
 async function runScrollTimers() {
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -38,7 +39,7 @@ describe('Wheel', () => {
 
   it('value', async () => {
     const wrapper = mount(Wheel, {
-      props: { options: OPTIONS }
+      props: { options: OPTIONS },
     })
 
     await runScrollTimers()
@@ -60,7 +61,7 @@ describe('Wheel', () => {
 
   it('arrow', async () => {
     const wrapper = mount(Wheel, {
-      props: { arrow: true, options: OPTIONS }
+      props: { arrow: true, options: OPTIONS },
     })
 
     await runScrollTimers()
@@ -69,20 +70,20 @@ describe('Wheel', () => {
     expect(wrapper.find('.vxp-wheel__arrow').exists()).toBe(true)
     expect(wrapper.find('.vxp-wheel__arrow--prev').exists()).toBe(true)
     expect(wrapper.find('.vxp-wheel__arrow--prev').classes()).toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
     expect(wrapper.find('.vxp-wheel__arrow--next').exists()).toBe(true)
     expect(wrapper.find('.vxp-wheel__arrow--next').classes()).not.toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
 
     await wrapper.find('.vxp-wheel__arrow--next').trigger('click')
     expect(items[1].classes()).toContain('vxp-wheel__item--active')
     expect(wrapper.find('.vxp-wheel__arrow--prev').classes()).not.toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
     expect(wrapper.find('.vxp-wheel__arrow--next').classes()).not.toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
 
     await wrapper.find('.vxp-wheel__arrow--prev').trigger('click')
@@ -91,10 +92,10 @@ describe('Wheel', () => {
     await wrapper.setProps({ value: OPTIONS.at(-1) })
     await nextTick()
     expect(wrapper.find('.vxp-wheel__arrow--prev').classes()).not.toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
     expect(wrapper.find('.vxp-wheel__arrow--next').classes()).toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
   })
 
@@ -106,8 +107,8 @@ describe('Wheel', () => {
         arrow: true,
         options: OPTIONS,
         onPrev,
-        onNext
-      }
+        onNext,
+      },
     })
 
     await runScrollTimers()
@@ -129,9 +130,9 @@ describe('Wheel', () => {
           { value: '2', disabled: true },
           { value: '3' },
           { value: '4', disabled: true },
-          { value: '5' }
-        ]
-      }
+          { value: '5' },
+        ],
+      },
     })
 
     await runScrollTimers()
@@ -143,7 +144,7 @@ describe('Wheel', () => {
     await wrapper.find('.vxp-wheel__arrow--next').trigger('click')
     expect(items[2].classes()).toContain('vxp-wheel__item--active')
     expect(wrapper.find('.vxp-wheel__arrow--next').classes()).toContain(
-      'vxp-wheel__arrow--disabled'
+      'vxp-wheel__arrow--disabled',
     )
 
     await wrapper.find('.vxp-wheel__arrow--next').trigger('click')
@@ -161,5 +162,20 @@ describe('Wheel', () => {
 
     expect(wrapper.find('.vxp-wheel').classes()).toContain('vxp-wheel--horizontal')
     expect(wrapper.find('.vxp-wheel__border').classes()).toContain('vxp-wheel__border--vertical')
+  })
+
+  it('selectable', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(Wheel, {
+      props: { selectable: true, options: OPTIONS, onChange },
+    })
+
+    await runScrollTimers()
+    const items = wrapper.findAll('.vxp-wheel__item')
+
+    await items[2].trigger('click')
+    expect(items[2].classes()).toContain('vxp-wheel__item--active')
+    expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledWith(OPTIONS[2], OPTIONS[2])
   })
 })

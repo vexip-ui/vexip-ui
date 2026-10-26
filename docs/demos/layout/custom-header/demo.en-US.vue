@@ -7,13 +7,16 @@
     :config="['color']"
     @user-action="handleUserAction"
   >
-    <template #header-left="{ reduced, toggleReduce }">
-      <div style="display: flex; cursor: pointer;" @click="toggleReduce()">
+    <template #header-left="{ reduced, toggleReduced }">
+      <div style="display: flex; cursor: pointer" @click="toggleReduced()">
         <Icon :icon="reduced ? Indent : Outdent"></Icon>
       </div>
     </template>
     <template #header-right>
-      <Linker to="https://github.com/vexip-ui/vexip-ui" style="display: flex; margin-right: 16px;">
+      <Linker
+        to="https://github.com/vexip-ui/vexip-ui"
+        style="display: flex; margin-inline-end: 16px"
+      >
         <Icon :scale="1.6">
           <GithubB></GithubB>
         </Icon>
@@ -23,19 +26,23 @@
       <span></span>
     </template>
     <template #main>
-      <div style="width: 100%; height: 1200px;"></div>
+      <div style="width: 100%; padding: 0 20px">
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
+      </div>
     </template>
   </Layout>
 </template>
 
 <script setup lang="ts">
-import { EnvelopesBulk, City, ChartPie, User, Indent, Outdent, GithubB } from '@vexip-ui/icons'
+import { ChartPie, City, EnvelopesBulk, GithubB, Indent, Outdent, User } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const menus: MenuOptions[] = [
@@ -46,25 +53,25 @@ const menus: MenuOptions[] = [
     children: [
       { label: '1-1', name: 'Child Menu 1' },
       { label: '1-2', name: 'Child Menu 2' },
-      { label: '1-3', name: 'Child Menu 3' }
-    ]
+      { label: '1-3', name: 'Child Menu 3' },
+    ],
   },
   {
     label: '2',
     name: 'Menu 2',
     icon: City,
-    disabled: true
+    disabled: true,
   },
   {
     label: '3',
     name: 'Menu 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: 'Menu 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 
 function handleUserAction(label: string) {

@@ -1,17 +1,43 @@
 @use 'sass:map';
 
-@use '../design/variables.scss' as c;
-@use './variables.scss' as *;
+@use '../shared/variables' as *;
+@use './variables' as *;
 
-:root.dark {
-  @include c.define-preset-values('content-color', $content-color-map);
-  @include c.define-preset-values('bg-color', $bg-color-map);
-  @include c.define-preset-values('border-color', $border-color-map);
-  @include c.define-preset-values('fill-color', $fill-color-map);
-  @include c.define-preset-values('shadow-color', $shadow-color-map);
+:root.dark,
+.#{$namespace}-theme-vars-dark {
+  color-scheme: dark;
 
-  .#{c.$namespace}-button-vars {
-    @include c.define-preset-values(
+  @include define-theme-styles(
+    (
+      'color-black': $color-black,
+      'color-white': $color-white,
+      'color-map': $color-map,
+      'content-color-map': $content-color-map,
+      'bg-color-map': $bg-color-map,
+      'border-width': $border-width,
+      'border-style': $border-style,
+      'border-color-map': $border-color-map,
+      'fill-color-map': $fill-color-map,
+      'font-family-map': $font-family-map,
+      'font-size-map': $font-size-map,
+      'line-height-map': $line-height-map,
+      'radius-map': $radius-map,
+      'shadow-x': $shadow-x,
+      'shadow-y': $shadow-y,
+      'shadow-blur': $shadow-blur,
+      'shadow-color-map': $shadow-color-map,
+      'shadow-border': $shadow-border,
+      'shadow-focus': $shadow-focus,
+      'transition-duration': $transition-duration,
+      'transition-timing': $transition-timing,
+      'transition-map': $transition-map,
+      'z-index-map': $z-index-map,
+      'break-point-map': $break-point-map
+    )
+  );
+
+  .#{$namespace}-button-vars {
+    @include define-preset-values(
       'button',
       (
         pulse-size: 8px,
@@ -20,20 +46,39 @@
     );
   }
 
-  .#{c.$namespace}-menu-vars {
-    @include c.define-preset-values(
+  .#{$namespace}-captcha-vars {
+    @include define-preset-values(
+      'captcha',
+      (
+        trigger-color: #868e96,
+        trigger-color-disabled: #adb5bd
+      )
+    );
+  }
+
+  .#{$namespace}-checkbox-vars {
+    @include define-preset-values(
+      'checkbox',
+      (
+        signal-bg-color-disabled: value('fill-color-hover')
+      )
+    );
+  }
+
+  .#{$namespace}-menu-vars {
+    @include define-preset-values(
       'menu',
       (
         label-color-dark: #495057,
-        label-color-hover-dark: c.get-css-var('color-primary-base'),
-        label-color-visible-dark: c.get-css-var('color-white'),
+        label-color-hover-dark: value('color-primary-base'),
+        label-color-visible-dark: value('color-white'),
         label-color-disabled-dark: #adb5bd
       )
     );
   }
 
-  .#{c.$namespace}-slider {
-    @include c.define-preset-values(
+  .#{$namespace}-slider {
+    @include define-preset-values(
       'slider',
       (
         handler-b-color-disabled: rgba(0, 0, 0, 0.4)

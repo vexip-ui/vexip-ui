@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Split } from '..'
 
 vi.useFakeTimers()
@@ -17,7 +18,7 @@ async function toggleStartAndMove(el: HTMLElement, value = 40) {
   moveEvent.clientX = value
   moveEvent.clientY = value
   document.dispatchEvent(moveEvent)
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -32,7 +33,7 @@ describe('Split', () => {
       <Split>
         {{
           left: () => 'left',
-          right: () => 'right'
+          right: () => 'right',
         }}
       </Split>
     ))
@@ -52,7 +53,7 @@ describe('Split', () => {
       <Split vertical>
         {{
           left: () => 'top',
-          right: () => 'bottom'
+          right: () => 'bottom',
         }}
       </Split>
     ))
@@ -66,12 +67,12 @@ describe('Split', () => {
   it('value', async () => {
     const wrapper = mount(Split, {
       props: {
-        value: 0.6
+        value: 0.6,
       },
       slots: {
         left: () => 'left',
-        right: () => 'right'
-      }
+        right: () => 'right',
+      },
     })
 
     expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 40%;')
@@ -92,18 +93,18 @@ describe('Split', () => {
         onMoveStart,
         onMove,
         onMoveEnd,
-        onChange
+        onChange,
       },
       slots: {
         left: () => 'left',
-        right: () => 'right'
-      }
+        right: () => 'right',
+      },
     })
     const handler = wrapper.find('.vxp-split__handler').element as HTMLElement
 
     Object.defineProperty(wrapper.element, 'offsetWidth', {
       configurable: true,
-      get: () => 400
+      get: () => 400,
     })
 
     await nextTick()
@@ -127,18 +128,18 @@ describe('Split', () => {
     const wrapper = mount(Split, {
       props: {
         lazy: true,
-        onChange
+        onChange,
       },
       slots: {
         left: () => 'left',
-        right: () => 'right'
-      }
+        right: () => 'right',
+      },
     })
     const handler = wrapper.find('.vxp-split__handler').element as HTMLElement
 
     Object.defineProperty(wrapper.element, 'offsetWidth', {
       configurable: true,
-      get: () => 400
+      get: () => 400,
     })
 
     await nextTick()
@@ -160,18 +161,18 @@ describe('Split', () => {
     const wrapper = mount(Split, {
       props: {
         min: 0.4,
-        max: 0.6
+        max: 0.6,
       },
       slots: {
         left: () => 'left',
-        right: () => 'right'
-      }
+        right: () => 'right',
+      },
     })
     const handler = wrapper.find('.vxp-split__handler').element as HTMLElement
 
     Object.defineProperty(wrapper.element, 'offsetWidth', {
       configurable: true,
-      get: () => 400
+      get: () => 400,
     })
 
     await nextTick()
@@ -190,7 +191,7 @@ describe('Split', () => {
       <Split can-full>
         {{
           left: () => 'left',
-          right: () => 'right'
+          right: () => 'right',
         }}
       </Split>
     ))
@@ -200,7 +201,7 @@ describe('Split', () => {
 
     await nextTick()
     await buttons[0].trigger('click')
-    expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 0;')
+    expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 0px;')
     expect(wrapper.find('.vxp-split__panel--right').attributes('style')).toContain('left: 100%;')
 
     await buttons[1].trigger('click')
@@ -209,7 +210,7 @@ describe('Split', () => {
 
     await buttons[1].trigger('click')
     expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 100%;')
-    expect(wrapper.find('.vxp-split__panel--right').attributes('style')).toContain('left: 0;')
+    expect(wrapper.find('.vxp-split__panel--right').attributes('style')).toContain('left: 0px;')
 
     await buttons[0].trigger('click')
     expect(wrapper.find('.vxp-split__panel--left').attributes('style')).toContain('right: 50%;')

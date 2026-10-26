@@ -1,5 +1,6 @@
-import { defineComponent, h, Transition } from 'vue'
-import { useProps, emitEvent } from '@vexip-ui/config'
+import { Transition, defineComponent, h, renderSlot } from 'vue'
+
+import { emitEvent, useProps } from '@vexip-ui/config'
 import { collapseTransitionProps } from './props'
 
 export default defineComponent({
@@ -11,32 +12,37 @@ export default defineComponent({
       appear: false,
       mode: {
         default: 'default',
-        validator: value => ['in-out', 'out-in', 'default'].includes(value)
+        validator: value => ['in-out', 'out-in', 'default'].includes(value),
       },
       horizontal: false,
       duration: {
         default: 250,
-        validator: (value: number) => value >= 200
+        validator: (value: number) => value >= 200,
       },
       timing: null,
-      fadeEffect: false
+      fadeEffect: false,
+      reverse: false,
     })
 
     let enterStage: 'before' | 'in' | null = null
     let leaveStage: 'before' | 'in' | null = null
 
     return () => {
+      if (props.disabled) {
+        return renderSlot(slots, 'default')
+      }
+
       const duration = props.duration
       const timing = props.timing || 'ease-in-out'
 
-      let height: 'width' | 'height' = 'height'
+      let height: 'maxWidth' | 'maxHeight' = 'maxHeight'
       let paddingTop: 'paddingTop' | 'paddingLeft' = 'paddingTop'
       let paddingBottom: 'paddingRight' | 'paddingBottom' = 'paddingBottom'
       let marginTop: 'marginTop' | 'marginLeft' = 'marginTop'
       let marginBottom: 'marginRight' | 'marginBottom' = 'marginBottom'
       let scrollHeight: 'scrollHeight' | 'scrollWidth' = 'scrollHeight'
       let transition = `
-        height ${duration}ms ${timing},
+        max-height ${duration}ms ${timing},
         padding-top ${duration}ms ${timing},
         padding-bottom ${duration}ms ${timing},
         margin-top ${duration}ms ${timing},
@@ -44,18 +50,18 @@ export default defineComponent({
       `
 
       if (props.horizontal) {
-        height = 'width'
+        height = 'maxWidth'
         paddingTop = 'paddingLeft'
         paddingBottom = 'paddingRight'
         marginTop = 'marginLeft'
         marginBottom = 'marginRight'
         scrollHeight = 'scrollWidth'
         transition = `
-          width ${duration}ms ${timing},
-          padding-left ${duration}ms ${timing},
-          padding-right ${duration}ms ${timing},
-          margin-left ${duration}ms ${timing},
-          margin-right ${duration}ms ${timing}
+          max-width ${duration}ms ${timing},
+          padding-inline-start ${duration}ms ${timing},
+          padding-inline-end ${duration}ms ${timing},
+          margin-inline-start ${duration}ms ${timing},
+          margin-inline-end ${duration}ms ${timing}
         `
       }
 
@@ -90,15 +96,17 @@ export default defineComponent({
 
             el.style.transition = transition
 
-            el.style[height] = '0'
-            el.style[paddingTop] = '0'
-            el.style[paddingBottom] = '0'
-            el.style[marginTop] = '0'
-            el.style[marginBottom] = '0'
-            el.style.boxSizing = 'content-box'
+            if (!props.reverse) {
+              el.style[height] = '0'
+              el.style[paddingTop] = '0'
+              el.style[paddingBottom] = '0'
+              el.style[marginTop] = '0'
+              el.style[marginBottom] = '0'
+              el.style.boxSizing = 'content-box'
 
-            if (props.fadeEffect) {
-              el.style.opacity = '0'
+              if (props.fadeEffect) {
+                el.style.opacity = '0'
+              }
             }
 
             emitEvent(props.onBeforeEnter, $el)
@@ -110,6 +118,7 @@ export default defineComponent({
             const el = $el as HTMLElement
 
             enterRecord.overflow = el.style.overflow
+            el.style.overflow = 'hidden'
 
             if (el[scrollHeight] !== 0) {
               el.style[height] = `${el[scrollHeight]}px`
@@ -121,10 +130,25 @@ export default defineComponent({
             el.style[paddingBottom] = enterRecord.paddingBottom!
             el.style[marginTop] = enterRecord.marginTop!
             el.style[marginBottom] = enterRecord.marginBottom!
-            el.style.overflow = 'hidden'
 
-            if (props.fadeEffect) {
-              el.style.opacity = enterRecord.opacity!
+            if (!props.reverse) {
+              if (props.fadeEffect) {
+                el.style.opacity = enterRecord.opacity!
+              }
+            } else {
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+              el[scrollHeight]
+
+              el.style[height] = '0'
+              el.style[paddingTop] = '0'
+              el.style[paddingBottom] = '0'
+              el.style[marginTop] = '0'
+              el.style[marginBottom] = '0'
+              el.style.boxSizing = 'content-box'
+
+              if (props.fadeEffect) {
+                el.style.opacity = '0'
+              }
             }
 
             emitEvent(props.onEnter, $el)
@@ -133,9 +157,12 @@ export default defineComponent({
             const el = $el as HTMLElement
 
             el.style.transition = enterRecord.transition || ''
-            el.style[height] = ''
-            el.style.overflow = enterRecord.overflow!
-            el.style.boxSizing = enterRecord.boxSizing!
+
+            if (!props.reverse) {
+              el.style[height] = ''
+              el.style.overflow = enterRecord.overflow!
+              el.style.boxSizing = enterRecord.boxSizing!
+            }
 
             enterStage = null
             emitEvent(props.onAfterEnter, $el)
@@ -225,12 +252,10 @@ export default defineComponent({
 
             leaveStage = null
             emitEvent(props.onLeaveCancelled, $el)
-          }
+          },
         },
-        {
-          default: () => slots.default && slots.default()
-        }
+        slots,
       )
     }
-  }
+  },
 })

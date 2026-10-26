@@ -1,81 +1,89 @@
-<template>
-  <div :class="nh.be('head')" role="rowgroup" :style="style">
-    <TableRow is-head :row="headRow">
-      <TableHeadCell
-        v-for="(item, index) in currentColumns"
-        :key="index"
-        :column="item"
-        :index="index"
-      ></TableHeadCell>
-    </TableRow>
-  </div>
-</template>
+<script setup lang="ts">
+import { computed, inject } from 'vue'
 
-<script lang="ts">
-import { defineComponent, computed, inject } from 'vue'
 import TableHeadCell from './table-head-cell.vue'
 import TableRow from './table-row.vue'
 import { useNameHelper } from '@vexip-ui/config'
-import { TABLE_STORE, TABLE_HEAD_KEY } from './symbol'
+import { getLast } from '@vexip-ui/utils'
+import { TABLE_HEAD_PREFIX, TABLE_STORE } from './symbol'
 
 import type { PropType } from 'vue'
 
-export default defineComponent({
-  name: 'TableHead',
-  components: {
-    TableHeadCell,
-    TableRow
+defineOptions({ name: 'TableHead' })
+
+const props = defineProps({
+  fixed: {
+    type: String as PropType<'left' | 'right' | undefined>,
+    default: null,
   },
-  props: {
-    fixed: {
-      type: String as PropType<'left' | 'right'>,
-      default: null,
-      validator: (value: string) => {
-        return value === 'left' || value === 'right'
-      }
-    }
-  },
-  setup(props) {
-    const { state } = inject(TABLE_STORE)!
+})
 
-    const currentColumns = computed(() => {
-      if (props.fixed === 'left') {
-        return state.leftFixedColumns
-      }
+const { state, getters, mutations } = inject(TABLE_STORE)!
 
-      if (props.fixed === 'right') {
-        return state.rightFixedColumns
-      }
+const nh = useNameHelper('table')
+const allColumns = computed(() => {
+  const left = state.leftFixedColumns.length
+  const right = state.allColumns[0].length - state.rightFixedColumns.length
 
-      return state.columns
-    })
-    const style = computed(() => {
-      const widths = state.widths
-      const columns = currentColumns.value
+  if (props.fixed === 'left') {
+    return state.allColumns.map(columns => columns.slice(0, left))
+  } else if (props.fixed === 'right') {
+    return state.allColumns.map(columns => columns.slice(right, state.allColumns[0].length))
+  }
 
-      let width = 0
+  return state.allColumns.map(columns => columns.slice(left, right))
+})
+const columns = computed(() => {
+  return props.fixed === 'left'
+    ? state.leftFixedColumns
+    : props.fixed === 'right'
+      ? state.rightFixedColumns
+      : state.normalColumns
+})
+const style = computed(() => {
+  const width =
+    props.fixed === 'left'
+      ? getLast(getters.leftFixedWidths)
+      : props.fixed === 'right'
+        ? getLast(getters.rightFixedWidths)
+        : getLast(getters.normalWidths)
+  const padLeft = columns.value[0]?.fixed === 'left' ? state.sidePadding[0] || 0 : 0
+  const padRight = getLast(columns.value)?.fixed === 'right' ? state.sidePadding[1] || 0 : 0
 
-      for (let i = 0, len = columns.length; i < len; ++i) {
-        const column = columns[i]
-        const key = column.key
-        const columnWidth = widths[key]
-
-        width += columnWidth
-      }
-
-      return {
-        minWidth: `${width}px`
-      }
-    })
-    const headRow = computed(() => state.dataMap[TABLE_HEAD_KEY] || { key: TABLE_HEAD_KEY })
-
-    return {
-      nh: useNameHelper('table'),
-
-      currentColumns,
-      style,
-      headRow
-    }
+  return {
+    minWidth: width && `${width + padLeft + padRight}px`,
   }
 })
+
+function getRow(index: number) {
+  const key = `${TABLE_HEAD_PREFIX}${index}`
+
+  return state.rowMap.get(key) || mutations.createMinRowState(key)
+}
 </script>
+
+<template>
+  <div :class="nh.be('head')" role="rowgroup" :style="style">
+    <TableRow
+      v-for="(rowColumns, rowIndex) in allColumns"
+      :key="rowIndex"
+      :index="rowIndex"
+      is-head
+      :fixed="fixed"
+      :row="getRow(rowIndex)"
+      :aria-rowindex="rowIndex"
+    >
+      <template v-for="(column, index) in rowColumns as any" :key="index">
+        <TableHeadCell
+          v-if="column"
+          :column="column"
+          :index="index"
+          :row="getRow(rowIndex)"
+          :row-index="rowIndex"
+          :fixed="fixed"
+          :aria-colindex="index"
+        ></TableHeadCell>
+      </template>
+    </TableRow>
+  </div>
+</template>

@@ -1,7 +1,9 @@
+@use './shared' as *;
 @use './design' as *;
 
 .#{$namespace}-cell {
   @include basis;
+  @include inherit-color;
 
   &--flex {
     display: flex;

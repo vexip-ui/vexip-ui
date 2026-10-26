@@ -1,14 +1,16 @@
 <template>
-  <p style="margin-bottom: 28px;">
-    <span>翻转：</span>
-    <Switch v-model:value="flip" style="margin-right: 10px;"></Switch>
-    <span>双边：</span>
-    <Switch v-model:value="bothSides"></Switch>
+  <p>
+    翻转：
+    <Switch v-model:value="flip" style="margin-inline-end: 10px"></Switch>
+  </p>
+  <p style="margin-bottom: 28px">
+    交替：
+    <Switch v-model:value="alternate"></Switch>
   </p>
   <Timeline
     horizontal
     :flip="flip"
-    :both-sides="bothSides"
+    :alternate="alternate"
     pending
   >
     <TimelineItem>
@@ -33,7 +35,7 @@
 import { ref } from 'vue'
 
 const flip = ref(false)
-const bothSides = ref(false)
+const alternate = ref(false)
 </script>
 
 <style scoped>

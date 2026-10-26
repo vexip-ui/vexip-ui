@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Popup } from '..'
 
 describe('Popup', () => {
@@ -8,14 +9,14 @@ describe('Popup', () => {
   })
 
   it('placement', () => {
-    (
+    ;(
       [
         'top-right',
         'top-center',
         'top-left',
         'bottom-right',
         'bottom-center',
-        'bottom-left'
+        'bottom-left',
       ] as const
     ).forEach(placement => {
       const wrapper = mount(() => <Popup placement={placement}></Popup>)

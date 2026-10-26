@@ -1,1 +1,2 @@
-import '@/style/option.scss'
+import '@/components/preset/style'
+import '@/components/option/style'

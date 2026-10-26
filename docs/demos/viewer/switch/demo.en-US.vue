@@ -23,11 +23,11 @@ import type { Viewer } from 'vexip-ui'
 const viewer = ref<InstanceType<typeof Viewer>>()
 const active = ref(0)
 const images = [
-  '/picture-1.jpg',
-  '/picture-2.jpg',
-  '/picture-3.jpg',
-  '/picture-4.jpg',
-  '/picture-5.jpg'
+  'https://www.vexipui.com/picture-1.jpg',
+  'https://www.vexipui.com/picture-2.jpg',
+  'https://www.vexipui.com/picture-3.jpg',
+  'https://www.vexipui.com/picture-4.jpg',
+  'https://www.vexipui.com/picture-5.jpg',
 ]
 
 watch(active, reset)
@@ -48,13 +48,13 @@ function reset() {
 .image-list img {
   width: 100px;
   height: 60px;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   user-select: none;
   opacity: 60%;
 }
 
 .image-list img:last-child {
-  margin-right: 0;
+  margin-inline-end: 0;
 }
 
 .image-list img.is-active {

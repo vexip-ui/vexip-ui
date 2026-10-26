@@ -1,8 +1,10 @@
-import { defineComponent, ref, reactive, computed, inject, provide } from 'vue'
 import { MenuItem } from '@/components/menu-item'
+
+import { computed, defineComponent, inject, provide, reactive, ref, renderSlot } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { callIfFunc } from '@vexip-ui/utils'
-import { baseIndentWidth, MENU_STATE, MENU_ITEM_STATE, MENU_GROUP_STATE } from './symbol'
+import { MENU_GROUP_STATE, MENU_ITEM_STATE, MENU_STATE } from './symbol'
 
 import type { PropType } from 'vue'
 import type { MenuOptions } from './symbol'
@@ -11,24 +13,25 @@ const MenuGroup = defineComponent({
   name: 'MenuGroup',
   props: {
     label: String,
-    children: Array as PropType<MenuOptions[]>
+    children: Array as PropType<MenuOptions[]>,
   },
   setup(_props, { slots }) {
     const props = useProps('menuGroup', _props, {
       label: {
         default: '',
-        static: true
+        static: true,
       },
       children: {
         default: () => [],
-        static: true
-      }
+        static: true,
+      },
     })
 
     const menuState = inject(MENU_STATE, null)
     const parentItemState = inject(MENU_ITEM_STATE, null)
 
     const nh = useNameHelper('menu-group')
+    const menuNh = useNameHelper('menu')
     const indent = ref(1)
 
     if (parentItemState) {
@@ -39,7 +42,7 @@ const MenuGroup = defineComponent({
       return {
         paddingLeft: parentItemState?.isUsePopper
           ? undefined
-          : `${indent.value * baseIndentWidth}px`
+          : `calc(${menuNh.gcv('indent-width')} * ${indent.value})`,
       }
     })
     const onlyShowSlot = computed(() => {
@@ -49,41 +52,39 @@ const MenuGroup = defineComponent({
     provide(MENU_GROUP_STATE, reactive({ indent }))
 
     function renderChildren() {
-      if (slots.default) {
-        return slots.default()
-      }
-
-      if (!props.children?.length) {
-        return null
-      }
-
-      if (!props.children?.length) {
-        return null
-      }
-
-      const renderItem = (item: MenuOptions) => (
-        <MenuItem
-          label={item.label}
-          icon={item.icon}
-          icon-props={item.iconProps}
-          disabled={item.disabled}
-          children={item.children}
-          route={item.route}
-        >
-          {item.name ? callIfFunc(item.name) : item.label}
-        </MenuItem>
-      )
-
-      return props.children.map(child => {
-        if (child.group) {
-          return (
-            <MenuGroup label={child.name ? callIfFunc(child.name) : child.label}>
-              {child.children?.map(renderItem)}
-            </MenuGroup>
-          )
+      return renderSlot(slots, 'default', {}, () => {
+        if (!props.children?.length) {
+          return []
         }
 
-        return renderItem(child)
+        const renderItem = (item: MenuOptions) => (
+          <MenuItem
+            label={item.label}
+            icon={item.icon}
+            icon-props={item.iconProps}
+            disabled={item.disabled}
+            children={item.children}
+            route={item.route}
+            meta={item.meta}
+          >
+            {item.name ? callIfFunc(item.name) : item.label}
+          </MenuItem>
+        )
+
+        return props.children.map(child => {
+          if (child.group) {
+            return (
+              <MenuGroup
+                key={child.label}
+                label={child.name ? callIfFunc(child.name) : child.label}
+              >
+                {child.children?.map(renderItem)}
+              </MenuGroup>
+            )
+          }
+
+          return renderItem(child)
+        })
       })
     }
 
@@ -103,7 +104,8 @@ const MenuGroup = defineComponent({
         </li>
       )
     }
-  }
+  },
 })
 
+// eslint-disable-next-line vue/require-direct-export
 export default MenuGroup

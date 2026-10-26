@@ -13,12 +13,12 @@ export type RowGridAlign = 'top' | 'middle' | 'bottom' | 'stretch'
 
 export interface ColumnFlex {
   justify: RowGridJustify,
-  align: RowGridAlign
+  align: RowGridAlign,
 }
 
 export interface RowState {
   columnFlex: ColumnFlex | false,
-  gap: number | number[]
+  gap: number | number[],
 }
 
 export interface ColumnOptions {
@@ -26,9 +26,9 @@ export interface ColumnOptions {
   offset?: number,
   pull?: number,
   push?: number,
-  order?: number
+  order?: number,
 }
 
 export const breakPoints = Object.freeze<BreakPoint[]>(['xs', 'sm', 'md', 'lg', 'xl', 'xxl'])
 
-export const ROW_STATE: InjectionKey<RowState> = Symbol('ROW_STATE')
+export const ROW_STATE = '__VXP_GRID_ROW_STATE' as unknown as InjectionKey<RowState>

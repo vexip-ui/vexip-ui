@@ -1,6 +1,6 @@
 <template>
-  <div class="demo-drawer-inner-wrapper">
-    <p style="margin-bottom: 16px;">
+  <div class="drawer-wrapper">
+    <p style="margin-bottom: 16px">
       抽屉渲染在该元素中
     </p>
     <Button type="primary" @click="active = !active">
@@ -21,7 +21,7 @@ const active = ref(false)
 </script>
 
 <style scoped>
-.demo-drawer-inner-wrapper {
+.drawer-wrapper {
   position: relative;
   display: flex;
   flex-direction: column;

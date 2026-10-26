@@ -1,9 +1,10 @@
-import type { NativeScroll } from '@/components/native-scroll'
+import type { ComponentPublicInstance } from 'vue'
+import type { NativeScrollExposed } from '@/components/native-scroll'
 
-export interface VirtualListExposed {
-  scroll: InstanceType<typeof NativeScroll> | null,
-  wrapper: HTMLElement | null,
-  list: HTMLElement | null,
+export interface VirtualListExposed extends ComponentPublicInstance {
+  scroll?: NativeScrollExposed,
+  wrapper?: HTMLElement,
+  list?: HTMLElement,
   scrollOffset: number,
   scrollTo: (top: number, behavior?: ScrollBehavior) => void,
   scrollBy: (delta: number, behavior?: ScrollBehavior) => void,
@@ -11,12 +12,12 @@ export interface VirtualListExposed {
   scrollToIndex: (index: number, behavior?: ScrollBehavior) => void,
   ensureIndexInView: (index: number, behavior?: ScrollBehavior) => void,
   ensureKeyInView: (key: string | number | symbol, behavior?: ScrollBehavior) => void,
-  refresh: () => void
+  refresh: () => Promise<void>,
 }
 
 export interface ScrollPayload {
   clientX: number,
   clientY: number,
   percentX: number,
-  percentY: number
+  percentY: number,
 }

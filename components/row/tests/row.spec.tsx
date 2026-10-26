@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest'
 import { Column } from '@/components/column'
+
+import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
+
 import { Row } from '..'
 
 describe('Row', () => {
@@ -23,33 +25,33 @@ describe('Row', () => {
     const wrapper = mount(Row, {
       props: { gap: 8 },
       slots: {
-        default: () => <Column></Column>
-      }
+        default: () => <Column></Column>,
+      },
     })
 
     expect(wrapper.attributes('style')).toContain('--vxp-row-h-gap: 8px;')
-    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-left: 4px;')
-    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-right: 4px;')
+    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-inline-start: 4px;')
+    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-inline-end: 4px;')
 
     await wrapper.setProps({ gap: [16, 24] })
     expect(wrapper.attributes('style')).toContain('--vxp-row-h-gap: 16px;')
     expect(wrapper.attributes('style')).toContain('--vxp-row-v-gap: 24px;')
-    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-left: 8px;')
-    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-right: 8px;')
+    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-inline-start: 8px;')
+    expect(wrapper.find('.vxp-column').attributes('style')).toContain('padding-inline-end: 8px;')
   })
 
   it('justify', () => {
-    (['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
+    ;(['start', 'end', 'center', 'space-around', 'space-between', 'space-evenly'] as const).forEach(
       justify => {
         const wrapper = mount(() => <Row justify={justify}></Row>)
 
         expect(wrapper.find('.vxp-row').classes()).toContain(`vxp-row--${justify}`)
-      }
+      },
     )
   })
 
   it('align', () => {
-    (['top', 'middle', 'bottom', 'stretch'] as const).forEach(align => {
+    ;(['top', 'middle', 'bottom', 'stretch'] as const).forEach(align => {
       const wrapper = mount(() => <Row align={align}></Row>)
 
       expect(wrapper.find('.vxp-row').classes()).toContain(`vxp-row--${align}`)

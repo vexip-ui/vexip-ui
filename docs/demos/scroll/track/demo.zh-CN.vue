@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 360px; border: var(--vxp-border-base);">
+  <div style="max-width: 360px; border: var(--vxp-border-base)">
     <Scroll
       use-y-bar
       use-bar-track

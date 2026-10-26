@@ -1,31 +1,26 @@
 <template>
-  <div>
-    <Alert icon>
-      警告提示的内容
-    </Alert>
-    <Alert icon type="success">
-      警告提示的内容
-    </Alert>
-    <Alert icon type="warning">
-      警告提示的内容
-    </Alert>
-    <Alert icon type="error">
-      警告提示的内容
-    </Alert>
-    <Alert icon title="警告标题">
-      警告提示的内容
-    </Alert>
-    <Alert icon type="success" title="警告标题">
-      警告提示的内容
-    </Alert>
-    <Alert icon type="warning" title="警告标题">
-      警告提示的内容
-    </Alert>
-    <Alert icon type="error" title="警告标题">
-      警告提示的内容
-    </Alert>
-  </div>
+  <Alert
+    v-for="alertType in types"
+    :key="alertType"
+    icon
+    :type="alertType"
+  >
+    警告提示的内容
+  </Alert>
+  <Alert
+    v-for="alertType in types"
+    :key="alertType"
+    icon
+    :type="alertType"
+    title="警告标题"
+  >
+    警告提示的内容
+  </Alert>
 </template>
+
+<script setup lang="ts">
+const types = ['primary', 'info', 'success', 'warning', 'error'] as const
+</script>
 
 <style scoped>
 .vxp-alert {

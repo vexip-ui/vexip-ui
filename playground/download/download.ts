@@ -1,10 +1,11 @@
 import { saveAs } from 'file-saver'
 
-import index from './template/index.html?raw'
-import main from './template/main.ts?raw'
-import pkg from './template/package.json'
-import config from './template/vite.config.js?raw'
-import readme from './template/README.md?raw'
+import index from './templates/index.html?raw'
+import main from './templates/main.ts?raw'
+import pkg from './templates/package.json'
+import config from './templates/vite.config.js?raw'
+import readme from './templates/README.md?raw'
+import vueDts from './templates/vue.d.ts?raw'
 
 import type { ReplStore } from '../store'
 
@@ -14,34 +15,35 @@ export async function downloadProject(store: ReplStore) {
   const versions: Record<string, string> = {
     vue: __VUE_VERSION__,
     'vexip-ui': __VERSION__,
-    ...store.versions
+    ...store.versions,
   }
 
   for (const name of Object.keys(pkg.dependencies)) {
     if (versions[name]) {
-      (pkg.dependencies as any)[name] = `${versions[name]}`
+      ;(pkg.dependencies as any)[name] = `${versions[name]}`
     }
   }
 
-  // basic structure
-  zip.file('index.html', index)
-  zip.file('package.json', JSON.stringify(pkg))
-  zip.file('vite.config.js', config)
-  zip.file('README.md', readme)
-
-  // project src
-  const src = zip.folder('src')!
-  src.file('main.ts', main)
-
   const files = store.getFiles()
+
   for (const file in files) {
     if (file === 'import-map.json') {
       continue
     }
 
-    src.file(file, files[file])
+    zip.file(file, files[file])
   }
 
+  // basic structure
+  zip.file('index.html', index)
+  zip.file('package.json', JSON.stringify(pkg, null, 2) + '\n')
+  zip.file('vite.config.js', config)
+  zip.file('README.md', readme)
+
+  zip.file('src/main.ts', main)
+  zip.file('src/vue.d.ts', vueDts)
+
   const blob = await zip.generateAsync({ type: 'blob' })
+
   saveAs(blob, 'vexip-project.zip')
 }

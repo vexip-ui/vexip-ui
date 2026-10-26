@@ -1,3 +1,4 @@
+@use './shared' as *;
 @use './design' as *;
 
 .#{$namespace}-icon {
@@ -5,31 +6,37 @@
   align-items: center;
   justify-content: center;
   overflow: visible;
-  transition: get-css-var('transition-transform');
+  vertical-align: -0.125em;
+  transition: value('transition-transform');
   transform-origin: 50% 50%;
 
   & > g {
     display: flex;
+    transform: rotate(value('icon-rotate', 0));
   }
 
   svg {
     width: 1em;
     height: 1em;
     line-height: 1;
-    vertical-align: -0.125em;
     fill: currentcolor;
+
+    &.lucide {
+      fill: none;
+      stroke: currentcolor;
+    }
   }
 
   &--flip-horizontal > g {
-    transform: scale(-1, 1);
+    transform: scale(-1, 1) rotate(value('icon-rotate', 0));
   }
 
   &--flip-vertical > g {
-    transform: scale(1, -1);
+    transform: scale(1, -1) rotate(value('icon-rotate', 0));
   }
 
   &--flip-both > g {
-    transform: scale(-1, -1);
+    transform: scale(-1, -1) rotate(value('icon-rotate', 0));
   }
 
   &--spin-in > g {

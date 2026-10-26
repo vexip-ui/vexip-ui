@@ -1,11 +1,13 @@
+@use './shared' as *;
 @use './design' as *;
-@use './scrollbar.scss';
 
 .#{$namespace}-native-scroll {
-  @include basis;
+  @include basis {
+    position: relative;
+    overflow: hidden;
+  }
 
-  position: relative;
-  overflow: hidden;
+  @include inherit-color;
 
   &__wrapper {
     position: relative;
@@ -30,11 +32,37 @@
     overflow-y: hidden;
   }
 
+  &--horizontal > &__wrapper,
+  &--both > &__wrapper {
+    display: inline-block;
+  }
+
+  &__extra {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__extra-inner {
+    position: sticky;
+    inset-inline-start: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    & > * {
+      pointer-events: auto;
+    }
+  }
+
   &--both > &__bar--horizontal {
-    width: calc(100% - get-css-var('scrollbar-width') + 1px);
+    width: calc(100% - value('scrollbar-width') + 1px);
   }
 
   &--both > &__bar--vertical {
-    height: calc(100% - get-css-var('scrollbar-width') + 1px);
+    height: calc(100% - value('scrollbar-width') + 1px);
   }
 }

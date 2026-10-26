@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
+
 import { Icon, Toast } from 'vexip-ui'
 import { CircleQuestion, Share } from '@vexip-ui/icons'
 
@@ -17,8 +18,8 @@ function showCustomizedIconToast() {
     content: '函数渲染图标',
     icon: () =>
       h(Icon, {
-        icon: Share
-      })
+        icon: Share,
+      }),
   })
 }
 </script>

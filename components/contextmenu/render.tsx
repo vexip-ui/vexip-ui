@@ -2,28 +2,24 @@ import { Dropdown } from '@/components/dropdown'
 import { DropdownList } from '@/components/dropdown-list'
 import { DropdownItem } from '@/components/dropdown-item'
 import { Icon } from '@/components/icon'
-import { ChevronRight } from '@vexip-ui/icons'
-import type { NameHelper } from '@vexip-ui/config'
 
+import { useIcons } from '@vexip-ui/config'
+import { useRtl } from '@vexip-ui/hooks'
+
+import type { NameHelper } from '@vexip-ui/config'
 import type { ContextmenuConfig } from './symbol'
 
 function renderItemIcon(item: ContextmenuConfig, nh: NameHelper) {
   if (!item.icon) return null
 
-  let icon: any
-
-  if (typeof item.icon === 'function') {
-    icon = item.icon()
-  } else {
-    icon = (
+  return (
+    <div class={nh.be('icon')}>
       <Icon
         icon={item.icon}
-        style={[{ color: item.iconColor || item.color }, item.icon.style]}
+        style={[{ color: item.iconColor || item.color }, (item.icon as any).style]}
       ></Icon>
-    )
-  }
-
-  return <div class={nh.be('icon')}>{icon}</div>
+    </div>
+  )
 }
 
 function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
@@ -33,6 +29,9 @@ function renderItemShortcut(item: ContextmenuConfig, nh: NameHelper) {
 }
 
 function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
+  const icons = useIcons()
+  const { isRtl } = useRtl()
+
   return (
     <Dropdown
       inherit
@@ -41,7 +40,7 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
         onContextmenu: (event: MouseEvent) => {
           event.preventDefault()
           event.stopPropagation()
-        }
+        },
       }}
     >
       {{
@@ -53,12 +52,19 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
             disabled={item.disabled}
           >
             {renderItemIcon(item, nh)}
-            <span class={nh.be('label')} style={{ color: item.color }}>
-              {item.label || item.key}
-            </span>
+            {typeof item.renderer === 'function' ? (
+              item.renderer()
+            ) : (
+              <span class={nh.be('label')} style={{ color: item.color }}>
+                {item.label || item.key}
+              </span>
+            )}
             {renderItemShortcut(item, nh)}
             <div class={[nh.be('icon'), nh.be('arrow')]}>
-              <Icon icon={ChevronRight} style={{ color: item.iconColor || item.color }}></Icon>
+              <Icon
+                {...(isRtl.value ? icons.value.angleLeft : icons.value.angleRight)}
+                style={{ color: item.iconColor || item.color }}
+              ></Icon>
             </div>
           </DropdownItem>
         ),
@@ -71,12 +77,12 @@ function renderGroupItem(item: ContextmenuConfig, nh: NameHelper) {
                 : nh.bem('list', 'no-icon'),
               item.children!.some(c => c.children?.length)
                 ? nh.bem('list', 'arrows')
-                : nh.bem('list', 'no-arrow')
+                : nh.bem('list', 'no-arrow'),
             ]}
           >
             {item.children!.map(i => renderItem({ nh, config: i }))}
           </DropdownList>
-        )
+        ),
       }}
     </Dropdown>
   )
@@ -94,9 +100,13 @@ export function renderItem({ config, nh }: { config: ContextmenuConfig, nh: Name
         disabled={config.disabled}
       >
         {renderItemIcon(config, nh)}
-        <span class={nh.be('label')} style={{ color: config.color }}>
-          {config.label || config.key}
-        </span>
+        {typeof config.renderer === 'function' ? (
+          config.renderer()
+        ) : (
+          <span class={nh.be('label')} style={{ color: config.color }}>
+            {config.label || config.key}
+          </span>
+        )}
         {renderItemShortcut(config, nh)}
       </DropdownItem>
     )

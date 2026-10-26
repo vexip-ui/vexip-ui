@@ -1,12 +1,41 @@
-import { describe, it, expect } from 'vitest'
-import { nextTick } from 'vue'
-import { GithubB } from '@vexip-ui/icons'
+import { describe, expect, it, vi } from 'vitest'
+import { getCurrentInstance, nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
+import { Github } from 'lucide-vue-next'
 import Confirm from '../confirm.vue'
+import { ConfirmManager } from '..'
+
+function createConfirm() {
+  const Confirm = new ConfirmManager()
+
+  mount({
+    setup() {
+      const instance = getCurrentInstance()
+      const app = instance?.appContext.app
+
+      app?.use(Confirm)
+
+      return () => <div></div>
+    },
+  })
+
+  return Confirm
+}
+
+async function waitRender() {
+  await nextTick()
+  await nextTick()
+  await nextTick()
+}
 
 describe('Confirm', () => {
-  it('render', () => {
+  it('render', async () => {
     const wrapper = mount(Confirm)
+    await nextTick()
+    wrapper.vm.openConfirm({ content: 'content' })
+    await nextTick()
+    await nextTick()
 
     expect(wrapper.find('.vxp-confirm').classes()).toContain('vxp-confirm-vars')
     expect(wrapper.find('.vxp-confirm__body').exists()).toBe(true)
@@ -16,99 +45,165 @@ describe('Confirm', () => {
   })
 
   it('open', async () => {
-    const wrapper = mount(Confirm)
-    const buttons = wrapper.findAll('.vxp-confirm__button')
+    const Confirm = createConfirm()
 
-    await nextTick()
-    wrapper.vm.openConfirm({
+    Confirm.open({
       content: 'content',
-      icon: GithubB,
+      icon: Github,
       confirmText: 'ok',
-      cancelText: 'no'
+      cancelText: 'no',
     })
-    await nextTick()
-    await nextTick()
-    expect(wrapper.find('.vxp-confirm__content').text()).toEqual('content')
-    expect(wrapper.findComponent(GithubB).exists()).toBe(true)
-    expect(buttons[0].text()).toEqual('no')
-    expect(buttons[1].text()).toEqual('ok')
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
+    expect(wrapper.querySelector<HTMLElement>('.vxp-confirm__content')!.textContent).toEqual(
+      'content',
+    )
+    expect(wrapper.querySelector('svg')).toBeTruthy()
+    expect(buttons[0].textContent).toEqual('no')
+    expect(buttons[1].textContent).toEqual('ok')
   })
 
   it('cancel', async () => {
-    const wrapper = mount(Confirm)
-    const buttons = wrapper.findAll('.vxp-confirm__button')
+    const Confirm = createConfirm()
 
-    await nextTick()
-    const promise = wrapper.vm.openConfirm({
+    const promise = Confirm.open({
       content: 'content',
-      icon: GithubB,
+      icon: Github,
       confirmText: 'ok',
-      cancelText: 'no'
+      cancelText: 'no',
     })
-    await nextTick()
-    await nextTick()
-    ;(buttons[0].element as HTMLButtonElement).click()
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
+    buttons[0].click()
     await nextTick()
     await expect(promise).resolves.toEqual(false)
   })
 
   it('confirm', async () => {
-    const wrapper = mount(Confirm)
-    const buttons = wrapper.findAll('.vxp-confirm__button')
+    const Confirm = createConfirm()
 
-    await nextTick()
-    const promise = wrapper.vm.openConfirm({
+    const promise = Confirm.open({
       content: 'content',
-      icon: GithubB,
+      icon: Github,
       confirmText: 'ok',
-      cancelText: 'no'
+      cancelText: 'no',
     })
-    await nextTick()
-    await nextTick()
-    ;(buttons[1].element as HTMLButtonElement).click()
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
+    buttons[1].click()
     await nextTick()
     await expect(promise).resolves.toEqual(true)
   })
 
-  it('title', async () => {
-    const wrapper = mount(Confirm)
+  it('async confirm', async () => {
+    vi.useFakeTimers()
+    const Confirm = createConfirm()
 
-    await nextTick()
-    wrapper.vm.openConfirm({
-      title: 'title',
-      content: 'content'
+    const promise = Confirm.open({
+      content: 'content',
+      confirmText: 'ok',
+      cancelText: 'no',
+      onBeforeConfirm: () => new Promise(r => setTimeout(r, 100)),
     })
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
+    buttons[1].click()
     await nextTick()
+    expect(buttons[1].classList).toContain('vxp-button--loading')
+    await vi.runAllTimersAsync()
     await nextTick()
-    expect(wrapper.find('.vxp-confirm__title').exists()).toBe(true)
-    expect(wrapper.find('.vxp-confirm__title').text()).toEqual('title')
+    expect(promise).resolves.toEqual(true)
+    vi.useRealTimers()
+  })
+
+  it('title', async () => {
+    const Confirm = createConfirm()
+
+    Confirm.open({
+      title: 'title',
+      content: 'content',
+    })
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    expect(wrapper.querySelector<HTMLElement>('.vxp-confirm__title')).toBeTruthy()
+    expect(wrapper.querySelector<HTMLElement>('.vxp-confirm__title')!.textContent).toEqual('title')
   })
 
   it('closable', async () => {
-    const wrapper = mount(Confirm)
+    const Confirm = createConfirm()
 
-    await nextTick()
-    wrapper.vm.openConfirm({
+    Confirm.open({
+      title: 'title',
       content: 'content',
-      closable: true
+      closable: true,
     })
-    await nextTick()
-    await nextTick()
-    expect(wrapper.find('.vxp-confirm__close').exists()).toBe(true)
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    expect(wrapper.querySelector<HTMLElement>('.vxp-confirm__close')).toBeTruthy()
   })
 
-  it('content align and anctions align', async () => {
-    const wrapper = mount(Confirm)
+  it('content align and actions align', async () => {
+    const Confirm = createConfirm()
 
-    await nextTick()
-    wrapper.vm.openConfirm({
+    Confirm.open({
       content: 'content',
       contentAlign: 'left',
-      actionsAlign: 'right'
+      actionsAlign: 'right',
     })
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    expect(
+      wrapper
+        .querySelector<HTMLElement>('.vxp-confirm__body')!
+        .classList.contains('vxp-confirm__body--left'),
+    ).toBe(true)
+    expect(
+      wrapper
+        .querySelector<HTMLElement>('.vxp-confirm__footer')!
+        .classList.contains('vxp-confirm__footer--right'),
+    ).toBe(true)
+  })
+
+  it('cancelable false', async () => {
+    const Confirm = createConfirm()
+
+    Confirm.open({
+      content: 'content',
+      cancelable: false,
+    })
+    await waitRender()
+
+    const wrapper = document.querySelector<HTMLElement>('.vxp-confirm')!
+    expect(wrapper).toBeTruthy()
+    const buttons = wrapper.querySelectorAll<HTMLButtonElement>('.vxp-confirm__button')
+    expect(buttons.length).toBe(1)
+    expect(buttons[0].classList.contains('vxp-confirm__button--confirm')).toBe(true)
+  })
+
+  it('transferTo', async () => {
+    const Confirm = createConfirm()
+    const el = document.createElement('div')
+    Confirm.transferTo(el)
+
     await nextTick()
-    await nextTick()
-    expect(wrapper.find('.vxp-confirm__body').classes()).toContain('vxp-confirm__body--left')
-    expect(wrapper.find('.vxp-confirm__footer').classes()).toContain('vxp-confirm__footer--right')
+    expect(el.querySelector('.vxp-confirm')).toBeTruthy()
   })
 })

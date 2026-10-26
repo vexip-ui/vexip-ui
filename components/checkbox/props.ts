@@ -1,14 +1,15 @@
 import {
-  buildProps,
   booleanProp,
   booleanStringProp,
+  buildProps,
+  classProp,
+  eventProp,
+  localeProp,
   sizeProp,
   stateProp,
-  classProp,
-  eventProp
 } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
 
 export const checkboxProps = buildProps({
@@ -25,8 +26,11 @@ export const checkboxProps = buildProps({
   tabIndex: [String, Number],
   loading: booleanProp,
   loadingLock: booleanProp,
+  name: String,
+  color: String,
+  stateColor: booleanProp,
   onChange: eventProp<(checked: boolean) => void>(),
-  onClick: eventProp<(event: MouseEvent) => void>()
+  onClick: eventProp<(event: MouseEvent) => void>(),
 })
 
 export type CheckboxProps = ExtractPropTypes<typeof checkboxProps>
@@ -37,12 +41,14 @@ export type RawOption =
   | {
     value: string | number,
     label?: string,
-    control?: boolean
+    control?: boolean,
+    disabled?: boolean,
   }
 
 export const checkboxGroupProps = buildProps({
   size: sizeProp,
   state: stateProp,
+  locale: localeProp('checkbox'),
   value: Array as PropType<(string | number)[]>,
   vertical: booleanProp,
   disabled: booleanProp,
@@ -51,7 +57,9 @@ export const checkboxGroupProps = buildProps({
   loading: booleanProp,
   loadingLock: booleanProp,
   control: booleanStringProp,
-  onChange: eventProp<(value: (string | number)[]) => void>()
+  color: String,
+  stateColor: booleanProp,
+  onChange: eventProp<(value: (string | number)[]) => void>(),
 })
 
 export type CheckboxGroupProps = ExtractPropTypes<typeof checkboxGroupProps>

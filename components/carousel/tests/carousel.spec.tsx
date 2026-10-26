@@ -1,7 +1,9 @@
-import { describe, it, expect, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { CarouselItem } from '@/components/carousel-item'
+
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Carousel } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'
@@ -12,7 +14,7 @@ async function doTransition(wrapper: VueWrapper<any>) {
   await nextTick()
   wrapper.vm.handleAfterMove()
   await nextTick()
-  vi.runAllTimers()
+  vi.runOnlyPendingTimers()
   await nextTick()
 }
 
@@ -48,8 +50,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
 
@@ -70,7 +72,7 @@ describe('Carousel', () => {
       props: {
         onChange,
         onPrev,
-        onNext
+        onNext,
       },
       slots: {
         default: () => (
@@ -80,8 +82,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
     const handlers = wrapper.findAll('.vxp-carousel__handler')
@@ -125,8 +127,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
     const handlers = wrapper.findAll('.vxp-carousel__handler')
@@ -153,8 +155,8 @@ describe('Carousel', () => {
             <CarouselItem>{'3'}</CarouselItem>
             <CarouselItem>{'4'}</CarouselItem>
           </>
-        )
-      }
+        ),
+      },
     })
     const items = wrapper.findAll('.vxp-carousel__item')
 

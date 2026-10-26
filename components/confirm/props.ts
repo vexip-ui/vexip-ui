@@ -1,28 +1,41 @@
-import { buildProps, booleanProp, classProp, styleProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, classProp, localeProp, styleProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
 import type { ConfigurableProps } from '@vexip-ui/config'
-import type { ConfirmType, ConfirmAlign, ConfirmRenderFn } from './symbol'
+import type { IconMinorProps } from '@/components/icon'
+import type { ConfirmAlign, ConfirmButtonType, ConfirmRenderFn } from './symbol'
 
 const positionType = [Number, String]
 
 export const confirmProps = buildProps({
+  locale: localeProp('confirm'),
+  width: positionType,
+  height: positionType,
   top: positionType,
   left: positionType,
-  width: positionType,
+  right: positionType,
+  bottom: positionType,
   maskClose: booleanProp,
-  confirmType: String as PropType<ConfirmType>,
+  confirmType: String as PropType<ConfirmButtonType>,
+  cancelType: String as PropType<ConfirmButtonType>,
   confirmText: String,
   cancelText: String,
-  icon: [Object, Function] as PropType<Record<string, any> | (() => any)>,
+  icon: {
+    type: [Boolean, Object, Function],
+    default: null,
+  },
   className: classProp,
   style: styleProp,
   renderer: Function as PropType<ConfirmRenderFn>,
-  iconColor: String,
+  iconProps: Object as PropType<IconMinorProps>,
   closable: booleanProp,
   contentAlign: String as PropType<ConfirmAlign>,
   actionsAlign: String as PropType<ConfirmAlign>,
-  parseHtml: booleanProp
+  parseHtml: booleanProp,
+  cancelable: booleanProp,
+  xOffset: positionType,
+  yOffset: positionType,
+  loadingLock: booleanProp,
 })
 
 export type ConfirmProps = ExtractPropTypes<typeof confirmProps>

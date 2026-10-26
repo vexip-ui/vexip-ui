@@ -1,12 +1,14 @@
 @use 'sass:map';
 @use 'sass:math';
+@use 'sass:meta';
 
+@use './shared' as *;
 @use './design' as *;
 
 $column: () !default;
 $column: map.merge(
   (
-    display: block
+    display: block,
   ),
   $column
 );
@@ -16,18 +18,20 @@ $column: map.merge(
     @include define-preset-values('column', $column);
   }
 
-  @include basis;
+  @include basis {
+    position: relative;
+    display: value('column-display');
+    max-width: 100%;
+  }
 
-  position: relative;
-  display: get-css-var('column-display');
-  max-width: 100%;
+  @include inherit-color;
 
   &--flex {
     // display: flex;
     @include define-preset-values(
       'column',
       (
-        display: flex
+        display: flex,
       )
     );
   }
@@ -76,21 +80,21 @@ $column: map.merge(
     $size: (math.div(1, 24) * $i * 100) * 1%;
 
     &--#{$i} {
-      display: if($i == 0, none, get-css-var('column-display'));
+      display: if(sass($i == 0): none; else: value('column-display'));
       flex: 0 0 $size;
       max-width: $size;
     }
 
     &--offset-#{$i} {
-      margin-left: $size;
+      margin-inline-start: $size;
     }
 
     &--pull-#{$i} {
-      right: $size;
+      inset-inline-end: $size;
     }
 
     &--push-#{$i} {
-      left: $size;
+      inset-inline-start: $size;
     }
 
     &--order-#{$i} {
@@ -98,8 +102,8 @@ $column: map.merge(
     }
   }
 
-  @each $point in map-keys($break-point-map) {
-    @media only screen and #{inspect(map-get($break-point-map, $point))} {
+  @each $point in map.keys($break-point-map) {
+    @media only screen and #{meta.inspect(map.get($break-point-map, $point))} {
       &--#{$point}-0 {
         display: none;
       }
@@ -108,21 +112,21 @@ $column: map.merge(
         $size: (math.div(1, 24) * $i * 100) * 1%;
 
         &--#{$point}-#{$i} {
-          display: get-css-var('column-display');
+          display: value('column-display');
           flex: 0 0 $size;
           max-width: $size;
         }
 
         &--#{$point}-offset-#{$i} {
-          margin-left: $size;
+          margin-inline-start: $size;
         }
 
         &--#{$point}-pull-#{$i} {
-          right: $size;
+          inset-inline-end: $size;
         }
 
         &--#{$point}-push-#{$i} {
-          left: $size;
+          inset-inline-start: $size;
         }
 
         &--#{$point}-order-#{$i} {

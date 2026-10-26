@@ -1,7 +1,9 @@
-import { buildProps, booleanProp, sizeProp, stateProp, eventProp } from '@vexip-ui/config'
+import { booleanProp, buildProps, eventProp, iconProp, sizeProp, stateProp } from '@vexip-ui/config'
 
-import type { PropType, ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, PropType } from 'vue'
+import type { IconEffect } from '@/components/icon'
 import type { ConfigurableProps } from '@vexip-ui/config'
+import type { SwitchSlots } from './symbol'
 
 export const switchProps = buildProps({
   size: sizeProp,
@@ -11,14 +13,17 @@ export const switchProps = buildProps({
   openColor: String,
   closeColor: String,
   loading: booleanProp,
-  loadingIcon: Object,
-  loadingSpin: booleanProp,
-  openIcon: Object,
-  closeIcon: Object,
+  loadingIcon: iconProp,
+  loadingEffect: String as PropType<IconEffect>,
+  openIcon: iconProp,
+  closeIcon: iconProp,
   openText: String,
   closeText: String,
   onBeforeChange: Function as PropType<(checked: boolean) => unknown>,
-  onChange: eventProp<(value: boolean) => void>()
+  rectangle: booleanProp,
+  name: String,
+  slots: Object as PropType<SwitchSlots>,
+  onChange: eventProp<(value: boolean) => void>(),
 })
 
 export type SwitchProps = ExtractPropTypes<typeof switchProps>

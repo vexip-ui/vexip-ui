@@ -13,7 +13,7 @@
       <Button
         type="success"
         :icon="Check"
-        style="margin-left: 6px;"
+        style="margin-inline-start: 6px"
         @click.stop="doUpload"
       >
         Manual upload
@@ -24,9 +24,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Upload as IUpload, Check } from '@vexip-ui/icons'
 
-import type { UploadExposed } from 'vexip-ui'
+import { Check, Upload as IUpload } from '@vexip-ui/icons'
+
+import type { UploadExposed, UploadFileState } from 'vexip-ui'
 
 const fileIds = ref<string[]>([])
 const upload = ref<UploadExposed>()
@@ -50,7 +51,7 @@ async function doUpload() {
 
 // When the url is not set, you can record the selected file through the change event,
 // and then operate it by yourself, such as putting it into a FormData
-function handleChange(files: File[]) {
+function handleChange(files: UploadFileState[]) {
   console.info(files)
 }
 </script>

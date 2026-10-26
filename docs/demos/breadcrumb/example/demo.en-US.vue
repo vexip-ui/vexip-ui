@@ -1,5 +1,5 @@
 <template>
-  <Breadcrumb border style="max-width: 500px;">
+  <Breadcrumb border style="max-width: 500px">
     <BreadcrumbItem v-for="[name, record] in recordMap" :key="name">
       {{ name }}
       <template #separator>
@@ -7,7 +7,7 @@
           <div
             :class="{
               separator: true,
-              'is-active': record.visible
+              'is-active': record.visible,
             }"
           >
             <Icon><CaretRight></CaretRight></Icon>
@@ -26,12 +26,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
+
 import { CaretRight } from '@vexip-ui/icons'
 
 interface Record {
   visible: boolean,
-  children: string[]
+  children: string[],
 }
 
 const recordMap = ref(new Map<string, Record>())
@@ -39,7 +40,7 @@ const recordMap = ref(new Map<string, Record>())
 recordMap.value
   .set(
     'This Computer',
-    reactive({ visible: false, children: ['System (C:)', 'Document (D:)', 'Software (E:)'] })
+    reactive({ visible: false, children: ['System (C:)', 'Document (D:)', 'Software (E:)'] }),
   )
   .set('Document (D:)', reactive({ visible: false, children: ['vexip-ui', 'font-awesome', 'vue'] }))
   .set('vexip-ui', reactive({ visible: false, children: [] }))

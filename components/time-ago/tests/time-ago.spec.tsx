@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { addMinutes, addHours, addDays, format } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
+
+import { addDays, addHours, addMinutes, format } from '@vexip-ui/utils'
 import { TimeAgo } from '..'
 
 vi.useFakeTimers()
@@ -23,7 +24,7 @@ describe('TimeAgo', () => {
       addDays(current, -32),
       addDays(current, -93),
       addDays(current, -366),
-      addDays(current, -732)
+      addDays(current, -732),
     ]
 
     const expects = [
@@ -38,7 +39,7 @@ describe('TimeAgo', () => {
       '上个月',
       '3个月前',
       '去年',
-      '2年前'
+      '2年前',
     ]
 
     datetimes.forEach((datetime, i) => {

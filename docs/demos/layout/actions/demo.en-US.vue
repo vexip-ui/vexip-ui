@@ -8,8 +8,11 @@
     @user-action="handleUserAction"
   >
     <template #main>
-      <div style="width: 100%; height: 1200px; padding: 20px;">
-        Click the top right avatar
+      <div style="width: 100%; padding: 0 20px">
+        <p>点击右上角头像</p>
+        <p v-for="n in 40" :key="n">
+          {{ n }}
+        </p>
       </div>
     </template>
   </Layout>
@@ -17,45 +20,45 @@
 
 <script setup lang="ts">
 import {
+  ArrowRightFromBracket,
+  ChartPie,
+  City,
+  CommentDotsR,
+  EnvelopesBulk,
   Gear,
   IdBadgeR,
-  CommentDotsR,
-  ArrowRightFromBracket,
-  EnvelopesBulk,
-  City,
-  ChartPie,
-  User
+  User,
 } from '@vexip-ui/icons'
 
 import type { MenuOptions } from 'vexip-ui'
 
 const user = {
   name: 'VexipUI',
-  email: 'email@vexip-ui.com'
+  email: 'email@vexip-ui.com',
 }
 
 const actions = [
   {
     label: 'profile',
     icon: IdBadgeR,
-    name: 'Your profile'
+    name: 'Your profile',
   },
   {
     label: 'message',
     icon: CommentDotsR,
-    name: 'Your messages'
+    name: 'Your messages',
   },
   {
     label: 'settings',
     icon: Gear,
     name: 'Settings',
-    divided: true
+    divided: true,
   },
   {
     label: 'signOut',
     name: 'Sign out',
-    icon: ArrowRightFromBracket
-  }
+    icon: ArrowRightFromBracket,
+  },
 ]
 
 const menus: MenuOptions[] = [
@@ -66,25 +69,25 @@ const menus: MenuOptions[] = [
     children: [
       { label: '1-1', name: 'Child Menu 1' },
       { label: '1-2', name: 'Child Menu 2' },
-      { label: '1-3', name: 'Child Menu 3' }
-    ]
+      { label: '1-3', name: 'Child Menu 3' },
+    ],
   },
   {
     label: '2',
     name: 'Menu 2',
     icon: City,
-    disabled: true
+    disabled: true,
   },
   {
     label: '3',
     name: 'Menu 3',
-    icon: ChartPie
+    icon: ChartPie,
   },
   {
     label: '4',
     name: 'Menu 4',
-    icon: User
-  }
+    icon: User,
+  },
 ]
 
 function handleUserAction(label: string) {

@@ -3,7 +3,7 @@ export type CountToTiming = (
   progress: number,
   localStart: number,
   end: number,
-  duration: number
+  duration: number,
 ) => number
 
 export const countToEasingFn: Record<CountToTimingName, CountToTiming> = {
@@ -14,5 +14,5 @@ export const countToEasingFn: Record<CountToTimingName, CountToTiming> = {
     const percent = Math.min(progress / duration, 1)
 
     return (percent * end * 1024) / 1023 + localStart
-  }
+  },
 }

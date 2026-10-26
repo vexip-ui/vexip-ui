@@ -1,34 +1,37 @@
 {
   "name": "@vexip-ui/icons",
-  "version": "1.0.3",
+  "version": "1.2.1",
+  "type": "module",
   "license": "MIT",
-  "anchor": "qmhc",
   "scripts": {
     "build": "tsx scripts/build.ts"
   },
-  "type": "module",
   "main": "lib/index.js",
   "module": "es/index.mjs",
   "types": "types/index.d.ts",
-  "sideEffects": [
-    "dist/*"
-  ],
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "require": "./lib/index.js",
       "import": "./es/index.mjs"
     },
-    "./brands/*": {
-      "require": "./lib/brands/*",
-      "import": "./es/brands/*"
+    "./es": {
+      "types": "./types/index.d.ts",
+      "import": "./es/index.mjs"
     },
-    "./regular/*": {
-      "require": "./lib/regular/*",
-      "import": "./es/regular/*"
+    "./lib": {
+      "types": "./types/index.d.ts",
+      "require": "./lib/index.js"
     },
-    "./package.json": "./package.json",
-    "./*": "./*"
+    "./es/*.mjs": "./es/*.mjs",
+    "./es/*": "./es/*.mjs",
+    "./lib/*.js": "./lib/*.js",
+    "./lib/*": "./lib/*.js",
+    "./package.json": "./package.json"
   },
+  "sideEffects": [
+    "dist/*"
+  ],
   "files": [
     "dist",
     "es",
@@ -36,25 +39,23 @@
     "types",
     "vue"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/icons#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/icons"
   },
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/icons#readme",
   "devDependencies": {
-    "@types/node": "^18.7.23",
-    "@types/prettier": "^2.7.1",
-    "@vitejs/plugin-vue": "^3.1.0",
-    "execa": "^6.1.0",
-    "fast-glob": "^3.2.12",
-    "fs-extra": "^10.1.0",
-    "kolorist": "^1.6.0",
-    "prettier": "^2.7.1",
-    "vite": "^3.1.4",
-    "vue": "^3.2.40"
+    "@types/node": "^22.10.6",
+    "execa": "^9.5.2",
+    "fast-glob": "^3.3.3",
+    "fs-extra": "^11.2.0",
+    "kolorist": "^1.8.0",
+    "prettier": "^3.4.2",
+    "vue": "^3.5.13"
   },
   "peerDependencies": {
     "vue": "^3.2.25"
-  }
+  },
+  "anchor": "qmhc"
 }

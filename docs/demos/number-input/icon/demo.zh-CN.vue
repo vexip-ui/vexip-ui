@@ -1,11 +1,11 @@
 <template>
-  <NumberInput placeholder="前置图标" style="max-width: 300px;" :prefix="User"></NumberInput>
+  <NumberInput placeholder="前置图标" style="max-width: 300px" :prefix="User"></NumberInput>
   <br />
   <br />
   <NumberInput
     clearable
     placeholder="后置图标"
-    style="max-width: 300px;"
+    style="max-width: 300px"
     :suffix="User"
   ></NumberInput>
 </template>

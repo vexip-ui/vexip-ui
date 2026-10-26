@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
+
 import { Modal } from '..'
 
 vi.useFakeTimers()
@@ -32,7 +33,7 @@ describe('Modal', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
-          title: () => <span class={'title'}></span>
+          title: () => <span class={'title'}></span>,
         }}
       </Modal>
     ))
@@ -42,11 +43,11 @@ describe('Modal', () => {
     expect(wrapper.find('.vxp-modal__close').exists()).toBe(true)
   })
 
-  it('close', () => {
+  it('close slot', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
-          close: () => <span class={'close'}></span>
+          close: () => <span class={'close'}></span>,
         }}
       </Modal>
     ))
@@ -55,11 +56,11 @@ describe('Modal', () => {
     expect(wrapper.find('.close').exists()).toBe(true)
   })
 
-  it('header', () => {
+  it('header slot', () => {
     const wrapper = mount(() => (
       <Modal title={TEXT}>
         {{
-          header: () => <span class={'header'}></span>
+          header: () => <span class={'header'}></span>,
         }}
       </Modal>
     ))
@@ -73,7 +74,7 @@ describe('Modal', () => {
     const wrapper = mount(() => (
       <Modal>
         {{
-          footer: () => <span class={'footer'}></span>
+          footer: () => <span class={'footer'}></span>,
         }}
       </Modal>
     ))
@@ -126,15 +127,15 @@ describe('Modal', () => {
         onToggle,
         onClose,
         onConfirm,
-        onCancel
-      }
+        onCancel,
+      },
     })
     const buttons = wrapper.findAllComponents('.vxp-button')
 
     ;(buttons[0].element as HTMLButtonElement).click()
     await nextTick()
-    await nextTick()
-    expect(onToggle).toHaveBeenCalled()
+    // await nextTick()
+    expect(onToggle).toHaveBeenLastCalledWith(false)
     expect(onClose).toHaveBeenCalledTimes(1)
     expect(onCancel).toHaveBeenCalled()
 
@@ -182,7 +183,8 @@ describe('Modal', () => {
     await nextTick()
     await nextTick()
     expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--draggable')
-    expect(modal.attributes('style')).toContain('top: 0px; left: 0px;')
+    expect(modal.attributes('style')).toContain('top: 0px;')
+    expect(modal.attributes('style')).toContain('left: 0px;')
 
     const downEvent = new CustomEvent('pointerdown') as any
     downEvent.button = 0
@@ -199,13 +201,16 @@ describe('Modal', () => {
     moveEvent.clientX = 40
     moveEvent.clientY = 40
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
+    await nextTick()
     expect(onDragMove).toHaveBeenCalled()
     expect(onDragMove).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
-    await nextTick()
-    expect(modal.attributes('style')).toContain('top: 40px; left: 40px;')
+    expect(modal.attributes('style')).toContain('top: 40px;')
+    expect(modal.attributes('style')).toContain('left: 40px;')
 
     const upEvent = new CustomEvent('pointerup') as any
+    upEvent.clientX = 40
+    upEvent.clientY = 40
     document.dispatchEvent(upEvent)
     expect(onDragEnd).toHaveBeenCalled()
     expect(onDragEnd).toHaveBeenCalledWith(expect.objectContaining({ top: 40, left: 40 }))
@@ -222,8 +227,8 @@ describe('Modal', () => {
       <Modal
         active
         resizable
-        width={200}
-        height={100}
+        min-width={40}
+        min-height={40}
         onResizeStart={onResizeStart}
         onResizeMove={onResizeMove}
         onResizeEnd={onResizeEnd}
@@ -236,7 +241,6 @@ describe('Modal', () => {
     await nextTick()
     expect(wrapper.find('.vxp-modal__resizer').exists()).toBe(true)
     expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--resizable')
-    expect(modal.attributes('style')).toContain('width: 200px; height: 100px;')
 
     const downEvent = new CustomEvent('pointerdown') as any
     downEvent.button = 0
@@ -244,27 +248,124 @@ describe('Modal', () => {
     downEvent.clientY = 0
     resizer.dispatchEvent(downEvent)
     expect(onResizeStart).toHaveBeenCalled()
-    expect(onResizeStart).toHaveBeenCalledWith(expect.objectContaining({ width: 200, height: 100 }))
+    expect(onResizeStart).toHaveBeenCalledWith(expect.objectContaining({ width: 0, height: 0 }))
 
     await nextTick()
     expect(modal.classes()).toContain('vxp-modal__wrapper--resizing')
 
     const moveEvent = new CustomEvent('pointermove') as any
-    moveEvent.clientX = 40
-    moveEvent.clientY = 40
+    moveEvent.clientX = 80
+    moveEvent.clientY = 80
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
-    expect(onResizeMove).toHaveBeenCalled()
-    expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 240, height: 140 }))
+    vi.runOnlyPendingTimers()
     await nextTick()
-    expect(modal.attributes('style')).toContain('width: 240px; height: 140px;')
+    expect(onResizeMove).toHaveBeenCalled()
+    expect(onResizeMove).toHaveBeenCalledWith(expect.objectContaining({ width: 80, height: 80 }))
+    expect(modal.attributes('style')).toContain('width: 80px;')
+    expect(modal.attributes('style')).toContain('height: 80px;')
 
     const upEvent = new CustomEvent('pointerup') as any
+    upEvent.clientX = 80
+    upEvent.clientY = 80
     document.dispatchEvent(upEvent)
     expect(onResizeEnd).toHaveBeenCalled()
-    expect(onResizeEnd).toHaveBeenCalledWith(expect.objectContaining({ width: 240, height: 140 }))
+    expect(onResizeEnd).toHaveBeenCalledWith(expect.objectContaining({ width: 80, height: 80 }))
 
     await nextTick()
     expect(modal.classes()).not.toContain('vxp-modal__wrapper--resizing')
+  })
+
+  it('position', async () => {
+    const wrapper = mount(Modal, {
+      props: {
+        active: true,
+        right: 10,
+        width: 100,
+        bottom: 10,
+        height: 100,
+      },
+    })
+    const modal = wrapper.find('.vxp-modal__wrapper')
+
+    expect(modal.attributes('style')).toContain('top: auto;')
+    expect(modal.attributes('style')).toContain('bottom: 10px;')
+    expect(modal.attributes('style')).toContain('height: 100px;')
+    expect(modal.attributes('style')).toContain('right: 10px;')
+    expect(modal.attributes('style')).toContain('width: 100px;')
+    expect(modal.attributes('style')).toContain('left: auto;')
+  })
+
+  it('adjust buttons', () => {
+    const wrapper = mount(() => (
+      <Modal confirm-type={'success'} cancel-type={'error'} action-size={'large'}>
+        {TEXT}
+      </Modal>
+    ))
+    const buttons = wrapper.findAllComponents('.vxp-button')
+
+    expect(buttons[0].classes()).toContain('vxp-button--error')
+    expect(buttons[0].classes()).toContain('vxp-button--large')
+    expect(buttons[1].classes()).toContain('vxp-button--success')
+    expect(buttons[1].classes()).toContain('vxp-button--large')
+  })
+
+  it('undivided', () => {
+    const wrapper = mount(() => <Modal undivided>{TEXT}</Modal>)
+
+    expect(wrapper.find('.vxp-modal').classes()).toContain('vxp-modal--undivided')
+  })
+
+  it('mask close', async () => {
+    const onToggle = vi.fn()
+    const onClose = vi.fn()
+    const wrapper = mount(Modal, {
+      props: {
+        active: true,
+        onToggle,
+        onClose,
+      },
+    })
+
+    await wrapper.find('.vxp-masker__mask').trigger('click')
+
+    expect(onToggle).toHaveBeenCalledWith(false)
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('before close', async () => {
+    const onBeforeClose = vi.fn()
+    const wrapper = mount(Modal, {
+      props: { closable: true, onBeforeClose },
+    })
+
+    const openAndClose = async () => {
+      wrapper.vm.currentActive = true
+      await nextTick()
+      await wrapper.find('.vxp-masker__mask').trigger('click')
+      await nextTick()
+    }
+
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(false)
+    expect(onBeforeClose).toHaveBeenCalled()
+
+    onBeforeClose.mockReturnValue(false)
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+
+    let resolveRef: (value: boolean) => void
+    onBeforeClose.mockReset()
+    onBeforeClose.mockImplementation(
+      () =>
+        new Promise(resolve => {
+          resolveRef = resolve
+        }),
+    )
+    await openAndClose()
+    expect(wrapper.vm.currentActive).toBe(true)
+    resolveRef!(true)
+    await nextTick()
+    await nextTick()
+    expect(wrapper.vm.currentActive).toBe(false)
   })
 })

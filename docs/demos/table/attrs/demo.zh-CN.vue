@@ -1,7 +1,7 @@
 <template>
   <Table
     :data="data"
-    :row-class="rowClass"
+    row-class="demo-row-class"
     :width="1000"
     :head-class="headClass"
     :head-style="headStyle"
@@ -13,94 +13,50 @@
       id-key="firstName"
       :attrs="{ 'data-label': 'First Name' }"
     ></TableColumn>
-    <TableColumn name="Last Name" id-key="lastName" class-name="demo-column-class"></TableColumn>
-    <TableColumn name="Job" id-key="job" style="font-weight: bold;"></TableColumn>
+    <TableColumn name="Last Name" id-key="lastName" class="demo-column-class"></TableColumn>
+    <TableColumn name="Job" id-key="job" style="font-weight: bold"></TableColumn>
     <TableColumn name="Age" id-key="age"></TableColumn>
   </Table>
 </template>
 
 <script setup lang="ts">
-import type { TableColumnOptions } from 'vexip-ui'
+import type { TableCellPropFn, TableHeadPropFn } from 'vexip-ui'
 
 type ItemType<D> = D extends (infer I)[] ? I : Record<string, any>
 
-const data = [
-  {
-    id: '1',
-    job: 'Cashier',
-    email: 'Angelique_Walsh2268@twace.org',
-    firstName: 'Angelique',
-    lastName: 'Walsh',
-    age: '58'
-  },
-  {
-    id: '2',
-    job: 'Stockbroker',
-    email: 'Aeris_Drake5867@gmail.com',
-    firstName: 'Aeris',
-    lastName: 'Drake',
-    age: '40'
-  },
-  {
-    id: '3',
-    job: 'Machine Operator',
-    email: 'Elisabeth_Rogers7566@sheye.org',
-    firstName: 'Elisabeth',
-    lastName: 'Rogers',
-    age: '56'
-  },
-  {
-    id: '4',
-    job: 'Audiologist',
-    email: 'Sharon_Tanner5855@nickia.com',
-    firstName: 'Sharon',
-    lastName: 'Tanner',
-    age: '58'
-  },
-  {
-    id: '5',
-    job: 'Cashier',
-    email: 'Evie_Farmer6650@typill.biz',
-    firstName: 'Evie',
-    lastName: 'Farmer',
-    age: '26'
-  }
-]
-
-const rowClass = 'demo-row-class'
-
-function headClass(column: TableColumnOptions, index: number) {
-  return `head-${index}`
-}
-
-function headStyle(column: TableColumnOptions, index: number) {
+const data = Array.from({ length: 5 }, (_, index) => {
   return {
-    color: `var(--vxp-color-error-opacity-${index + 1})`
+    id: index + 1,
+    firstName: `First ${index}`,
+    lastName: `Last ${index}`,
+    company: `Company ${index}`,
+    job: `Job ${index}`,
+    age: 20 + index,
+    email: `email${index}@vexip.ui`,
+    address: `Address ${index}`,
   }
-}
+})
 
-function hadeAttrs(column: TableColumnOptions, index: number) {
-  return {
-    'data-index': index
-  }
-}
+const headClass: TableHeadPropFn = ({ index }) => `head-${index}`
 
-function cellClass(
-  row: ItemType<typeof data>,
-  column: TableColumnOptions,
-  rowIndex: number,
-  columnIndex: number
-) {
-  return `cell-${rowIndex}-${columnIndex}`
-}
+const headStyle: TableHeadPropFn = ({ index }) => ({
+  color: `var(--vxp-color-error-opacity-${index + 1})`,
+})
+
+const hadeAttrs: TableHeadPropFn = ({ index }) => ({
+  'data-index': index,
+})
+
+const cellClass: TableCellPropFn<ItemType<typeof data>> = ({ rowIndex, columnIndex }) =>
+  `cell-${rowIndex}-${columnIndex}`
 </script>
 
 <style scoped>
 :deep(.demo-row-class) {
-  color: #339af0;
+  color: var(--vxp-color-primary-opacity-3);
 }
 
 :deep(.demo-column-class) {
-  background-color: #fab005;
+  background-color: var(--vxp-color-warning-opacity-6);
 }
 </style>

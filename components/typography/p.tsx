@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue'
+
 import { useProps } from '@vexip-ui/config'
 import Text from './text'
 import { pProps } from './props'
@@ -18,7 +19,7 @@ export default defineComponent({
       disabled: false,
       keyboard: false,
       thin: false,
-      reversed: false
+      reversed: false,
     })
 
     return () => (
@@ -26,5 +27,5 @@ export default defineComponent({
         {slots.default?.()}
       </Text>
     )
-  }
+  },
 })

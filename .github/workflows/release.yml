@@ -6,19 +6,22 @@ on:
       - v*
 
 jobs:
-  build:
-    name: Create Release
+  release:
+    # prevents this action from running on forks
+    if: github.repository == 'vexip-ui/vexip-ui'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-
-      - name: Create Release for Tag
-        id: release_tag
-        uses: yyx990803/release-tag@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.OPER_TOKEN }}
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
-          tag_name: ${{ github.ref }}
-          body: |
-            Please refer to [CHANGELOG.md](https://github.com/vexip-ui/vexip-ui/blob/main/CHANGELOG.md) for details.
+          fetch-depth: 0
+
+      - name: Set node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+
+      - name: Changelog
+        run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,6 @@
 <template>
   <Space>
-    <Tooltip trigger="click" placement="right">
+    <Tooltip trigger="hover" placement="top">
       <template #trigger>
         <Button> Hover Trigger </Button>
       </template>
@@ -15,6 +15,12 @@
     <Tooltip trigger="focus" placement="bottom">
       <template #trigger>
         <Button> Focus Trigger </Button>
+      </template>
+      Some tip content
+    </Tooltip>
+    <Tooltip trigger="hover-focus" placement="bottom">
+      <template #trigger>
+        <Button> Both Hover and Focus Trigger </Button>
       </template>
       Some tip content
     </Tooltip>

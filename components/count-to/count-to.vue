@@ -9,9 +9,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, reactive, watch, onBeforeUnmount } from 'vue'
 import { countToProps } from '@/components/count-to/props'
 import { countToEasingFn } from '@/components/count-to/symbol'
+
+import { computed, defineComponent, onBeforeUnmount, onMounted, reactive, watch } from 'vue'
+
 import { useNameHelper, useProps } from '@vexip-ui/config'
 import { isNumber } from '@vexip-ui/utils'
 
@@ -29,15 +31,15 @@ export default defineComponent({
         default: 0,
         validator(value) {
           return value >= 0
-        }
+        },
       },
       appear: false,
       separator: '',
       prefix: '',
       suffix: '',
       timing: {
-        default: 'linear'
-      }
+        default: 'linear',
+      },
     })
 
     const nh = useNameHelper('count-to')
@@ -51,7 +53,7 @@ export default defineComponent({
       startTime: 0,
       timestamp: 0,
       remaining: 0,
-      rAF: 0
+      rAF: 0,
     })
 
     const stopCount = computed(() => {
@@ -70,7 +72,7 @@ export default defineComponent({
         () => [props.start, props.end],
         () => {
           start()
-        }
+        },
       )
     })
 
@@ -103,7 +105,7 @@ export default defineComponent({
         progress,
         state.localStart,
         props.end - state.localStart,
-        state.localDuration
+        state.localDuration,
       )
       if (stopCount.value) {
         state.printVal = state.printVal < props.end ? props.end : state.printVal
@@ -157,8 +159,8 @@ export default defineComponent({
       start,
       pause,
       resume,
-      toggle
+      toggle,
     }
-  }
+  },
 })
 </script>

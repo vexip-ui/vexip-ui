@@ -1,37 +1,33 @@
 {
   "name": "@vexip-ui/utils",
-  "version": "1.9.1",
+  "version": "2.16.4",
+  "type": "module",
   "license": "MIT",
+  "private": false,
   "author": "qmhc",
   "scripts": {
     "build": "vite build",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:cover": "vitest run --coverage",
+    "test:dev": "vitest dev"
   },
-  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.mjs"
     }
   },
-  "private": false,
-  "engines": {
-    "node": ">=14"
-  },
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/utils#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vexip-ui/vexip-ui.git",
     "directory": "common/utils"
   },
-  "devDependencies": {
-    "vite": "^3.1.4",
-    "vite-plugin-dts": "^1.6.6"
-  }
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/utils#readme"
 }

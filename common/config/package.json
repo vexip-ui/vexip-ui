@@ -1,19 +1,38 @@
 {
   "name": "@vexip-ui/config",
-  "author": "qmhc",
+  "version": "1.11.1",
   "type": "module",
+  "license": "MIT",
+  "private": false,
+  "author": "qmhc",
+  "scripts": {
+    "build": "vite build"
+  },
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "private": true,
-  "engines": {
-    "node": ">=14"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
   },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexip-ui/vexip-ui.git",
+    "directory": "common/config"
+  },
+  "homepage": "https://github.com/vexip-ui/vexip-ui/tree/main/common/config#readme",
   "dependencies": {
-    "@vexip-ui/utils": "workspace:^"
-  },
-  "devDependencies": {
-    "vue": "^3.2.41"
+    "@vexip-ui/bem-helper": "workspace:*",
+    "@vexip-ui/icons": "workspace:*",
+    "@vexip-ui/utils": "workspace:*",
+    "lucide-vue-next": "^0.511.0",
+    "vue": "^3.5.15"
   },
   "peerDependencies": {
     "vue": "^3.2.25"

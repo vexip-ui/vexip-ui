@@ -1,1 +1,2 @@
-import '@/style/tab-nav.scss'
+import '@/components/preset/style'
+import '@/components/tab-nav/style'

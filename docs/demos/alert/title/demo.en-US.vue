@@ -3,6 +3,9 @@
     <Alert title="Alert Title">
       Some content to alert
     </Alert>
+    <Alert type="info" title="Alert Title">
+      Some content to alert
+    </Alert>
     <Alert type="success" title="Alert Title">
       Some content to alert
     </Alert>

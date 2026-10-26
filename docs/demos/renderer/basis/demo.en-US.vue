@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, h } from 'vue'
+import { h, ref } from 'vue'
 
 const msg = ref('some content')
 
@@ -16,11 +16,11 @@ function renderMessage({ message }: { message: string }) {
     h(
       'span',
       {
-        style: 'color: red'
+        style: 'color: red',
       },
-      [message]
+      [message],
     ),
-    ' that using render function'
+    ' that using render function',
   ])
 }
 </script>

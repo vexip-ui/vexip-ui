@@ -11,10 +11,10 @@
       :loading="loading"
       :on-before-close="beforeClose"
     >
-      <p style="margin-bottom: 3px;">
+      <p style="margin-bottom: 3px">
         Click the
-        <Tag style="vertical-align: baseline;">
-          Confrim
+        <Tag style="vertical-align: baseline">
+          Confirm
         </Tag>
         then
       </p>

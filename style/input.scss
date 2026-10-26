@@ -1,36 +1,36 @@
 @use 'sass:map';
 
+@use './shared' as *;
 @use './design' as *;
-@use './icon.scss';
 
 $input: () !default;
 $input: map.merge(
   (
-    bg-color: get-css-var('fill-color-base'),
-    bg-color-disabled: get-css-var('fill-color-humble'),
-    b-color: get-css-var('border-color-base'),
-    b-color-hover: get-css-var('color-primary-light-1'),
-    b-color-focus: get-css-var('input-b-color-hover'),
-    s-color-focus: get-css-var('color-primary-opacity-6'),
-    placeholder-color: get-css-var('content-color-placeholder'),
-    control-color: get-css-var('content-color-base'),
-    control-color-disabled: get-css-var('content-color-disabled'),
-    icon-color: get-css-var('content-color-secondary'),
-    icon-color-hover: get-css-var('color-primary-base'),
-    icon-color-disabled: get-css-var('input-control-color-disabled'),
-    before-bg-color: get-css-var('fill-color-background'),
-    after-bg-color: get-css-var('fill-color-background'),
-    line-height: get-css-var('line-height-base'),
-    border: get-css-var('border-shape') get-css-var('input-b-color'),
-    radius: get-css-var('radius-base'),
-    count-color: get-css-var('content-color-secondary'),
-    count-color-disbaled: get-css-var('input-control-color-disabled'),
-    count-font-size: get-css-var('font-size-secondary'),
-    count-line-height: get-css-var('line-height-secondary'),
+    bg-color: value('fill-color-base'),
+    bg-color-disabled: value('fill-color-humble'),
+    b-color: value('border-color-base'),
+    b-color-hover: value('color-primary-light-1'),
+    b-color-focus: value('input-b-color-hover'),
+    s-color-focus: value('color-primary-opacity-6'),
+    placeholder-color: value('content-color-placeholder'),
+    control-color: value('content-color-base'),
+    control-color-disabled: value('content-color-disabled'),
+    icon-color: value('content-color-secondary'),
+    icon-color-hover: value('color-primary-base'),
+    icon-color-disabled: value('input-control-color-disabled'),
+    before-bg-color: value('fill-color-background'),
+    after-bg-color: value('fill-color-background'),
+    line-height: value('line-height-base'),
+    border: value('border-shape') value('input-b-color'),
+    radius: value('radius-base'),
+    count-color: value('content-color-secondary'),
+    count-color-disabled: value('input-control-color-disabled'),
+    count-font-size: value('font-size-secondary'),
+    count-line-height: value('line-height-secondary'),
     height: 32px,
     v-padding: 4px,
     h-padding: 8px,
-    padding: get-css-var('input-v-padding') get-css-var('input-h-padding'),
+    padding: value('input-v-padding') value('input-h-padding'),
     prefix-width: 32px,
     suffix-width: 32px
   ),
@@ -47,28 +47,26 @@ $input: map.merge(
     display: inline-flex;
     align-items: center;
     width: 100%;
-    height: get-css-var('input-height');
-    padding: get-css-var('input-v-padding') get-css-var('input-h-padding');
+    height: value('input-height');
+    padding: value('input-v-padding') value('input-h-padding');
     cursor: text;
-    background-color: get-css-var('input-bg-color');
-    border: get-css-var('border-shape') get-css-var('input-b-color');
-    border-radius: get-css-var('input-radius');
+    background-color: value('input-bg-color');
+    border: value('border-shape') value('input-b-color');
+    border-radius: value('input-radius');
     outline: 0;
     transition:
-      get-css-var('transition-background'),
-      get-css-var('transition-border'),
-      get-css-var('transition-shadow');
+      value('transition-background'), value('transition-border'), value('transition-shadow');
 
     &:hover {
-      border-color: get-css-var('input-b-color-hover');
+      border-color: value('input-b-color-hover');
     }
 
     &:focus,
     &:focus-within,
     &--focused {
       z-index: 2;
-      border-color: get-css-var('input-b-color-focus');
-      box-shadow: get-css-var('shadow-focus') get-css-var('input-s-color-focus');
+      border-color: value('input-b-color-focus');
+      box-shadow: value('shadow-focus') value('input-s-color-focus');
     }
 
     &--small {
@@ -106,7 +104,7 @@ $input: map.merge(
       }
     }
 
-    &--loading {
+    &--readonly {
       cursor: auto;
     }
 
@@ -125,25 +123,25 @@ $input: map.merge(
 
     &--disabled {
       cursor: not-allowed;
-      background-color: get-css-var('input-bg-color-disabled');
+      background-color: value('input-bg-color-disabled');
 
       &,
       &:hover,
       &:focus,
       &:focus-within {
-        border-color: get-css-var('border-color-base');
+        border-color: value('border-color-base');
         box-shadow: none;
       }
 
       %disabled-item {
-        color: get-css-var('input-control-color-disabled');
+        color: value('input-control-color-disabled');
         pointer-events: none;
         cursor: not-allowed;
       }
     }
 
     &--disabled#{&}--focused {
-      border-color: get-css-var('border-color-base');
+      border-color: value('border-color-base');
       box-shadow: none;
     }
   }
@@ -154,19 +152,20 @@ $input: map.merge(
     height: 100%;
     padding: 0;
     font-size: inherit;
-    line-height: get-css-var('input-line-height');
-    color: get-css-var('input-control-color');
+    line-height: value('input-line-height');
+    color: value('input-control-color');
     background-color: transparent;
     border: 0;
-    border-radius: get-css-var('input-radius');
+    border-radius: value('input-radius');
     outline: 0;
+    transition: value('transition-color');
 
     &:disabled {
       cursor: not-allowed;
     }
 
     &::placeholder {
-      color: get-css-var('input-placeholder-color');
+      color: value('input-placeholder-color');
     }
 
     /* stylelint-disable no-duplicate-selectors */
@@ -181,7 +180,7 @@ $input: map.merge(
     @extend %disabled-item;
   }
 
-  #{$handler}--loading &__control {
+  #{$handler}--readonly &__control {
     cursor: auto;
   }
 
@@ -190,13 +189,13 @@ $input: map.merge(
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: get-css-var('input-icon-color');
+    color: value('input-icon-color');
     user-select: none;
 
     &--placeholder {
       min-width: 14px;
       min-height: 1px;
-      margin-left: 4px;
+      margin-inline-start: 4px;
       visibility: hidden;
       opacity: 0%;
     }
@@ -205,20 +204,24 @@ $input: map.merge(
   }
 
   &__prefix {
-    margin-right: 4px;
+    margin-inline-end: 4px;
   }
 
   &__suffix {
-    margin-left: 4px;
-    transition: get-css-var('transition-opacity');
+    margin-inline-start: 4px;
+    transition: value('transition-opacity');
+  }
+
+  &__clear {
+    @include clean-button;
   }
 
   &__clear,
   &__loading {
     position: absolute;
-    right: get-css-var('input-h-padding');
+    inset-inline-end: value('input-h-padding');
     min-width: 14px;
-    margin-left: 4px;
+    margin-inline-start: 4px;
     cursor: pointer;
   }
 
@@ -234,16 +237,18 @@ $input: map.merge(
 
   $self: &;
   $wrapper: #{&}-wrapper;
-  $radius: get-css-var('input-radius');
+  $radius: value('input-radius');
 
   &-wrapper {
-    @include basis;
-
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    width: 100%;
-    background-color: get-css-var('input-bg-color');
+    @include basis {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      min-width: 0;
+      background-color: value('input-bg-color');
+      border-radius: value('input-radius');
+    }
   }
 
   @include basis;
@@ -252,26 +257,27 @@ $input: map.merge(
   &-wrapper & {
     flex: 1 0 0;
     width: auto;
+    min-width: 0;
     background-color: transparent;
     border-radius: 0;
   }
 
   &-wrapper--before-only & {
-    border-radius: 0 $radius $radius 0;
+    @include logical-radius(0 $radius $radius 0);
   }
 
   &-wrapper--after-only & {
-    border-radius: $radius 0 0 $radius;
+    @include logical-radius($radius 0 0 $radius);
   }
 
   &--before {
     z-index: 1;
-    border-left-color: transparent;
+    border-inline-start-color: transparent;
   }
 
   &--after {
     z-index: 1;
-    border-right-color: transparent;
+    border-inline-end-color: transparent;
   }
 
   &__suffix-wrapper {
@@ -282,25 +288,26 @@ $input: map.merge(
 
   &__clear,
   &__loading {
-    right: 0;
+    inset-inline-end: 0;
   }
 
   &__password {
+    margin-inline-start: 4px;
     cursor: pointer;
   }
 
   &__count {
-    margin-left: 4px;
-    font-size: get-css-var('input-count-font-size');
-    line-height: get-css-var('input-count-line-height');
-    color: get-css-var('input-count-color');
+    margin: 0 4px;
+    font-size: value('input-count-font-size');
+    line-height: value('input-count-line-height');
+    color: value('input-count-color');
     pointer-events: none;
     user-select: none;
-    transition: get-css-var('transition-color');
+    transition: value('transition-color');
   }
 
   &--disabled &__count {
-    color: get-css-var('input-count-color-disbaled');
+    color: value('input-count-color-disabled');
   }
 
   &__before,
@@ -308,9 +315,9 @@ $input: map.merge(
     position: relative;
     display: flex;
     align-items: center;
-    height: calc(get-css-var('input-height'));
-    padding: 0 get-css-var('input-h-padding');
-    border: get-css-var('input-border');
+    height: calc(value('input-height'));
+    padding: 0 value('input-h-padding');
+    border: value('input-border');
 
     &--action {
       padding: 0;
@@ -320,40 +327,43 @@ $input: map.merge(
 
   @mixin inner-input($inner-radius) {
     & > #{$wrapper},
-    .#{$namespace}-number-input {
-      width: calc(100% + 2 * get-css-var('input-h-padding'));
+    & > .#{$namespace}-number-input {
+      width: calc(100% + 2 * value('input-h-padding'));
       height: 100%;
-      border-radius: $inner-radius;
+
+      @include logical-radius($inner-radius);
     }
   }
 
   @mixin inner-select($inner-radius) {
-    .#{$namespace}-cascader,
-    .#{$namespace}-color-picker,
-    .#{$namespace}-date-picker,
-    .#{$namespace}-select,
-    .#{$namespace}-time-picker {
-      width: calc(100% + 2 * get-css-var('input-h-padding'));
-      height: 100%;
+    $selects: cascader color-picker date-picker select time-picker;
 
-      &__selector {
-        min-width: 60px;
+    @each $select in $selects {
+      & > .#{$namespace}-#{$select} {
+        width: calc(100% + 2 * value('input-h-padding'));
         height: 100%;
-        background-color: transparent;
-        border-radius: $inner-radius;
-        box-shadow: unset;
+
+        & .#{$namespace}-#{$select}__selector {
+          min-width: 60px;
+          height: 100%;
+          background-color: transparent;
+          box-shadow: unset;
+
+          @include logical-radius($inner-radius);
+        }
       }
     }
   }
 
   @mixin inner-button($inner-radius) {
-    .#{$namespace}-button {
-      width: calc(100% + 2 * get-css-var('input-h-padding'));
+    & > .#{$namespace}-button {
+      width: calc(100% + 2 * value('input-h-padding'));
       height: 100%;
-      border-radius: $inner-radius;
+
+      @include logical-radius($inner-radius);
 
       &--icon-only {
-        width: calc(get-css-var('button-height') + 2 * get-css-var('input-h-padding'));
+        width: calc(value('button-height') + 2 * value('input-h-padding'));
       }
     }
   }
@@ -362,14 +372,15 @@ $input: map.merge(
   $after-radius: 0 $radius $radius 0;
 
   &__before {
-    $bg-color: get-css-var('input-before-bg-color');
+    $bg-color: value('input-before-bg-color');
 
     background-color: $bg-color;
-    border-right: 0;
-    border-radius: $radius 0 0 $radius;
+    border-inline-end: 0;
+
+    @include logical-radius($radius 0 0 $radius);
 
     &--action {
-      margin-right: -1px;
+      margin-inline-end: -1px;
       background-color: transparent;
 
       @include inner-button($before-radius);
@@ -379,14 +390,15 @@ $input: map.merge(
   }
 
   &__after {
-    $bg-color: get-css-var('input-after-bg-color');
+    $bg-color: value('input-after-bg-color');
 
     background-color: $bg-color;
-    border-left: 0;
-    border-radius: 0 $radius $radius 0;
+    border-inline-start: 0;
+
+    @include logical-radius(0 $radius $radius 0);
 
     &--action {
-      margin-left: -1px;
+      margin-inline-start: -1px;
       background-color: transparent;
 
       @include inner-button($after-radius);

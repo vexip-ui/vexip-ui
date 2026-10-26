@@ -1,1 +1,2 @@
-import '@/style/radio.scss'
+import '@/components/preset/style'
+import '@/components/radio/style'

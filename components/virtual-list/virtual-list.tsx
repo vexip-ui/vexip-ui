@@ -1,17 +1,20 @@
-import { defineComponent, toRefs, ref, computed, watch, nextTick } from 'vue'
 import { NativeScroll } from '@/components/native-scroll'
 import { ResizeObserver } from '@/components/resize-observer'
-import { useNameHelper, useProps, emitEvent } from '@vexip-ui/config'
-import { useVirtual } from '@vexip-ui/hooks'
+
+import { computed, defineComponent, nextTick, ref, renderSlot, toRefs, watch } from 'vue'
+
+import { emitEvent, useNameHelper, useProps } from '@vexip-ui/config'
+import { createSlotRender, useVirtual } from '@vexip-ui/hooks'
 import { virtualListProps } from './props'
 
+import type { NativeScrollExposed } from '@/components/native-scroll'
 import type { ScrollPayload } from './symbol'
 
 export default defineComponent({
   name: 'VirtualList',
   components: {
     NativeScroll,
-    ResizeObserver
+    ResizeObserver,
   },
   inheritAttrs: false,
   props: virtualListProps,
@@ -20,7 +23,7 @@ export default defineComponent({
     const props = useProps('virtualList', _props, {
       items: {
         default: () => [],
-        static: true
+        static: true,
       },
       itemSize: 36,
       itemFixed: false,
@@ -29,19 +32,25 @@ export default defineComponent({
       bufferSize: 5,
       listTag: 'div',
       itemsTag: 'ul',
-      itemsAttrs: null
+      itemsAttrs: null,
+      hideBar: false,
+      lockItems: false,
+      autoplay: false,
+      ignoreResize: false,
+      disabled: false,
     })
 
     const nh = useNameHelper('virtual-list')
 
     const { items, itemSize, itemFixed, idKey, bufferSize } = toRefs(props)
-    const scroll = ref<InstanceType<typeof NativeScroll>>()
-    const list = ref<HTMLElement>()
 
-    const wrapper = computed(() => scroll.value?.content ?? null)
+    const scroll = ref<NativeScrollExposed>()
+    const list = ref<HTMLElement>()
+    const wrapper = computed(() => scroll.value?.content)
 
     const {
       indexMap,
+      heightTree,
       scrollOffset,
       visibleItems,
       listStyle,
@@ -54,7 +63,7 @@ export default defineComponent({
       scrollToKey,
       scrollToIndex,
       ensureIndexInView,
-      ensureKeyInView
+      ensureKeyInView,
     } = useVirtual({
       items,
       itemSize,
@@ -63,13 +72,15 @@ export default defineComponent({
       bufferSize,
       wrapper,
       defaultKeyAt: props.defaultKeyAt,
-      autoResize: false
+      autoResize: false,
     })
 
     expose({
       scroll,
       wrapper,
       list,
+      indexMap,
+      heightTree,
       scrollOffset,
       scrollTo,
       scrollBy,
@@ -77,15 +88,24 @@ export default defineComponent({
       scrollToIndex,
       ensureIndexInView,
       ensureKeyInView,
-      refresh
+      refresh,
     })
 
     watch(
       () => props.items.length,
       () => {
         nextTick(refresh)
-      }
+      },
     )
+
+    const className = computed(() => {
+      return [
+        nh.b(),
+        props.inherit && nh.bm('inherit'),
+        props.disabled && nh.bm('disabled'),
+        attrs.class,
+      ]
+    })
 
     function onScroll(payload: ScrollPayload) {
       handleScroll()
@@ -93,24 +113,68 @@ export default defineComponent({
     }
 
     function onResize(entry: ResizeObserverEntry) {
+      if (props.ignoreResize) return
+
       handleResize(entry)
       emitEvent(props.onResize, entry)
     }
 
-    function refresh() {
-      scroll.value?.refresh()
+    function onItemResize(key: number | string | symbol, entry: ResizeObserverEntry) {
+      if (!props.lockItems && !props.ignoreResize) {
+        handleItemResize(key, entry)
+      }
     }
 
-    return () => {
+    async function refresh() {
+      await scroll.value?.refresh()
+      handleScroll()
+    }
+
+    function renderList(items: Record<string, any>[]) {
       const keyField = props.idKey
       const itemFixed = props.itemFixed
       const keyIndexMap = indexMap.value
-      const itemSlot = slots.default
       const { class: itemsClass, style: itemsOtherStyle, ...itemsAttrs } = props.itemsAttrs || {}
 
       const ListTag = (props.listTag || 'div') as any
       const ItemsTag = (props.itemsTag || 'ul') as any
 
+      return (
+        <ResizeObserver onResize={refresh}>
+          <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
+            <ItemsTag
+              {...itemsAttrs}
+              class={[nh.be('items'), itemsClass]}
+              style={[itemsStyle.value, itemsOtherStyle]}
+            >
+              {slots.default && props.items.length
+                ? items.map(item => {
+                  const key = item[keyField]
+                  const index = keyIndexMap.get(key)
+                  const vnode = renderSlot(slots, 'default', { item, index })
+
+                  if (itemFixed) {
+                    vnode.key = key
+
+                    return vnode
+                  }
+
+                  const onResize = onItemResize.bind(null, key)
+
+                  return (
+                    <ResizeObserver key={key} onResize={onResize}>
+                      {() => vnode}
+                    </ResizeObserver>
+                  )
+                })
+                : renderSlot(slots, 'empty')}
+            </ItemsTag>
+          </ListTag>
+        </ResizeObserver>
+      )
+    }
+
+    return () => {
       let renderingItems = visibleItems.value
 
       if (import.meta.env.MODE === 'test') {
@@ -120,48 +184,38 @@ export default defineComponent({
 
       return (
         <NativeScroll
-          ref={scroll}
-          inherit={props.inherit}
-          class={nh.b()}
-          use-y-bar
-          scroll-y={scrollOffset.value}
           {...attrs}
+          ref={scroll}
+          class={className.value}
+          inherit={props.inherit}
+          use-y-bar={!props.hideBar}
+          scroll-y={scrollOffset.value}
+          autoplay={props.autoplay}
           onScroll={onScroll}
           onResize={onResize}
         >
-          <ResizeObserver throttle onResize={refresh}>
-            <ListTag ref={list} class={nh.be('list')} style={listStyle.value}>
-              <ItemsTag
-                {...itemsAttrs}
-                class={[nh.be('items'), itemsClass]}
-                style={[itemsStyle.value, itemsOtherStyle]}
-              >
-                {itemSlot && props.items.length
-                  ? renderingItems.map(item => {
-                    const key = item[keyField]
-                    const index = keyIndexMap.get(key)
-                    const vnode = itemSlot({ item, index })[0]
+          {{
+            default: () => {
+              if (props.disabled) {
+                return slots.default && props.items.length
+                  ? props.items.map((item, index) => {
+                    const key = item[props.idKey]
+                    const vnode = renderSlot(slots, 'default', { item, index })
 
-                    if (itemFixed) {
-                      vnode.key = key
+                    vnode.key = key
 
-                      return vnode
-                    }
-
-                    const onResize = handleItemResize.bind(null, key)
-
-                    return (
-                        <ResizeObserver key={key} throttle onResize={onResize}>
-                          {() => vnode}
-                        </ResizeObserver>
-                    )
+                    return vnode
                   })
-                  : slots.empty?.()}
-              </ItemsTag>
-            </ListTag>
-          </ResizeObserver>
+                  : renderSlot(slots, 'empty')
+              }
+
+              return renderList(renderingItems)
+            },
+            prefixTrap: createSlotRender(slots, ['prefix-trap', 'prefixTrap']),
+            suffixTrap: createSlotRender(slots, ['suffix-trap', 'suffixTrap']),
+          }}
         </NativeScroll>
       )
     }
-  }
+  },
 })

@@ -1,7 +1,8 @@
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { noop } from '@vexip-ui/utils'
 import { mount } from '@vue/test-utils'
+
+import { noop } from '@vexip-ui/utils'
 import { NativeScroll } from '..'
 
 import type { VueWrapper } from '@vue/test-utils'
@@ -32,14 +33,14 @@ describe('NativeScroll', () => {
   function mockScrollWidth(el: HTMLElement, value: number) {
     Object.defineProperty(el, 'scrollWidth', {
       configurable: true,
-      value
+      value,
     })
   }
 
   function mockScrollHeight(el: HTMLElement, value: number) {
     Object.defineProperty(el, 'scrollHeight', {
       configurable: true,
-      value
+      value,
     })
   }
 
@@ -51,11 +52,11 @@ describe('NativeScroll', () => {
         mode: 'both',
         width: 200,
         height: 200,
-        ...props
+        ...props,
       },
       slots: {
-        default: () => <span class={'content'}>{TEXT}</span>
-      }
+        default: () => <span class={'content'}>{TEXT}</span>,
+      },
     })
 
     const contentEl = scroll.find('.vxp-native-scroll__wrapper').element as HTMLElement
@@ -71,16 +72,17 @@ describe('NativeScroll', () => {
     Object.defineProperty(contentEl, 'scrollTop', {
       configurable: true,
       get: () => top,
-      set: v => (top = v)
+      set: v => (top = v),
     })
     Object.defineProperty(contentEl, 'scrollLeft', {
       configurable: true,
       get: () => left,
-      set: v => (left = v)
+      set: v => (left = v),
     })
-
-    scroll.vm.refresh()
-    vi.runAllTimers()
+    ;(scroll.vm as any).refresh()
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     return scroll
@@ -127,8 +129,8 @@ describe('NativeScroll', () => {
     expect(wrapper.find('.vxp-native-scroll__bar--vertical').exists()).toBe(true)
   })
 
-  it('wrapper tag', () => {
-    const wrapper = mount(() => <NativeScroll wrapper-tag={'ul'}></NativeScroll>)
+  it('scroll tag', () => {
+    const wrapper = mount(() => <NativeScroll scroll-tag={'ul'}></NativeScroll>)
 
     expect(wrapper.find('.vxp-native-scroll__wrapper').element.tagName).toBe('UL')
   })
@@ -144,7 +146,7 @@ describe('NativeScroll', () => {
     const onYEnabledChange = vi.fn()
     wrapper = await createScroll({
       onXEnabledChange,
-      onYEnabledChange
+      onYEnabledChange,
     })
     const contentEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
@@ -155,7 +157,9 @@ describe('NativeScroll', () => {
     mockScrollHeight(contentEl, 200)
 
     wrapper.vm.refresh()
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
+    await nextTick()
+    vi.runOnlyPendingTimers()
     await nextTick()
 
     expect(onXEnabledChange).toHaveBeenCalled()
@@ -165,9 +169,9 @@ describe('NativeScroll', () => {
   it('wheel event', async () => {
     const onWheel = vi.fn()
     wrapper = await createScroll({
-      onWheel
+      onWheel,
     })
-    const wrapperEl = wrapper.element as HTMLElement
+    const wrapperEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
     emitWheel(wrapperEl, 'bottom')
     expect(onWheel).toHaveBeenCalled()
@@ -179,7 +183,7 @@ describe('NativeScroll', () => {
   it('scroll event', async () => {
     const onScroll = vi.fn()
     wrapper = await createScroll({
-      onScroll
+      onScroll,
     })
     const contentEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
@@ -195,9 +199,9 @@ describe('NativeScroll', () => {
       pointer: true,
       onScrollStart,
       onScroll,
-      onScrollEnd
+      onScrollEnd,
     })
-    const wrapperEl = wrapper.element as HTMLElement
+    const wrapperEl = wrapper.find('.vxp-native-scroll__wrapper').element as HTMLElement
 
     const downEvent = new CustomEvent('mousedown') as any
     downEvent.button = 0
@@ -224,10 +228,11 @@ describe('NativeScroll', () => {
   it('auto play', async () => {
     wrapper = await createScroll({
       mode: 'vertical',
-      autoplay: true
+      autoplay: true,
     })
 
-    expect(wrapper.vm.currentScroll.y !== 0).toBe(true)
+    vi.runOnlyPendingTimers()
+    expect(wrapper.vm.y !== 0).toBe(true)
   })
 
   it('using bar', async () => {
@@ -239,7 +244,7 @@ describe('NativeScroll', () => {
       useYBar: true,
       onBarScrollStart,
       onBarScroll,
-      onBarScrollEnd
+      onBarScrollEnd,
     })
     const trackEl = wrapper.find('.vxp-scrollbar__track').element as HTMLElement
     const barEl = wrapper.find('.vxp-scrollbar__bar').element as HTMLElement
@@ -253,7 +258,7 @@ describe('NativeScroll', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
     const barMock = vi.spyOn(barEl, 'getBoundingClientRect').mockImplementation(() => ({
       x: 0,
@@ -264,7 +269,7 @@ describe('NativeScroll', () => {
       height: 100,
       right: 0,
       bottom: 0,
-      toJSON: noop
+      toJSON: noop,
     }))
 
     const downEvent = new CustomEvent('pointerdown') as any
@@ -279,7 +284,7 @@ describe('NativeScroll', () => {
     moveEvent.clientX = 20
     moveEvent.clientY = 20
     document.dispatchEvent(moveEvent)
-    vi.runAllTimers()
+    vi.runOnlyPendingTimers()
     expect(onBarScroll).toHaveBeenCalled()
     expect(onBarScroll).toHaveBeenCalledWith(expect.objectContaining({ percentY: 40 }))
 

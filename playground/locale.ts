@@ -7,12 +7,13 @@ const config = {
     theme: 'Toggle theme',
     share: 'Share',
     download: 'Download',
-    reset: 'Reset',
+    reload: 'Reload',
+    reset: 'Reset store',
     cdn: 'Change CDN',
     other: 'Other',
     apply: 'Apply',
     loading: 'Loading #{0}...',
-    format: 'Format codes'
+    format: 'Format codes',
   },
   zh: {
     doDelete: '确定要删除 #{0} 吗？',
@@ -22,13 +23,14 @@ const config = {
     theme: '切换主题',
     share: '分享',
     download: '下载',
-    reset: '重置',
+    reload: '重新加载',
+    reset: '重置状态',
     cdn: '更改 CDN',
     other: '其他',
     apply: '应用',
     loading: '加载 #{0} 中...',
-    format: '格式化代码'
-  }
+    format: '格式化代码',
+  },
 }
 
 type Language = keyof typeof config
