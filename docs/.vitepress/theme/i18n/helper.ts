@@ -174,6 +174,7 @@ export interface I18nConfig {
     // Else
     Affix: string,
     ConfigProvider: string,
+    CountTo: string,
     Masker: string,
     Overflow: string,
     Renderer: string,

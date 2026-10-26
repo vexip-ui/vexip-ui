@@ -27,6 +27,7 @@ import type { CollapseTransitionCProps } from './collapse-transition'
 import type { ColorPickerCProps } from './color-picker'
 import type { ColumnCProps } from './column'
 import type { ConfirmCProps } from './confirm'
+import type { CountToCProps } from './count-to'
 import type { DatePickerCProps } from './date-picker'
 import type { DividerCProps } from './divider'
 import type { DrawerCProps } from './drawer'
@@ -156,6 +157,7 @@ export interface PropsOptions {
   colorPicker?: ColorPickerCProps,
   column?: ColumnCProps,
   confirm?: ConfirmCProps,
+  countTo?: CountToCProps,
   datePicker?: DatePickerCProps,
   divider?: DividerCProps,
   drawer?: DrawerCProps,

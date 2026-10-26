@@ -176,6 +176,7 @@ export const enUS = defineI18n({
     // Else
     Affix: 'Affix',
     ConfigProvider: 'ConfigProvider',
+    CountTo: 'CountTo',
     Masker: 'Masker',
     Overflow: 'Overflow',
     Renderer: 'Renderer',

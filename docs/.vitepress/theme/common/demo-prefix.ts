@@ -35,6 +35,7 @@ const components = [
   'ColorPicker',
   'Column',
   'ConfigProvider',
+  'CountTo',
   'DatePicker',
   'Divider',
   'Drawer',
