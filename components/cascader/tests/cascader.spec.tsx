@@ -169,6 +169,36 @@ describe('Cascader', () => {
     expect(selector.classes()).not.toContain('vxp-cascader__selector--focused')
   })
 
+  it.each([false, true])(
+    'does not select after disabling an open cascader (multiple: %s)',
+    async multiple => {
+      const options = createOptions(1)
+      const path = [options[0].value]
+      const value = multiple ? [path] : path
+      const onChange = vi.fn()
+      const wrapper = mount(Cascader, {
+        props: { multiple, options, value, onChange },
+      })
+      const option = () => wrapper.findAll('.vxp-option')[1]
+
+      await wrapper.trigger('click')
+      expect(option().isVisible()).toBe(true)
+
+      await wrapper.setProps({ disabled: true })
+      await option().trigger('click')
+
+      expect(wrapper.emitted('update:value')).toBeUndefined()
+      expect(onChange).not.toHaveBeenCalled()
+
+      await wrapper.setProps({ disabled: false })
+      await wrapper.trigger('click')
+      await option().trigger('click')
+
+      expect(wrapper.emitted('update:value')).toHaveLength(1)
+      expect(onChange).toHaveBeenCalledTimes(1)
+    },
+  )
+
   it('toggle event', async () => {
     const onToggle = vi.fn()
     const wrapper = mount(Cascader, {

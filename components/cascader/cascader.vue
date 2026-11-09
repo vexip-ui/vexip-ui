@@ -709,7 +709,7 @@ async function handlePanelOpen(option: CascaderOptionState, depth: number) {
 }
 
 function handleOptionSelect(option: CascaderOptionState, depth: number) {
-  if (!option) return
+  if (props.disabled || !option) return
 
   if (option.hasChild || option.children?.length) {
     handlePanelOpen(option, depth)
@@ -777,7 +777,7 @@ function updateCheckedDown(originalOption: CascaderOptionState) {
 }
 
 function handleOptionCheck(option: CascaderOptionState) {
-  if (!option) return
+  if (props.disabled || !option) return
 
   const options = Array.from(optionIdMap.values())
   const checked = !option.checked
