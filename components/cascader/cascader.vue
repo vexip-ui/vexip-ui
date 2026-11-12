@@ -647,6 +647,8 @@ function setVisible(visible: boolean) {
 }
 
 async function handlePanelOpen(option: CascaderOptionState, depth: number) {
+  if (props.disabled || readonly.value) return
+
   if (!option.hasChild && !option.children?.length) return
 
   if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
@@ -777,7 +779,7 @@ function updateCheckedDown(originalOption: CascaderOptionState) {
 }
 
 function handleOptionCheck(option: CascaderOptionState) {
-  if (!option) return
+  if (!option || props.disabled || readonly.value) return
 
   const options = Array.from(optionIdMap.values())
   const checked = !option.checked
@@ -868,6 +870,8 @@ function emitMultipleChange() {
 }
 
 function handleSingleSelect(fullValue: string) {
+  if (props.disabled || readonly.value) return
+
   const option = optionValueMap.get(fullValue)
 
   if (!option) return

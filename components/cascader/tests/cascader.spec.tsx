@@ -383,6 +383,23 @@ describe('Cascader', () => {
     expect(getPanels().length).toEqual(3)
   })
 
+  it('ignores an option click after the open cascader becomes disabled', async () => {
+    const onChange = vi.fn()
+    const wrapper = mount(Cascader, {
+      props: {
+        visible: true,
+        options: createOptions(1),
+        onChange,
+      },
+    })
+    const option = wrapper.get('.vxp-option')
+
+    await wrapper.setProps({ disabled: true })
+    await option.trigger('click')
+    expect(onChange).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
   it('clearable', async () => {
     const options = createOptions()
     const onClear = vi.fn()
