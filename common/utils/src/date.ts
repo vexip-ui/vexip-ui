@@ -47,7 +47,9 @@ const formatters: Formatters = {
   y(date, match) {
     const year = date.getFullYear()
 
-    return match.length === 4 ? year : (year % 1000) % 100
+    if (match === 'yy') return doubleDigits(year % 100)
+
+    return match.length === 4 ? year : year % 100
   },
   M(date, match) {
     const month = date.getMonth() + 1
@@ -83,9 +85,10 @@ const formatters: Formatters = {
 
 const formatRegExp = /[yMdHmsq](\w)*|./g
 const quotationRegExp = /'(.+?)'/g
+const isoDateOnlyRegExp = /^(?:\d{4}|[+-]\d{6})(?:-\d{2}){0,2}$/
 
 /**
- * 将任意可转为 `Date` 对象的变量转为一个新日期
+ * 将任意可转为 `Date` 对象的变量转为一个新日期，ISO 纯日期按本地零点解析
  *
  * @param any 任意可转换的值
  * @param strict 是否在传入非法值时抛错
@@ -93,6 +96,10 @@ const quotationRegExp = /'(.+?)'/g
  * @returns 转换后的 `Date` 对象
  */
 export function toDate(any: Dateable, strict = false) {
+  if (typeof any === 'string' && isoDateOnlyRegExp.test(any)) {
+    any += 'T00:00:00'
+  }
+
   const date = new Date(any)
 
   if (strict && Number.isNaN(+date)) {
@@ -100,9 +107,7 @@ export function toDate(any: Dateable, strict = false) {
   }
 
   if (typeof any === 'string' && !any.includes(':')) {
-    date.setHours(0)
-    date.setMinutes(0)
-    date.setSeconds(0)
+    date.setHours(0, 0, 0, 0)
   }
 
   return date
@@ -595,19 +600,17 @@ export function startOfQuarter(date: Dateable) {
  * @returns 新的开始日期
  */
 export function startOfYear(date: Dateable, startOn = 0) {
-  startOn = startOn % 11
+  startOn %= YEAR_ON_MONTHS
 
   if (startOn < 0) {
-    startOn += 11
+    startOn += YEAR_ON_MONTHS
   }
 
   date = toDate(date)
 
-  const month = date.getMonth()
-  const difference = (month < startOn ? 11 : 0) + month - startOn
+  const year = date.getFullYear() - (date.getMonth() < startOn ? 1 : 0)
 
-  date.setMonth(date.getMonth() - difference)
-  date.setDate(1)
+  date.setFullYear(year, startOn, 1)
   date.setHours(0, 0, 0, 0)
 
   return date
@@ -670,8 +673,15 @@ export function differenceHours(left: Dateable, right: Dateable) {
   return diff > 0 ? Math.floor(diff) : Math.ceil(diff)
 }
 
+/** 将本地年月日映射到 UTC 零点，消除时区偏移变化对日历天数差的影响 */
+function getCalendarDayTime(value: Dateable) {
+  const date = toDate(value)
+
+  return new Date(0).setUTCFullYear(date.getFullYear(), date.getMonth(), date.getDate())
+}
+
 /**
- * 比较两个日期相差的天数
+ * 比较两个日期相差的日历天数
  *
  * @param left 原始日期
  * @param right 原始日期
@@ -679,10 +689,7 @@ export function differenceHours(left: Dateable, right: Dateable) {
  * @returns 相差的天数
  */
 export function differenceDays(left: Dateable, right: Dateable) {
-  left = startOfDay(left)
-  right = startOfDay(right)
-
-  return (right.getTime() - left.getTime()) / DAY_ON_MILLS
+  return (getCalendarDayTime(right) - getCalendarDayTime(left)) / DAY_ON_MILLISECONDS
 }
 
 /**
@@ -698,7 +705,7 @@ export function differenceWeeks(left: Dateable, right: Dateable, weekStartOn = 0
   left = startOfWeek(left, weekStartOn)
   right = startOfWeek(right, weekStartOn)
 
-  return (right.getTime() - left.getTime()) / WEEK_ON_MILLS
+  return differenceDays(left, right) / WEEK_ON_DAYS
 }
 
 /**
