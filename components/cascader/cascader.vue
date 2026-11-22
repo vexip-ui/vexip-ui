@@ -698,6 +698,9 @@ async function handlePanelOpen(option: CascaderOptionState, depth: number) {
     upstream.forEach(option => {
       option.childrenLoaded = queryChildrenLoaded(option)
     })
+
+    // 加载期间可能被锁定，保留子选项以供下次展开。
+    if (props.disabled || readonly.value) return
   }
 
   if (depth < openedIds.value.length) {
