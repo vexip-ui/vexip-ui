@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 
 import { Github } from 'lucide-vue-next'
 import { globalIcons } from '@vexip-ui/config'
@@ -381,6 +381,70 @@ describe('Cascader', () => {
 
     await wrapper.trigger('click')
     expect(getPanels().length).toEqual(3)
+  })
+
+  describe.each(['disabled', 'loading'] as const)('when locked by %s', lock => {
+    it.each([false, true])(
+      'preserves the selection until unlocked (multiple: %s)',
+      async multiple => {
+        const options = createOptions(1)
+        const initial = [options[0].value]
+        const next = [options[1].value]
+        const onChange = vi.fn()
+        const wrapper = mount(Cascader, {
+          props: {
+            visible: true,
+            options,
+            multiple,
+            value: multiple ? [initial] : initial,
+            loadingLock: true,
+            onChange,
+          },
+        })
+        const option = () => wrapper.findAll('[role="option"]')[1]
+
+        await wrapper.setProps({ [lock]: true })
+        await option().trigger('click')
+        expect(wrapper.emitted('update:value')).toBeUndefined()
+        expect(onChange).not.toHaveBeenCalled()
+
+        await wrapper.setProps({ [lock]: false })
+        await wrapper.trigger('click')
+        await option().trigger('click')
+        expect(wrapper.emitted('update:value')).toEqual([[multiple ? [initial, next] : next]])
+        expect(onChange).toHaveBeenCalledTimes(1)
+        wrapper.unmount()
+      },
+    )
+
+    it('keeps loaded children for the next explicit open', async () => {
+      const { promise, resolve } = Promise.withResolvers<CascaderOption[]>()
+      const onAsyncLoad = vi.fn(() => promise)
+      const wrapper = mount(Cascader, {
+        props: {
+          visible: true,
+          loadingLock: true,
+          options: [{ value: 'parent', hasChild: true }],
+          onAsyncLoad,
+        },
+      })
+
+      await wrapper.get('[role="option"]').trigger('click')
+      expect(onAsyncLoad).toHaveBeenCalledTimes(1)
+      await wrapper.setProps({ [lock]: true })
+      await wrapper.get('[role="option"]').trigger('click')
+      resolve(createOptions(1))
+      await flushPromises()
+
+      await wrapper.setProps({ [lock]: false })
+      await wrapper.trigger('click')
+      expect(wrapper.findAll('[role="listbox"]')).toHaveLength(1)
+
+      await wrapper.get('[role="option"]').trigger('click')
+      expect(wrapper.findAll('[role="listbox"]')).toHaveLength(2)
+      expect(onAsyncLoad).toHaveBeenCalledTimes(1)
+      wrapper.unmount()
+    })
   })
 
   it('clearable', async () => {

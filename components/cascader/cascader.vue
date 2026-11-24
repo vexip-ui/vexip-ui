@@ -647,6 +647,8 @@ function setVisible(visible: boolean) {
 }
 
 async function handlePanelOpen(option: CascaderOptionState, depth: number) {
+  if (props.disabled || readonly.value) return
+
   if (!option.hasChild && !option.children?.length) return
 
   if (isAsyncLoad.value && !option.children?.length && !option.loaded) {
@@ -696,6 +698,9 @@ async function handlePanelOpen(option: CascaderOptionState, depth: number) {
     upstream.forEach(option => {
       option.childrenLoaded = queryChildrenLoaded(option)
     })
+
+    // 加载期间可能被锁定，保留子选项以供下次展开。
+    if (props.disabled || readonly.value) return
   }
 
   if (depth < openedIds.value.length) {
@@ -777,7 +782,7 @@ function updateCheckedDown(originalOption: CascaderOptionState) {
 }
 
 function handleOptionCheck(option: CascaderOptionState) {
-  if (!option) return
+  if (!option || props.disabled || readonly.value) return
 
   const options = Array.from(optionIdMap.values())
   const checked = !option.checked
@@ -868,6 +873,8 @@ function emitMultipleChange() {
 }
 
 function handleSingleSelect(fullValue: string) {
+  if (props.disabled || readonly.value) return
+
   const option = optionValueMap.get(fullValue)
 
   if (!option) return
