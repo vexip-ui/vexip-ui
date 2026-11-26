@@ -67,6 +67,7 @@ import { Modal } from './modal'
 import { NativeScroll } from './native-scroll'
 import { Notice } from './notice'
 import { NumberInput } from './number-input'
+import { ObjectFit } from './object-fit'
 import { Option } from './option'
 import { OptionGroup } from './option-group'
 import { Overflow } from './overflow'
@@ -191,6 +192,7 @@ const components = [
   Modal,
   NativeScroll,
   NumberInput,
+  ObjectFit,
   Option,
   OptionGroup,
   Overflow,
@@ -335,6 +337,7 @@ export * from './modal'
 export * from './native-scroll'
 export * from './notice'
 export * from './number-input'
+export * from './object-fit'
 export * from './option'
 export * from './option-group'
 export * from './overflow'

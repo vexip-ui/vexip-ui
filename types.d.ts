@@ -62,6 +62,7 @@ declare module 'vue' {
     Modal: (typeof import('vexip-ui'))['Modal'],
     NativeScroll: (typeof import('vexip-ui'))['NativeScroll'],
     NumberInput: (typeof import('vexip-ui'))['NumberInput'],
+    ObjectFit: (typeof import('vexip-ui'))['ObjectFit'],
     Option: (typeof import('vexip-ui'))['Option'],
     OptionGroup: (typeof import('vexip-ui'))['OptionGroup'],
     Overflow: (typeof import('vexip-ui'))['Overflow'],
