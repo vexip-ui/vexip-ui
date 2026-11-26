@@ -32,6 +32,7 @@ import { Column } from './column'
 import { ConfigProvider } from './config-provider'
 import { Confirm } from './confirm'
 import { Contextmenu } from './contextmenu'
+import { CountTo } from './count-to'
 import { DatePicker } from './date-picker'
 import { Divider } from './divider'
 import { Drawer } from './drawer'
@@ -159,6 +160,7 @@ const components = [
   ColorPicker,
   Column,
   ConfigProvider,
+  CountTo,
   DatePicker,
   Divider,
   Drawer,
@@ -300,6 +302,7 @@ export * from './column'
 export * from './config-provider'
 export * from './confirm'
 export * from './contextmenu'
+export * from './count-to'
 export * from './date-picker'
 export * from './divider'
 export * from './drawer'

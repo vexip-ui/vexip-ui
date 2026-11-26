@@ -114,6 +114,7 @@ export function getComponentConfig(): ComponentGroup[] {
       components: [
         { name: 'Affix', since: '2.2.0' },
         { name: 'ConfigProvider', since: '2.0.0' },
+        { name: 'CountTo' },
         { name: 'FullScreen', since: '2.1.0' },
         { name: 'Masker' },
         { name: 'Overflow', since: '2.0.0' },
